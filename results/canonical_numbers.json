@@ -1,0 +1,29 @@
+{
+  "definition": "native max-depth (deepest available split-half) + all perturbations + direct split-half energy distance, PCA-50 space",
+  "dself_dnull_mean_native": {
+    "TP53": 0.965,
+    "KRAS": 1.004,
+    "GATA1": 0.878,
+    "JAK1": 0.21
+  },
+  "unrankable_native_pct": {
+    "TP53": 100.0,
+    "KRAS": 100.0,
+    "GATA1": 97.6,
+    "JAK1": 10.0,
+    "Replogle": 55.3,
+    "Norman": 3.4,
+    "Adamson": 14.6
+  },
+  "unrankable_matched50_pct": {
+    "Replogle": 54.9,
+    "Norman": 11.2,
+    "Adamson": 38.5
+  },
+  "effect_size_median": {
+    "TP53": 1.41,
+    "KRAS": 1.11,
+    "GATA1": 2.79,
+    "JAK1": 13.04
+  }
+}

@@ -21,7 +21,7 @@
 |---|---|
 | **Genes** | TP53, KRAS, GATA1, JAK1 |
 | **Variants** | 472 protein-coding variants |
-| **Cells** | 268,981 single cells |
+| **Cells** | 321,043 single cells |
 | **Technologies** | Perturb-seq, base editing, scSNV-seq |
 | **Metrics** | 10 (3 ranking + 3 direction + 3 DE + 1 reconstruction) |
 | **Splits** | 6 generalization strategies |
@@ -113,7 +113,7 @@ from alleleperturb import AllelePerturb
 
 bench = AllelePerturb.load()
 print(bench)
-# AllelePerturb: 472 variants, 4 genes, 268,981 cells
+# AllelePerturb: 472 variants, 4 genes, 321,043 cells
 # Splits: Random, OOD-Position, OOD-Mechanism, Cross-Gene, Low-N, PerturbNet-Compat
 
 train, test = bench.split("split1")  # Random split
@@ -178,6 +178,11 @@ AllelePerturb-Eval uses **10 metrics** across three categories:
 | TP53 + KRAS | Ursu et al. 2022 | [GSE161824](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE161824) |
 | GATA1 | PerturbNet (Yu & Welch 2025) | [HuggingFace](https://huggingface.co/datasets/cyclopeta/PerturbNet_reproduce) |
 | JAK1 | Cooper et al. 2024 | [PRJEB48915](https://www.ebi.ac.uk/ena/browser/view/PRJEB48915) / [Zenodo](https://doi.org/10.5281/zenodo.10418435) |
+
+### Feature representations
+- **θ₆**: 6-dimensional biophysical feature vector (Δhydrophobicity, Δvolume, Δcharge, fold-core location, functional-switch residue, hotspot/pathogenic marker). External-only hotspot definition (no outcome leakage).
+- **ESM-1v**: 1,280-dimensional mean-pooled embeddings from `esm1v_t33_650M_UR90S_1` (full dimension, no PCA reduction).
+- **ESM+θ**: Concatenation of θ₆ and ESM-1v (1,286 dimensions).
 
 See [`data/README.md`](data/README.md) for detailed download and preprocessing instructions.
 
