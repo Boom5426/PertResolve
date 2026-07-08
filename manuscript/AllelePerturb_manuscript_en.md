@@ -217,3 +217,21 @@ Confidence intervals for PDS and Pearson-delta were obtained by nonparametric bo
 ### Software and reproducibility
 
 The evaluation grid was run in Python 3.11 with NumPy 2.4.6, pandas 2.3.3, scikit-learn 1.7.2 and SciPy 1.14.1. Single-cell loading and preprocessing used scanpy 1.10 (Python) and scran with SingleCellExperiment (R, Bioconductor). ESM-1v embeddings were extracted with fair-esm 2.0.0 and PyTorch 2.10. Figures were rendered with matplotlib 3.10. All code, processed benchmark tables and evaluation protocols are available at https://github.com/Boom5426/AllelePerturb.
+
+
+---
+
+## References
+
+1. Roohani, Y., Huang, K. & Leskovec, J. Predicting transcriptional outcomes of novel multigene perturbations with GEARS. *Nat. Biotechnol.* **42**, 927–935 (2024). doi:10.1038/s41587-023-01905-6
+2. Lotfollahi, M. et al. Predicting cellular responses to complex perturbations in high-throughput screens. *Mol. Syst. Biol.* **19**, e11517 (2023). doi:10.15252/msb.202211517
+3. Norman, T.M. et al. Exploring genetic interaction manifolds constructed from rich single-cell phenotypes. *Science* **365**, 786–793 (2019). doi:10.1126/science.aax4438
+4. Cui, H. et al. scGPT: toward building a foundation model for single-cell multi-omics using generative AI. *Nat. Methods* **21**, 1470–1480 (2024). doi:10.1038/s41592-024-02201-0
+5. Peidli, S. et al. scPerturb: harmonized single-cell perturbation data. *Nat. Methods* **21**, 531–540 (2024). doi:10.1038/s41592-023-02144-y
+6. Piran, Z., Cohen, N., Hoshen, Y. & Nitzan, M. Disentanglement of single-cell data with biolord. *Nat. Biotechnol.* **42**, 1678–1683 (2024). doi:10.1038/s41587-023-02079-x
+7. Baugh, E.H., Ke, H., Levine, A.J., Bonneau, R.A. & Chan, C.S. Why are there hotspot mutations in the TP53 gene in human cancers? *Cell Death Differ.* **25**, 154–160 (2018). doi:10.1038/cdd.2017.180
+8. Hunter, J.C. et al. Biochemical and structural analysis of common cancer-associated KRAS mutations. *Mol. Cancer Res.* **13**, 1325–1335 (2015). doi:10.1158/1541-7786.MCR-15-0203
+9. Yu, Z. & Welch, J.D. PerturbNet predicts single-cell responses to unseen chemical and genetic perturbations. *Mol. Syst. Biol.* **21**, 960–982 (2025). doi:10.1038/s44320-025-00131-3
+10. Ursu, O. et al. Massively parallel phenotyping of coding variants in cancer with Perturb-seq. *Nat. Biotechnol.* **40**, 896–905 (2022). doi:10.1038/s41587-021-01160-7
+11. Cooper, S.E. et al. scSNV-seq: high-throughput phenotyping of single nucleotide variants by coupled single-cell genotyping and transcriptomics. *Genome Biol.* **25**, 20 (2024). doi:10.1186/s13059-024-03169-y
+12. Meier, J. et al. Language models enable zero-shot prediction of the effects of mutations on protein function. *Adv. Neural Inf. Process. Syst.* **34**, 29287–29303 (2021).

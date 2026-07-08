@@ -6,6 +6,7 @@
 \usepackage{mathpazo}
 \usepackage[margin=2.5cm]{geometry}
 \usepackage{graphicx}
+\usepackage{float}
 \usepackage{amsmath,amssymb}
 \usepackage{booktabs}
 \usepackage{hyperref}
@@ -71,7 +72,7 @@ To make held-out variant prediction possible, each variant was represented by pr
 
 
 % FIGURE 1
-\begin{figure}[!ht]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{figures/fig1.pdf}
 \caption{\textbf{AllelePerturb defines protein-coding variant-level perturbation prediction.}
@@ -96,7 +97,7 @@ The magnitude of the dissociation varied by gene (Fig. 2d). It was strongest for
 
 
 % FIGURE 2
-\begin{figure}[!ht]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{figures/fig2.pdf}
 \caption{\textbf{All methods recover perturbation direction but cannot rank variant identity.}
@@ -120,7 +121,7 @@ We next asked whether this measurement floor was specific to allele-level pertur
 
 
 % FIGURE 3
-\begin{figure}[!ht]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{figures/fig3.pdf}
 \caption{\textbf{Split-half analysis reveals a narrow allele-level measurement window.}
@@ -144,7 +145,7 @@ Finally, we audited whether existing single-cell perturbation prediction tools e
 
 
 % FIGURE 4
-\begin{figure}[!ht]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{figures/fig4.pdf}
 \caption{\textbf{Allele-ranking failure persists across evaluation choices and model interfaces.}
@@ -170,7 +171,7 @@ As a practical check, we revisited the external gene-level atlases in an experim
 
 
 % FIGURE 5
-\begin{figure}[!ht]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{figures/fig5.pdf}
 \caption{\textbf{A power-aware reporting protocol for allele-resolution perturbation prediction.}
@@ -331,17 +332,17 @@ The evaluation grid was run in Python 3.11 with NumPy 2.4.6, pandas 2.3.3, sciki
 \section*{References}
 
 \begin{enumerate}[label={[\arabic*]},leftmargin=2em,itemsep=0pt]
-\item Roohani, Y., Huang, K. \& Leskovec, J. Predicting transcriptional outcomes of novel multigene perturbations with GEARS. \textit{Nat. Biotechnol.} \textbf{42}, 927--935 (2024).
-\item Lotfollahi, M. et al. Predicting cellular responses to complex perturbations in high-throughput screens. \textit{Mol. Syst. Biol.} \textbf{19}, e11517 (2023).
-\item Roohani, Y. et al. GEARS: predicting transcriptional responses to genetic perturbations. \textit{Nat. Biotechnol.} \textbf{42}, 927--935 (2024).
-\item Cui, H. et al. scGPT: toward building a foundation model for single-cell multi-omics using generative AI. \textit{Nat. Methods} \textbf{21}, 1470--1480 (2024).
-\item Peidli, S. et al. scPerturb: harmonized single-cell perturbation data. \textit{Nat. Methods} \textbf{21}, 531--540 (2024).
-\item Ji, Y. et al. Benchmarking computational methods for single-cell perturbation-response prediction. Preprint (2025).
-\item Baugh, E.H. et al. Why are there hotspot mutations in the TP53 gene in human cancers? \textit{Cell Death Differ.} \textbf{25}, 154--160 (2018).
-\item Hunter, J.C. et al. Biochemical and structural analysis of common cancer-associated KRAS mutations. \textit{Mol. Cancer Res.} \textbf{13}, 1325--1335 (2015).
-\item Yu, Z. \& Welch, J.D. PerturbNet predicts single-cell responses to unseen chemical and genetic perturbations. \textit{Mol. Syst. Biol.} (2025).
-\item Ursu, O. et al. Massively parallel phenotyping of coding variants in cancer with Perturb-seq. \textit{Nat. Biotechnol.} \textbf{40}, 896--905 (2022).
-\item Cooper, S.E. et al. scSNV-seq: high-throughput phenotyping of single-nucleotide variants by coupled single-cell genotyping and transcriptomics. \textit{Genome Biol.} \textbf{25}, 20 (2024).
+\item Roohani, Y., Huang, K. \& Leskovec, J. Predicting transcriptional outcomes of novel multigene perturbations with GEARS. \textit{Nat. Biotechnol.} \textbf{42}, 927--935 (2024). \\ \texttt{doi:10.1038/s41587-023-01905-6}
+\item Lotfollahi, M. et al. Predicting cellular responses to complex perturbations in high-throughput screens. \textit{Mol. Syst. Biol.} \textbf{19}, e11517 (2023). \\ \texttt{doi:10.15252/msb.202211517}
+\item Norman, T.M. et al. Exploring genetic interaction manifolds constructed from rich single-cell phenotypes. \textit{Science} \textbf{365}, 786--793 (2019). \\ \texttt{doi:10.1126/science.aax4438}
+\item Cui, H. et al. scGPT: toward building a foundation model for single-cell multi-omics using generative AI. \textit{Nat. Methods} \textbf{21}, 1470--1480 (2024). \\ \texttt{doi:10.1038/s41592-024-02201-0}
+\item Peidli, S. et al. scPerturb: harmonized single-cell perturbation data. \textit{Nat. Methods} \textbf{21}, 531--540 (2024). \\ \texttt{doi:10.1038/s41592-023-02144-y}
+\item Piran, Z., Cohen, N., Hoshen, Y. \& Nitzan, M. Disentanglement of single-cell data with biolord. \textit{Nat. Biotechnol.} \textbf{42}, 1678--1683 (2024). \\ \texttt{doi:10.1038/s41587-023-02079-x}
+\item Baugh, E.H., Ke, H., Levine, A.J., Bonneau, R.A. \& Chan, C.S. Why are there hotspot mutations in the TP53 gene in human cancers? \textit{Cell Death Differ.} \textbf{25}, 154--160 (2018). \\ \texttt{doi:10.1038/cdd.2017.180}
+\item Hunter, J.C. et al. Biochemical and structural analysis of common cancer-associated KRAS mutations. \textit{Mol. Cancer Res.} \textbf{13}, 1325--1335 (2015). \\ \texttt{doi:10.1158/1541-7786.MCR-15-0203}
+\item Yu, Z. \& Welch, J.D. PerturbNet predicts single-cell responses to unseen chemical and genetic perturbations. \textit{Mol. Syst. Biol.} \textbf{21}, 960--982 (2025). \\ \texttt{doi:10.1038/s44320-025-00131-3}
+\item Ursu, O. et al. Massively parallel phenotyping of coding variants in cancer with Perturb-seq. \textit{Nat. Biotechnol.} \textbf{40}, 896--905 (2022). \\ \texttt{doi:10.1038/s41587-021-01160-7}
+\item Cooper, S.E. et al. scSNV-seq: high-throughput phenotyping of single nucleotide variants by coupled single-cell genotyping and transcriptomics. \textit{Genome Biol.} \textbf{25}, 20 (2024). \\ \texttt{doi:10.1186/s13059-024-03169-y}
 \item Meier, J. et al. Language models enable zero-shot prediction of the effects of mutations on protein function. \textit{Adv. Neural Inf. Process. Syst.} \textbf{34}, 29287--29303 (2021).
 \end{enumerate}
 
