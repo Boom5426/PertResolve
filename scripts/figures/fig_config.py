@@ -1,7 +1,7 @@
 """
 Shared config for AllelePerturb figure scripts.
-Run from: /home/boom/ICLR/AllelePerturb/scripts/figures/
-Data from: /data/boom/NUS/VCCompass/ (remote results) or local artifacts
+Run from: AllelePerturb/scripts/figures/
+Data from: AllelePerturb/results/ (pre-computed, included in repo)
 """
 import os
 import numpy as np
@@ -105,7 +105,7 @@ def head_type(m):
 # Data loading
 # ============================================================
 # Adjust these paths to your local setup
-DATA_DIR = '/home/boom/ICLR/AllelePerturb'
+DATA_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 RESULTS_V4 = None  # will be set by load_v4()
 RANKABILITY = None
 
@@ -115,7 +115,6 @@ def load_v4(path=None):
     candidates = [
         path,
         f'{DATA_DIR}/results/results_v4_10metrics.csv',
-        '/data/boom/NUS/VCCompass/results_v4_10metrics.csv',
     ]
     for p in candidates:
         if p and os.path.isfile(p):
@@ -130,7 +129,6 @@ def load_rankability(path=None):
     candidates = [
         path,
         f'{DATA_DIR}/results/second_probe_rankability_table.csv',
-        '/data/boom/NUS/floor_audit/results/floor_audit/second_probe_rankability_table.csv',
     ]
     for p in candidates:
         if p and os.path.isfile(p):
@@ -144,7 +142,6 @@ def load_power(path=None):
     candidates = [
         path,
         f'{DATA_DIR}/results/split_half_power_curve.csv',
-        '/data/boom/NUS/VCCompass/results/power/split_half_power_table.csv',
     ]
     for p in candidates:
         if p and os.path.isfile(p):

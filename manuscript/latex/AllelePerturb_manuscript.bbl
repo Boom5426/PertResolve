@@ -1,0 +1,141 @@
+\begin{thebibliography}{19}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Lotfollahi et~al.(2019)Lotfollahi, Wolf, and Theis]{scGen}
+Mohammad Lotfollahi, F.~Alexander Wolf, and Fabian~J. Theis.
+\newblock sc{G}en predicts single-cell perturbation responses.
+\newblock \emph{Nature Methods}, 16:\penalty0 715--721, 2019.
+\newblock \doi{10.1038/s41592-019-0494-8}.
+
+\bibitem[Lotfollahi et~al.(2023)Lotfollahi, Klimovskaia~Susmelj, De~Donno,
+  et~al.]{CPA2023}
+Mohammad Lotfollahi, Anna Klimovskaia~Susmelj, Carlo De~Donno, et~al.
+\newblock Predicting cellular responses to complex perturbations in
+  high-throughput screens.
+\newblock \emph{Molecular Systems Biology}, 19:\penalty0 e11517, 2023.
+\newblock \doi{10.15252/msb.202211517}.
+
+\bibitem[Bunne et~al.(2023)Bunne, Stark, Gut, et~al.]{CellOT}
+Charlotte Bunne, Stefan~G. Stark, Gabriele Gut, et~al.
+\newblock Learning single-cell perturbation responses using neural optimal
+  transport.
+\newblock \emph{Nature Methods}, 20:\penalty0 1759--1768, 2023.
+\newblock \doi{10.1038/s41592-023-01969-x}.
+
+\bibitem[Roohani et~al.(2024)Roohani, Huang, and Leskovec]{GEARS}
+Yusuf Roohani, Kexin Huang, and Jure Leskovec.
+\newblock Predicting transcriptional outcomes of novel multigene perturbations
+  with {GEARS}.
+\newblock \emph{Nature Biotechnology}, 42:\penalty0 927--935, 2024.
+\newblock \doi{10.1038/s41587-023-01905-6}.
+
+\bibitem[Cui et~al.(2024)Cui, Wang, Maan, et~al.]{scGPT}
+Haotian Cui, Chloe Wang, Hassaan Maan, et~al.
+\newblock sc{GPT}: toward building a foundation model for single-cell
+  multi-omics using generative {AI}.
+\newblock \emph{Nature Methods}, 21:\penalty0 1470--1480, 2024.
+\newblock \doi{10.1038/s41592-024-02201-0}.
+
+\bibitem[Norman et~al.(2019)Norman, Horlbeck, Replogle, et~al.]{Norman2019}
+Thomas~M. Norman, Max~A. Horlbeck, Joseph~M. Replogle, et~al.
+\newblock Exploring genetic interaction manifolds constructed from rich
+  single-cell phenotypes.
+\newblock \emph{Science}, 365:\penalty0 786--793, 2019.
+\newblock \doi{10.1126/science.aax4438}.
+
+\bibitem[Peidli et~al.(2024)Peidli, Green, Shen, et~al.]{scPerturb}
+Stefan Peidli, Tessa~D. Green, Ciyue Shen, et~al.
+\newblock sc{P}erturb: harmonized single-cell perturbation data.
+\newblock \emph{Nature Methods}, 21:\penalty0 531--540, 2024.
+\newblock \doi{10.1038/s41592-023-02144-y}.
+
+\bibitem[Baugh et~al.(2018)Baugh, Ke, Levine, Bonneau, and Chan]{Baugh2018}
+Evan~H. Baugh, Hua Ke, Arnold~J. Levine, Richard~A. Bonneau, and Chris~Sander
+  Chan.
+\newblock Why are there hotspot mutations in the {TP53} gene in human cancers?
+\newblock \emph{Cell Death \& Differentiation}, 25:\penalty0 154--160, 2018.
+\newblock \doi{10.1038/cdd.2017.180}.
+
+\bibitem[Hunter et~al.(2015)Hunter, Manandhar, Carrasco, et~al.]{Hunter2015}
+John~C. Hunter, Arianna Manandhar, Mario~A. Carrasco, et~al.
+\newblock Biochemical and structural analysis of common cancer-associated
+  {KRAS} mutations.
+\newblock \emph{Molecular Cancer Research}, 13:\penalty0 1325--1335, 2015.
+\newblock \doi{10.1158/1541-7786.MCR-15-0203}.
+
+\bibitem[Notin et~al.(2023)Notin, Kollasch, Ritter, et~al.]{ProteinGym}
+Pascal Notin, Aaron~W. Kollasch, Daniel Ritter, et~al.
+\newblock {ProteinGym}: large-scale benchmarks for protein fitness prediction
+  and design.
+\newblock In \emph{Advances in Neural Information Processing Systems},
+  volume~36, pages 64331--64379, 2023.
+
+\bibitem[Esposito et~al.(2019)Esposito, Weile, Shendure, et~al.]{MaveDB}
+Daniel Esposito, Jochen Weile, Jay Shendure, et~al.
+\newblock {MaveDB}: an open-source platform to distribute and interpret data
+  from multiplexed assays of variant effect.
+\newblock \emph{Genome Biology}, 20:\penalty0 223, 2019.
+\newblock \doi{10.1186/s13059-019-1845-6}.
+
+\bibitem[Ursu et~al.(2022)Ursu, Neal, Bhatt, et~al.]{Ursu2022}
+Oana Ursu, James~T. Neal, Dhawal Bhatt, et~al.
+\newblock Massively parallel phenotyping of coding variants in cancer with
+  {P}erturb-seq.
+\newblock \emph{Nature Biotechnology}, 40:\penalty0 896--905, 2022.
+\newblock \doi{10.1038/s41587-021-01160-7}.
+
+\bibitem[Yu and Welch(2025)]{PerturbNet}
+Zhiyuan Yu and Joshua~D. Welch.
+\newblock {PerturbNet} predicts single-cell responses to unseen chemical and
+  genetic perturbations.
+\newblock \emph{Molecular Systems Biology}, 21:\penalty0 960--982, 2025.
+\newblock \doi{10.1038/s44320-025-00131-3}.
+
+\bibitem[Ahlmann-Eltze et~al.(2025)Ahlmann-Eltze, Huber, and
+  Anders]{AhlmannEltze2025}
+Constantin Ahlmann-Eltze, Wolfgang Huber, and Simon Anders.
+\newblock Deep-learning-based gene perturbation effect prediction does not yet
+  outperform simple linear baselines.
+\newblock \emph{Nature Methods}, 22:\penalty0 1657--1661, 2025.
+\newblock \doi{10.1038/s41592-025-02772-6}.
+
+\bibitem[Vi{\~n}as~Torn{\'e} et~al.(2026)Vi{\~n}as~Torn{\'e}, Wiatrak, Piran,
+  et~al.]{Systema}
+Roc{\'i}o Vi{\~n}as~Torn{\'e}, Maciej Wiatrak, Zoe Piran, et~al.
+\newblock Systema: a framework for evaluating genetic perturbation response
+  prediction beyond systematic variation.
+\newblock \emph{Nature Biotechnology}, 44:\penalty0 1050--1059, 2026.
+\newblock \doi{10.1038/s41587-025-02777-8}.
+
+\bibitem[Bunne et~al.(2024)Bunne, Roohani, Wenteler, et~al.]{BunneVC2024}
+Charlotte Bunne, Yusuf Roohani, Yanay Wenteler, et~al.
+\newblock How to build the virtual cell with artificial intelligence:
+  priorities and opportunities.
+\newblock \emph{Cell}, 187:\penalty0 7045--7063, 2024.
+\newblock \doi{10.1016/j.cell.2024.11.015}.
+
+\bibitem[Cooper et~al.(2024)Cooper, Coelho, Strauss, et~al.]{Cooper2024}
+Sarah~E. Cooper, Matthew~A. Coelho, Magdalena~E. Strauss, et~al.
+\newblock sc{SNV}-seq: high-throughput phenotyping of single nucleotide
+  variants by coupled single-cell genotyping and transcriptomics.
+\newblock \emph{Genome Biology}, 25:\penalty0 20, 2024.
+\newblock \doi{10.1186/s13059-024-03169-y}.
+
+\bibitem[Meier et~al.(2021)Meier, Rao, Aber, et~al.]{ESM1v}
+Joshua Meier, Roshan Rao, Robert Aber, et~al.
+\newblock Language models enable zero-shot prediction of the effects of
+  mutations on protein function.
+\newblock In \emph{Advances in Neural Information Processing Systems},
+  volume~34, pages 29287--29303, 2021.
+
+\bibitem[Piran et~al.(2024)Piran, Cohen, Hoshen, and Nitzan]{biolord}
+Zoe Piran, Niv Cohen, Yedid Hoshen, and Mor Nitzan.
+\newblock Disentanglement of single-cell data with biolord.
+\newblock \emph{Nature Biotechnology}, 42:\penalty0 1678--1683, 2024.
+\newblock \doi{10.1038/s41587-023-02079-x}.
+
+\end{thebibliography}
