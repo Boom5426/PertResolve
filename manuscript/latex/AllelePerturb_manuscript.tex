@@ -231,7 +231,7 @@ To bound the influence of the most deeply sampled variants, up to 300 cells were
 
 AllelePerturb-Eval separates prediction quality into three families of metrics. \textbf{Direction recovery} asks whether a predicted profile points the right way in expression space. \textbf{Allele discrimination} asks whether a predicted profile is specific enough to identify its own variant among the other held-out variants. \textbf{Differential-expression fidelity} asks whether the predicted and measured profiles agree on which genes change and by how much. The ten metrics are defined as follows.
 
-\textbf{Perturbation discrimination score (PDS).} PDS is the primary metric and directly tests allele discrimination: is a predicted profile closer to its own measured profile than to those of the other held-out variants? Let $T$ be the set of $n_{\mathrm{test}} = |T|$ held-out variants and $d(\cdot,\cdot)$ a distance. For variant $v$, the rank of the correct match among all candidates is
+\textbf{Perturbation discrimination score (PDS).} PDS is the primary metric and directly tests allele discrimination: is a predicted profile closer to its own measured profile than to those of the other held-out variants? This nearest-match discrimination logic follows the perturbation-discrimination principle used in recent virtual-cell evaluation efforts\textsuperscript{10}, adapted here to protein-coding variants and computed with tie-aware ranking. Let $T$ be the set of $n_{\mathrm{test}} = |T|$ held-out variants and $d(\cdot,\cdot)$ a distance. For variant $v$, the rank of the correct match among all candidates is
 
 \[
 r_v = \big|\{\, w \in T : d(\hat{\delta}_v, \delta_w) < d(\hat{\delta}_v, \delta_v) \,\}\big| + 1,
