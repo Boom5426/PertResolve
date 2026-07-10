@@ -149,10 +149,14 @@ def load_power(path=None):
     raise FileNotFoundError("power curve CSV not found")
 
 def load_predictor(path=None):
-    """Load LODO predictor results."""
+    """DEPRECATED. Loads the superseded row-level LODO predictor output
+    (results/deprecated/second_probe_predictor_results.csv), whose headline AUROC 0.974
+    was shown to be a config-identity + pseudo-replication artifact. New work should use
+    the honest per-perturbation predictor in scripts/figures/rankability_predictor.py
+    (results/rankability_predictor_honest.csv). Kept only so historical panels still load."""
     candidates = [
         path,
-        f'{DATA_DIR}/results/second_probe_predictor_results.csv',
+        f'{DATA_DIR}/results/deprecated/second_probe_predictor_results.csv',
     ]
     for p in candidates:
         if p and os.path.isfile(p):

@@ -1,0 +1,127 @@
+\documentclass[11pt,letterpaper]{article}
+
+%% ---- Packages (kept consistent with the main manuscript) ----
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{mathpazo}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{hyperref}
+\usepackage[dvipsnames]{xcolor}
+\hypersetup{colorlinks=true,linkcolor=MidnightBlue,citecolor=MidnightBlue,urlcolor=MidnightBlue}
+
+%% ---- Supplementary numbering (Supplementary Table 1, 2, ...) ----
+\renewcommand{\thetable}{\arabic{table}}
+\renewcommand{\thefigure}{\arabic{figure}}
+\renewcommand{\tablename}{Supplementary Table}
+\renewcommand{\figurename}{Supplementary Figure}
+
+\title{Supplementary Information\\[4pt]
+\large AllelePerturb reveals measurement limits of protein-coding variant prediction in single-cell transcriptomics}
+\author{Bo~Li\textsuperscript{1,*}}
+\date{}
+
+\begin{document}
+\maketitle
+
+\noindent\textsuperscript{1}Department of Biomedical Engineering, University of Florida, Gainesville, FL, USA.\\[2pt]
+\noindent\textsuperscript{*}Correspondence: \href{mailto:bo.li@ufl.edu}{bo.li@ufl.edu}
+
+\bigskip
+\noindent This document contains the full parameter tables underlying the variant feature representation, the prediction methods and the split-half rankability analysis. Complete assignments and code are also available at \url{https://github.com/Boom5426/AllelePerturb}.
+
+\bigskip
+
+
+%% ===== Supplementary Table 1 =====
+\begin{table}[H]
+\centering
+\caption{\textbf{Variant feature ($\theta$) structural and hotspot annotations.} Per-gene residue assignments for the three structural components of the biophysical feature vector. The fold-core term $f_v$ was additionally set to $0.5$ for annotated interaction regions and $0.0$ elsewhere. The hotspot/pathogenic marker $h_v$ was defined exclusively from external prior knowledge, with no reference to the single-cell outcome.}
+\label{stab:features}
+\smallskip
+\begin{tabular}{@{}p{1.6cm} p{3.6cm} p{2.9cm} p{5.0cm}@{}}
+\toprule
+Gene & Structural core ($f_v=1$) & Catalytic / switch ($s_v=1$) & Hotspot / pathogenic ($h_v=1$) \\
+\midrule
+TP53  & DNA-binding domain, residues 94--293 & --- & COSMIC/IARC missense hotspot codons 175, 176, 179, 220, 238, 245, 248, 249, 273, 282, 285 \\[2pt]
+KRAS  & G-domain, residues 1--169 & G12, G13, Q61 & COSMIC/IARC missense hotspot codons 12, 13, 59, 61, 117, 146 \\[2pt]
+GATA1 & Zinc fingers ZF1 (204--228) and ZF2 (258--282) & Zinc-finger cysteines & Zinc-coordinating cysteines 204, 207, 225, 228, 258, 261, 279, 282; ClinVar pathogenic / likely-pathogenic annotations \\[2pt]
+JAK1  & Kinase domain, residues 866--1154 & --- & Functional-module membership: JH2 pseudokinase (583--855), JH1 kinase (875--1153) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent\textit{Note.} An earlier version of $h_v$ used the top quintile of measured effect size, which leaks the evaluation outcome into the feature; it was removed and the entire evaluation grid was re-run, with ranking performance unchanged ($\theta$-only PDS shifted by at most 0.02 and every method remained at chance).
+
+\bigskip
+
+
+%% ===== Supplementary Table 2 =====
+\begin{table}[H]
+\centering
+\caption{\textbf{Regression-head hyperparameters.} The six heads were crossed with three feature spaces ($\theta$, ESM, ESM+$\theta$) to form the 18 in-house feature-model combinations. All heads used a fixed random seed and were fit by minimizing squared error on the training variants.}
+\label{stab:heads}
+\smallskip
+\begin{tabular}{@{}p{4.2cm} p{3.0cm} p{5.4cm}@{}}
+\toprule
+Head & Family & Settings \\
+\midrule
+Ridge regression & Linear (L2) & $\alpha = 1.0$ \\
+Lasso regression & Linear (L1) & $\alpha = 0.01$; up to 2{,}000 iterations \\
+Random forest & Tree ensemble & 50 trees; maximum depth 6 \\
+Gradient-boosted trees & Tree ensemble & 50 estimators; maximum depth 3; multi-output wrapper \\
+$k$-nearest-neighbours & Neighbour & $k = 3$ \\
+Multilayer perceptron & Neural network & hidden layers 128 and 64; ReLU; up to 500 iterations \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent\textit{Note.} Linear and neighbour heads regress directly onto the full expression profile. Because tree ensembles scale poorly to thousands of output genes, for output spaces larger than 200 genes the random forest and gradient-boosted heads were fit on a $q$-component PCA of the training profiles and predictions were mapped back to gene space by the inverse transform, with $q = \min(50,\, G,\, n_{\mathrm{train}} - 1)$.
+
+\bigskip
+
+
+%% ===== Supplementary Table 3 =====
+\begin{table}[H]
+\centering
+\caption{\textbf{Split-half rankability and power-analysis sampling grid.} Parameters for the energy-distance split-half analysis (Fig.~3) and the depth power analysis (Figs.~3, 5). Each configuration was summarized by the median and the 2.5--97.5 percentile interval across seeds.}
+\label{stab:sampling}
+\smallskip
+\begin{tabular}{@{}p{5.2cm} p{9.0cm}@{}}
+\toprule
+Parameter & Values \\
+\midrule
+Split-half subsample sizes (per half) & 30, 50, 100, 150, 250, 365 cells \\
+Representation spaces & 50-component PCA (canonical), gene space, pathway-score space \\
+Random seeds per configuration & 50 \\
+Canonical setting & PCA space at native maximum depth \\
+Power-analysis depths (per variant) & 50, 100, 150, 300 cells \\
+Minimum cells for inclusion & 50 (split-half); 5 (pseudobulk profiles) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+%% ===== Supplementary Table 4 =====
+\begin{table}[H]
+\centering
+\caption{\textbf{Metric-family invariance of the measurement floor.} Split-half window ratio (median $D_\mathrm{self}$ divided by median $D_\mathrm{null}$) per gene under five distance families in the 50-component PCA space, at 50 cells per half. A ratio near 1 indicates a variant at the measurement floor; a low ratio indicates a wide, resolvable window. The floor is present for TP53, KRAS and GATA1 and absent for JAK1 under every metric.}
+\label{stab:metrics}
+\smallskip
+\begin{tabular}{@{}l c c c c c@{}}
+\toprule
+Gene & Energy & MMD (RBF) & Sliced-Wasserstein & Cosine & Euclidean \\
+\midrule
+TP53  & 1.03 & 1.01 & 1.02 & 1.02 & 1.03 \\
+KRAS  & 0.95 & 0.97 & 0.97 & 0.99 & 0.97 \\
+GATA1 & 1.01 & 0.98 & 1.03 & 0.90 & 1.04 \\
+JAK1  & 0.12 & 0.32 & 0.40 & 0.05 & 0.26 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\end{document}
