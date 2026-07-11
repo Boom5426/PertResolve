@@ -2,7 +2,7 @@
 
 ## Included
 
-- `allele_perturb_bench.csv` — 472 variants with θ₆ features, split assignments,
+- `allele_perturb_bench.csv` — 470 protein-coding variants (+2 WT reference rows) with θ₆ features, split assignments,
   and per-variant cell counts.
 
 ## External data (download separately)

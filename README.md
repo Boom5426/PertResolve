@@ -10,7 +10,7 @@
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-green.svg"></a>
   <img alt="Python" src="https://img.shields.io/badge/python-3.11%2B-blue.svg">
   <img alt="Cells" src="https://img.shields.io/badge/single%20cells-321%2C043-orange.svg">
-  <img alt="Variants" src="https://img.shields.io/badge/variants-472-9cf.svg">
+  <img alt="Variants" src="https://img.shields.io/badge/variants-470-9cf.svg">
   <img alt="Genes" src="https://img.shields.io/badge/genes-TP53%20%C2%B7%20KRAS%20%C2%B7%20GATA1%20%C2%B7%20JAK1-lightgrey.svg">
   <a href="https://github.com/Boom5426/AllelePerturb/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/Boom5426/AllelePerturb?style=social"></a>
 </p>
@@ -44,7 +44,7 @@ Most single-cell perturbation benchmarks define a perturbation at the level of a
 
 | 🧫 Genes | 🔬 Variants | 🧮 Cells | 🧪 Technologies | 🎲 Splits | 📐 Metrics |
 |:--:|:--:|:--:|:--:|:--:|:--:|
-| 4 | 472 | 321,043 | 3 | 6 | 10 |
+| 4 | 470 | 321,043 | 3 | 6 | 10 |
 
 *TP53 · KRAS · GATA1 · JAK1   —   Perturb-seq · base editing · scSNV-seq*
 
@@ -142,7 +142,7 @@ AllelePerturb/
 
 | File | Description |
 |------|-------------|
-| `data/allele_perturb_bench.csv` | 472 variants: gene, protein, θ₆ biophysical features, 6 split assignments |
+| `data/allele_perturb_bench.csv` | 470 protein-coding variants (+2 WT reference rows): gene, protein, θ₆ biophysical features, 6 split assignments |
 | `results/results_v4_exttheta.csv` | Full evaluation grid (canonical, external-θ) |
 | `results/rankability_predictor_honest.csv` | Per-perturbation rankability predictor (leave-one-dataset-out) |
 
@@ -179,7 +179,7 @@ python ../scripts/preprocess_gata1.py    # -> gata1_arrays.npz
 wget https://zenodo.org/records/10418435/files/scSNPseq_data.zip && unzip scSNPseq_data.zip -d jak1/
 python ../scripts/preprocess_jak1.py     # -> jak1_arrays.npz  (needs R: scran + SingleCellExperiment)
 
-# ESM-1v embeddings for all 472 variants
+# ESM-1v embeddings for all 470 variants
 python ../scripts/extract_esm_embeddings.py --bench allele_perturb_bench.csv --output esm1v_embeddings.npz
 ```
 
