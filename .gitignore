@@ -39,3 +39,11 @@ Thumbs.db
 
 # Jupyter
 .ipynb_checkpoints/
+
+# Local backup of remote result data (45MB); not committed
+results/_remote/
+
+# Figure build intermediates and raster previews (regenerate from figures/**/*.py
+# and *_assemble.tex; only the vector composites and AI-panel PDFs are tracked)
+manuscript/figures/**/*_assemble.pdf
+manuscript/figures/**/*.png

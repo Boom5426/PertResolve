@@ -1,0 +1,23 @@
+% Figure 6 composite (vector). Build: pdflatex fig6_assemble.tex
+\documentclass[tikz,border=1mm]{standalone}
+\usepackage{graphicx}\usepackage{helvet}\renewcommand{\familydefault}{\sfdefault}
+\begin{document}
+\begin{tikzpicture}[x=1mm,y=1mm]
+  \useasboundingbox (0,0) rectangle (183,187);
+  % row 1: a pilot->rankability (AI) | b ROC | c AUROC forest
+  \node[anchor=north west,inner sep=0] at (4,183)  {\includegraphics[width=60mm]{Fig6a.pdf}};
+  \node[anchor=north west,inner sep=0] at (68,183) {\includegraphics[width=46mm]{fig6b_roc.pdf}};
+  \node[anchor=north west,inner sep=0] at (118,183){\includegraphics[width=58mm]{fig6c_auroc.pdf}};
+  % row 2: d prospective | e design landscape | f depth-match
+  \node[anchor=north west,inner sep=0] at (4,133)  {\includegraphics[width=58mm]{fig6d_prospective.pdf}};
+  \node[anchor=north west,inner sep=0] at (66,133) {\includegraphics[width=54mm]{fig6e_design.pdf}};
+  \node[anchor=north west,inner sep=0] at (124,133){\includegraphics[width=54mm]{fig6f_depthmatch.pdf}};
+  % row 3: g power-aware workflow (AI, full width)
+  \node[anchor=north west,inner sep=0] at (4,84)  {\includegraphics[width=168mm]{Fig6g.pdf}};
+  % panel letters
+  \tikzset{plab/.style={font=\bfseries\large,anchor=north west,inner sep=0}}
+  \node[plab] at (1,186) {a};  \node[plab] at (65,186) {b};  \node[plab] at (115,186) {c};
+  \node[plab] at (1,136) {d};  \node[plab] at (63,136) {e};  \node[plab] at (121,136) {f};
+  \node[plab] at (1,87) {g};
+\end{tikzpicture}
+\end{document}

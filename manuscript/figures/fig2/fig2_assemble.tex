@@ -1,0 +1,23 @@
+% Figure 2 composite (vector). Build: pdflatex fig2_assemble.tex
+\documentclass[tikz,border=1mm]{standalone}
+\usepackage{graphicx}\usepackage{helvet}\renewcommand{\familydefault}{\sfdefault}
+\begin{document}
+\begin{tikzpicture}[x=1mm,y=1mm]
+  \useasboundingbox (0,0) rectangle (183,183);
+  % row 1: a schematic (AI) | b PDS forest | c Pearson forest
+  \node[anchor=north west,inner sep=0] at (4,176)  {\includegraphics[width=48mm]{Fig2a.pdf}};
+  \node[anchor=north west,inner sep=0] at (55,180) {\includegraphics[width=60mm]{fig2b_pds_forest.pdf}};
+  \node[anchor=north west,inner sep=0] at (119,180){\includegraphics[width=60mm]{fig2c_pearson_forest.pdf}};
+  % row 2: d scatter | e DE gradient | f gene gap
+  \node[anchor=north west,inner sep=0] at (4,116)  {\includegraphics[width=54mm]{fig2d_scatter.pdf}};
+  \node[anchor=north west,inner sep=0] at (62,122) {\includegraphics[width=72mm]{fig2e_de_gradient.pdf}};
+  \node[anchor=north west,inner sep=0] at (137,116){\includegraphics[width=44mm]{fig2f_gene_gap.pdf}};
+  % row 3: g representative variants
+  \node[anchor=north west,inner sep=0] at (50,66)  {\includegraphics[width=82mm]{fig2g_pervariant.pdf}};
+  % panel letters
+  \tikzset{plab/.style={font=\bfseries\large,anchor=north west,inner sep=0}}
+  \node[plab] at (1,182) {a};  \node[plab] at (52,182) {b};  \node[plab] at (116,182) {c};
+  \node[plab] at (1,119) {d};  \node[plab] at (60,119) {e};  \node[plab] at (134,119) {f};
+  \node[plab] at (47,68) {g};
+\end{tikzpicture}
+\end{document}
