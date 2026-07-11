@@ -124,4 +124,28 @@ JAK1  & 0.12 & 0.32 & 0.40 & 0.05 & 0.26 \\
 \end{tabular}
 \end{table}
 
+%% ===== Supplementary Table 5 =====
+\begin{table}[H]
+\centering
+\caption{\textbf{Benchmark resolution across public perturbation datasets and the allele-level genes.} Resolution is the probability that a benchmark recovers the true ranking of graded synthetic predictors under bootstrap over perturbations (the controlled-predictor analysis of the main text), computed at 50 cells per half over perturbations with at least 100 cells; allele perturbation counts and rankable fractions therefore differ from the native-depth main-text table. Well-powered gene- and drug-level benchmarks recover model orderings, whereas TP53 and KRAS are the only datasets at the floor; resolution reflects both per-perturbation signal and the number of perturbations.}
+\label{stab:external}
+\smallskip
+\begin{tabular}{@{}l l c c c@{}}
+\toprule
+Dataset & Type & Perturbations & Rankable & Resolution \\
+\midrule
+Norman 2019            & gene pairs & 224 & 74\% & 1.00 \\
+Replogle 2022          & gene KD    & 400 & 33\% & 1.00 \\
+Adamson 2016           & gene KD    & 97  & 42\% & 1.00 \\
+Virtual Cell Challenge & gene KD    & 145 & 22\% & 1.00 \\
+sci-Plex               & drug       & 188 & 2\%  & 0.77 \\
+\midrule
+JAK1  & allele & 14  & 86\% & 0.99 \\
+GATA1 & allele & 247 & 0\%  & 0.51 \\
+KRAS  & allele & 97  & 1\%  & 0.04 \\
+TP53  & allele & 98  & 1\%  & 0.01 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \end{document}
