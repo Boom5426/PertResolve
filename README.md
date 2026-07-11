@@ -13,7 +13,7 @@
 
 AllelePerturb is a benchmark and evaluation framework for predicting single-cell transcriptional responses at **protein-coding variant resolution**. Unlike gene-level perturbation benchmarks, AllelePerturb asks whether models can distinguish the cellular effects of different missense mutations within the same gene (e.g., TP53 R175H vs R273C).
 
-**Key finding:** Systematic evaluation of 20 feature-model combinations reveals that all methods recover perturbation direction (Pearson-δ 0.59–0.67) but none reliably ranks held-out variants (PDS 0.43–0.49, at or below chance 0.50). Split-half analysis traces this to a measurement-resolution floor governed by effect size, sampling noise and sequencing depth.
+**Key finding:** Systematic evaluation of 20 feature-model combinations reveals that all methods recover perturbation direction (Pearson-δ 0.60–0.68) but none reliably ranks held-out variants (PDS 0.49–0.52, statistically indistinguishable from chance 0.50). Split-half analysis traces this to a measurement-resolution floor governed by effect size, sampling noise and sequencing depth.
 
 ### Benchmark at a Glance
 
@@ -47,7 +47,7 @@ AllelePerturb/
 │   ├── results_v4_10metrics.csv          # Full 10-metric grid
 │   ├── second_probe_rankability_table.csv # Split-half rankability (55K rows)
 │   ├── split_half_power_curve.csv        # Detection-rate vs depth
-│   ├── second_probe_predictor_results.csv # LODO rankability predictor
+│   ├── rankability_predictor_honest.csv   # LODO rankability predictor (honest, per-perturbation)
 │   ├── bootstrap_CIs.json               # Bootstrap confidence intervals
 │   ├── canonical_numbers.json            # Frozen canonical numbers for manuscript
 │   ├── permutation_null_pds.csv          # 1000× permutation null for PDS

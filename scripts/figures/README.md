@@ -40,7 +40,8 @@ python draw_fig2.py --out /path/to/output.png
 | `results_v4_10metrics.csv` | 10,276 | 20 methods × 5 splits × 4 genes × 10 metrics |
 | `second_probe_rankability_table.csv` | 55,548 | Split-half D_self/D_null per perturbation |
 | `split_half_power_curve.csv` | 30 | Detection rate vs subsampled cells |
-| `second_probe_predictor_results.csv` | 7 | LODO AUROC + calibration per dataset |
+| `rankability_predictor_honest.csv` | 14 | Honest per-perturbation LODO AUROC (from `rankability_predictor.py`; effect size only) |
+| `deprecated/second_probe_predictor_results.csv` | 7 | DEPRECATED: row-level artifact, superseded (see `results/deprecated/README.md`) |
 
 ## Editing tips
 
