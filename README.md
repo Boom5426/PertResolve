@@ -1,281 +1,251 @@
 <div align="center">
 
-# AllelePerturb
+<h1>🧬 AllelePerturb</h1>
 
-**A Benchmark for Allele-Resolution Single-Cell Perturbation Prediction**
+<h3>Can models predict the transcriptional effect of <em>individual</em> protein-coding variants?</h3>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/)
+<p><b>A benchmark for allele-resolution single-cell perturbation prediction</b></p>
+
+<p>
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-green.svg"></a>
+  <img alt="Python" src="https://img.shields.io/badge/python-3.11%2B-blue.svg">
+  <img alt="Cells" src="https://img.shields.io/badge/single%20cells-321%2C043-orange.svg">
+  <img alt="Variants" src="https://img.shields.io/badge/variants-472-9cf.svg">
+  <img alt="Genes" src="https://img.shields.io/badge/genes-TP53%20%C2%B7%20KRAS%20%C2%B7%20GATA1%20%C2%B7%20JAK1-lightgrey.svg">
+  <a href="https://github.com/Boom5426/AllelePerturb/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/Boom5426/AllelePerturb?style=social"></a>
+</p>
+
+<p>
+  <a href="#-overview">Overview</a> ·
+  <a href="#-key-results">Key Results</a> ·
+  <a href="#-installation">Install</a> ·
+  <a href="#-quick-start">Quick Start</a> ·
+  <a href="#-data">Data</a> ·
+  <a href="#-evaluation-protocol">Metrics</a> ·
+  <a href="#-citation">Cite</a>
+</p>
 
 </div>
 
-## Overview
+---
 
-AllelePerturb is a benchmark and evaluation framework for predicting single-cell transcriptional responses at **protein-coding variant resolution**. Unlike gene-level perturbation benchmarks, AllelePerturb asks whether models can distinguish the cellular effects of different missense mutations within the same gene (e.g., TP53 R175H vs R273C).
-
-**Key finding:** Systematic evaluation of 20 feature-model combinations reveals that all methods recover perturbation direction (Pearson-δ 0.60–0.68) but none reliably ranks held-out variants (PDS 0.49–0.52, statistically indistinguishable from chance 0.50). Split-half analysis traces this to a measurement-resolution floor governed by effect size, sampling noise and sequencing depth.
-
-### Benchmark at a Glance
-
-| Property | Value |
-|----------|-------|
-| **Genes** | TP53, KRAS, GATA1, JAK1 |
-| **Variants** | 472 protein-coding variants |
-| **Cells** | 321,043 single cells |
-| **Technologies** | Perturb-seq, base editing, scSNV-seq |
-| **Splits** | 6 generalization strategies |
-| **Methods** | 20 feature-model combinations |
-| **Metrics** | 10 evaluation metrics |
+> [!IMPORTANT]
+> **TL;DR** — Across 20 predictors, every method recovers the *direction* of a variant's transcriptional effect (Pearson-δ **0.60–0.68**), but **none reliably distinguishes individual alleles of the same gene** (PDS **0.49–0.52**, indistinguishable from chance 0.50). A split-half analysis traces this to a **measurement-resolution floor** set by effect size, sampling noise and sequencing depth — reframing variant-level benchmarking as a *power-aware* problem.
 
 ---
 
-## Repository Structure
+## ✨ Overview
 
-```
-AllelePerturb/
-├── alleleperturb/           # Python package (bench loading, evaluation)
-│   ├── bench.py             # Load and filter the benchmark table
-│   ├── evaluation/          # Evaluation utilities
-│   └── features.py          # θ feature computation
-├── data/                    # Benchmark tables (included in repo)
-│   ├── allele_perturb_bench.csv          # 472 variants, θ₆ features, splits
-│   ├── allele_perturb_bench_v2.csv       # V2 with external-only hotspot
-│   ├── allele_perturb_bench_exttheta.csv # De-leaked θ version
-│   └── hotspot_external_definition.txt   # External hotspot criteria
-├── results/                 # Pre-computed result tables (included)
-│   ├── results_v4_exttheta.csv           # Main grid: 20 methods × 5 splits × 4 genes × 10 metrics
-│   ├── results_v4_10metrics.csv          # Full 10-metric grid
-│   ├── second_probe_rankability_table.csv # Split-half rankability (55K rows)
-│   ├── split_half_power_curve.csv        # Detection-rate vs depth
-│   ├── rankability_predictor_honest.csv   # LODO rankability predictor (honest, per-perturbation)
-│   ├── bootstrap_CIs.json               # Bootstrap confidence intervals
-│   ├── canonical_numbers.json            # Frozen canonical numbers for manuscript
-│   ├── permutation_null_pds.csv          # 1000× permutation null for PDS
-│   ├── rankability_sensitivity.csv       # Sensitivity to criterion choice
-│   └── unrankable_canonical.json         # Un-rankable fractions per dataset
-├── scripts/
-│   ├── figures/             # Figure-drawing scripts (self-contained)
-│   │   ├── fig_config.py    # Shared config, colors, loaders
-│   │   ├── draw_fig2.py     # Direction-ranking dissociation
-│   │   ├── draw_fig3.py     # Split-half measurement window
-│   │   ├── draw_fig4.py     # Robustness across splits/metrics
-│   │   └── draw_fig5.py     # Rankability prediction + workflow
-│   ├── baselines/           # Baseline method implementations
-│   └── run_all_splits.py    # Full evaluation grid runner
-├── figures/                 # Generated figures organized by panel
-│   ├── fig1/ ... fig5/      # Each: composite + panels/ + figure.md
-│   └── extended_data/       # Extended Data figures
-├── manuscript/
-│   ├── AllelePerturb_manuscript_en.md    # Markdown manuscript
-│   └── latex/               # LaTeX build directory
-│       ├── AllelePerturb_manuscript.tex
-│       ├── references.bib   # 19 BibTeX entries (DOI-verified)
-│       ├── figures/          # PDF figures for embedding
-│       ├── Makefile          # Build: `make`
-│       └── README.md         # Compilation instructions
-├── PROJECT_STRUCTURE.md     # Detailed structure documentation
-├── requirements.txt         # Python dependencies
-└── README.md                # This file
-```
+Most single-cell perturbation benchmarks define a perturbation at the level of a **gene**, **drug** or **condition** ("knock down *TP53*", "apply compound X"). But many disease mechanisms are **allele-specific**: `TP53 R175H` unfolds the protein, `R273C` keeps it folded yet DNA-binding-dead, and `R248Q` shows dominant-negative / gain-of-function behavior.
+
+**AllelePerturb** asks the finer question: *can a model tell these alleles apart from their single-cell transcriptional response?* It packages the publicly available single-cell perturbation data that resolve individual protein-coding variants into one benchmark, with a fixed evaluation protocol and generalization splits.
+
+<div align="center">
+
+| 🧫 Genes | 🔬 Variants | 🧮 Cells | 🧪 Technologies | 🎲 Splits | 📐 Metrics |
+|:--:|:--:|:--:|:--:|:--:|:--:|
+| 4 | 472 | 321,043 | 3 | 6 | 10 |
+
+*TP53 · KRAS · GATA1 · JAK1   —   Perturb-seq · base editing · scSNV-seq*
+
+</div>
 
 ---
 
-## Quick Start
+## 🔑 Key Results
 
-### 1. Install Dependencies
+The central finding is a clean **direction–discrimination dissociation**:
+
+<div align="center">
+
+| | 🧭 **Direction recovery** | 🎯 **Allele discrimination** |
+|:--|:--:|:--:|
+| **Metric** | Pearson-δ | PDS (perturbation discrimination score) |
+| **Result** | ✅ **0.60 – 0.68** | ❌ **0.49 – 0.52**  (chance = 0.50) |
+| **Meaning** | models capture the shared, gene-level program | models cannot tell one allele from another |
+
+</div>
+
+> [!NOTE]
+> **Why?** A split-half analysis shows the culprit is not the models but the **ground truth**: within-variant replicate noise approaches the variant-to-wild-type signal. When the *effect-size-to-noise window* is narrow, no method — however expressive — can rank held-out variants. The same floor appears in gene-level Perturb-seq atlases, where a large fraction of perturbations are un-rankable at native depth.
+
+**Takeaway for practitioners:** before benchmarking models on variant-level data, first ask whether the ground truth is *measurable enough* to rank them. AllelePerturb provides the diagnostics and effect-size-conditioned guidance to do so.
+
+---
+
+## 📦 Installation
 
 ```bash
-# Clone the repo
 git clone https://github.com/Boom5426/AllelePerturb.git
 cd AllelePerturb
 
-# Create environment (Python 3.11+)
-conda create -n alleleperturb python=3.11
+conda create -n alleleperturb python=3.11 -y
 conda activate alleleperturb
 pip install -r requirements.txt
 ```
 
-**Requirements:** numpy, pandas, scipy, scikit-learn, matplotlib, seaborn, scanpy, fair-esm, torch
+**Core dependencies:** `numpy` · `pandas` · `scipy` · `scikit-learn` · `matplotlib` · `seaborn` · `scanpy` · `fair-esm` · `torch`
 
-### 2. Reproduce Figures (from pre-computed results)
+---
 
-All figure-drawing scripts read from `results/` (included in the repo) — no raw data download needed.
+## 🚀 Quick Start
+
+Every figure is reproducible **from the pre-computed tables in `results/`** — no raw-data download required.
 
 ```bash
 cd scripts/figures
 
-# Figure 2: Direction-ranking dissociation
-python draw_fig2.py
-
-# Figure 3: Split-half measurement window
-python draw_fig3.py
-
-# Figure 4: Robustness across splits and metrics
-python draw_fig4.py
-
-# Figure 5: Rankability prediction and workflow
-python draw_fig5.py
+python draw_fig2.py   # Direction–ranking dissociation
+python draw_fig3.py   # Split-half measurement window
+python draw_fig4.py   # Robustness across splits and metrics
+python draw_fig5.py   # Rankability prediction + power-aware workflow
 ```
 
-Output composites are saved to `../../figures/composites/`.
-
-### 3. Reproduce the Evaluation Grid (from raw data)
-
-This requires downloading the raw single-cell data (~2 GB total). See [Data](#data) below.
+<details>
+<summary><b>Re-run the full evaluation grid from raw data</b></summary>
 
 ```bash
-# After downloading raw arrays to data/:
+# after downloading the raw arrays into data/ (see Data below)
 python scripts/run_all_splits.py \
     --data_dir data/ \
-    --output results/results_v4_10metrics.csv
+    --output   results/results_v4_10metrics.csv
 ```
 
-This runs 20 methods × 5 splits × 4 genes × 10 metrics. Runtime: ~30 min on a 24-core CPU.
+Runs 20 methods × 5 splits × 4 genes × 10 metrics (~30 min on a 24-core CPU).
+
+</details>
 
 ---
 
-## Data
+## 🗂️ Repository Structure
+
+```
+AllelePerturb/
+├── alleleperturb/          # Python package: bench loading, θ features, evaluation
+├── data/                   # Benchmark tables (θ features, split assignments)
+├── results/                # Pre-computed result tables (reproducibility backbone)
+├── scripts/
+│   ├── figures/            # Self-contained figure-drawing scripts
+│   ├── baselines/          # Baseline method implementations
+│   └── run_all_splits.py   # Full evaluation-grid runner
+├── figures/                # Generated figures (composites + panels)
+├── manuscript/             # LaTeX manuscript + references
+├── requirements.txt
+└── README.md
+```
+
+---
+
+## 📊 Data
 
 ### Included in the repository
 
-| File | Rows | Description |
-|------|------|-------------|
-| `data/allele_perturb_bench.csv` | 472 | Variant metadata: gene, protein, variant name, cell count, θ₆ features, 6 split assignments |
-| `data/allele_perturb_bench_v2.csv` | 472 | V2 with external-only hotspot (de-leaked) |
-| `results/results_v4_exttheta.csv` | 10,276 | Full evaluation grid (canonical, external-θ) |
-| `results/second_probe_rankability_table.csv` | 55,548 | Split-half rankability across depth bins |
+| File | Description |
+|------|-------------|
+| `data/allele_perturb_bench.csv` | 472 variants: gene, protein, θ₆ biophysical features, 6 split assignments |
+| `results/results_v4_exttheta.csv` | Full evaluation grid (canonical, external-θ) |
+| `results/rankability_predictor_honest.csv` | Per-perturbation rankability predictor (leave-one-dataset-out) |
 
-### External data (download separately)
+### Raw single-cell data (download separately, ~2 GB)
 
-The raw single-cell expression arrays are too large for git (~2 GB). They are needed only to **re-run the evaluation grid** (`scripts/run_all_splits.py`). Drawing figures from pre-computed results does **not** require them.
+Needed only to **re-run the evaluation grid** — not to draw figures.
 
-#### TP53 + KRAS (Ursu et al. 2022, A549 Perturb-seq)
+| Genes | Source | Assay |
+|-------|--------|-------|
+| **TP53 + KRAS** | [GEO GSE161824](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE161824) | Perturb-seq (A549) |
+| **GATA1** | [🤗 cyclopeta/PerturbNet_reproduce](https://huggingface.co/datasets/cyclopeta/PerturbNet_reproduce) | Base editing (HSPC) |
+| **JAK1** | [Zenodo 10418435](https://doi.org/10.5281/zenodo.10418435) · ENA PRJEB48915 | scSNV-seq (HT-29) |
 
-Source: [GEO GSE161824](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE161824)
+<details>
+<summary><b>Download commands & preprocessing</b></summary>
 
 ```bash
 cd data/
-# Download processed matrix files
-wget https://ftp.ncbi.nlm.nih.gov/geo/series/GSE161nnn/GSE161824/suppl/GSE161824_A549_TP53.processed.matrix.mtx.gz
-wget https://ftp.ncbi.nlm.nih.gov/geo/series/GSE161nnn/GSE161824/suppl/GSE161824_A549_TP53.processed.genes.csv.gz
-wget https://ftp.ncbi.nlm.nih.gov/geo/series/GSE161nnn/GSE161824/suppl/GSE161824_A549_TP53.variants2cell.csv.gz
-wget https://ftp.ncbi.nlm.nih.gov/geo/series/GSE161nnn/GSE161824/suppl/GSE161824_A549_KRAS.processed.matrix.mtx.gz
-wget https://ftp.ncbi.nlm.nih.gov/geo/series/GSE161nnn/GSE161824/suppl/GSE161824_A549_KRAS.processed.genes.csv.gz
-wget https://ftp.ncbi.nlm.nih.gov/geo/series/GSE161nnn/GSE161824/suppl/GSE161824_A549_KRAS.variants2cell.csv.gz
+
+# TP53 + KRAS (Ursu et al. 2022)
+for G in TP53 KRAS; do
+  for F in processed.matrix.mtx.gz processed.genes.csv.gz variants2cell.csv.gz; do
+    wget https://ftp.ncbi.nlm.nih.gov/geo/series/GSE161nnn/GSE161824/suppl/GSE161824_A549_${G}.${F}
+  done
+done
+python ../scripts/preprocess_ursu.py     # -> joint_arrays.npz
+
+# GATA1 (Yu & Welch 2025)
+python -c "from huggingface_hub import hf_hub_download; \
+  hf_hub_download('cyclopeta/PerturbNet_reproduce','GATA1_standard_hvg_pert_filtered.h5ad',local_dir='.')"
+python ../scripts/preprocess_gata1.py    # -> gata1_arrays.npz
+
+# JAK1 (Cooper et al. 2024)
+wget https://zenodo.org/records/10418435/files/scSNPseq_data.zip && unzip scSNPseq_data.zip -d jak1/
+python ../scripts/preprocess_jak1.py     # -> jak1_arrays.npz  (needs R: scran + SingleCellExperiment)
+
+# ESM-1v embeddings for all 472 variants
+python ../scripts/extract_esm_embeddings.py --bench allele_perturb_bench.csv --output esm1v_embeddings.npz
 ```
 
-After downloading, run `scripts/preprocess_ursu.py` to produce `joint_arrays.npz`.
-
-#### GATA1 (Yu & Welch 2025, HSPC base editing)
-
-Source: [HuggingFace cyclopeta/PerturbNet_reproduce](https://huggingface.co/datasets/cyclopeta/PerturbNet_reproduce)
-
-```bash
-pip install huggingface_hub
-python -c "
-from huggingface_hub import hf_hub_download
-hf_hub_download('cyclopeta/PerturbNet_reproduce',
-    'GATA1_standard_hvg_pert_filtered.h5ad',
-    local_dir='data/')
-"
-```
-
-After downloading, run `scripts/preprocess_gata1.py` to produce `gata1_arrays.npz`.
-
-#### JAK1 (Cooper et al. 2024, HT-29 scSNV-seq)
-
-Source: [Zenodo 10418435](https://doi.org/10.5281/zenodo.10418435) (ENA: PRJEB48915)
-
-```bash
-# Download the SingleCellExperiment RDS (232 MB)
-wget https://zenodo.org/records/10418435/files/scSNPseq_data.zip
-unzip scSNPseq_data.zip -d data/jak1/
-```
-
-After downloading, run `scripts/preprocess_jak1.py` (requires R with scran + SingleCellExperiment) to produce `jak1_arrays.npz`.
-
-#### ESM-1v Embeddings
-
-```bash
-# Extract ESM-1v embeddings for all 472 variants
-python scripts/extract_esm_embeddings.py \
-    --bench data/allele_perturb_bench.csv \
-    --output data/esm1v_embeddings.npz
-```
-
-Requires `fair-esm` and ~2 GB GPU memory (or ~10 min on CPU).
+</details>
 
 ---
 
-## Evaluation Protocol (AllelePerturb-Eval)
+## 📏 Evaluation Protocol
 
-### Core Metrics
+### Metrics
 
-| Metric | What it measures | Range |
-|--------|-----------------|-------|
-| **PDS** (Perturbation Discrimination Score) | Is a prediction closer to its own target than to other variants? | 0–1 (0.5 = chance) |
-| **Pearson-δ** | Correlation between predicted and true perturbation directions | -1 to 1 |
-| **DE overlap** | Fraction of top-50 DE genes shared between prediction and truth | 0–1 |
+| Metric | Question | Range |
+|--------|----------|:-----:|
+| **PDS** *(primary)* | Is a prediction closer to its own target than to other variants? | 0–1 · **0.5 = chance** |
+| **Pearson-δ** | Do predicted and true perturbation directions agree? | −1 to 1 |
+| **DE overlap** | Fraction of top-50 DE genes shared | 0–1 |
 | **Direction agreement** | Sign concordance across genes | 0–1 |
-| **DE-LFC Spearman** | Rank correlation of log-fold-changes for DE genes | -1 to 1 |
+| **DE-LFC Spearman** | Rank correlation of log-fold-changes | −1 to 1 |
 | **MAE** | Mean absolute error of predicted profiles | ≥ 0 |
 
-PDS is computed under three distances (cosine, L1, L2); PDS-cosine is the primary metric reported.
+*PDS is computed under cosine, L1 and L2 distances; **PDS-cosine** is the primary metric.*
 
-### Generalization Splits
+### Generalization splits
 
-| Split | Training | Test | Tests |
-|-------|----------|------|-------|
-| Random | 65% variants | 35% variants | Standard generalization |
-| OOD-Position | N-terminal half | C-terminal half | Positional extrapolation |
-| OOD-Mechanism | Non-hotspot | Hotspot/ZF variants | Mechanistic extrapolation |
-| Cross-Gene | 3 genes | 1 gene (all variants) | Gene transfer |
-| Low-N | Variants ≥200 cells | Variants <200 cells | Low-depth evaluation |
-| PerturbNet-Compat | Matching PerturbNet holdouts | PerturbNet test sets | Direct comparison |
+| Split | Held out | Tests |
+|-------|----------|-------|
+| **Random** | 35% of variants | Standard generalization |
+| **OOD-Position** | C-terminal half | Positional extrapolation |
+| **OOD-Mechanism** | Hotspot / functional residues | Mechanistic extrapolation |
+| **Cross-Gene** | one whole gene | Gene transfer |
+| **Low-N** | variants < 200 cells | Low-depth regime |
+| **Compatibility** | matched holdouts | Comparison with prior work |
 
 ---
 
-## Manuscript
+## 📄 Manuscript
 
-### Compile the LaTeX manuscript
+The LaTeX manuscript lives under `manuscript/latex/` and compiles with:
 
 ```bash
-# Requires TeX Live (install with: sudo apt install texlive-full)
-cd manuscript/latex
-make
+cd manuscript/latex && make
 ```
-
-This produces `AllelePerturb_manuscript.pdf` (20 pages, 5 embedded figures, 19 BibTeX references).
-
-### Manuscript files
-
-| File | Description |
-|------|-------------|
-| `manuscript/AllelePerturb_manuscript_en.md` | Markdown source |
-| `manuscript/latex/AllelePerturb_manuscript.tex` | LaTeX source |
-| `manuscript/latex/references.bib` | Bibliography (19 DOI-verified entries) |
-| `manuscript/latex/figures/fig1–5.pdf` | Embedded figure PDFs |
 
 ---
 
-## Citation
-
-If you use AllelePerturb in your research, please cite:
+## 📖 Citation
 
 ```bibtex
 @article{li2026alleleperturb,
-  title={AllelePerturb reveals measurement limits of protein-coding variant 
-         prediction in single-cell transcriptomics},
-  author={Li, Bo},
-  year={2026},
-  note={Manuscript in preparation}
+  title   = {AllelePerturb reveals measurement limits of protein-coding
+             variant prediction in single-cell transcriptomics},
+  author  = {Li, Bo},
+  year    = {2026},
+  note    = {Manuscript in preparation}
 }
 ```
 
-## License
+---
 
-This project is licensed under the MIT License.
+## 📝 License & Contact
 
-## Contact
+Released under the [MIT License](LICENSE).
+Questions and contributions welcome — please open an [issue](https://github.com/Boom5426/AllelePerturb/issues).
 
-Bo Li — University of Florida, Department of Biomedical Engineering
+**Bo Li** · University of Florida, Department of Biomedical Engineering
+
+<div align="center">
+<sub>If AllelePerturb is useful for your work, consider leaving a ⭐ — it helps others find it.</sub>
+</div>
