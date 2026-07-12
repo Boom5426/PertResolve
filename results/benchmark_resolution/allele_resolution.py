@@ -33,12 +33,17 @@ def norm(Mx):
     return Mx / (np.linalg.norm(Mx, axis=1, keepdims=True) + 1e-12)
 
 
+import pandas as pd
+_bench = pd.read_csv("/data/boom/NUS/VCCompass/allele_perturb_bench.csv")
+BENCH = {g: set(_bench[_bench.gene == g]["variant"]) for g in H.GENES}   # curated benchmark set (consistency)
+
+
 def run(g):
     X, lab = H.load_gene(g); lab = np.asarray(lab)
     from sklearn.decomposition import PCA
     Xp = PCA(n_components=50, random_state=0).fit_transform(X.astype(np.float32))
     wt = np.where(np.isin(lab, WT))[0]
-    perts = [v for v in np.unique(lab) if v not in WT and (lab == v).sum() >= 2 * M]
+    perts = [v for v in np.unique(lab) if v not in WT and v in BENCH[g] and (lab == v).sum() >= 2 * M]
     cell = {p: Xp[lab == p] for p in perts}
     dself, dnull = {p: [] for p in perts}, {p: [] for p in perts}
     pv = {a: {p: [] for p in perts} for a in ALPHAS}
