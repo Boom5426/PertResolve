@@ -177,7 +177,7 @@ JAK1  & 51\% & 49\% & 0.808 & 0.892 \\
 %% ===== Supplementary Table 7 =====
 \begin{table}[H]
 \centering
-\caption{\textbf{Representation robustness control.} PDS-cosine and Pearson-$\delta$ for each variant representation under the identical splits, six regression heads and scoring (single deterministic pseudobulk draw; the multi-seed convention used in the main text gives PDS 0.49--0.52). Modern sequence embeddings, mutation-aware mutant-minus-wild-type constructions, and a structure- and evolution-informed variant-effect predictor (AlphaMissense) all leave allele discrimination at chance while recovering direction similarly. A featureless training-gene-mean predictor reaches Pearson-$\delta$ 0.66 at PDS 0.45.}
+\caption{\textbf{Representation robustness control.} PDS-cosine and Pearson-$\delta$ for each variant representation under the identical splits, six regression heads and scoring (single deterministic pseudobulk draw; the multi-seed convention used in the main text gives PDS 0.49--0.52). Modern sequence embeddings, mutation-aware mutant-minus-wild-type constructions, and a structure- and evolution-informed variant-effect predictor (AlphaMissense) all leave allele discrimination at chance while recovering direction similarly. A featureless training-gene-mean predictor reaches Pearson-$\delta$ 0.66 at PDS 0.45. Under the single-draw convention these point estimates fall marginally below 0.50 (self-identification slightly worse than random), a finite-sample and tie-structure effect that averaging over pseudobulk subsamples removes.}
 \label{stab:representation}
 \smallskip
 \begin{tabular}{@{}l c c@{}}
@@ -203,6 +203,7 @@ AlphaMissense $+\ \theta$ & 0.466 & 0.656 \\
 \caption{\textbf{Oracle ceiling sensitivity.} The replicate-based discrimination ceiling recomputed over all variants of each gene under stress tests (small differences from the main-text per-split values reflect the all-variant candidate set). Full depth uses all cells per half; perfect prediction uses a deep disjoint estimate of the true mean scored against the benchmark's noisy pseudobulk truth; shrinkage reports a prediction shrunk fully to the gene mean ($\lambda{=}0$) versus the replicate oracle ($\lambda{=}1$). The ceiling is unchanged by depth and stays at chance for TP53 and KRAS even for a perfect prediction; shrinking toward the gene mean does not raise it.}
 \label{stab:oraclesens}
 \smallskip
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{@{}l c c c c c@{}}
 \toprule
 Gene & Oracle (300-cell) & Oracle (full depth) & Perfect vs noisy & Shrink to gene-mean & Replicate oracle \\
@@ -212,7 +213,7 @@ KRAS  & 0.485 & 0.492 & 0.490 & 0.500 & 0.485 \\
 GATA1 & 0.585 & 0.591 & 0.569 & 0.500 & 0.585 \\
 JAK1  & 0.812 & 0.812 & 0.997$^{*}$ & 0.500 & 0.812 \\
 \bottomrule
-\end{tabular}
+\end{tabular}}
 
 \smallskip
 \footnotesize $^{*}$JAK1 perfect-versus-noisy is computed over only the few JAK1 variants with more than 350 cells and is not representative of the gene.
@@ -240,7 +241,7 @@ yes & yes            & yes            & successful regime          & (target) \\
 %% ===== Supplementary Table 10 (moved from main text) =====
 \begin{table}[H]
 \centering
-\caption{\textbf{Published perturbation models under a unified allele-level evaluation.} Perturbation-discrimination score (PDS, cosine) with 95\% bootstrap confidence intervals, pooled over five generalization splits and four genes; chance is 0.5. Variant-conditionable models are scored directly; gene-keyed models are allele-blind by construction and reported by resolution coverage. Every method was scored through one harness (identical held-out variants, pseudobulk profiles, tie-aware PDS and permutation null).}
+\caption{\textbf{Published perturbation models under a unified allele-level evaluation.} Perturbation-discrimination score (PDS, cosine) with 95\% bootstrap confidence intervals, pooled over five generalization splits and four genes; chance is 0.50. Variant-conditionable models are scored directly; gene-keyed models are allele-blind by construction and reported by resolution coverage. Every method was scored through one harness (identical held-out variants, pseudobulk profiles, tie-aware PDS and permutation null).}
 \label{tab:models}
 \smallskip
 \begin{tabular}{@{}p{4.2cm} p{3.0cm} l c@{}}
@@ -276,9 +277,10 @@ Compositional autoencoder & variant-CPA & non-finite loss & --- \\
 %% ===== Supplementary Table 11 (moved from main text) =====
 \begin{table}[H]
 \centering
-\caption{\textbf{Per-gene measurement window, achievable ceiling and model performance.} Split-half energy-distance ratio $D_\mathrm{self}/D_\mathrm{null}$; oracle discrimination ceiling (independent second measurement, estimating attainable discrimination); fraction of allele pairs resolvable above replicate noise; fraction of variants rankable at native depth; and best honestly-scored model PDS (canonical multi-seed harness). Chance is 0.5.}
+\caption{\textbf{Per-gene measurement window, achievable ceiling and model performance.} Split-half energy-distance ratio $D_\mathrm{self}/D_\mathrm{null}$; oracle discrimination ceiling (independent second measurement, estimating attainable discrimination); fraction of allele pairs resolvable above replicate noise; fraction of variants rankable at native depth; and best honestly-scored model PDS (canonical multi-seed harness). Chance is 0.50.}
 \label{tab:window}
 \smallskip
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{@{}l c c c c c@{}}
 \toprule
 Gene & $D_\mathrm{self}/D_\mathrm{null}$ & Oracle ceiling (95\% CI) & Pairs resolvable & Rankable (native) & Best model PDS$^{\dagger}$ \\
@@ -288,7 +290,7 @@ KRAS  & 1.00 & 0.500 (0.440--0.566) & 0\%    & 0\%   & 0.54 \\
 GATA1 & 0.88 & 0.572 (0.549--0.595) & 3.8\%  & 2.4\% & 0.50 \\
 JAK1  & 0.21 & 0.792 (0.742--0.838) & 78.5\% & 90\%  & 0.52 \\
 \bottomrule
-\end{tabular}
+\end{tabular}}
 
 \smallskip
 \footnotesize $^{\dagger}$Best model is the highest-scoring in-house feature-regression head per gene under the canonical multi-seed harness (published variant-conditionable models are compared separately in Supplementary Table~\ref{tab:models}). PerturbNet is excluded; its higher per-gene values (0.53--0.54) arise from its 50-dimensional principal-component subspace, in which random predictions already score 0.52.
