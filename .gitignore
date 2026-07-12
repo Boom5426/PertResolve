@@ -47,3 +47,6 @@ results/_remote/
 # and *_assemble.tex; only the vector composites and AI-panel PDFs are tracked)
 manuscript/figures/**/*_assemble.pdf
 manuscript/figures/**/*.png
+
+# Local-only skills toolkit; never commit or publish (kept out of GitHub)
+Nature-Paper-Skills/
