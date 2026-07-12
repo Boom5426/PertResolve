@@ -148,4 +148,66 @@ TP53  & allele & 98  & 1\%  & 0.01 \\
 \end{tabular}
 \end{table}
 
+%% ===== Supplementary Table 6 =====
+\begin{table}[H]
+\centering
+\caption{\textbf{Gene-shared versus allele-specific decomposition.} Each variant effect is split as $\delta_v = \bar{\delta}_g + r_v$. Columns give the fraction of the per-variant effect that is gene-shared versus the allele-specific residual, and the oracle discrimination ceiling scored on the full profiles versus on the residual (allele-specific) profiles. Across all 24 predictors the residual Pearson-$\delta$ lay between $-0.08$ and $0.03$, so direction recovery is essentially entirely gene-shared.}
+\label{stab:residual}
+\smallskip
+\begin{tabular}{@{}l c c c c@{}}
+\toprule
+Gene & Gene-shared & Allele residual & Oracle (full) & Oracle (residual) \\
+\midrule
+TP53  & 72\% & 28\% & 0.488 & 0.480 \\
+KRAS  & 59\% & 41\% & 0.472 & 0.464 \\
+GATA1 & 29\% & 71\% & 0.573 & 0.588 \\
+JAK1  & 51\% & 49\% & 0.808 & 0.892 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+%% ===== Supplementary Table 7 =====
+\begin{table}[H]
+\centering
+\caption{\textbf{Representation robustness control.} PDS-cosine and Pearson-$\delta$ for each variant representation under the identical splits, six regression heads and scoring (single deterministic pseudobulk draw; the multi-seed convention used in the main text gives PDS 0.49--0.52). Modern sequence embeddings, mutation-aware mutant-minus-wild-type constructions, and a structure- and evolution-informed variant-effect predictor (AlphaMissense) all leave allele discrimination at chance while recovering direction similarly. A featureless training-gene-mean predictor reaches Pearson-$\delta$ 0.67 at PDS 0.45.}
+\label{stab:representation}
+\smallskip
+\begin{tabular}{@{}l c c@{}}
+\toprule
+Representation & PDS-cosine & Pearson-$\delta$ \\
+\midrule
+$\theta$ (biophysical, 6-d) & 0.475 & 0.632 \\
+ESM-1v (1{,}280-d) & 0.464 & 0.640 \\
+ESM2 global & 0.465 & 0.645 \\
+ESM2 mutant$-$WT global delta & 0.465 & 0.646 \\
+ESM2 mutated-residue delta & 0.468 & 0.631 \\
+ESM2 local-window delta & 0.466 & 0.646 \\
+ESM2 residue delta $+\ \theta$ & 0.465 & 0.627 \\
+AlphaMissense & 0.459 & 0.655 \\
+AlphaMissense $+\ \theta$ & 0.466 & 0.656 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+%% ===== Supplementary Table 8 =====
+\begin{table}[H]
+\centering
+\caption{\textbf{Oracle ceiling sensitivity.} The replicate-based discrimination ceiling recomputed over all variants of each gene under stress tests (small differences from the main-text per-split values reflect the all-variant candidate set). Full depth uses all cells per half; perfect prediction uses a deep disjoint estimate of the true mean scored against the benchmark's noisy pseudobulk truth; shrinkage reports a prediction shrunk fully to the gene mean ($\lambda{=}0$) versus the replicate oracle ($\lambda{=}1$). The ceiling is unchanged by depth and stays at chance for TP53 and KRAS even for a perfect prediction; shrinking toward the gene mean does not raise it.}
+\label{stab:oraclesens}
+\smallskip
+\begin{tabular}{@{}l c c c c c@{}}
+\toprule
+Gene & Oracle (300-cell) & Oracle (full depth) & Perfect vs noisy & Shrink to gene-mean & Replicate oracle \\
+\midrule
+TP53  & 0.487 & 0.486 & 0.488 & 0.500 & 0.487 \\
+KRAS  & 0.476 & 0.476 & 0.481 & 0.500 & 0.476 \\
+GATA1 & 0.585 & 0.591 & 0.569 & 0.500 & 0.585 \\
+JAK1  & 0.812 & 0.812 & 0.997$^{*}$ & 0.500 & 0.812 \\
+\bottomrule
+\end{tabular}
+
+\smallskip
+\footnotesize $^{*}$JAK1 perfect-versus-noisy is computed over only the few JAK1 variants with more than 350 cells and is not representative of the gene.
+\end{table}
+
 \end{document}

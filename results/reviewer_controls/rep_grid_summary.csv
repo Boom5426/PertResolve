@@ -1,0 +1,8 @@
+representation,dim,PDS_cos,pearson_delta
+theta,6,0.475,0.632
+esm1v,1280,0.464,0.64
+esm2_global,1280,0.465,0.645
+esm2_globaldelta,1280,0.465,0.646
+esm2_sitedelta,1280,0.468,0.631
+esm2_window16,1280,0.466,0.646
+esm2_sitedelta+theta,1286,0.465,0.627

@@ -1,0 +1,5 @@
+gene,n_var,frac_gene_shared,frac_allele_residual,oracle_full,oracle_residual
+TP53,98,0.715,0.285,0.488,0.48
+KRAS,97,0.591,0.409,0.472,0.464
+GATA1,254,0.294,0.706,0.573,0.588
+JAK1,26,0.506,0.494,0.808,0.892
