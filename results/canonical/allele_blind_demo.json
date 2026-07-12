@@ -1,0 +1,37 @@
+{
+  "models": {
+    "scGPT": "Cui et al. 2024 Nat Methods \u2014 perturbation-prediction head conditions on a perturbed-GENE token; no within-gene variant channel. (Using scGPT only as a cell-embedding provider reduces to embedding->regressor, already represented by our ESM heads.)",
+    "GEARS": "Roohani et al. 2024 Nat Biotech \u2014 perturbations are nodes in a gene-gene GO graph, indexed by GENE; two alleles of a gene map to the same node.",
+    "STATE": "Adduri et al. 2025 (Arc) \u2014 perturbations are one-hot perturbation identities; allele-blind for held-out variants as shipped."
+  },
+  "mechanism": "condition on perturbed-gene identity; identical prediction for all variants of a gene",
+  "per_gene": [
+    {
+      "gene": "TP53",
+      "n_variants": 98,
+      "gene_keyed_representations": 1,
+      "collapse_ratio": 0.0102
+    },
+    {
+      "gene": "KRAS",
+      "n_variants": 93,
+      "gene_keyed_representations": 1,
+      "collapse_ratio": 0.0108
+    },
+    {
+      "gene": "GATA1",
+      "n_variants": 255,
+      "gene_keyed_representations": 1,
+      "collapse_ratio": 0.0039
+    },
+    {
+      "gene": "JAK1",
+      "n_variants": 26,
+      "gene_keyed_representations": 1,
+      "collapse_ratio": 0.0385
+    }
+  ],
+  "resolution_coverage": "4/472 = 0.85% of benchmark variants representable",
+  "category_error": "assigning these models an allele-level PDS is a category error (they cannot represent the distinction being scored)",
+  "empirical_anchor": "Gene-mean reference (a gene-constant predictor) = PDS 0.468 [0.435, 0.501] (at chance) -> gene-resolution models cannot discriminate alleles"
+}

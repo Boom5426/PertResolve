@@ -36,7 +36,7 @@ def _halfviolin(ax, x, data, color, side=1):
 
 def main() -> None:
     S.apply_rcparams()
-    df = pd.read_csv(S.repo_root() / "results" / "_remote" / "unified" / "fig3b_selfnull_dist.csv")
+    df = pd.read_csv(S.repo_root() / "results" / "canonical" / "fig3b_selfnull_dist.csv")
 
     import matplotlib.pyplot as plt
     fig, axes = plt.subplots(1, 2, figsize=(78 * S.MM, 46 * S.MM))

@@ -20,7 +20,9 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import nm_style as S
 
 ROOT = S.repo_root()
-REM = ROOT / "results" / "_remote" / "unified"
+# Canonical multi-seed / metrology tables, committed to the public repo so every
+# main-figure number regenerates from a tracked file (formerly under _remote/unified).
+REM = ROOT / "results" / "canonical"
 
 # split1..6 role names (split4 = cross-gene, excluded from the main grid)
 SPLIT_LABELS = {"split1": "Random", "split2": "Positional", "split3": "Mechanistic",
@@ -82,3 +84,13 @@ def classifier() -> pd.DataFrame:
 def controlled() -> pd.DataFrame:
     """gene, depth_m, n_var, ceiling_pds, pds_a0, pds_a1, P_correct_order, P_winner, mean_tau."""
     return pd.read_csv(REM / "controlled_recovery.csv")
+
+
+def best_model() -> dict[str, float]:
+    """Per-gene best honestly-scored in-house feature-model head, canonical multi-seed
+    harness (max over the 18 heads of the per-gene mean PDS_cos in unified_results5.csv).
+    Precomputed to best_model_pds.csv; recomputed here so the two stay in sync."""
+    df = pd.read_csv(REM / "unified_results5.csv")
+    ih = df[df.method.apply(is_inhouse)]
+    m = ih.groupby(["gene", "method"])["PDS_cos"].mean().reset_index()
+    return {g: float(m[m.gene == g]["PDS_cos"].max()) for g in S.GENE_ORDER}

@@ -1,0 +1,5 @@
+gene,best_model_pds,best_method
+TP53,0.508,KNN-esm+theta
+KRAS,0.541,KNN-theta
+GATA1,0.496,GBoost-theta
+JAK1,0.517,Lasso-theta

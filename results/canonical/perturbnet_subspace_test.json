@@ -1,0 +1,13 @@
+{
+  "description": "PerturbNet 50-dim WT-PCA subspace inflation test. Projecting known-at-chance predictors into the subspace inflates PDS to ~0.52; pure random in-subspace = 0.516. Demonstrates PerturbNet PDS is a subspace artifact, not allele discrimination.",
+  "script": "unified/subspace_test.py",
+  "ridge_esm_full_pds": 0.476,
+  "ridge_esm_subspace_pds": 0.52,
+  "gene_mean_full_pds": 0.468,
+  "gene_mean_subspace_pds": 0.52,
+  "pure_random_in_subspace_pds": 0.516,
+  "perturbnet_subspace_pds": 0.561,
+  "perturbnet_permutation_null_mean": 0.5434538803657682,
+  "perturbnet_permutation_p": 0.129,
+  "perturbnet_permutation_significant": false
+}
