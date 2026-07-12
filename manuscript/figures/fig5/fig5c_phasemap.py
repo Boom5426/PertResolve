@@ -5,13 +5,12 @@ Message: two distinct failure modes separate in ceiling-vs-model space.
   y = best honestly-scored model PDS per gene.
 
 Source of truth (both axes committed):
-  x: results/_remote/unified/oracle_ceiling.csv via D.oracle() PDS_oracle
+  x: results/canonical/oracle_ceiling.csv via D.oracle() PDS_oracle
      (TP53 0.485, KRAS 0.500, GATA1 0.572, JAK1 0.792).
-  y: manuscript Table tab:window "Best model PDS" column
-     (AllelePerturb_manuscript.tex L226-229; best excluding PerturbNet, canonical
-     multi-seed harness): TP53 0.51, KRAS 0.52, GATA1 0.54, JAK1 0.52.
-The y column is committed only in the .tex table (not in any D-exposed CSV), so it
-is pinned here verbatim with the trace above. No number is fabricated.
+  y: results/canonical/unified_results5.csv via D.best_model() (best in-house head,
+     canonical multi-seed harness): TP53 0.51, KRAS 0.54, GATA1 0.50, JAK1 0.52.
+Both axes now regenerate from committed CSVs; the same y feeds Fig 5b and SI Table
+tab:window "Best model PDS" so all three stay in sync.
 
 Regions (faint labels only, no leakage of ceiling/model values):
   lower-left  "measurement-limited"  both near chance (TP53, KRAS)
@@ -33,8 +32,8 @@ def _rect(x, y, w, h, color, alpha):
 
 # ---- data ----------------------------------------------------------------
 orc = D.oracle().set_index("scope")
-# best-model PDS per gene, committed in manuscript Table tab:window (L226-229)
-BEST_MODEL_PDS = {"TP53": 0.51, "KRAS": 0.52, "GATA1": 0.54, "JAK1": 0.52}
+# best-model PDS per gene, canonical multi-seed harness (D.best_model, committed CSV)
+BEST_MODEL_PDS = {g: round(v, 2) for g, v in D.best_model().items()}
 
 genes = S.GENE_ORDER  # TP53, KRAS, GATA1, JAK1
 xs = {g: float(orc.loc[g, "PDS_oracle"]) for g in genes}
@@ -83,7 +82,7 @@ for g in genes:
                edgecolor="white", linewidth=0.5, zorder=5, clip_on=False)
 
 # gene labels, offset to avoid overlap and stay on-axis
-# TP53 (0.485,0.51) & KRAS (0.500,0.52) sit close in lower-left -> spread them
+# TP53 (0.485,0.51) & KRAS (0.500,0.54) sit close in lower-left -> spread them
 label_off = {
     "TP53":  (-0.006, 0.018, "right", "bottom"),
     "KRAS":  (0.010, -0.006, "left", "top"),

@@ -5,8 +5,8 @@ Data-direct. Two committed sources:
     oracle_ceiling.csv, native-depth per-gene PDS_oracle (TP53 0.485 [0.445,0.525],
     KRAS 0.500 [0.440,0.566], GATA1 0.572 [0.549,0.595], JAK1 0.792 [0.742,0.838]).
   - Best honest model (open marker): max over the 18 in-house feature-model heads of
-    the per-gene mean PDS_cos in results/results_v4_exttheta.csv
-    (TP53 0.513, KRAS 0.540, GATA1 0.500, JAK1 0.477).
+    the per-gene mean PDS_cos in results/canonical/unified_results5.csv (canonical
+    multi-seed harness; TP53 0.51, KRAS 0.54, GATA1 0.50, JAK1 0.52).
 
 Message: TP53/KRAS oracle ~= chance (measurement-limited, no headroom to compete for);
 GATA1 intermediate; JAK1 oracle 0.79 >> best model 0.48 (real computational gap). The
@@ -33,11 +33,8 @@ REGIME = {
 
 
 def best_model_pds() -> dict[str, float]:
-    """Max over in-house heads of per-gene mean PDS_cos (committed grid)."""
-    df = D.exttheta()
-    ih = df[df.method.apply(D.is_inhouse)]
-    m = ih.groupby(["gene", "method"])["PDS_cos"].mean().reset_index()
-    return {g: m[m.gene == g]["PDS_cos"].max() for g in S.GENE_ORDER}
+    """Per-gene best in-house head, canonical multi-seed harness (D.best_model)."""
+    return D.best_model()
 
 
 def main() -> None:
