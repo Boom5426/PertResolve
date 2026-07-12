@@ -22,17 +22,25 @@
 
 \title{Supplementary Information\\[4pt]
 \large AllelePerturb reveals measurement limits of protein-coding variant prediction in single-cell transcriptomics}
-\author{Bo~Li\textsuperscript{1,*}}
+\author{}
 \date{}
 
 \begin{document}
 \maketitle
 
-\noindent\textsuperscript{1}Department of Biomedical Engineering, University of Florida, Gainesville, FL, USA.\\[2pt]
-\noindent\textsuperscript{*}Correspondence: \href{mailto:bo.li@ufl.edu}{bo.li@ufl.edu}
-
 \bigskip
 \noindent This document contains the full parameter tables underlying the variant feature representation, the prediction methods and the split-half rankability analysis. Complete assignments and code are also available at \url{https://github.com/Boom5426/AllelePerturb}.
+
+\bigskip
+
+
+%% ===== Supplementary Figure 1 =====
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{figures/ED_fig1.pdf}
+\caption{\textbf{The rankability verdict is robust to the choice of criterion.} Fraction of un-rankable perturbations for the seven datasets (the four AllelePerturb genes and three gene-level Perturb-seq atlases) under five rankability criteria: the primary signal-versus-noise rule $S>W$ (default); a bootstrap lower-bound rule ($\mathrm{CI}(S)>0$, the lower $95\%$ confidence bound of $S$ above zero); two increased-stringency rules ($S>1.5\,W$ and $S>2\,W$); and a ratio threshold, under which a variant is un-rankable when $D_\mathrm{self}/D_\mathrm{null}\ge0.8$. Absolute fractions shift with stringency, but the ordering across datasets is preserved under every criterion: TP53 and KRAS remain $\sim$100\% un-rankable, GATA1 stays high, JAK1 stays low ($\sim$10\%), and among gene-level atlases Replogle is consistently the highest and Norman the lowest. Source values are listed in \texttt{results/rankability\_sensitivity.csv}.}
+\label{sfig:sensitivity}
+\end{figure}
 
 \bigskip
 
@@ -169,7 +177,7 @@ JAK1  & 51\% & 49\% & 0.808 & 0.892 \\
 %% ===== Supplementary Table 7 =====
 \begin{table}[H]
 \centering
-\caption{\textbf{Representation robustness control.} PDS-cosine and Pearson-$\delta$ for each variant representation under the identical splits, six regression heads and scoring (single deterministic pseudobulk draw; the multi-seed convention used in the main text gives PDS 0.49--0.52). Modern sequence embeddings, mutation-aware mutant-minus-wild-type constructions, and a structure- and evolution-informed variant-effect predictor (AlphaMissense) all leave allele discrimination at chance while recovering direction similarly. A featureless training-gene-mean predictor reaches Pearson-$\delta$ 0.67 at PDS 0.45.}
+\caption{\textbf{Representation robustness control.} PDS-cosine and Pearson-$\delta$ for each variant representation under the identical splits, six regression heads and scoring (single deterministic pseudobulk draw; the multi-seed convention used in the main text gives PDS 0.49--0.52). Modern sequence embeddings, mutation-aware mutant-minus-wild-type constructions, and a structure- and evolution-informed variant-effect predictor (AlphaMissense) all leave allele discrimination at chance while recovering direction similarly. A featureless training-gene-mean predictor reaches Pearson-$\delta$ 0.66 at PDS 0.45.}
 \label{stab:representation}
 \smallskip
 \begin{tabular}{@{}l c c@{}}
@@ -227,6 +235,63 @@ yes & yes            & no             & model-limited              & JAK1 \\
 yes & yes            & yes            & successful regime          & (target) \\
 \bottomrule
 \end{tabular}
+\end{table}
+
+%% ===== Supplementary Table 10 (moved from main text) =====
+\begin{table}[H]
+\centering
+\caption{\textbf{Published perturbation models under a unified allele-level evaluation.} Perturbation-discrimination score (PDS, cosine) with 95\% bootstrap confidence intervals, pooled over five generalization splits and four genes; chance is 0.5. Variant-conditionable models are scored directly; gene-keyed models are allele-blind by construction and reported by resolution coverage. Every method was scored through one harness (identical held-out variants, pseudobulk profiles, tie-aware PDS and permutation null).}
+\label{tab:models}
+\smallskip
+\begin{tabular}{@{}p{4.2cm} p{3.0cm} l c@{}}
+\toprule
+Model family & Method & PDS (95\% CI) & Pearson-$\delta$ \\
+\midrule
+\multicolumn{4}{@{}l}{\textit{Variant-conditionable (run to completion)}}\\
+Optimal-transport flow & CellFlow & 0.51 (0.48--0.54) & 0.12 \\
+Attribute disentanglement & Biolord & 0.49 (0.47--0.52) & 0.13 \\
+Latent arithmetic (dose) & scVIDR & 0.50 (0.48--0.53) & 0.13 \\
+Latent arithmetic & scGen & 0.49 (0.46--0.52) & 0.18 \\
+Conditional-flow generative & PerturbNet$^{\dagger}$ & 0.54 (0.51--0.57) & 0.13 \\
+Feature regression & baselines (Fig.~2) & 0.49--0.52 & 0.55--0.65 \\
+\midrule
+\multicolumn{4}{@{}l}{\textit{References}}\\
+Gene identity & Gene-mean & 0.49 (0.46--0.52) & 0.66 \\
+No perturbation & WT-null & 0.50 & --- \\
+\midrule
+\multicolumn{4}{@{}l}{\textit{Allele-blind by construction (resolution coverage 4/470 = 0.85\%)}}\\
+Foundation model & scGPT & n/a$^{\ddagger}$ & --- \\
+Gene knowledge graph & GEARS & n/a$^{\ddagger}$ & --- \\
+Virtual-cell (one-hot) & STATE & n/a$^{\ddagger}$ & --- \\
+\midrule
+\multicolumn{4}{@{}l}{\textit{Did not converge}}\\
+Compositional autoencoder & variant-CPA & non-finite loss & --- \\
+\bottomrule
+\end{tabular}
+
+\smallskip
+\footnotesize $^{\dagger}$PerturbNet generates within a 50-dimensional principal-component subspace in which random predictions already score 0.52; full-space-at-chance predictors (Ridge-esm, Gene-mean) projected into the same subspace are likewise inflated to 0.52, and its exceedance over a subspace permutation null is not significant (permutation $P=0.13$). $^{\ddagger}$These models condition on perturbed-gene identity and assign an identical prediction to every variant of a gene, so an allele-level PDS is undefined (a category error).
+\end{table}
+
+%% ===== Supplementary Table 11 (moved from main text) =====
+\begin{table}[H]
+\centering
+\caption{\textbf{Per-gene measurement window, achievable ceiling and model performance.} Split-half energy-distance ratio $D_\mathrm{self}/D_\mathrm{null}$; oracle discrimination ceiling (independent second measurement, estimating attainable discrimination); fraction of allele pairs resolvable above replicate noise; fraction of variants rankable at native depth; and best honestly-scored model PDS (canonical multi-seed harness). Chance is 0.5.}
+\label{tab:window}
+\smallskip
+\begin{tabular}{@{}l c c c c c@{}}
+\toprule
+Gene & $D_\mathrm{self}/D_\mathrm{null}$ & Oracle ceiling (95\% CI) & Pairs resolvable & Rankable (native) & Best model PDS$^{\dagger}$ \\
+\midrule
+TP53  & 0.96 & 0.485 (0.445--0.525) & 0\%    & 0\%   & 0.51 \\
+KRAS  & 1.00 & 0.500 (0.440--0.566) & 0\%    & 0\%   & 0.54 \\
+GATA1 & 0.88 & 0.572 (0.549--0.595) & 3.8\%  & 2.4\% & 0.50 \\
+JAK1  & 0.21 & 0.792 (0.742--0.838) & 78.5\% & 90\%  & 0.52 \\
+\bottomrule
+\end{tabular}
+
+\smallskip
+\footnotesize $^{\dagger}$Best model is the highest-scoring in-house feature-regression head per gene under the canonical multi-seed harness (published variant-conditionable models are compared separately in Supplementary Table~\ref{tab:models}). PerturbNet is excluded; its higher per-gene values (0.53--0.54) arise from its 50-dimensional principal-component subspace, in which random predictions already score 0.52.
 \end{table}
 
 \end{document}
