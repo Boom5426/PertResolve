@@ -14,13 +14,13 @@
     },
     {
       "gene": "KRAS",
-      "n_variants": 93,
+      "n_variants": 92,
       "gene_keyed_representations": 1,
-      "collapse_ratio": 0.0108
+      "collapse_ratio": 0.0109
     },
     {
       "gene": "GATA1",
-      "n_variants": 255,
+      "n_variants": 254,
       "gene_keyed_representations": 1,
       "collapse_ratio": 0.0039
     },
@@ -31,7 +31,7 @@
       "collapse_ratio": 0.0385
     }
   ],
-  "resolution_coverage": "4/472 = 0.85% of benchmark variants representable",
+  "resolution_coverage": "4/470 = 0.85% of benchmark variants representable",
   "category_error": "assigning these models an allele-level PDS is a category error (they cannot represent the distinction being scored)",
   "empirical_anchor": "Gene-mean reference (a gene-constant predictor) = PDS 0.468 [0.435, 0.501] (at chance) -> gene-resolution models cannot discriminate alleles"
 }
