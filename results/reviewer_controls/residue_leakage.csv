@@ -1,0 +1,6 @@
+split,n_test,residue_leak_frac
+split1,85,0.471
+split2,230,0.0
+split3,71,0.099
+split5,62,0.371
+split6,70,0.543
