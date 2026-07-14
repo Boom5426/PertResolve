@@ -26,8 +26,8 @@ def main() -> None:
     fig, ax = S.panel(72, 50)
 
     # soft, annotation-only regime bands (NOT hard thresholds)
-    ax.axhspan(0.90, 1.25, color="#EDE7F3", alpha=0.6, zorder=0)   # near floor
-    ax.axhspan(0.0, 0.50, color="#E7F1EC", alpha=0.6, zorder=0)    # wide window
+    ax.axhspan(0.90, 1.25, color="#E4E4E4", alpha=0.6, zorder=0)   # near floor (neutral grey; not a gene hue)
+    ax.axhspan(0.0, 0.50, color="#F7F7F7", alpha=0.6, zorder=0)    # wide window (faint neutral)
     ax.text(3.62, 1.07, "near floor", fontsize=5, color=S.GREY, ha="right", va="center")
     ax.text(3.62, 0.30, "wide window", fontsize=5, color=S.GREY, ha="right", va="center")
 

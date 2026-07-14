@@ -43,8 +43,8 @@ def main() -> None:
     fig, ax = S.panel(74, 54)
 
     # regime shading (annotation only)
-    ax.axhspan(0.90, 1.06, color="#E7F1EC", alpha=0.6, zorder=0)
-    ax.axhspan(-0.06, 0.50, color="#F3E9E9", alpha=0.6, zorder=0)
+    ax.axhspan(0.90, 1.06, color="#F7F7F7", alpha=0.6, zorder=0)
+    ax.axhspan(-0.06, 0.50, color="#E4E4E4", alpha=0.6, zorder=0)
     ax.text(0.905, 1.0, "reliable ranking", fontsize=5, color=S.GREY, va="center")
     ax.text(0.905, 0.16, "near floor", fontsize=5, color=S.GREY, va="center")
 

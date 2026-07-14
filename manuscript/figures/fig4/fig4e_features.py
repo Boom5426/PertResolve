@@ -35,7 +35,7 @@ import remote_data as D
 FS_ORDER = ["theta", "ESM", "ESM+theta"]
 FS_LABEL = {"theta": r"$\theta$", "ESM": "ESM", "ESM+theta": r"ESM+$\theta$"}
 
-C_DIR = S.GENE_COLORS["JAK1"]   # green = direction (pearson_delta)
+C_DIR = "#C96144"               # terracotta = direction (non-gene accent, avoids JAK1 green)
 C_PDS = S.GREY                  # grey  = PDS_cos (near chance)
 
 

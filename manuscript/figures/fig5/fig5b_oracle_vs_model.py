@@ -90,7 +90,7 @@ def main() -> None:
             ha="left", va="center")
     ax.scatter([lx], [-0.16], s=22, marker="o", facecolor="white",
                edgecolor=S.INK, linewidths=0.9, zorder=6)
-    ax.text(lx + 0.012, -0.16, "best honest model", fontsize=5, color=S.INK,
+    ax.text(lx + 0.012, -0.16, "best in-house model", fontsize=5, color=S.INK,
             ha="left", va="center")
 
     ax.set_yticks(list(ypos.values()))
