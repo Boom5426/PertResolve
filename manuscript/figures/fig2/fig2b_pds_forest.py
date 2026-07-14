@@ -34,11 +34,7 @@ def main() -> None:
     assert 0.485 <= keep.PDS.min() and keep.PDS.max() <= 0.520, "PDS out of expected range"
 
     # colour: feature-space families for the 18 heads; references in grey
-    feat_color = {
-        "theta": S.GENE_COLORS["TP53"],       # blue
-        "ESM": S.GENE_COLORS["KRAS"],         # orange
-        "ESM+theta": S.GENE_COLORS["JAK1"],   # green
-    }
+    feat_color = S.FEATURE_COLORS  # slate ramp, distinct from the gene hues used in a/f/g
 
     def color_of(m: str) -> str:
         if m in D.REFS:
@@ -73,7 +69,7 @@ def main() -> None:
     ax.set_ylim(-0.7, len(keep) + 2.2)
     ax.set_xlim(0.45, 0.56)
     ax.set_xticks([0.46, 0.50, 0.54])
-    ax.set_xlabel("PDS (perturbation direction score)")
+    ax.set_xlabel("PDS (perturbation discrimination score)")
     ax.tick_params(axis="y", length=0, pad=1.5)
     ax.tick_params(axis="x", pad=1.5)
 

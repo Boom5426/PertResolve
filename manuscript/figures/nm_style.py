@@ -39,9 +39,9 @@ GREY = "#7A7A7A"
 
 # canonical feature-space palette (Fig 2b/2c/2d/4e): keep ONE mapping across panels
 FEATURE_COLORS = {
-    "theta": "#5185C0",       # blue
-    "ESM": "#E99D4E",         # orange
-    "ESM+theta": "#55966B",   # green
+    "theta": "#9AA7B3",       # light slate (feature spaces = slate ramp, distinct from gene hues)
+    "ESM": "#5F6B76",         # mid slate
+    "ESM+theta": "#2E3742",   # dark slate
     "reference": "#7A7A7A",   # grey (Gene-mean / WT-null)
 }
 LIGHT_GREY = "#D9D9D9"
