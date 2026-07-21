@@ -1,54 +1,103 @@
-# Figure 1a — AI schematic prompt
+# Figure 1a — AI schematic prompt (pipeline-first; replaces the old concept panel)
 
-**Panel role:** the single most important definition panel. Show, with no results,
-that gene-level perturbation collapses different variants of one gene into one
-averaged response, whereas AllelePerturb keeps each protein-coding variant as an
-independent, held-out prediction target.
+**Panel role:** the entry panel of the whole paper. Show the AllelePerturb pipeline
+end to end, so a reader enters Figure 2 already knowing (i) what is measured, (ii) what
+the model does and does *not* see, (iii) how a prediction is scored, and (iv) the
+parallel single-cell resolution diagnostic that decides whether the ground truth can
+reward an allele model at all. **No results.** This panel replaces the old
+gene-vs-variant concept panel and **subsumes the old workflow panel (old g)**; the
+gene-vs-variant motivation survives, lightly, inside the discrimination axis (stage 3).
 
 **Target tool:** general raster image model (GPT-Image / Nano Banana).
-**Aspect ratio:** ~4:3 (portrait-ish), two stacked rows.
+**Aspect ratio:** ~3:2 landscape (a main left-to-right row with a thin parallel lower
+track). It will be placed in an enlarged panel-a slot at assembly (row-1 left, widened
+into the space freed by removing old g).
 
-**Palette (use exactly):** background pure white `#FFFFFF`; ink `#1A1A1A`;
-wild-type / control neutral grey `#7A7A7A`; TP53 blue `#0072B2`; the three TP53
-variants in three distinguishable hues — R175H `#0072B2`, R273C `#00A0C6`,
-R248Q `#5AB4E6` (all in the blue family so they read as "same gene, different
-alleles"); held-out target highlighted with orange accent `#E69F00`.
+**Palette (use exactly, matches the sibling panels):** background pure white `#FFFFFF`;
+ink `#1A1A1A`; wild-type / control neutral grey `#7A7A7A`; the variant / TP53 blue
+`#0072B2`, with two sibling shades `#00A0C6` and `#5AB4E6` (same blue family = "same
+gene, different alleles"); held-out target and the verdict accent in orange `#E69F00`;
+model and evaluation step boxes in a single muted blue-grey. No 3D, no gradients, no
+shadows.
 
 ---
 
 ## Prompt (paste into the image model)
 
-> A clean, flat 2D vector scientific schematic on a pure white background, Nature-
-> Methods editorial style, thin 0.5 pt strokes, no 3D, no gradients, no drop
-> shadows, no photorealism, generous white space. Two stacked rows separated by a
-> thin horizontal divider.
+> A clean, flat 2D vector scientific schematic on a pure white background,
+> Nature-Methods editorial style, thin 0.5 pt strokes, no 3D, no gradients, no drop
+> shadows, generous white space. A single left-to-right pipeline of three main stages
+> ending in a verdict box, with one thin parallel lower track running beneath the whole
+> row and feeding up into the verdict.
 >
-> TOP ROW, labelled "Gene-level perturbation": on the left a small grey cluster of
-> dots labelled "wild-type cells"; a thin arrow points right to a single blue cluster
-> labelled "TP53 perturbation"; a second arrow points to ONE merged blue response
-> cloud on the right. Inside that merged cloud, three faint overlapping ghosted
-> labels "R175H", "R273C", "R248Q" are blended together to show the alleles are
-> averaged away. A short caption under the row reads "one gene → one averaged
-> response".
+> STAGE 1, header "Measurement": on the left, a small blue cluster of dots labelled
+> "held-out variant, single cells" sits above a grey cluster labelled "wild-type cells".
+> A short downward bracket collapses the two clusters into ONE small horizontal vector
+> bar labelled "delta-v = pseudobulk target (ground truth)"; a tiny sub-label reads
+> "mean(variant) - mean(WT)". This makes clear the target is the averaged profile built
+> from the cells.
 >
-> BOTTOM ROW, labelled "Protein-coding variant-level perturbation": on the left the
-> same grey "wild-type cells" cluster; three separate arrows fan out to three
-> distinct small clusters in three shades of blue, labelled "TP53 R175H",
-> "TP53 R273C", "TP53 R248Q"; each maps to its own SEPARATE response region on the
-> right, three clouds that do NOT overlap. One of them, "TP53 R175H", is outlined in
-> an orange dashed ring and tagged "held-out prediction target". A short caption
-> under the row reads "each allele → a distinct response".
+> STAGE 2, header "Model": from STAGE 1, an arrow carrying ONLY a small feature chip
+> labelled "variant features (theta / ESM)" enters a rounded box labelled
+> "feature -> response model". A short red-free grey note beside the arrow reads
+> "not the variant identity, not its cells". The model box outputs a second small vector
+> bar labelled "delta-hat-v (predicted profile)". Draw the feature chip, NOT cells,
+> entering the model.
 >
-> Minimalist, lots of white space, small neat sans-serif labels, colour-blind-safe
-> blues and grey only. No title, no numbers, no charts.
+> STAGE 3, header "Evaluation": the predicted bar delta-hat-v is scored on two stacked
+> mini-axes. Top mini-axis "Direction (Pearson-delta)": two short overlaid line profiles
+> pointing the same way, caption "points the right way". Bottom mini-axis
+> "Discrimination (PDS)": delta-hat-v on the left with an arrow to a small set of three
+> candidate sibling profiles drawn as three separate blue-family clusters occupying
+> distinct regions; the variant's own cluster is ringed in orange as the nearest match,
+> the two siblings stay grey-blue, caption "nearest its own allele among siblings".
+>
+> STAGE 5, header "Verdict" (rightmost, orange-accented rounded box): a short stacked
+> checklist "measurable?", "benchmarkable?", "worth modelling?" with a small branching
+> arrow out to three outcomes "expand", "redesign", "exclude". This is the power-aware
+> output of the pipeline.
+>
+> LOWER TRACK, header "Resolution diagnostic (single cell)": a thin full-width band
+> beneath stages 1 to 3 that operates on the SAME cell clusters with no averaging. Two
+> small side-by-side motifs: "detection = variant vs wild-type distribution" and
+> "identification = variant vs sibling distributions", each drawn as two cell clouds with
+> a small distance caliper between them. A thin arrow rises from this band into the
+> Verdict box, with a caption "can the ground truth reward an allele model?".
+>
+> Keep stages evenly sized, thin connecting arrows left to right, small neat sans-serif
+> labels, colour-blind-safe blues, grey and one orange accent only, minimalist, no charts
+> with axes ticks, no numbers.
 
 ---
 
-**Exact text to place/verify in Illustrator (raster text is unreliable):**
-- Row titles: "Gene-level perturbation" / "Protein-coding variant-level perturbation"
-- "wild-type cells" (both rows)
-- Top: "TP53 perturbation"; ghost labels "R175H", "R273C", "R248Q"; caption "one gene → one averaged response"
-- Bottom: "TP53 R175H", "TP53 R273C", "TP53 R248Q"; badge "held-out prediction target"; caption "each allele → a distinct response"
+**Exact text to place / verify in Illustrator (raster text is unreliable):**
+- Stage headers: "1 Measurement" / "2 Model" / "3 Evaluation" / "4 Resolution diagnostic (single cell)" / "5 Verdict"
+- Stage 1: "held-out variant, single cells", "wild-type cells", "delta_v = pseudobulk target (ground truth)", sub-label "mean(variant) - mean(WT)"
+- Stage 2: "variant features (theta / ESM)", grey note "not the variant identity, not its cells", "feature -> response model", "delta-hat_v (predicted profile)"
+- Stage 3 top: "Direction (Pearson-delta)", "points the right way"
+- Stage 3 bottom: "Discrimination (PDS)", "nearest its own allele among siblings"; three sibling clusters, own ringed in orange as "held-out target"
+- Stage 4 (lower track): "detection = variant vs wild type", "identification = variant vs siblings", "same single cells, no averaging", "can the ground truth reward an allele model?"
+- Stage 5: "measurable?", "benchmarkable?", "worth modelling?", outcomes "expand", "redesign", "exclude"
 
-**Do NOT include (results leakage guard):** no mention of models, accuracy, failure,
-PDS, measurement floor, or any performance claim. This is a task-definition panel only.
+Use the Greek delta glyph (δ) and the hat (δ̂) in the final Illustrator text; the prompt
+spells them out only because raster models mangle glyphs.
+
+**Do NOT include (results-leakage guard):** no score value, no PDS/Pearson number, no
+statement that any model or the benchmark succeeds or fails, no mention of "chance",
+"measurement floor", "0.50", or any per-gene outcome. This is a task-and-pipeline
+definition panel only; every result begins in Figure 2 and later.
+
+---
+
+## Assembly notes (step 2, after the raster is made)
+
+- Render, overlay the exact text above in Illustrator, export vector-preserving
+  `Fig1a.pdf` into this directory at >= 300 dpi effective size.
+- Edit `fig1_assemble.tex`: place the new `Fig1a.pdf` in the panel-a slot, **delete the
+  `Fig1g.pdf` node and its `g` panel letter**, and reflow so panel a takes part of the
+  width freed by removing g (b-f keep their content). Panel letters become **a-f**.
+- Recompile `pdflatex fig1_assemble.tex`, then copy `fig1_composite.pdf` over
+  `../../latex/figures/fig1.pdf` so the rendered figure matches the a-f caption already
+  in the manuscript.
+- This also resolves the current mismatch: the embedded `fig1.pdf` is still the old
+  seven-panel a-g composite, while the caption already describes a-f.

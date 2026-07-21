@@ -1,7 +1,7 @@
 # Figure 1 — assembly guide
 
 **One-line message:** AllelePerturb defines perturbation prediction at protein-coding
-variant resolution (pipeline, coverage, sampling regime, features, evaluation) — a
+variant resolution (task, coverage, sampling regime, features, evaluation) — a
 definition figure, **no results**.
 
 Source of truth is the LaTeX manuscript `manuscript/latex/AllelePerturb_manuscript.tex`.
@@ -11,35 +11,25 @@ are **superseded**; do not reuse them.
 ## Composite
 
 `fig1_composite.pdf` (assembled by `fig1_assemble.tex`, build: `pdflatex fig1_assemble.tex`).
-Layout: row 1 **a | b**, row 2 **c | d(+PCA inset) | e**, row 3 **f** (centred), with bold
-panel letters **a-f**; page ~185 x 173 mm. Vector-preserving: panel a
-(`Fig1a_editable.pdf`) is now a vector/editable schematic; the data panels (b/c/d-PCA) and
-Fig1f stay vector; the two remaining AI raster panels are embedded above 300 dpi at their
-placed sizes (d 643, e 791 dpi, print-safe). To reposition anything, edit the coordinates
-in `fig1_assemble.tex` and recompile. The d PCA inset (`fig1d_theta_pca.pdf`) is dropped
-where the d schematic's "theta space" arrow points; nudge a few mm if it clips the label.
-
-**Panel a is pipeline-first.** Panel a is the end-to-end AllelePerturb pipeline
-(measurement -> model -> evaluation -> verdict, with a parallel single-cell resolution
-diagnostic). It replaces the old gene-vs-variant concept panel and **subsumes the old
-workflow panel (old g, now removed)**; the gene-vs-variant motivation survives inside the
-discrimination axis. Spec in `PIPELINE_SPEC.md`, prompt in `fig1a_prompt.md`. The
-manuscript caption (panel a) and the Results opening already describe exactly this pipeline.
+Layout: row 1 **a | b**, row 2 **c | d(+PCA inset) | e**, row 3 **f | g**, with bold panel
+letters a-g; page 185 x 172 mm. Vector-preserving: the data panels (b/c/d-PCA) and Fig1f
+stay vector; the AI raster panels are embedded at effective **460-791 dpi** at their placed
+sizes (a 460, d 643, e 791, g 569 — all > 300, print-safe). To reposition anything, edit the
+coordinates in `fig1_assemble.tex` and recompile. One easy Illustrator nudge: the d PCA inset
+(`fig1d_theta_pca.pdf`) is dropped where the d schematic's "theta space" arrow points; move a
+few mm if it clips the schematic label.
 
 ## Panel inventory (each panel is its own file)
 
 | Panel | Content | Type | File(s) | Data source |
 |-------|---------|------|---------|-------------|
-| a | end-to-end pipeline: measurement / model / evaluation / verdict, plus a parallel single-cell resolution diagnostic | AI schematic (vector) | `fig1a_prompt.md` -> `Fig1a_editable.pdf` | — |
+| a | gene-level vs variant-level task | AI schematic | `fig1a_prompt.md` | — |
 | b | variant positions on 4 proteins | **data-direct** | `fig1b_track_{TP53,KRAS,GATA1,JAK1}.pdf` + `fig1b_legend.pdf` | `data/allele_perturb_bench.csv`, `data/hotspot_external_definition.txt` |
 | c | per-variant cell depth | **data-direct** | `fig1c_depth.pdf` | `data/allele_perturb_bench.csv` (`n_cells`) |
 | d | variant feature concept | AI schematic + **data inset** | `fig1d_prompt.md` + `fig1d_theta_pca.pdf` | θ columns of the bench CSV |
 | e | evaluation decomposition | AI schematic | `fig1e_prompt.md` | — |
 | f | six generalization splits | AI schematic | `fig1f_prompt.md` | — |
-
-**Removed: old g** (end-to-end workflow), folded into the new pipeline panel a. Its prompt
-`fig1g_prompt.md` and render `Fig1g.pdf`, together with the old concept `Fig1a.pdf`, remain
-in git history but are no longer used by the composite.
+| g | end-to-end workflow | AI schematic | `fig1g_prompt.md` | — |
 
 Data-direct panels: `python fig1b_variant_tracks.py`, `python fig1c_depth.py`,
 `python fig1d_theta_pca.py` (all import `nm_style.py`; PDF deliverable + 600 dpi PNG
@@ -68,18 +58,15 @@ technologies Perturb-seq (TP53, KRAS) · base editing (GATA1) · scSNV-seq (JAK1
 > statements now note the 321,043 includes wild-type/control cells. Set
 > `exclude_wt=False` only to reproduce the old 472/93/255 numbers.
 
-## Recommended figure legend (covers a–f)
+## Recommended figure legend (covers a–g)
 
 **Figure 1 | AllelePerturb defines perturbation prediction at protein-coding variant
-resolution. a**, The AllelePerturb pipeline: a held-out variant's single cells give the
-pseudobulk target δ_v (mean(variant) − mean(WT)); a model maps variant features (θ / ESM),
-not identity or cells, to a predicted profile δ̂_v, scored for direction recovery
-(Pearson-δ) and allele discrimination (PDS); a parallel single-cell resolution diagnostic
-(detection versus wild type, identification versus siblings) yields a power-aware verdict
-(measurable / benchmarkable / worth modelling). **b**, Benchmark coverage: variant
-positions along TP53, KRAS, GATA1 and JAK1 with annotated domains; hotspot/pathogenic
-residues highlighted. **c**, Per-variant cell depth spans distinct sampling regimes across
-genes (medians 929, 1000, 354, 104). **d**, Each variant is represented by a 6-dimensional
-biophysical feature vector θ, placing variants from all genes in a shared feature space.
-**e**, AllelePerturb-Eval separates direction recovery, allele discrimination and
-differential-expression fidelity. **f**, Six generalization splits.
+resolution. a**, Conceptual distinction between gene-level and allele-level perturbation
+prediction. **b**, Benchmark coverage: variant positions along TP53, KRAS, GATA1 and
+JAK1 with annotated domains; hotspot/pathogenic residues highlighted. **c**, Per-variant
+cell depth spans distinct sampling regimes across genes (medians 929, 1000, 354, 104).
+**d**, Each variant is represented by a 6-dimensional biophysical feature vector θ,
+placing variants from all genes in a shared feature space. **e**, AllelePerturb-Eval
+separates direction recovery, allele discrimination and differential-expression fidelity.
+**f**, Six generalization splits. **g**, End-to-end benchmark workflow for held-out
+protein-coding variant prediction.
