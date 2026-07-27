@@ -25,6 +25,7 @@ import os
 import re
 import sys
 
+import matplotlib.patheffects as pe
 import numpy as np
 import pandas as pd
 
@@ -37,8 +38,10 @@ DOMAINS = {
     "KRAS": [(1, 169, "G-domain"), (30, 38, "SW I"), (60, 76, "SW II"),
              (167, 189, "HVR")],
     "GATA1": [(204, 228, "ZF1"), (258, 282, "ZF2")],
+    # JAK1 kinase modules are labelled by their short names (JH2 pseudokinase,
+    # JH1 kinase) so the in-band labels stay inside their domains at 5.5 pt.
     "JAK1": [(34, 420, "FERM"), (439, 544, "SH2-like"),
-             (583, 855, "JH2 pseudokinase"), (875, 1153, "JH1 kinase")],
+             (583, 855, "JH2"), (875, 1153, "JH1")],
 }
 
 # ---- external-only hotspot codons (verbatim from hotspot_external_definition.txt)
@@ -82,7 +85,39 @@ CLASS_STYLE = {  # (facecolor-key, marker)
 }
 
 
-def draw_gene(df: pd.DataFrame, gene: str) -> None:
+BASE = 0.75        # lollipop stems start here, clear of the backbone band
+UNIT = 0.55        # y units added per variant sharing a residue
+YBOT = -3.2        # bottom of every track (room for the sub-backbone domain labels)
+MM_PER_UNIT = 1.0  # millimetres of track height per y unit, SHARED by all tracks
+TRACK_W = 52.0     # drawing width in mm = final placement width (scale 1.0)
+PAD_TOP_MM = 2.9   # room above the axes for the gene title
+PAD_BOT_MM = 2.6   # room below the axes for the residue tick labels
+XLABEL_MM = 3.0    # extra room on the bottom track for the "Residue" axis label
+
+
+def assign_tiers(positions, length: float):
+    """Two-tier stagger for hotspot residue labels; returns {pos: tier}."""
+    last_x = [-1e9, -1e9]
+    min_gap = length * 0.14
+    out = {}
+    for pos in sorted(positions):
+        tier = 0 if (pos - last_x[0]) > min_gap else 1
+        last_x[tier] = pos
+        out[pos] = tier
+    return out
+
+
+def draw_gene(df: pd.DataFrame, gene: str, show_xlabel: bool = False) -> None:
+    """Draw one gene track.
+
+    Track height is derived from the data: every track uses the same
+    ``MM_PER_UNIT`` scale, so one variant at one residue is the same number of
+    millimetres of stem in all four tracks (stem height is a quantity, its
+    scale must not change between panels), but a track only reserves the
+    vertical band it actually needs, so tracks without hotspot callouts carry
+    no empty headroom. ``show_xlabel`` prints the shared "Residue" axis label;
+    only the bottom track of the stack carries it.
+    """
     length = S.PROTEIN_LEN[gene]
     color = S.GENE_COLORS[gene]
     sub = df[df.gene == gene].copy()
@@ -94,10 +129,30 @@ def draw_gene(df: pd.DataFrame, gene: str) -> None:
     sub = sub.dropna(subset=["pos"])
     sub["pos"] = sub["pos"].astype(int)
 
-    fig, ax = S.panel(89, 20)
+    # ---- pre-pass: stem tops, callout tiers and the exact vertical extent ----
+    counts = sub.groupby("pos").size()
+    tops = {p: BASE + c * UNIT for p, c in counts.items()}
+    ymax = max([1.0] + list(tops.values()))
+    hs = HOTSPOT_CODONS[gene]
+    callouts = [p for p in counts.index if p in hs and p in LABEL_HINT[gene]]
+    tiers_of = assign_tiers(callouts, length)
+    n_tiers = (max(tiers_of.values()) + 1) if tiers_of else 0
+    tier_y = [ymax + 0.7, ymax + 2.0]
+    ytop = ymax + (0.5 if n_tiers == 0 else 2.0 if n_tiers == 1 else 3.3)
+    if n_splice:
+        ytop += 1.9   # headroom for the "no protein coordinate" note
+
+    pad_bot = PAD_BOT_MM + (XLABEL_MM if show_xlabel else 0.0)
+    axes_h = (ytop - YBOT) * MM_PER_UNIT
+    fig_h = axes_h + PAD_TOP_MM + pad_bot
+    fig, ax = S.panel(TRACK_W, fig_h)
+    fig.subplots_adjust(left=0.015, right=0.995,
+                        bottom=pad_bot / fig_h, top=1.0 - PAD_TOP_MM / fig_h)
 
     # --- protein backbone + domains (baseline band around y=0) ---
-    bb_h = 0.6
+    # The band is deliberately taller than the lollipop base offset so an
+    # in-band domain label can never be overrun by a variant marker.
+    bb_h = 1.0
     ax.barh(0, length, height=bb_h, color=S.LIGHT_GREY, edgecolor="none", zorder=1)
     submotifs = {"SW I", "SW II"}  # nested KRAS switch regions: darker band, label below
     for start, end, lab in DOMAINS[gene]:
@@ -106,24 +161,31 @@ def draw_gene(df: pd.DataFrame, gene: str) -> None:
                     alpha=0.9, edgecolor="white", linewidth=0.4, zorder=3)
             ax.annotate(lab, ((start + end) / 2, -bb_h / 2), xytext=(0, -1.5),
                         textcoords="offset points", ha="center", va="top",
-                        fontsize=4.5, color=S.GREY, zorder=4)
+                        fontsize=5.0, color=S.GREY, zorder=4)
         else:
             ax.barh(0, end - start, left=start, height=bb_h, color=color,
                     alpha=0.5, edgecolor="none", zorder=2)
-            ax.text((start + end) / 2, 0, lab, ha="center", va="center",
-                    fontsize=5, color="white", zorder=4,
-                    fontweight="bold" if (end - start) > length * 0.12 else "normal")
+            # a white label only stays legible when the domain band is wide
+            # enough to contain it; narrow domains get a coloured label below
+            # the backbone instead of white text spilling onto light grey.
+            if (end - start) > length * 0.15:
+                # ink, not white: the bands are gene colour at alpha 0.5, so
+                # white text loses contrast on the lighter hues (KRAS orange).
+                # A white halo separates the glyphs from the lollipop stems that
+                # cross the band, which otherwise read as striking the label out.
+                ax.text((start + end) / 2, 0, lab, ha="center", va="center",
+                        fontsize=5.5, color=S.INK, zorder=6, fontweight="bold",
+                        path_effects=[pe.withStroke(linewidth=1.6,
+                                                    foreground="white")])
+            else:
+                ax.annotate(lab, ((start + end) / 2, -bb_h / 2), xytext=(0, -1.5),
+                            textcoords="offset points", ha="center", va="top",
+                            fontsize=5.5, color=color, zorder=4)
 
     # --- lollipops: stem height = number of variants at that residue ---
-    unit = 0.55
-    hs = HOTSPOT_CODONS[gene]
     grouped = sub.groupby("pos")
-    ymax = 1.0
-    to_label = []  # (pos, top, residue) drawn in a band above all stems
     for pos, g in grouped:
-        count = len(g)
-        top = bb_h / 2 + count * unit
-        ymax = max(ymax, top)
+        top = tops[pos]
         is_hot = pos in hs
         # class of the tallest / representative variant at this residue
         cls = g.cls.mode().iloc[0]
@@ -131,44 +193,40 @@ def draw_gene(df: pd.DataFrame, gene: str) -> None:
         face = color if fkey == "gene" else fkey
         if is_hot:
             face = S.HOTSPOT
-        ax.plot([pos, pos], [bb_h / 2, top], color=S.GREY, lw=0.5, zorder=3)
+        ax.plot([pos, pos], [BASE, top], color=S.GREY, lw=0.5, zorder=3)
         ax.scatter([pos], [top], s=9 if is_hot else 6, marker=marker,
                    facecolor=face, edgecolor=S.INK if is_hot else "none",
                    linewidths=0.4, zorder=5)
-        if is_hot and pos in LABEL_HINT[gene]:
-            to_label.append((pos, top, g.iloc[0].variant.split(",")[0]))
 
     # hotspot residue labels lifted into a clean band above the lollipops;
     # nearby labels are staggered onto two tiers so text never overlaps
-    tiers = [ymax + 0.9, ymax + 1.75]
-    last_x = [-1e9, -1e9]
-    min_gap = length * 0.11
-    for pos, top, res in sorted(to_label):
-        tier = 0 if (pos - last_x[0]) > min_gap else 1
-        last_x[tier] = pos
-        ly = tiers[tier]
-        ax.plot([pos, pos], [top + 0.08, ly - 0.12], color=S.GREY, lw=0.4,
+    for pos in sorted(callouts):
+        res = sub.loc[sub.pos == pos, "variant"].iloc[0].split(",")[0]
+        ly = tier_y[tiers_of[pos]]
+        ax.plot([pos, pos], [tops[pos] + 0.08, ly - 0.12], color=S.GREY, lw=0.4,
                 zorder=4)
-        ax.annotate(res, (pos, ly), ha="center", va="bottom", fontsize=5,
+        ax.annotate(res, (pos, ly), ha="center", va="bottom", fontsize=5.5,
                     color=S.INK, zorder=6)
 
     # --- axes cosmetics ---
     ax.set_xlim(-length * 0.02, length * 1.02)
-    ax.set_ylim(-1.2, ymax + 2.8)
+    ax.set_ylim(YBOT, ytop)
     ax.set_yticks([])
     ax.set_xticks([1, length] if length < 500 else [1, length // 2, length])
-    ax.set_xlabel("Residue", labelpad=1)
+    if show_xlabel:
+        ax.set_xlabel("Residue", labelpad=1)
     S.despine(ax, keep=("bottom",))
     ax.tick_params(length=2.0)
 
     # gene label + count (left) ; splice note if any
     n_kept = len(sub)
     tag = f"{gene}  ({length:,} aa, n = {n_total} variants)"
-    ax.text(0.0, 1.02, tag, transform=ax.transAxes, ha="left", va="bottom",
+    ax.text(0.0, 1.01, tag, transform=ax.transAxes, ha="left", va="bottom",
             fontsize=6.5, fontweight="bold", color=color)
     if n_splice:
-        ax.text(1.0, 1.02, f"+{n_splice} splice (no coord.)", transform=ax.transAxes,
-                ha="right", va="bottom", fontsize=5, color=S.GREY)
+        # inside the axes, top right: at 52 mm the title line has no room for it
+        ax.text(length * 1.02, ytop - 0.15, f"+{n_splice} splice (no coord.)",
+                ha="right", va="top", fontsize=5.0, color=S.GREY)
 
     S.save(fig, f"fig1b_track_{gene}")
     print(f"{gene}: total={n_total} kept={n_kept} splice_excluded={n_splice} "
@@ -176,10 +234,16 @@ def draw_gene(df: pd.DataFrame, gene: str) -> None:
 
 
 def make_legend() -> None:
-    """Standalone variant-class + hotspot legend (shape = class, colour = gene)."""
+    """Standalone variant-class key.
+
+    Shape only. The colour = gene mapping is already carried by the direct,
+    gene-coloured track titles above (and repeated by the gene-coloured tick
+    labels of panel c), so a colour key here would be redundant; NM legend
+    economy asks for one shared key per figure, not one per panel.
+    """
     import matplotlib.pyplot as plt
     from matplotlib.lines import Line2D
-    fig, ax = S.panel(52, 12)
+    fig, ax = S.panel(46, 8)
     ax.axis("off")
     handles = [
         Line2D([0], [0], marker="o", color="none", markerfacecolor=S.GREY,
@@ -193,10 +257,10 @@ def make_legend() -> None:
                label="Hotspot / pathogenic"),
     ]
     leg = ax.legend(handles=handles, ncol=2, loc="center", handletextpad=0.3,
-                    columnspacing=1.2, labelspacing=0.5, borderpad=0.0)
-    ax.text(0.5, 1.05, "shape = variant class   ·   colour = gene",
-            transform=ax.transAxes, ha="center", va="bottom", fontsize=5,
-            color=S.GREY)
+                    columnspacing=1.2, labelspacing=0.45, borderpad=0.0,
+                    title="shape = variant class")
+    leg.get_title().set_fontsize(5.5)
+    leg.get_title().set_color(S.GREY)
     S.save(fig, "fig1b_legend")
     plt.close(fig)
 
@@ -205,7 +269,7 @@ def main() -> None:
     S.apply_rcparams()
     df = S.load_bench(exclude_wt=True)  # count real variants only (470, not 472)
     for gene in S.GENE_ORDER:
-        draw_gene(df, gene)
+        draw_gene(df, gene, show_xlabel=(gene == S.GENE_ORDER[-1]))
     make_legend()
 
 

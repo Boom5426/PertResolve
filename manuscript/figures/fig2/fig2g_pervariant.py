@@ -7,19 +7,41 @@ whole 0-1 range. Similar direction, very different allele ranking.
 Data: D.exttheta(), method=='Ridge-esm', gene=='TP53', per variant.
 A representative subset of 10 distinct variants (deduplicated by variant, one
 row each) evenly spaced across the observed PDS_cos range is shown.
+
+Nature Methods pass:
+  * The two bands are now two real axes with real y-axis labels; the former
+    in-plot strings "pearson_delta (direction)" / "PDS_cos (allele ranking)"
+    and the in-plot title (which duplicated the caption) are gone.
+  * Both axes carry the SAME 0-1 scale from a true zero baseline, so the visual
+    contrast (direction tightly clustered high, ranking spread over the full
+    range) is a property of the data and not of two different rescalings. The
+    old top band mapped 0.70-0.85 onto a strip, which exaggerated the spread of
+    the very quantity the panel calls stable.
+  * Re-proportioned to a short 120.5 x 44 mm strip that shares the bottom row
+    with Fig 2f, so it supports rather than dominates the page.
 """
 import os
 import sys
 
+import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.patches import Rectangle
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import nm_style as S
 import remote_data as D
 
+HERE = os.path.dirname(os.path.abspath(__file__))
+
 N_SHOW = 10
 GENE = "TP53"
 METHOD = "Ridge-esm"
+
+W_MM, H_MM = 120.5, 44.0
+AX_LEFT_MM, AX_WIDTH_MM = 16.0, 101.5
+AX_H_MM = 14.5                    # each of the two stacked axes
+AX_BOT_MM = 8.0                   # bottom axis (PDS) sits here
+AX_TOP_MM = 27.0                  # top axis (Pearson) sits here
 
 
 def select_variants():
@@ -31,8 +53,38 @@ def select_variants():
     return sub.iloc[idx].reset_index(drop=True)
 
 
+def canvas():
+    fig = plt.figure(figsize=(W_MM * S.MM, H_MM * S.MM))
+    bg = fig.add_axes([0, 0, 1, 1])
+    bg.set_axis_off()
+    bg.set_xlim(0, 1)
+    bg.set_ylim(0, 1)
+    bg.add_patch(Rectangle((0, 0), 1, 1, facecolor="white", edgecolor="none",
+                           zorder=-10))
+
+    def band(bottom_mm):
+        return fig.add_axes([AX_LEFT_MM / W_MM, bottom_mm / H_MM,
+                             AX_WIDTH_MM / W_MM, AX_H_MM / H_MM])
+
+    return fig, band(AX_TOP_MM), band(AX_BOT_MM)
+
+
+def lollipops(ax, x, y, color):
+    ax.vlines(x, 0, y, color=S.LIGHT_GREY, lw=0.7, zorder=1)
+    ax.scatter(x, y, s=12, color=color, edgecolors="white", linewidths=0.35,
+               zorder=3, clip_on=False)
+
+
 def main():
     S.apply_rcparams()
+    # Keep Greek/maths glyphs in the same Arial-metric sans as the body text.
+    # nm_style sets the text font but not mathtext, whose default (DejaVu Sans)
+    # would embed a second typeface for every $\theta$, $\delta$ and subscript.
+    plt.rcParams.update({"mathtext.fontset": "custom",
+                         "mathtext.rm": "Liberation Sans",
+                         "mathtext.it": "Liberation Sans:italic",
+                         "mathtext.bf": "Liberation Sans:bold",
+                         "mathtext.default": "it"})
     pick = select_variants()
     x = np.arange(len(pick))
     labels = pick["variant"].tolist()
@@ -40,75 +92,37 @@ def main():
     pds = pick["PDS_cos"].to_numpy()
 
     col = S.GENE_COLORS[GENE]
+    fig, ax_dir, ax_pds = canvas()
 
-    fig, ax = S.panel(64, 46)
+    lollipops(ax_dir, x, pdir, col)
+    lollipops(ax_pds, x, pds, col)
 
-    # two horizontal bands: top = direction (stable), bottom = ranking (spread)
-    Y_DIR = 1.0
-    Y_PDS = 0.0
+    # chance line on the ranking axis only (Pearson's null is 0, already the base)
+    ax_pds.axhline(0.5, color=S.GREY, lw=0.6, ls=(0, (3, 2)), zorder=2)
+    ax_pds.text(len(pick) - 0.55, 0.52, "chance", ha="right", va="bottom",
+                fontsize=5.5, color=S.GREY)
 
-    # --- TOP band: pearson_delta lollipops (rescaled to sit as a thin strip) ---
-    # map pearson_delta -> small vertical offset around Y_DIR so the strip reads
-    # as "all high, all similar". Use its own mini-axis on the right.
-    dir_lo, dir_hi = 0.70, 0.85
-    dir_h = 0.34  # visual height of the top strip
-    y_dir = Y_DIR + (pdir - dir_lo) / (dir_hi - dir_lo) * dir_h
+    for ax in (ax_dir, ax_pds):
+        ax.set_xlim(-0.6, len(pick) - 0.4)
+        ax.set_ylim(0, 1.04)
+        ax.set_yticks([0, 0.5, 1])
+        ax.tick_params(axis="y", length=1.8, pad=1.5, labelsize=5.8)
+        S.despine(ax, keep=("left", "bottom"))
+        ax.spines["left"].set_bounds(0, 1)
+        ax.spines["bottom"].set_bounds(-0.6, len(pick) - 0.4)
 
-    ax.vlines(x, Y_DIR, y_dir, color=S.LIGHT_GREY, lw=0.7, zorder=1)
-    ax.scatter(x, y_dir, s=11, color=col, edgecolors="white",
-               linewidths=0.35, zorder=3, clip_on=False)
+    ax_dir.set_xticks(x)
+    ax_dir.set_xticklabels([])
+    ax_dir.tick_params(axis="x", length=0)
+    ax_dir.set_ylabel(r"Pearson-$\delta$", labelpad=1.5)
 
-    # --- BOTTOM band: PDS_cos lollipops (0..1 spread) ---
-    pds_h = 0.80
-    y_pds = Y_PDS + pds * pds_h
-    ax.vlines(x, Y_PDS, y_pds, color=S.LIGHT_GREY, lw=0.7, zorder=1)
-    ax.scatter(x, y_pds, s=11, color=col, edgecolors="white",
-               linewidths=0.35, zorder=3, clip_on=False)
+    ax_pds.set_xticks(x)
+    ax_pds.set_xticklabels(labels, fontsize=5.8)
+    ax_pds.tick_params(axis="x", length=0, pad=1.5)
+    ax_pds.set_ylabel(r"PDS$_{cos}$", labelpad=1.5)
+    ax_pds.set_xlabel("held-out TP53 variant (Ridge ESM)", labelpad=1.5)
 
-    # chance line on the PDS row (0.5)
-    y_chance = Y_PDS + 0.5 * pds_h
-    ax.axhline(y_chance, xmin=0.02, xmax=0.98, color=S.GREY, lw=0.6,
-               ls=(0, (3, 2)), zorder=2)
-    ax.text(len(pick) - 0.5, y_chance, "chance", ha="right", va="bottom",
-            fontsize=5, color=S.GREY)
-
-    # ---- axis cosmetics -------------------------------------------------------
-    ax.set_xlim(-0.6, len(pick) - 0.4)
-    ax.set_ylim(Y_PDS - 0.04, Y_DIR + dir_h + 0.12)
-    # keep the two band labels clear of the plot area
-    ax.margins(x=0)
-
-    ax.set_xticks(x)
-    ax.set_xticklabels(labels, rotation=90, fontsize=5)
-    ax.tick_params(axis="x", length=0, pad=1.5)
-
-    # custom y ticks: PDS band 0/0.5/1, dir band 0.70/0.85
-    yt = [Y_PDS, y_chance, Y_PDS + pds_h,
-          Y_DIR, Y_DIR + dir_h]
-    ytl = ["0", "0.5", "1", "0.70", "0.85"]
-    ax.set_yticks(yt)
-    ax.set_yticklabels(ytl, fontsize=5)
-    ax.tick_params(axis="y", length=1.6, pad=1.5)
-
-    S.despine(ax, keep=("left", "bottom"))
-
-    # band labels on the left in axes-fraction coords, clear of the tick numbers
-    ymin, ymax = Y_PDS - 0.04, Y_DIR + dir_h + 0.12
-    def yfrac(yval):
-        return (yval - ymin) / (ymax - ymin)
-    ax.text(-0.135, yfrac(Y_PDS + pds_h / 2), "PDS$_{cos}$ (ranking)",
-            transform=ax.transAxes, ha="center", va="center", fontsize=5.5,
-            rotation=90, color=S.INK)
-    ax.text(-0.135, yfrac(Y_DIR + dir_h / 2), "pearson$_\\Delta$ (direction)",
-            transform=ax.transAxes, ha="center", va="center", fontsize=5.5,
-            rotation=90, color=S.INK)
-
-    # message annotation
-    ax.set_title("Held-out TP53 variants: similar direction,\nvery different allele ranking",
-                 fontsize=5.8, pad=3, loc="left", linespacing=1.1)
-
-    S.save(fig, os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                             "fig2g_pervariant"))
+    S.save(fig, os.path.join(HERE, "fig2g_pervariant"))
 
     # echo numbers plotted
     for _, r in pick.iterrows():

@@ -39,7 +39,7 @@ def main() -> None:
     df = pd.read_csv(S.repo_root() / "results" / "canonical" / "fig3b_selfnull_dist.csv")
 
     import matplotlib.pyplot as plt
-    fig, axes = plt.subplots(1, 2, figsize=(78 * S.MM, 46 * S.MM))
+    fig, axes = plt.subplots(1, 2, figsize=(54.8 * S.MM, 55.0 * S.MM))
 
     panels = [
         ("TP53", axes[0], "closed window", S.GENE_COLORS["TP53"]),
@@ -53,7 +53,7 @@ def main() -> None:
         ratio = m_self / m_null
         ax.set_xticks([0, 1])
         ax.set_xticklabels([r"$D_\mathrm{self}$" + "\n(noise)", r"$D_\mathrm{null}$" + "\n(signal)"],
-                           fontsize=5.5)
+                           fontsize=6.0)
         ax.set_xlim(-0.6, 1.6)
         top = float(d.D_null.max()) * 1.15
         ax.set_ylim(0, top)
@@ -61,8 +61,9 @@ def main() -> None:
                      color=gcol, pad=3)
         S.despine(ax)
         ax.tick_params(length=2.2)
-        if gene == "TP53":
-            ax.set_ylabel("Energy distance")
+        # both sub-panels carry the y label: their scales differ ~15x, so an
+        # unlabelled second axis invites a direct visual comparison that is wrong
+        ax.set_ylabel("Energy distance")
 
     fig.subplots_adjust(wspace=0.5)
     S.save(fig, "fig3b_windows")

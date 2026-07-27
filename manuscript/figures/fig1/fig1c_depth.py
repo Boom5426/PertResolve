@@ -29,7 +29,7 @@ def main() -> None:
     S.apply_rcparams()
     df = S.load_bench(exclude_wt=True)  # per-variant depth excludes the 2 WT rows
 
-    fig, ax = S.panel(60, 46)
+    fig, ax = S.panel(60, 41)
     for i, gene in enumerate(S.GENE_ORDER):
         vals = df.loc[df.gene == gene, "n_cells"].to_numpy(dtype=float)
         color = S.GENE_COLORS[gene]
@@ -61,13 +61,21 @@ def main() -> None:
                 color=S.GREY, transform=ax.get_xaxis_transform())
 
     ax.set_xticks(range(len(S.GENE_ORDER)))
+    # gene names in the gene colour: this panel is the figure's shared key for
+    # "colour = gene" (direct labelling), so no detached gene legend is needed
+    # anywhere in Figure 1.
     ax.set_xticklabels(S.GENE_ORDER)
+    for lab, gene in zip(ax.get_xticklabels(), S.GENE_ORDER):
+        lab.set_color(S.GENE_COLORS[gene])
+        lab.set_fontweight("bold")
     ax.set_xlim(-0.6, len(S.GENE_ORDER) - 0.4)
     ax.set_ylabel("Cells per variant")
 
-    # log-scale y with 10^k ticks shown as plain numbers
-    ax.set_ylim(np.log10(25), np.log10(45000))
-    ticks = [50, 100, 300, 1000, 3000, 10000, 30000]
+    # log-scale y with 10^k ticks shown as plain numbers; limits are tightened
+    # to the observed range (33 to 1,987 cells per variant) so the panel is not
+    # mostly empty axis
+    ax.set_ylim(np.log10(25), np.log10(3000))
+    ticks = [50, 100, 300, 1000, 3000]
     ax.set_yticks(np.log10(ticks))
     ax.set_yticklabels([f"{t:,}" for t in ticks])
     S.despine(ax)

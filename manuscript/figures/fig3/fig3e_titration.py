@@ -1,4 +1,4 @@
-"""Figure 3e - Depth titration reveals gene-dependent gains.
+"""Figure 3g (composite letter) - Depth titration reveals gene-dependent gains.
 
 Data-direct. Source: results/split_half_power_curve.csv, PCA-50 space (canonical).
 Fraction of variants detectable vs cells per half (50/100/150/300). JAK1 is already
@@ -7,6 +7,10 @@ below 75%. (The committed curve stores point estimates only, no bootstrap ribbon
 TP53 has no 300-cell rung.)
 Message: adding cells helps only when the allele-specific effect window is wide enough.
 
+Layout notes (Nature Methods pass): the gene key is NOT repeated here. Each curve is
+labelled directly at its end in the gene colour, which also makes the panel readable
+in greyscale (position identifies the curve, colour only reinforces it).
+
 Run:  python fig3e_titration.py  ->  fig3e_titration.pdf (+ .png)
 """
 from __future__ import annotations
@@ -14,30 +18,46 @@ from __future__ import annotations
 import fig3_data as D
 import nm_style as S
 
+W_MM, H_MM = 54.6, 58.5
+
 
 def main() -> None:
     S.apply_rcparams()
     pw = D.power_curve("pca50")
 
-    fig, ax = S.panel(56, 46)
+    fig, ax = S.panel(W_MM, H_MM)
+    ends = {}
     for gene in S.GENE_ORDER:
         s = pw[pw.gene == gene].sort_values("n_sub")
         ax.plot(s.n_sub, s.frac_detectable, "-o", color=S.GENE_COLORS[gene],
-                lw=1.0, ms=3.0, label=gene, zorder=3)
+                lw=1.0, ms=2.6, zorder=3)
+        ends[gene] = (float(s.n_sub.iloc[-1]), float(s.frac_detectable.iloc[-1]))
 
-    ax.axhline(0.75, color=S.GREY, ls=":", lw=0.6, zorder=1)
-    ax.text(305, 0.75, "75%", fontsize=5, color=S.GREY, va="center", ha="left")
+    # reference line stops before the label column so it cannot strike a label
+    ax.plot([35, 305], [0.75, 0.75], color=S.GREY, ls=":", lw=0.6, zorder=1)
+    ax.text(38, 0.765, "75%", fontsize=5.5, color=S.GREY, va="bottom", ha="left")
     ax.set_xlabel("Cells per half")
     ax.set_ylabel("Fraction detectable")
     ax.set_xticks([50, 100, 150, 300])
-    ax.set_ylim(0.0, 1.05)
-    ax.set_xlim(35, 330)
+    # Every plotted value lies between 0.507 and 1.000, so a 0-1.08 axis left the
+    # lower half of the panel empty. Line plots do not require a zero baseline;
+    # the axis is clipped to the occupied range (plus margin) and the 75% guide
+    # keeps the "plateau below 75%" claim readable.
+    ax.set_ylim(0.45, 1.05)
+    ax.set_yticks([0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
+    ax.set_xlim(35, 395)
     S.despine(ax)
     ax.tick_params(length=2.2)
-    leg = ax.legend(loc="center right", handletextpad=0.4, labelspacing=0.3,
-                    borderpad=0.2)
-    for t, g in zip(leg.get_texts(), S.GENE_ORDER):
-        t.set_color(S.GENE_COLORS[g])
+
+    # ---- direct end-of-curve labels (replace the repeated gene legend) ----
+    for gene, (x, y) in ends.items():
+        col = S.GENE_COLORS[gene]
+        if x >= 300:                      # curve reaches the right edge
+            ax.text(x * 1.06, y, gene, color=col, fontsize=6, fontweight="bold",
+                    va="center", ha="left")
+        else:                             # TP53 stops at 150 (no 300-cell rung)
+            ax.text(x + 10, y + 0.022, gene, color=col, fontsize=6,
+                    fontweight="bold", va="center", ha="left")
 
     S.save(fig, "fig3e_titration")
     print(pw.pivot_table(index="gene", columns="n_sub", values="frac_detectable")

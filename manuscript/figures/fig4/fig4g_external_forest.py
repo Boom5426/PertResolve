@@ -1,11 +1,13 @@
 """Fig 4g (HERO): published perturbation models scored under one identical harness.
 
-Message: no evaluated model class exceeds the empirical discrimination floor.
-Every published variant-conditionable model, the in-house feature-regression
-range, and both references sit at the PDS = 0.50 chance line; their 95% bootstrap
-CIs overlap chance. PerturbNet's point estimate (0.542) clears the analytic 0.50
-line but falls inside its own 50-dim subspace null (0.52), where random vectors
-already score 0.52, so the exceedance is not significant.
+Message: no evaluated model class clears the null it must be judged against.
+Every published variant-conditionable model except PerturbNet, the in-house
+feature-regression range, and both references sit at the PDS = 0.50 chance line;
+their 95% bootstrap CIs overlap chance. PerturbNet's point estimate (0.542)
+clears the analytic 0.50 line, but random vectors confined to its 50-dim
+subspace already score 0.52, and against a permutation null estimated in that
+subspace its exceedance is not significant (P = 0.13,
+results/canonical/perturbnet_subspace_test.json).
 
 Data (committed): results/_remote/unified/definitive_summary.csv via D.definitive().
 Numbers plotted (point = PDS, whisker = [ci_lo, ci_hi]):
@@ -28,9 +30,6 @@ from __future__ import annotations
 
 import os
 import sys
-
-from matplotlib.lines import Line2D
-from matplotlib.patches import Patch
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import nm_style as S
@@ -60,7 +59,10 @@ def main() -> None:
     # PerturbNet point must lie inside its own subspace null band's reach
     assert df.loc["PerturbNet", "PDS"] > PNET_SUBSPACE_NULL, "PerturbNet vs null"
 
-    BLUE = S.GENE_COLORS["TP53"]   # variant-conditionable published models
+    # Fig. 4 palette discipline: gene hues appear only in the gene-resolved panel
+    # (4f); here the two families are separated by ink vs grey (plus the italic
+    # family labels), which also survives greyscale.
+    DARK = S.INK                    # variant-conditionable published models
     GREY = S.GREY                   # references + in-house band + null band
 
     # ---- rows, grouped top-to-bottom; larger y = higher on axis -------------
@@ -104,6 +106,9 @@ def main() -> None:
     bfrac_hi = (pnet_y + 0.5 - y0) / (y1 - y0)
     ax.axvspan(0.50, PNET_SUBSPACE_NULL, ymin=bfrac_lo, ymax=bfrac_hi,
                color=S.LIGHT_GREY, alpha=0.7, lw=0, zorder=0)
+    # mark the band's right edge: the level random in-subspace vectors reach
+    ax.plot([PNET_SUBSPACE_NULL, PNET_SUBSPACE_NULL],
+            [pnet_y - 0.5, pnet_y + 0.5], color=GREY, lw=0.6, zorder=1)
 
     # ---- draw each row ------------------------------------------------------
     for (m, ry, kind) in rows:
@@ -118,7 +123,7 @@ def main() -> None:
             continue
 
         row = df.loc[m]
-        c = BLUE if kind == "cond" else GREY
+        c = DARK if kind == "cond" else GREY
         # whisker
         ax.plot([row.ci_lo, row.ci_hi], [ry, ry], color=c, lw=0.9,
                 solid_capstyle="round", zorder=2)
@@ -138,7 +143,7 @@ def main() -> None:
 
     ax.set_xlim(0.44, 0.595)
     ax.set_xticks([0.45, 0.50, 0.55])
-    ax.set_xlabel("PDS (perturbation direction score)")
+    ax.set_xlabel("PDS (perturbation discrimination score)")
     ax.tick_params(axis="y", length=0, pad=1.5)
     ax.tick_params(axis="x", pad=1.5)
     S.despine(ax, keep=("left", "bottom"))
@@ -148,8 +153,10 @@ def main() -> None:
     xlab = -0.40  # axes fraction (into the reserved left margin)
     trans = ax.get_yaxis_transform()
 
-    def group_label(text, ylo, yhi):
-        yc = (ylo + yhi) / 2.0
+    def group_label(text, ylo, yhi, dy=0.0):
+        # dy nudges a label off the block centre; the rotated two-line labels are
+        # as long as ~2.5 rows, so adjacent blocks need explicit clearance.
+        yc = (ylo + yhi) / 2.0 + dy
         ax.annotate(text, xy=(xlab, yc), xycoords=trans,
                     ha="center", va="center", rotation=90,
                     fontsize=5.6, style="italic", color=S.INK,
@@ -158,43 +165,29 @@ def main() -> None:
     cond_ys = [ry for (m, ry, k) in rows if k == "cond"]
     ref_ys = [ry for (m, ry, k) in rows if k == "ref"]
     group_label("Variant-\nconditionable", min(cond_ys), max(cond_ys))
-    group_label("Feature\nregression", band_y, band_y)
-    group_label("Reference", min(ref_ys), max(ref_ys))
+    group_label("Feature\nregression", band_y, band_y, dy=0.45)
+    group_label("Reference", min(ref_ys), max(ref_ys), dy=-0.30)
 
     # ---- "chance" tag at top of dashed line --------------------------------
-    ax.text(0.50, ymax + 0.78, "chance", ha="center", va="bottom",
+    ax.text(0.4975, ymax + 0.78, "chance", ha="right", va="bottom",
             fontsize=5.6, color=S.INK)
 
     # ---- PerturbNet not-significant annotation -----------------------------
     # label the subspace-null band above the PerturbNet row, clear of the whisker.
-    ax.annotate("50-dim subspace null;\nnot significant",
+    ax.annotate("50-dim subspace null:\n0.52 (P = 0.13, n.s.)",
                 xy=(PNET_SUBSPACE_NULL, pnet_y + 0.48),
                 xytext=(0.508, pnet_y + 1.0),
                 textcoords="data", ha="left", va="bottom",
-                fontsize=5.0, color=GREY, style="italic",
+                fontsize=5.2, color=GREY, style="italic",
                 arrowprops=dict(arrowstyle="-", lw=0.5, color=GREY,
                                 shrinkA=1, shrinkB=1),
                 annotation_clip=False)
 
     # ---- panel message ------------------------------------------------------
-    # sits in the empty upper-left quadrant, clear of all points and the legend.
-    ax.text(0.445, max(cond_ys) - 1.0, "no model class\nexceeds the floor",
+    # sits in the empty lower-right quadrant, clear of every whisker.
+    ax.text(0.5195, (min(ref_ys) + max(ref_ys)) / 2.0,
+            "no model class\nclears its null",
             ha="left", va="center", fontsize=5.8, color=S.INK, style="italic")
-
-    # ---- compact legend (no black edges) -----------------------------------
-    handles = [
-        Line2D([0], [0], marker="o", ms=3.2, mfc=BLUE, mec="white", mew=0.4,
-               color=BLUE, lw=0.9, label="Published model"),
-        Patch(facecolor=GREY, alpha=0.45, edgecolor="none",
-              label="In-house head range"),
-        Line2D([0], [0], marker="o", ms=3.2, mfc=GREY, mec="white", mew=0.4,
-               color=GREY, lw=0.9, label="Reference"),
-    ]
-    leg = ax.legend(handles=handles, loc="lower right",
-                    bbox_to_anchor=(1.005, -0.02), handlelength=1.1,
-                    handletextpad=0.4, labelspacing=0.28, borderpad=0.2,
-                    fontsize=5.2)
-    leg.set_zorder(6)
 
     stem = os.path.join(HERE, "fig4g_external_forest")
     S.save(fig, stem)

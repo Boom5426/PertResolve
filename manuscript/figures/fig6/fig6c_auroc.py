@@ -31,15 +31,20 @@ def main() -> None:
     # mean over the evaluable datasets actually drawn (matches committed 0.9574 -> 0.96)
     mean_auroc = df.loc[ORDER, "auroc"].mean()
 
-    fig, ax = S.panel(58, 42)
+    fig, ax = S.panel(60, 44)
 
     # y positions: first item at top
     ys = list(range(len(ORDER)))[::-1]
 
-    # chance line
+    # reference lines. Same idiom as panel d: dashed grey = null/chance,
+    # dotted ink = the mean across the evaluable datasets.
     ax.axvline(0.5, ls=(0, (3, 2)), lw=0.6, color=S.GREY, zorder=1)
-    ax.text(0.5, len(ORDER) - 0.55, "chance", fontsize=5, color=S.GREY,
-            ha="center", va="bottom")
+    # set beside the line, not on it, so the dashes do not run through the word
+    ax.text(0.508, len(ORDER) - 0.52, "chance", fontsize=5.5, color=S.GREY,
+            ha="left", va="bottom")
+    ax.axvline(mean_auroc, ls=(0, (1, 1.5)), lw=0.6, color=S.INK, zorder=1)
+    ax.text(mean_auroc - 0.008, len(ORDER) - 0.52, "mean %.2f" % mean_auroc,
+            fontsize=5.5, color=S.INK, ha="right", va="bottom")
 
     printed = []
     for ds, y in zip(ORDER, ys):
@@ -58,19 +63,21 @@ def main() -> None:
                    linewidths=0.5, zorder=4)
         printed.append((ds, auroc, lo, hi))
 
-    # mean AUROC annotation (open band just below the point cloud, left of centre)
-    ax.text(0.565, 0.62, "mean AUROC %.2f" % mean_auroc, fontsize=6, color=S.INK,
-            ha="left", va="center")
-
-    # not-evaluable note for the two single-class allele genes (empty lower band,
-    # clear of the JAK1 point and inside the axes)
-    ax.text(0.565, -0.36,
-            "TP53, KRAS: all un-rankable\n(single-class, not evaluable)",
-            fontsize=4.8, color=S.GREY, ha="left", va="center", linespacing=1.25)
+    # not-evaluable note for the two single-class allele genes. Carried ONCE for
+    # the whole figure (removed from panel b), in the empty lower-left band.
+    # Verified-empty band: between the GATA1 and Adamson rows, left of every CI
+    # (the leftmost interval bound drawn is Norman's 0.84).
+    ax.text(0.525, 1.5,
+            "TP53, KRAS: all un-rankable\n(single class, not evaluable)",
+            fontsize=5.4, color=S.GREY, ha="left", va="center", linespacing=1.25)
 
     ax.set_yticks(ys)
     ax.set_yticklabels(ORDER)
-    ax.set_ylim(-0.65, len(ORDER) - 0.35)
+    # direct-coloured dataset labels (same device as panel f); together with the
+    # single bare key in panel b this is the figure's whole dataset legend.
+    for tick, ds in zip(ax.get_yticklabels(), ORDER):
+        tick.set_color(D.DATASET_COLORS[ds])
+    ax.set_ylim(-0.55, len(ORDER) - 0.15)
     ax.set_xlim(0.45, 1.02)
     ax.set_xticks([0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
     ax.set_xlabel("LODO rankability AUROC")

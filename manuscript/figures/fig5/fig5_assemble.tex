@@ -1,23 +1,37 @@
 % Figure 5 composite (vector). Build: pdflatex fig5_assemble.tex
-\documentclass[tikz,border=1mm]{standalone}
+% Page is exactly 183 x 150 mm (Nature double-column width; border=0 so the PDF
+% media box equals the bounding box and the figure is not 185 mm wide).
+%
+% Layout contract (all values in mm):
+%   left/right margin 3.5, every gutter 5.5, three rows.
+%   Row 1  a 64.00 | b 56.82 | c 44.19     top 146.3, height 41.1 (common baseline)
+%   Row 2  d 85.25 | e 85.25               top 101.3, height 36.1
+%   Row 3  f 85.25 | g 85.25               top  61.2, height 57.9 (the message pair)
+% Every panel PDF is generated at (or within 0.3% of) its placement width, so the
+% point sizes written in the panel scripts are the on-page point sizes.
+\documentclass[tikz,border=0mm]{standalone}
 \usepackage{graphicx}\usepackage{helvet}\renewcommand{\familydefault}{\sfdefault}
 \begin{document}
 \begin{tikzpicture}[x=1mm,y=1mm]
   \useasboundingbox (0,0) rectangle (183,150);
-  % row 1: a oracle def (AI) | b oracle vs model | c phase map
-  \node[anchor=north west,inner sep=0] at (4,146)  {\includegraphics[width=60mm]{Fig5a_oracle_ceiling.pdf}};
-  \node[anchor=north west,inner sep=0] at (68,146) {\includegraphics[width=58mm]{fig5b_oracle_vs_model.pdf}};
-  \node[anchor=north west,inner sep=0] at (130,146){\includegraphics[width=44mm]{fig5c_phasemap.pdf}};
-  % row 2: d synthetic predictors (AI) | e leaderboard example (AI) | f resolution curve
-  \node[anchor=north west,inner sep=0] at (4,98)   {\includegraphics[width=60mm]{Fig5d.pdf}};
-  \node[anchor=north west,inner sep=0] at (68,98)  {\includegraphics[width=58mm]{Fig5e.pdf}};
-  \node[anchor=north west,inner sep=0] at (128,98) {\includegraphics[width=54mm]{fig5f_resolution.pdf}};
-  % row 3: g benchmark-validity transition
-  \node[anchor=north west,inner sep=0] at (48,62)  {\includegraphics[width=90mm]{fig5g_validity.pdf}};
-  % panel letters
-  \tikzset{plab/.style={font=\bfseries\large,anchor=north west,inner sep=0}}
-  \node[plab] at (1,149) {a};  \node[plab] at (65,149) {b};  \node[plab] at (127,149) {c};
-  \node[plab] at (1,101) {d};  \node[plab] at (65,101) {e};  \node[plab] at (125,101) {f};
-  \node[plab] at (45,65) {g};
+  % ---- row 1: a oracle definition (schematic) | b ceiling vs model | c phase map
+  \node[anchor=north west,inner sep=0] at (3.50,146.3)  {\includegraphics[width=64.00mm]{fig5a_oracle_def.pdf}};
+  \node[anchor=north west,inner sep=0] at (73.00,146.3) {\includegraphics[width=56.82mm]{fig5b_oracle_vs_model.pdf}};
+  \node[anchor=north west,inner sep=0] at (135.32,146.3){\includegraphics[width=44.19mm]{fig5c_phasemap.pdf}};
+  % ---- row 2: d synthetic-predictor construction | e leaderboard illustration
+  \node[anchor=north west,inner sep=0] at (3.50,101.3)  {\includegraphics[width=85.25mm]{fig5d_synthetic.pdf}};
+  \node[anchor=north west,inner sep=0] at (94.25,101.3) {\includegraphics[width=85.25mm]{fig5e_leaderboard.pdf}};
+  % ---- row 3: f resolution across datasets | g benchmark-validity transition
+  \node[anchor=north west,inner sep=0] at (3.50,61.2)   {\includegraphics[width=85.25mm]{fig5f_resolution.pdf}};
+  \node[anchor=north west,inner sep=0] at (94.25,61.2)  {\includegraphics[width=85.25mm]{fig5g_validity.pdf}};
+  % ---- panel letters: lowercase bold, 8 pt on the page, at the top-left edge
+  \tikzset{plab/.style={font=\fontsize{8}{9}\selectfont\bfseries,anchor=north west,inner sep=0}}
+  \node[plab] at (0.60,149.5)  {a};
+  \node[plab] at (70.00,149.5) {b};
+  \node[plab] at (132.40,149.5){c};
+  \node[plab] at (0.60,104.6)  {d};
+  \node[plab] at (91.35,104.6) {e};
+  \node[plab] at (0.60,64.5)   {f};
+  \node[plab] at (91.35,64.5)  {g};
 \end{tikzpicture}
 \end{document}

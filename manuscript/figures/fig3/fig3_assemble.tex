@@ -1,25 +1,28 @@
 % Figure 3 composite (vector). Build: pdflatex fig3_assemble.tex
 % Identification-first order: row1 define+detect | row2 identification | row3 determinants
-\documentclass[tikz,border=1mm]{standalone}
+% Every panel is drawn natively at its placed width, so the composite scale is 1.0
+% and on-page type stays at 5.5-7 pt. Rows are bottom-aligned (common baseline);
+% gutters are 6.2 / 8.0 / 7.6 mm and left/right margins are 3 mm throughout.
+\documentclass[tikz,border=0mm]{standalone}
 \usepackage{graphicx}\usepackage{helvet}\renewcommand{\familydefault}{\sfdefault}
 \begin{document}
 \begin{tikzpicture}[x=1mm,y=1mm]
   \useasboundingbox (0,0) rectangle (183,167);
-  % row 1: a schematic | b windows | c detection ratio (hero)
-  \node[anchor=north west,inner sep=0] at (4,163)  {\includegraphics[width=46mm]{Fig3a.pdf}};
-  \node[anchor=north west,inner sep=0] at (54,164) {\includegraphics[width=60mm]{fig3b_windows.pdf}};
-  \node[anchor=north west,inner sep=0] at (118,163){\includegraphics[width=64mm]{fig3c_ratio.pdf}};
-  % row 2: d sibling-pair resolvable | e classifier (identification)
-  \node[anchor=north west,inner sep=0] at (10,114) {\includegraphics[width=74mm]{fig3g_detect_ident.pdf}};
-  \node[anchor=north west,inner sep=0] at (96,114) {\includegraphics[width=76mm]{fig3h_classifier.pdf}};
-  % row 3: f landscape | g titration | h rankable (determinants)
-  \node[anchor=north west,inner sep=0] at (4,50)  {\includegraphics[width=54mm]{fig3d_landscape.pdf}};
-  \node[anchor=north west,inner sep=0] at (62,50) {\includegraphics[width=52mm]{fig3e_titration.pdf}};
-  \node[anchor=north west,inner sep=0] at (120,50){\includegraphics[width=58mm]{fig3f_rankable.pdf}};
-  % panel letters
-  \tikzset{plab/.style={font=\bfseries\large,anchor=north west,inner sep=0}}
-  \node[plab] at (1,166) {a};   \node[plab] at (51,166) {b};   \node[plab] at (115,166) {c};
-  \node[plab] at (7,116) {d};   \node[plab] at (93,116) {e};
-  \node[plab] at (1,52) {f};    \node[plab] at (59,52) {g};    \node[plab] at (117,52) {h};
+  % ---- row 1: a definition schematic | b representative windows | c per-variant ratio (hero)
+  \node[anchor=north west,inner sep=0] at (3.00,162.51){\includegraphics[width=48.01mm]{fig3a_window_def.pdf}};
+  \node[anchor=north west,inner sep=0] at (57.17,162.52){\includegraphics[width=54.81mm]{fig3b_windows.pdf}};
+  \node[anchor=north west,inner sep=0] at (118.14,161.59){\includegraphics[width=61.86mm]{fig3c_ratio.pdf}};
+  % ---- row 2: d sibling-pair resolvability | e two-sample classifier (identification)
+  \node[anchor=north west,inner sep=0] at (3.00,100.73){\includegraphics[width=84.55mm]{fig3g_detect_ident.pdf}};
+  \node[anchor=north west,inner sep=0] at (95.51,100.74){\includegraphics[width=84.49mm]{fig3h_classifier.pdf}};
+  % ---- row 3: f effect-size landscape | g depth titration | h rankable fraction
+  \node[anchor=north west,inner sep=0] at (3.00,57.87){\includegraphics[width=56.43mm]{fig3d_landscape.pdf}};
+  \node[anchor=north west,inner sep=0] at (66.99,58.28){\includegraphics[width=51.51mm]{fig3e_titration.pdf}};
+  \node[anchor=north west,inner sep=0] at (126.06,58.28){\includegraphics[width=53.95mm]{fig3f_rankable.pdf}};
+  % ---- panel letters: lowercase bold 8 pt at final size, top-left of each panel
+  \tikzset{plab/.style={font=\fontsize{8}{9}\selectfont\bfseries,anchor=north west,inner sep=0}}
+  \node[plab] at (0.2,166.0)  {a};  \node[plab] at (54.4,166.0)  {b};  \node[plab] at (115.3,166.0) {c};
+  \node[plab] at (0.2,104.2)  {d};  \node[plab] at (92.7,104.2)  {e};
+  \node[plab] at (0.2,61.9)   {f};  \node[plab] at (64.2,61.9)   {g};  \node[plab] at (123.3,61.9)  {h};
 \end{tikzpicture}
 \end{document}

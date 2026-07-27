@@ -25,6 +25,18 @@ S.apply_rcparams()
 # ---- data (documented, verified against README + T100 JSON) ---------------
 DATASETS = ["Adamson", "Norman", "Replogle"]      # the three balanced datasets
 LEARNED = {"Adamson": 0.85, "Norman": 0.94, "Replogle": 0.99}   # README headline
+# Training-free pilot-SNR AUROC. Source: results/pilot_validation/README.md
+# ("Mechanistic pilot-SNR (no training), per dataset: 0.84 / 0.93 / 0.98", listed
+# in the same Adamson / Norman / Replogle order as the LODO line above).
+# Traceability re-checked 2026-07-27 by recomputing per dataset directly from the
+# committed per-perturbation files results/pilot_validation/<DS>_pilot.csv, using
+# the recipe of results/pilot_validation/pilot_validate.py (score = pilot_snr_50,
+# label = rank_T100, sklearn.metrics.roc_auc_score, no training):
+#   Adamson 0.839 (n=92, pos=49), Norman 0.926 (n=177, pos=146),
+#   Replogle 0.977 (n=239, pos=161)  ->  0.84 / 0.93 / 0.98 as plotted.
+# Note that pilot_validate.py itself stores only the POOLED mechanistic AUROC
+# (0.978) in pilot_validation_summary.json; that pooled value is base-rate
+# inflated and is deliberately NOT plotted here.
 SNR = {"Adamson": 0.84, "Norman": 0.93, "Replogle": 0.98}       # training-free
 MEAN_LEARNED = 0.93
 NULL = 0.49
@@ -55,14 +67,16 @@ ax.axhline(MEAN_LEARNED, ls=(0, (1, 1.5)), lw=0.6, color=S.INK, zorder=1)
 ax.text(-0.42, MEAN_LEARNED + 0.006, "mean 0.93", ha="left", va="bottom",
         fontsize=5.5, color=S.INK)
 
+# FIGURE-WIDE FILL RULE (panels d, e, f): one mark (circle); filled = the primary /
+# headline condition, open = the comparison condition. Here filled = learned
+# predictor, open = training-free predictor. The former square marker in this panel
+# was the figure's only competing shape encoding and has been removed.
 for i, ds in enumerate(DATASETS):
     c = D.DATASET_COLORS[ds]
-    # learned effect-size predictor: filled circle
-    ax.plot(i - JIT, LEARNED[ds], marker="o", ms=4.5, mfc=c, mec=S.INK,
-            mew=0.5, ls="none", zorder=3)
-    # training-free SNR predictor: open square
-    ax.plot(i + JIT, SNR[ds], marker="s", ms=4.2, mfc="white", mec=c,
-            mew=0.9, ls="none", zorder=3)
+    ax.plot(i - JIT, LEARNED[ds], marker="o", ms=4.4, mfc=c, mec=c,
+            mew=0.6, ls="none", zorder=3)
+    ax.plot(i + JIT, SNR[ds], marker="o", ms=4.4, mfc="white", mec=c,
+            mew=1.0, ls="none", zorder=3)
 
 ax.set_xlim(-0.6, len(DATASETS) - 0.4)
 ax.set_ylim(0.40, 1.02)
@@ -73,16 +87,17 @@ ax.set_ylabel("Prospective AUROC\n(disjoint higher-depth cells)")
 S.despine(ax)
 ax.tick_params(length=2.2)
 
-# legend for the two predictors: draw as proxy handles (no black edge on frame)
-h_learned = ax.plot([], [], marker="o", ms=4.5, mfc=S.GREY, mec=S.INK,
-                    mew=0.5, ls="none")[0]
-h_snr = ax.plot([], [], marker="s", ms=4.2, mfc="white", mec=S.GREY,
-                mew=0.9, ls="none")[0]
-leg = ax.legend([h_learned, h_snr],
-                ["learned (effect size)", "training-free (SNR)"],
-                loc="center right", bbox_to_anchor=(1.0, 0.42),
-                handletextpad=0.35, borderpad=0.2,
-                labelspacing=0.3, fontsize=5.5, frameon=False)
+# LEGEND ECONOMY: no detached legend. The two predictors are spatially stable
+# (learned always left of the tick, training-free always right), so they are
+# direct-labelled once on the leftmost (Adamson) pair with hairline leaders.
+ax.annotate("learned (effect size)", xy=(-0.185, 0.838), xytext=(-0.55, 0.792),
+            fontsize=5.5, color=S.INK, ha="left", va="center",
+            arrowprops=dict(arrowstyle="-", lw=0.4, color=S.GREY,
+                            shrinkA=1.0, shrinkB=2.0))
+ax.annotate("training-free (SNR)", xy=(0.175, 0.852), xytext=(0.40, 0.888),
+            fontsize=5.5, color=S.INK, ha="left", va="center",
+            arrowprops=dict(arrowstyle="-", lw=0.4, color=S.GREY,
+                            shrinkA=1.0, shrinkB=2.0))
 
 # panel note
 ax.text(0.0, 1.015, "pilot 25-50 cells", transform=ax.transAxes,
@@ -97,10 +112,10 @@ axi.set_xlim(-0.03, 1.03)
 axi.set_ylim(-0.03, 1.03)
 axi.set_xticks([0, 1])
 axi.set_yticks([0, 1])
-axi.tick_params(length=1.6, pad=1.2, labelsize=5)
-axi.set_xlabel("pred.", fontsize=5.5, labelpad=1.0)
-axi.set_ylabel("obs.", fontsize=5.5, labelpad=1.0)
-axi.set_title("calibration", fontsize=5.5, pad=1.5)
+axi.tick_params(length=1.6, pad=1.2, labelsize=6)
+axi.set_xlabel("pred.", fontsize=6.0, labelpad=1.0)
+axi.set_ylabel("obs.", fontsize=6.0, labelpad=1.0)
+axi.set_title("calibration", fontsize=6.0, pad=1.5)
 S.despine(axi)
 for sp in ("left", "bottom"):
     axi.spines[sp].set_linewidth(0.4)

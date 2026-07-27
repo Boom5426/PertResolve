@@ -37,6 +37,17 @@ import fig6_data as D
 ALL_DATASETS = ["Replogle", "Norman", "Adamson", "GATA1", "JAK1", "TP53", "KRAS"]
 SINGLE_CLASS = ["TP53", "KRAS"]
 
+# GREYSCALE REDUNDANCY: the five curves must stay separable without colour, so
+# every held-out dataset also carries its own dash pattern. None of them repeats
+# the chance diagonal's (0, (2, 2)).
+DASHES = {
+    "Replogle": (0, ()),                     # solid
+    "Norman": (0, (3.4, 1.3)),               # long dash
+    "Adamson": (0, (1.1, 1.2)),              # dot
+    "GATA1": (0, (4.4, 1.3, 1.0, 1.3)),      # dash-dot
+    "JAK1": (0, (2.0, 1.1, 0.8, 1.1, 0.8, 1.1)),  # dash-dot-dot
+}
+
 
 def build() -> dict[str, pd.DataFrame]:
     frames = {}
@@ -73,8 +84,9 @@ def main() -> None:
         auc = roc_auc_score(y, p)
         printed.append((ho, auc, committed.get(ho)))
 
-        ax.plot(fpr, tpr, "-", lw=0.9, color=D.DATASET_COLORS[ho],
-                label=f"{ho} ({auc:.2f})", zorder=3, solid_capstyle="round")
+        ax.plot(fpr, tpr, ls=DASHES[ho], lw=0.9, color=D.DATASET_COLORS[ho],
+                label=ho, zorder=3, solid_capstyle="round",
+                dash_capstyle="butt")
 
     ax.set_xlim(-0.02, 1.02)
     ax.set_ylim(-0.02, 1.02)
@@ -86,16 +98,16 @@ def main() -> None:
     S.despine(ax)
     ax.tick_params(length=2.2)
 
-    leg = ax.legend(loc="lower right", handlelength=1.2, handletextpad=0.5,
-                    labelspacing=0.25, borderpad=0.2, borderaxespad=0.2,
-                    fontsize=5.5, title="LODO hold-out (AUC)", frameon=False)
-    leg.get_title().set_fontsize(5.5)
-
-    # single-class note (TP53/KRAS have undefined AUROC); placed in the empty
-    # wedge below the chance diagonal, clear of both the ROC curves and legend
-    ax.text(0.055, 0.24, "TP53, KRAS: single-class\n(AUROC undefined)",
-            transform=ax.transAxes, fontsize=5, color=S.GREY,
-            va="center", ha="left", linespacing=1.2)
+    # LEGEND ECONOMY. This is the ONLY dataset key in the figure; it is a bare
+    # colour-and-dash-to-name list with no title and no numbers. The handle is long
+    # enough (2.4 em) to show a full dash period, so the key works in greyscale
+    # too. The AUROC values and their
+    # 95% intervals are stated once, in the adjacent panel c, and the TP53/KRAS
+    # single-class note is likewise carried once, in c. Colours here match c's
+    # (and f's) directly-coloured axis labels, so the key serves the whole row.
+    ax.legend(loc="lower right", handlelength=2.4, handletextpad=0.4,
+              labelspacing=0.22, borderpad=0.15, borderaxespad=0.15,
+              fontsize=5.5, frameon=False)
 
     S.save(fig, "fig6b_roc")
 

@@ -34,11 +34,14 @@ def main() -> None:
         # connecting dumbbell line
         ax.plot([xn, xm], [y, y], color=col, lw=0.9, zorder=1,
                 solid_capstyle="round")
-        # native = filled circle; matched-50 = open circle
-        ax.plot(xn, y, marker="o", ms=4.6, mfc=col, mec=col, mew=0.6,
-                linestyle="none", zorder=3)
+        # matched-50 = open circle (drawn first); native = filled circle (drawn on
+        # top). For Replogle the two values are 0.4 pt apart, so the markers all but
+        # coincide; drawing the filled one last keeps it visible inside the open
+        # ring and shows the near-zero shift honestly instead of hiding it.
         ax.plot(xm, y, marker="o", ms=4.6, mfc="white", mec=col, mew=1.0,
                 linestyle="none", zorder=3)
+        ax.plot(xn, y, marker="o", ms=4.0, mfc=col, mec="white", mew=0.5,
+                linestyle="none", zorder=4)
 
         # value labels: put the lower value to the left of its marker and the
         # higher value to the right, so the two never collide. If the lower
@@ -49,7 +52,7 @@ def main() -> None:
         for xval in (lo, hi):
             if xval == lo:
                 if xval < 8.0:  # near axis: label above to avoid tick clash
-                    ax.text(xval, y + 0.28, f"{xval:.1f}", ha="center",
+                    ax.text(xval, y + 0.24, f"{xval:.1f}", ha="center",
                             va="bottom", fontsize=5.5, color=S.INK)
                 else:
                     ax.text(xval - 2.6, y, f"{xval:.1f}", ha="right",
@@ -61,7 +64,7 @@ def main() -> None:
     # axes cosmetics
     ax.set_xlim(0, 60)
     ax.set_xticks([0, 20, 40, 60])
-    ax.set_ylim(-0.6, len(datasets) - 0.4)
+    ax.set_ylim(-0.5, len(datasets) - 0.5)
     ax.set_yticks(list(y_pos.values()))
     ax.set_yticklabels([d for d in reversed(datasets)], fontsize=6.5)
     ax.set_xlabel("un-rankable perturbations (%)", fontsize=6.5)
@@ -73,22 +76,16 @@ def main() -> None:
     for tick, d in zip(ax.get_yticklabels(), reversed(datasets)):
         tick.set_color(D.DATASET_COLORS[d])
 
-    # legend: native (filled) vs depth-matched n=50 (open), drawn in neutral ink
-    from matplotlib.lines import Line2D
-    handles = [
-        Line2D([0], [0], marker="o", linestyle="none", ms=4.4,
-               mfc=S.GREY, mec=S.GREY, mew=0.6, label="native depth"),
-        Line2D([0], [0], marker="o", linestyle="none", ms=4.4,
-               mfc="white", mec=S.GREY, mew=1.0, label="depth-matched (n=50/half)"),
-    ]
-    leg = ax.legend(handles=handles, loc="lower right",
-                    bbox_to_anchor=(1.0, -0.02), fontsize=5.5,
-                    handletextpad=0.4, labelspacing=0.35,
-                    borderaxespad=0.2, frameon=False)
-    for t in leg.get_texts():
-        t.set_color(S.INK)
+    # LEGEND ECONOMY: no detached legend. The two conditions are spatially stable
+    # (filled = native, open = depth-matched, per the figure-wide fill rule shared
+    # with panels d and e), so they are direct-labelled once, above the Adamson
+    # row, which is the row whose two markers are furthest apart.
+    ax.text(native["Adamson"], 1.24, "native", ha="center", va="bottom",
+            fontsize=5.5, color=S.INK)
+    ax.text(matched["Adamson"], 1.24, "depth-matched\n(n = 50 per half)",
+            ha="center", va="bottom", fontsize=5.5, color=S.INK, linespacing=1.2)
 
-    fig.subplots_adjust(left=0.20, right=0.97, top=0.97, bottom=0.16)
+    fig.subplots_adjust(left=0.20, right=0.97, top=0.94, bottom=0.16)
     stem = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fig6f_depthmatch")
     S.save(fig, stem)
     print("native:", {d: native[d] for d in datasets})

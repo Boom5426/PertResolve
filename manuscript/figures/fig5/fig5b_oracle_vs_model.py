@@ -24,12 +24,10 @@ import nm_style as S
 import remote_data as D
 
 CHANCE = 0.50
-REGIME = {
-    "TP53": "measurement-\nlimited",
-    "KRAS": "measurement-\nlimited",
-    "GATA1": "intermediate",
-    "JAK1": "computational\ngap",
-}
+# NOTE: the regime taxonomy (measurement-limited / intermediate / computation-
+# limited) is owned by panel c and is deliberately NOT repeated here: b answers
+# "how far is the best model from the ceiling, per gene", c answers "which failure
+# mode is each gene in".
 
 
 def best_model_pds() -> dict[str, float]:
@@ -42,14 +40,14 @@ def main() -> None:
     orc = D.oracle().set_index("scope")
     best = best_model_pds()
 
-    fig, ax = S.panel(58, 46)
+    fig, ax = S.panel(61.5, 40.3)
 
     genes = S.GENE_ORDER  # TP53, KRAS, GATA1, JAK1
     ypos = {g: i for i, g in enumerate(genes)}  # 0..3 bottom->top
 
     # chance reference
     ax.axvline(CHANCE, color=S.GREY, lw=0.6, ls=(0, (3, 2)), zorder=1)
-    ax.text(CHANCE, len(genes) - 0.30, "chance", fontsize=5, color=S.GREY,
+    ax.text(CHANCE, len(genes) - 0.30, "chance", fontsize=5.5, color=S.GREY,
             ha="center", va="bottom")
 
     printed = []
@@ -75,22 +73,15 @@ def main() -> None:
                    linewidths=0.9, zorder=5)
         printed.append((g, b, o, lo, hi))
 
-    # right-margin regime labels
-    for g in genes:
-        y = ypos[g]
-        ax.text(1.005, y, REGIME[g], transform=ax.get_yaxis_transform(),
-                fontsize=5, color=S.GENE_COLORS[g], ha="left", va="center",
-                linespacing=0.95)
-
     # in-panel legend (filled=oracle, open=model), drawn as proxy markers
-    lx = 0.585
-    ax.scatter([lx], [0.16], s=26, marker="o", color=S.INK, edgecolor="white",
+    lx = 0.615
+    ax.scatter([lx], [0.20], s=22, marker="o", color=S.GREY, edgecolor="white",
                linewidths=0.5, zorder=6)
-    ax.text(lx + 0.012, 0.16, "oracle ceiling", fontsize=5, color=S.INK,
+    ax.text(lx + 0.017, 0.20, "oracle ceiling", fontsize=5.5, color=S.GREY,
             ha="left", va="center")
-    ax.scatter([lx], [-0.16], s=22, marker="o", facecolor="white",
-               edgecolor=S.INK, linewidths=0.9, zorder=6)
-    ax.text(lx + 0.012, -0.16, "best in-house model", fontsize=5, color=S.INK,
+    ax.scatter([lx], [-0.14], s=19, marker="o", facecolor="white",
+               edgecolor=S.GREY, linewidths=0.8, zorder=6)
+    ax.text(lx + 0.017, -0.14, "best in-house model", fontsize=5.5, color=S.GREY,
             ha="left", va="center")
 
     ax.set_yticks(list(ypos.values()))
@@ -98,7 +89,7 @@ def main() -> None:
     for lab in ax.get_yticklabels():
         lab.set_color(S.GENE_COLORS[lab.get_text()])
     ax.set_ylim(-0.55, len(genes) - 0.30)
-    ax.set_xlim(0.42, 0.86)
+    ax.set_xlim(0.425, 0.87)
     ax.set_xticks([0.5, 0.6, 0.7, 0.8])
     ax.set_xlabel("PDS (perturbation discrimination score)")
     S.despine(ax)

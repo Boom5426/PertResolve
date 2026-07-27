@@ -12,10 +12,17 @@ Source of truth (both axes committed):
 Both axes now regenerate from committed CSVs; the same y feeds Fig 5b and SI Table
 tab:window "Best model PDS" so all three stay in sync.
 
+Region shading is neutral grey only: blue/orange/purple/green are reserved for the
+four genes throughout Figure 5, so no region may borrow a gene hue.
+
 Regions (faint labels only, no leakage of ceiling/model values):
-  lower-left  "measurement-limited"  both near chance (TP53, KRAS)
+  left band   "measurement-limited"  ceiling near chance (TP53, KRAS)
   lower-right "computation-limited"   ceiling high, model low (JAK1)
-  upper-right "benchmark-solvable"    ceiling high, model tracks ceiling (aspiration)
+  diagonal    "benchmark-solvable"    ceiling high, model TRACKS the ceiling, i.e. a
+              narrow band hugging y = x in the high-ceiling zone. The half-plane
+              ABOVE y = x (model scores higher than its own oracle ceiling) is not
+              an attainable regime: it is left unshaded and unlabelled, since any
+              excursion into it is best-of-many-heads selection noise (see panel b).
 """
 import os
 import sys
@@ -41,40 +48,53 @@ ys = {g: BEST_MODEL_PDS[g] for g in genes}
 
 # ---- figure --------------------------------------------------------------
 S.apply_rcparams()
-fig, ax = S.panel(50.0, 48.0)
+fig, ax = S.panel(45.2, 43.9)
 
-LO, HI = 0.45, 0.85
+# y-axis is tightened to the plotted models plus the stretch of the y = x diagonal
+# that the regime shading needs; x still spans every gene ceiling (JAK1 0.792).
+X_LO, X_HI = 0.46, 0.82
+Y_LO, Y_HI = 0.46, 0.72
 CHANCE = 0.5
 
-# faint region shading: lower band (measurement-limited) uses ceiling <= ~0.55.
-# We separate the plane by a vertical measurement threshold and the y=x diagonal.
+# faint region shading. The plane is split by a vertical measurement threshold and
+# by the y = x diagonal (model == its own ceiling).
 X_SEP = 0.55  # ceiling below this => measurement-limited (near-chance measurement)
+BAND = 0.035  # half-width (in PDS) of the "model tracks its ceiling" band
 
-# lower-left measurement-limited block (ceiling near chance)
-ax.add_patch(_rect(LO, LO, X_SEP - LO, HI - LO, S.LIGHT_GREY, 0.30))
-# right half (high ceiling) split by the y=x diagonal into two failure/success modes:
-#   below diagonal  -> computation-limited (ceiling high, model lags)
-#   above/near diag -> benchmark-solvable  (model tracks ceiling)
-comp_poly = [(X_SEP, LO), (HI, LO), (HI, HI), (X_SEP, X_SEP)]
-solv_poly = [(X_SEP, X_SEP), (HI, HI), (X_SEP, HI)]
-ax.add_patch(Polygon(comp_poly, closed=True, facecolor=S.GENE_COLORS["JAK1"],
-                     edgecolor="none", alpha=0.12, zorder=0))
-ax.add_patch(Polygon(solv_poly, closed=True, facecolor=S.GENE_COLORS["GATA1"],
-                     edgecolor="none", alpha=0.10, zorder=0))
+# left measurement-limited block (ceiling near chance)
+ax.add_patch(_rect(X_LO, Y_LO, X_SEP - X_LO, Y_HI - Y_LO, S.LIGHT_GREY, 0.55))
+
+# benchmark-solvable: a narrow band hugging y = x once the ceiling is high, i.e.
+# the model tracks its ceiling. Clipped at the top of the axes.
+x_top = min(Y_HI + BAND, X_HI)      # y = x - BAND reaches the top edge here
+solv_poly = [(X_SEP, X_SEP - BAND), (x_top, Y_HI), (Y_HI - BAND, Y_HI),
+             (X_SEP, X_SEP + BAND)]
+ax.add_patch(Polygon(solv_poly, closed=True, facecolor=S.LIGHT_GREY,
+                     edgecolor="none", alpha=0.45, zorder=0))
+
+# computation-limited: high ceiling, model below the tracking band.
+comp_poly = [(X_SEP, Y_LO), (X_HI, Y_LO), (X_HI, Y_HI), (x_top, Y_HI),
+             (X_SEP, X_SEP - BAND)]
+ax.add_patch(Polygon(comp_poly, closed=True, facecolor=S.LIGHT_GREY,
+                     edgecolor="none", alpha=0.18, zorder=0))
 
 # y = x diagonal (model == ceiling)
-ax.plot([LO, HI], [LO, HI], color=S.GREY, lw=0.6, ls=(0, (4, 2)), zorder=1)
+ax.plot([X_LO, Y_HI], [X_LO, Y_HI], color=S.GREY, lw=0.6, ls=(0, (4, 2)), zorder=1)
 # chance reference lines
 ax.axhline(CHANCE, color=S.LIGHT_GREY, lw=0.5, zorder=0)
 ax.axvline(CHANCE, color=S.LIGHT_GREY, lw=0.5, zorder=0)
 
-# region labels (faint, no numbers)
-ax.text(0.492, 0.472, "measurement-\nlimited", ha="center", va="center",
-        fontsize=5.4, color=S.GREY, linespacing=1.0, zorder=2)
-ax.text(0.775, 0.485, "computation-\nlimited", ha="center", va="center",
-        fontsize=5.4, color=S.GREY, linespacing=1.0, zorder=2)
-ax.text(0.635, 0.795, "benchmark-\nsolvable", ha="center", va="center",
-        fontsize=5.4, color=S.GENE_COLORS["GATA1"], linespacing=1.0, zorder=2)
+# region labels (faint, no numbers). "benchmark-solvable" runs ALONG the diagonal
+# so it reads as "model tracks its ceiling", not as the half-plane above it.
+ax.text(0.505, 0.680, "measurement-\nlimited", ha="center", va="center",
+        fontsize=5.5, color=S.GREY, linespacing=1.0, zorder=2)
+ax.text(0.660, 0.558, "computation-\nlimited", ha="center", va="center",
+        fontsize=5.5, color=S.GREY, linespacing=1.0, zorder=2)
+# centred ON the diagonal (x = y = 0.665), i.e. inside the tracking band, so the
+# label names the band and not the half-plane above it. Kept horizontal: rotated
+# text is fragmented by the on-page type audit (pdftotext) into sub-word boxes.
+ax.text(0.665, 0.665, "benchmark-\nsolvable", ha="center", va="center",
+        fontsize=5.5, color=S.GREY, linespacing=1.0, zorder=2)
 
 # gene points
 for g in genes:
@@ -83,25 +103,26 @@ for g in genes:
 
 # gene labels, offset to avoid overlap and stay on-axis
 # TP53 (0.485,0.51) & KRAS (0.500,0.54) sit close in lower-left -> spread them
+# label style is identical to panels f and g: 6 pt, gene colour, not bold.
+# (dy rescaled by the tightened y-range so the on-page offsets are unchanged)
 label_off = {
-    "TP53":  (-0.006, 0.018, "right", "bottom"),
-    "KRAS":  (0.010, -0.006, "left", "top"),
-    "GATA1": (0.012, 0.004, "left", "center"),
-    "JAK1":  (-0.010, 0.006, "right", "bottom"),
+    "TP53":  (-0.007, 0.001, "right", "center"),
+    "KRAS":  (0.009, 0.010, "left", "bottom"),
+    "GATA1": (0.010, -0.003, "left", "top"),
+    "JAK1":  (-0.008, 0.010, "right", "bottom"),
 }
 for g in genes:
     dx, dy, ha, va = label_off[g]
     ax.text(xs[g] + dx, ys[g] + dy, g, ha=ha, va=va, fontsize=6,
-            color=S.GENE_COLORS[g], fontweight="bold", zorder=6)
+            color=S.GENE_COLORS[g], zorder=6)
 
 # axes
-ax.set_xlim(LO, HI)
-ax.set_ylim(LO, HI)
+ax.set_xlim(X_LO, X_HI)
+ax.set_ylim(Y_LO, Y_HI)
 ax.set_xticks([0.5, 0.6, 0.7, 0.8])
-ax.set_yticks([0.5, 0.6, 0.7, 0.8])
-ax.set_xlabel("Oracle ceiling (PDS)")
+ax.set_yticks([0.5, 0.6, 0.7])
+ax.set_xlabel("Oracle ceiling (PDS, native depth)")
 ax.set_ylabel("Best-model PDS")
-ax.set_aspect("equal", adjustable="box")
 S.despine(ax, keep=("left", "bottom"))
 
 S.save(fig, os.path.join(os.path.dirname(os.path.abspath(__file__)), "fig5c_phasemap"))

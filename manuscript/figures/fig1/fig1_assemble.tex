@@ -1,45 +1,54 @@
 % Figure 1 composite assembly (vector-preserving) for AllelePerturb.
 % 6 panels: a pipeline (measurement->model->evaluation->verdict + single-cell
-% resolution diagnostic; subsumes old workflow g), b tracks+legend, c depth,
+% resolution diagnostic; subsumes old workflow g), b tracks+class key, c depth,
 % d features+PCA, e evaluation, f splits. Build: pdflatex fig1_assemble.tex.
+%
+% Placement rules enforced here:
+%   * every panel is placed at (or within 2% of) the width it was drawn at, so
+%     its internal 5-6.5 pt type is 5-6.5 pt ON THE PAGE. The only exception is
+%     panel a, author-supplied vector art 1152 pt wide with 16.7 pt native type,
+%     which therefore needs >= 122 mm; it is placed at 122.5 mm (5.0 pt on page).
+%   * one gutter value, 5.5 mm, between columns; one gutter value, 4.0 mm,
+%     between rows.
+%   * rows share a common top edge; row 1 additionally shares a common baseline
+%     (panel a bottom = panel b class-key bottom = 118.33 mm).
+%   * panel letters are lowercase bold 8 pt (Nature Methods), not \large.
+% Page envelope 183 x 170.2 mm (was 183 x 171 mm; never increased).
 \documentclass[tikz,border=1mm]{standalone}
 \usepackage{graphicx}
 \usepackage{helvet}
 \renewcommand{\familydefault}{\sfdefault}
 \begin{document}
 \begin{tikzpicture}[x=1mm,y=1mm]
-  \useasboundingbox (0,31) rectangle (183,202);
+  \useasboundingbox (0,32.8) rectangle (183,203);
 
-  % ---------- Row 1: a (pipeline, 3:2 wide) | b (variant tracks + legend) -------
-  % a is 1152x768 pt (3:2); at width 110mm it is 73.3mm tall. b tracks (44mm each)
-  % + legend total ~72.6mm so the two panels are bottom-aligned. Height kept close
-  % to the previous composite so the Fig.1 float is no worse than before.
-  \node[anchor=north west,inner sep=0] at (3,200)   {\includegraphics[width=110mm]{Fig1a_editable.pdf}};
-  \node[anchor=north west,inner sep=0] at (126,200)
-    {\begin{minipage}{44mm}
-       \includegraphics[width=\linewidth]{fig1b_track_TP53.pdf}\\[-0.3mm]
-       \includegraphics[width=\linewidth]{fig1b_track_KRAS.pdf}\\[-0.3mm]
-       \includegraphics[width=\linewidth]{fig1b_track_GATA1.pdf}\\[-0.3mm]
-       \includegraphics[width=\linewidth]{fig1b_track_JAK1.pdf}\\[0.4mm]
-       \hspace*{5mm}\includegraphics[width=32mm]{fig1b_legend.pdf}
-     \end{minipage}};
+  % ---------- Row 1: a (pipeline, 3:2) | b (variant tracks + class key) -------
+  % a: 1152x768 pt art at 122.5 mm -> 81.67 mm tall, native type 5.0 pt on page.
+  % b: four tracks drawn at 52 mm (scale 1.0), stacked with equal 2.225 mm gaps,
+  %    bottom-aligned with a.
+  \node[anchor=north west,inner sep=0] at (1.5,200)      {\includegraphics[width=122.5mm]{fig1a_pipeline.pdf}};
+  \node[anchor=north west,inner sep=0] at (129.5,200)    {\includegraphics[width=52.25mm]{fig1b_track_TP53.pdf}};
+  \node[anchor=north west,inner sep=0] at (129.5,181.65) {\includegraphics[width=52.25mm]{fig1b_track_KRAS.pdf}};
+  \node[anchor=north west,inner sep=0] at (129.5,160.51) {\includegraphics[width=52.25mm]{fig1b_track_GATA1.pdf}};
+  \node[anchor=north west,inner sep=0] at (129.5,144.99) {\includegraphics[width=52.25mm]{fig1b_track_JAK1.pdf}};
+  \node[anchor=north west,inner sep=0] at (134.74,126.54){\includegraphics[width=41.77mm]{fig1b_legend.pdf}};
 
-  % ---------- Row 2: c (depth) | d (features + PCA inset) | e (evaluation) ------
-  \node[anchor=north west,inner sep=0] at (3,123)   {\includegraphics[width=48mm]{fig1c_depth.pdf}};
-  \node[anchor=north west,inner sep=0] at (54,123)  {\includegraphics[width=58mm]{Fig1d_schematic_highres.pdf}};
-  \node[anchor=north west,inner sep=0] at (89,117)  {\includegraphics[width=19mm]{fig1d_theta_pca.pdf}};
-  \node[anchor=north west,inner sep=0] at (117,123) {\includegraphics[width=52mm]{Fig1e_Eval_highres.pdf}};
+  % ---------- Row 2: c (depth) | d (theta schematic + PCA data panel) ---------
+  \node[anchor=north west,inner sep=0] at (2,114.33)      {\includegraphics[width=58.06mm]{fig1c_depth.pdf}};
+  \node[anchor=north west,inner sep=0] at (65.56,114.33)  {\includegraphics[width=62.5mm]{fig1d_theta_schematic.pdf}};
+  \node[anchor=north west,inner sep=0] at (133.56,114.33) {\includegraphics[width=47.4mm]{fig1d_theta_pca.pdf}};
 
-  % ---------- Row 3: f (six generalization splits), centred --------------------
-  \node[anchor=north west,inner sep=0] at (51,84)   {\includegraphics[width=78mm]{Fig1f.pdf}};
+  % ---------- Row 3: e (three evaluation axes) | f (six generalization splits) -
+  \node[anchor=north west,inner sep=0] at (2,69.83)    {\includegraphics[width=76.5mm]{fig1e_eval_axes.pdf}};
+  \node[anchor=north west,inner sep=0] at (84,69.83)   {\includegraphics[width=97.5mm]{fig1f_splits.pdf}};
 
-  % ---------- panel letters ----------------------------------------------------
-  \tikzset{plab/.style={font=\bfseries\large,anchor=north west,inner sep=0}}
-  \node[plab] at (1,201.5) {a};
-  \node[plab] at (124,201.5) {b};
-  \node[plab] at (1,122.5) {c};
-  \node[plab] at (52,122.5) {d};
-  \node[plab] at (115,122.5) {e};
-  \node[plab] at (49,85.5) {f};
+  % ---------- panel letters (lowercase, bold, 8 pt) ---------------------------
+  \tikzset{plab/.style={font=\fontsize{8}{9}\selectfont\bfseries,anchor=north west,inner sep=0}}
+  \node[plab] at (0.3,202.8)   {a};
+  \node[plab] at (127.5,202.8) {b};
+  \node[plab] at (0.3,117.13)  {c};
+  \node[plab] at (63.6,117.13) {d};
+  \node[plab] at (0.3,72.63)   {e};
+  \node[plab] at (82.0,72.63)  {f};
 \end{tikzpicture}
 \end{document}

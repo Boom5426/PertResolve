@@ -21,13 +21,20 @@ import nm_style as S
 
 RESULTS = S.repo_root() / "results"
 
-# dataset palette: allele genes reuse the house gene colours; external gene-level
-# atlases get muted distinct hues (colour-blind-safe-ish teal / mauve / tan).
+# dataset palette, house system only. Allele genes keep their unique house gene
+# hues (TP53 blue, KRAS orange, GATA1 purple, JAK1 green) so colour means "gene"
+# wherever a gene is plotted; the external gene-level atlases are given the house
+# neutral slate ramp (nm_style.FEATURE_COLORS) instead of invented hues, dark to
+# light in the order in which they rank across panels c/d/f. The previous
+# teal/mauve/tan set collided with the gene hues (tan vs KRAS orange in
+# particular) and made the figure speak two colour languages.
 DATASET_COLORS = {
     "TP53": S.GENE_COLORS["TP53"], "KRAS": S.GENE_COLORS["KRAS"],
     "GATA1": S.GENE_COLORS["GATA1"], "JAK1": S.GENE_COLORS["JAK1"],
-    "Replogle": "#3E8E9C", "Norman": "#B07AA1", "Adamson": "#C79A55",
-    "VCC": "#8A8F98", "sciPlex": "#6E6E6E",
+    "Replogle": S.FEATURE_COLORS["ESM+theta"],   # dark slate  #2E3742
+    "Norman": S.FEATURE_COLORS["ESM"],           # mid slate   #5F6B76
+    "Adamson": S.FEATURE_COLORS["theta"],        # light slate #9AA7B3
+    "VCC": S.GREY, "sciPlex": S.LIGHT_GREY,
 }
 # datasets with non-degenerate LODO labels, in a sensible display order
 LODO_DATASETS = ["Replogle", "Norman", "Adamson", "GATA1", "JAK1"]

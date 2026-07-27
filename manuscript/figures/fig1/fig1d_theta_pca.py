@@ -37,23 +37,43 @@ def main() -> None:
     Z = pca.transform(X)
     ev = pca.explained_variance_ratio_ * 100
 
-    fig, ax = S.panel(46, 46)
-    for gene in S.GENE_ORDER:
+    # aspect is equal because PC1 and PC2 carry comparable variance (26% / 21%),
+    # so a unit of PC1 must be a unit of PC2 on the page; limits are padded by
+    # 4% of the data range, which also removes the empty margin of the old
+    # square panel.
+    pad = 0.04
+    xr = float(np.ptp(Z[:, 0]))
+    yr = float(np.ptp(Z[:, 1]))
+    xlim = (Z[:, 0].min() - pad * xr, Z[:, 0].max() + pad * xr)
+    ylim = (Z[:, 1].min() - pad * yr, Z[:, 1].max() + pad * yr)
+    w_mm = 57.4
+    h_mm = w_mm * (ylim[1] - ylim[0]) / (xlim[1] - xlim[0])
+
+    fig, ax = S.panel(w_mm, h_mm)
+    # draw the most numerous gene first so the smaller sets are not buried; this
+    # changes only paint order, not a single plotted coordinate
+    order = sorted(S.GENE_ORDER, key=lambda g: -(df.gene == g).sum())
+    for gene in order:
         m = (df.gene == gene).to_numpy()
-        ax.scatter(Z[m, 0], Z[m, 1], s=5, color=S.GENE_COLORS[gene], alpha=0.75,
-                   linewidths=0, label=gene)  # vector: ~470 points, no rasterization
+        ax.scatter(Z[m, 0], Z[m, 1], s=3.5, color=S.GENE_COLORS[gene], alpha=0.7,
+                   linewidths=0, label=gene)  # vector: 470 points, no rasterization
 
     ax.set_xlabel(f"PC1 ({ev[0]:.0f}%)", labelpad=1)
     ax.set_ylabel(f"PC2 ({ev[1]:.0f}%)", labelpad=1)
     ax.set_xticks([])
     ax.set_yticks([])
+    ax.set_xlim(*xlim)
+    ax.set_ylim(*ylim)
+    ax.set_aspect("equal", adjustable="box")
     S.despine(ax, keep=("left", "bottom"))
     ax.axhline(0, color=S.LIGHT_GREY, lw=0.4, zorder=0)
     ax.axvline(0, color=S.LIGHT_GREY, lw=0.4, zorder=0)
-    leg = ax.legend(loc="upper left", handletextpad=0.2, borderpad=0.2,
-                    labelspacing=0.25, markerscale=1.4, bbox_to_anchor=(-0.02, 1.03))
-    for t, g in zip(leg.get_texts(), S.GENE_ORDER):
-        t.set_color(S.GENE_COLORS[g])
+    # No gene legend here. Gene colours are direct-labelled by the track titles
+    # of panel b and the tick labels of panel c; Figure 1 carries ONE gene key,
+    # not one per panel.
+    ax.text(0.0, 1.015, f"{len(df)} variants, coloured by gene",
+            transform=ax.transAxes, ha="left", va="bottom", fontsize=5.5,
+            color=S.GREY)
 
     S.save(fig, "fig1d_theta_pca")
     print("explained variance %:", np.round(ev, 1), " n variants:", len(df))

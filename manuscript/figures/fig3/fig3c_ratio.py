@@ -23,13 +23,13 @@ def main() -> None:
     S.apply_rcparams()
     ci = D.dself_dnull_ci()
 
-    fig, ax = S.panel(72, 50)
+    fig, ax = S.panel(67.3, 64.4)
 
     # soft, annotation-only regime bands (NOT hard thresholds)
-    ax.axhspan(0.90, 1.25, color="#E4E4E4", alpha=0.6, zorder=0)   # near floor (neutral grey; not a gene hue)
-    ax.axhspan(0.0, 0.50, color="#F7F7F7", alpha=0.6, zorder=0)    # wide window (faint neutral)
-    ax.text(3.62, 1.07, "near floor", fontsize=5, color=S.GREY, ha="right", va="center")
-    ax.text(3.62, 0.30, "wide window", fontsize=5, color=S.GREY, ha="right", va="center")
+    ax.axhspan(0.90, 1.25, color=S.LIGHT_GREY, alpha=0.35, zorder=0)  # near floor
+    ax.axhspan(0.0, 0.50, color=S.LIGHT_GREY, alpha=0.13, zorder=0)  # wide window
+    ax.text(3.62, 1.14, "near floor", fontsize=5.5, color=S.GREY, ha="right", va="center")
+    ax.text(-0.72, 0.30, "wide window", fontsize=5.5, color=S.GREY, ha="left", va="center")
 
     for i, gene in enumerate(S.GENE_ORDER):
         r = D.native_rankability(gene)["ratio"].to_numpy()
@@ -53,14 +53,14 @@ def main() -> None:
         ax.text(i + 0.34, m, f"{m:.2f}", fontsize=6, va="center", color=S.INK)
 
     ax.axhline(1.0, color=S.GREY, ls="--", lw=0.7, zorder=1)
-    ax.text(-0.55, 1.0, "R = 1", fontsize=5.5, color=S.GREY, va="bottom", ha="left")
+    ax.text(-0.72, 1.0, "R = 1", fontsize=5.5, color=S.GREY, va="bottom", ha="left")
     ax.set_xticks(range(4))
     ax.set_xticklabels(S.GENE_ORDER)
     for t, g in zip(ax.get_xticklabels(), S.GENE_ORDER):
         t.set_color(S.GENE_COLORS[g]); t.set_fontweight("bold")
-    ax.set_xlim(-0.6, 3.7)
+    ax.set_xlim(-0.78, 3.7)
     ax.set_ylim(-0.03, 1.35)
-    ax.set_ylabel(r"$D_\mathrm{self}\,/\,D_\mathrm{null}$")
+    ax.set_ylabel(r"$D_\mathrm{self}/D_\mathrm{null}$")
     S.despine(ax)
     ax.tick_params(length=2.2)
 

@@ -1,24 +1,38 @@
 % Figure 4 composite (vector). Build: pdflatex fig4_assemble.tex
+% Placement rule: every panel is drawn at its final size, so each \includegraphics
+% width equals the panel PDF's native width (scale = 1.00) and the on-page type
+% stays in the 5-7 pt house band.
+%
+% Panels a and b live in ONE file (fig4ab_splits.pdf): they share the 18 method
+% rows and the 5 split columns, so the row-label column and the colour key are
+% drawn once and serve both maps. The letters a and b are stamped over the two
+% heatmap blocks.
+%
+% Row geometry (mm, page 183 x 166):
+%   row 1  top 162  height 49.0   left edge 4  right edge 179
+%   row 2  top 107  height 45.6   left edge 4  right edge 179
+%   row 3  top  56  height 52.0   left edge 4  right edge 179
+% Gutters are equal within each row (6.7 / 6.65 / 5.3 mm); panels in a row share
+% a common top edge and a common baseline to within 0.8 mm.
 \documentclass[tikz,border=1mm]{standalone}
 \usepackage{graphicx}\usepackage{helvet}\renewcommand{\familydefault}{\sfdefault}
 \begin{document}
 \begin{tikzpicture}[x=1mm,y=1mm]
-  \useasboundingbox (0,0) rectangle (183,182);
-  % row 1: a PDS-splits | b Pearson-splits | c null
-  \node[anchor=north west,inner sep=0] at (3,178)  {\includegraphics[width=58mm]{fig4a_pds_splits.pdf}};
-  \node[anchor=north west,inner sep=0] at (64,178) {\includegraphics[width=58mm]{fig4b_pearson_splits.pdf}};
-  \node[anchor=north west,inner sep=0] at (126,178){\includegraphics[width=54mm]{fig4c_null.pdf}};
-  % row 2: d distance | e features | f gene x split
-  \node[anchor=north west,inner sep=0] at (6,124)  {\includegraphics[width=50mm]{fig4d_distance.pdf}};
-  \node[anchor=north west,inner sep=0] at (60,124) {\includegraphics[width=58mm]{fig4e_features.pdf}};
-  \node[anchor=north west,inner sep=0] at (122,124){\includegraphics[width=50mm]{fig4f_gene_split.pdf}};
-  % row 3: g external forest (hero) | h interface audit
-  \node[anchor=north west,inner sep=0] at (4,70)  {\includegraphics[width=66mm]{fig4g_external_forest.pdf}};
-  \node[anchor=north west,inner sep=0] at (74,74) {\includegraphics[width=78mm]{fig4h_interface.pdf}};
-  % panel letters
-  \tikzset{plab/.style={font=\bfseries\large,anchor=north west,inner sep=0}}
-  \node[plab] at (0,181) {a};   \node[plab] at (61,181) {b};   \node[plab] at (123,181) {c};
-  \node[plab] at (2,123) {d};   \node[plab] at (57,123) {e};   \node[plab] at (119,123) {f};
-  \node[plab] at (1,69) {g};    \node[plab] at (71,69) {h};
+  \useasboundingbox (0,0) rectangle (183,166);
+  % row 1: a PDS across splits + b Pearson-delta across splits (shared rows/key) | c permutation null
+  \node[anchor=north west,inner sep=0] at (4,162)     {\includegraphics[width=89mm]{fig4ab_splits.pdf}};
+  \node[anchor=north west,inner sep=0] at (99.7,162)  {\includegraphics[width=79.3mm]{fig4c_null.pdf}};
+  % row 2: d distance geometry | e feature spaces | f gene x split dissociation
+  \node[anchor=north west,inner sep=0] at (4,107)     {\includegraphics[width=58mm]{fig4d_distance.pdf}};
+  \node[anchor=north west,inner sep=0] at (68.65,107) {\includegraphics[width=57mm]{fig4e_features.pdf}};
+  \node[anchor=north west,inner sep=0] at (132.3,107) {\includegraphics[width=46.7mm]{fig4f_gene_split.pdf}};
+  % row 3: g external models under one harness (hero) | h interface audit
+  \node[anchor=north west,inner sep=0] at (4,56)      {\includegraphics[width=60.7mm]{fig4g_external_forest.pdf}};
+  \node[anchor=north west,inner sep=0] at (70,56)     {\includegraphics[width=109mm]{fig4h_interface.pdf}};
+  % panel letters: lowercase bold 8 pt at final size, top-left of each panel
+  \tikzset{plab/.style={font=\fontsize{8}{9}\selectfont\bfseries,anchor=north west,inner sep=0}}
+  \node[plab] at (0.5,165.5) {a};  \node[plab] at (47.5,165.5) {b};  \node[plab] at (95,165.5) {c};
+  \node[plab] at (0.5,110.5) {d};  \node[plab] at (65.15,110.5) {e};  \node[plab] at (128.8,110.5) {f};
+  \node[plab] at (0.5,59.5) {g};   \node[plab] at (66.5,59.5) {h};
 \end{tikzpicture}
 \end{document}

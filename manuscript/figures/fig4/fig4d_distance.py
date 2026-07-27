@@ -2,8 +2,7 @@
 
 Data-direct. Source (committed): the D.exttheta() per-variant external-calibration
 grid; for each in-house method we take the per-method mean of PDS_cos, PDS_L1 and
-PDS_L2 (cosine, L1, L2 variants of the paired-direction score). One dot per method
-at each of the three distance positions, a thin line linking a method's three
+PDS_L2 (cosine, L1, L2 variants of the perturbation discrimination score). One dot per method at each of the three distance positions, a thin line linking a method's three
 values, a dashed chance line at 0.50, and a median bar per distance.
 
 Verified firsthand (18 in-house methods, per-method means then median across
@@ -42,7 +41,7 @@ def main() -> None:
     xpos = np.arange(len(METRICS))
     medians = per_method.median().to_numpy()
 
-    fig, ax = S.panel(48, 46)
+    fig, ax = S.panel(57.5, 48.6)
 
     # dashed chance line at 0.50
     ax.axhline(0.50, color=S.INK, ls=(0, (4, 3)), lw=0.7, zorder=1)
@@ -50,7 +49,7 @@ def main() -> None:
     # thin line linking each method's three distance values
     for m in inhouse:
         y = per_method.loc[m, METRICS].to_numpy(float)
-        ax.plot(xpos, y, "-", color=S.GREY, lw=0.35, alpha=0.55, zorder=2)
+        ax.plot(xpos, y, "-", color=S.LIGHT_GREY, lw=0.4, zorder=2)
 
     # one dot per method at each distance position (slight x-jitter for density)
     rng = np.random.default_rng(0)
@@ -58,8 +57,8 @@ def main() -> None:
         y = per_method[met].to_numpy(float)
         jit = (rng.random(n_methods) - 0.5) * 0.16
         ax.scatter(np.full(n_methods, xpos[j]) + jit, y,
-                   s=7, facecolor=S.GENE_COLORS["TP53"], edgecolor="white",
-                   linewidth=0.25, alpha=0.9, zorder=3)
+                   s=7.5, facecolor=S.GREY, edgecolor="white",
+                   linewidth=0.3, zorder=3)
 
     # median bar per distance (short horizontal segment)
     bar_hw = 0.30
@@ -71,12 +70,12 @@ def main() -> None:
                 linespacing=1.2)
 
     ax.set_xlim(-0.5, len(METRICS) - 0.5)
-    ax.set_ylim(0.40, 0.56)
+    ax.set_ylim(0.40, 0.52)
     ax.set_xticks(xpos)
     ax.set_xticklabels(XLABELS)
-    ax.set_yticks([0.40, 0.45, 0.50, 0.55])
+    ax.set_yticks([0.40, 0.45, 0.50])
     ax.set_xlabel("Distance geometry")
-    ax.set_ylabel("Per-variant direction score (PDS)")
+    ax.set_ylabel("PDS (perturbation\ndiscrimination score)")
 
     # annotate the chance line
     ax.text(len(METRICS) - 0.55, 0.503, "chance (0.50)", fontsize=5.2,
