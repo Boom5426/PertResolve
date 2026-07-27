@@ -11,13 +11,13 @@ are **superseded**; do not reuse them.
 ## Composite
 
 `fig1_composite.pdf` (assembled by `fig1_assemble.tex`, build: `pdflatex fig1_assemble.tex`).
-Layout: row 1 **a | b**, row 2 **c | d(+PCA inset) | e**, row 3 **f** (centred), with bold
-panel letters **a-f**; page ~185 x 173 mm. Vector-preserving: panel a
-(`Fig1a_editable.pdf`) is now a vector/editable schematic; the data panels (b/c/d-PCA) and
-Fig1f stay vector; the two remaining AI raster panels are embedded above 300 dpi at their
-placed sizes (d 643, e 791 dpi, print-safe). To reposition anything, edit the coordinates
-in `fig1_assemble.tex` and recompile. The d PCA inset (`fig1d_theta_pca.pdf`) is dropped
-where the d schematic's "theta space" arrow points; nudge a few mm if it clips the label.
+Layout: row 1 **a | b**, row 2 **c | d (schematic + PCA data inset)**, row 3 **e | f**,
+with bold lowercase 8 pt panel letters **a-f**; page 185 x 172.2 mm (bounding box
+183 x 170.2 mm, slightly *shorter* than the previous 183 x 171 mm composite, never wider). Every placed file is vector; the composite contains zero
+embedded raster (`pdfimages -list fig1_composite.pdf | tail -n +3 | wc -l` -> 0). To
+reposition anything, edit the coordinates in `fig1_assemble.tex` and recompile. The d PCA
+inset (`fig1d_theta_pca.pdf`) sits where the d schematic's "shared feature space" arrow
+points; nudge a few mm if it clips.
 
 **Panel a is pipeline-first.** Panel a is the end-to-end AllelePerturb pipeline
 (measurement -> model -> evaluation -> verdict, with a parallel single-cell resolution
@@ -30,34 +30,74 @@ manuscript caption (panel a) and the Results opening already describe exactly th
 
 | Panel | Content | Type | File(s) | Data source |
 |-------|---------|------|---------|-------------|
-| a | end-to-end pipeline: measurement / model / evaluation / verdict, plus a parallel single-cell resolution diagnostic | AI schematic (vector) | `fig1a_prompt.md` -> `Fig1a_editable.pdf` | — |
-| b | variant positions on 4 proteins | **data-direct** | `fig1b_track_{TP53,KRAS,GATA1,JAK1}.pdf` + `fig1b_legend.pdf` | `data/allele_perturb_bench.csv`, `data/hotspot_external_definition.txt` |
+| a | end-to-end pipeline: measurement / model / evaluation / verdict, plus a parallel single-cell resolution diagnostic | matplotlib schematic | `fig1a_pipeline.py` (spec: `fig1a_prompt.md`) | — |
+| b | variant positions on 4 proteins | **data-direct** | `fig1b_track_{TP53,KRAS,GATA1,JAK1}.pdf` + `fig1b_legend.pdf` (variant-**class** key only) | `data/allele_perturb_bench.csv`, `data/hotspot_external_definition.txt` |
 | c | per-variant cell depth | **data-direct** | `fig1c_depth.pdf` | `data/allele_perturb_bench.csv` (`n_cells`) |
-| d | variant feature concept | AI schematic + **data inset** | `fig1d_prompt.md` + `fig1d_theta_pca.pdf` | θ columns of the bench CSV |
-| e | evaluation decomposition | AI schematic | `fig1e_prompt.md` | — |
-| f | six generalization splits | AI schematic | `fig1f_prompt.md` | — |
+| d | variant feature concept | matplotlib schematic + **data inset** | `fig1d_theta_schematic.py` + `fig1d_theta_pca.pdf` | θ columns of the bench CSV |
+| e | evaluation decomposition | matplotlib schematic | `fig1e_eval_axes.py` | — |
+| f | six generalization splits | matplotlib schematic | `fig1f_splits.py` | — |
 
-**Removed: old g** (end-to-end workflow), folded into the new pipeline panel a. Its prompt
-`fig1g_prompt.md` and render `Fig1g.pdf`, together with the old concept `Fig1a.pdf`, remain
-in git history but are no longer used by the composite.
+**Superseded (2026-07-27), archived in `../_superseded/`.** Every externally made panel
+was replaced by a matplotlib panel drawn at its exact placement size, because each was
+authored on a canvas far larger than its slot and its type collapsed on the page:
 
-Data-direct panels: `python fig1b_variant_tracks.py`, `python fig1c_depth.py`,
-`python fig1d_theta_pca.py` (all import `nm_style.py`; PDF deliverable + 600 dpi PNG
-preview). AI panels: paste the prompt into a raster image model, then overlay the exact
-text in Illustrator (raster text is unreliable).
+| Archived file | Problem as placed | Replaced by |
+|---|---|---|
+| `Fig1a_editable.pdf` | 36 of 94 words below 5 pt (min 4.3 pt); off-palette blues (#0072B2/#00A0C6/#5AB4E6); a third font family (Arimo); its Direction/Discrimination block restated panel e | `fig1a_pipeline.py` |
+| `Fig1d_schematic_highres.pdf` | embedded raster, placed at scale 0.41 | `fig1d_theta_schematic.py` |
+| `Fig1e_Eval_highres.pdf` | embedded raster, placed at scale 0.38 | `fig1e_eval_axes.py` |
+| `Fig1f.pdf` | placed at scale 0.18, type at 3.4 pt | `fig1f_splits.py` |
+| `Fig1a.pdf` (old concept panel), `Fig1g.pdf` (old workflow) | panel g was dropped; its content folded into the new pipeline panel a | not replaced |
+
+The prompts (`fig1a_prompt.md`, `fig1d_prompt.md`, `fig1e_prompt.md`, `fig1f_prompt.md`,
+`fig1g_prompt.md`) remain as the content spec; the redraws keep the same conceptual
+content, simplified to what stays legible at 122.5 / 62.5 / 76.5 / 99.5 mm. The composite
+is now **100% vector, zero embedded raster**, and every panel regenerates from code.
+
+Every panel is a matplotlib script that imports `nm_style.py` and emits a vector PDF plus
+a 600 dpi PNG preview: `fig1a_pipeline.py`, `fig1b_variant_tracks.py`, `fig1c_depth.py`,
+`fig1d_theta_schematic.py`, `fig1d_theta_pca.py`, `fig1e_eval_axes.py`, `fig1f_splits.py`.
+The `*_prompt.md` files are retained as the content specification for the schematics, not
+as a build step; no panel in this figure is generated by an image model any more.
 
 ## Style (Nature Methods)
 
 Helvetica/Arial (Liberation/Nimbus Sans stand-ins locally), 5–7 pt, 0.5 pt axes, no
-top/right spines, vector PDF with editable text, colour-blind-safe Okabe-Ito genes:
-TP53 `#0072B2`, KRAS `#D55E00`, GATA1 `#009E73`, JAK1 `#CC79A7`; hotspot `#E69F00`.
-Single-column 89 mm / double 183 mm.
+top/right spines, vector PDF with editable text. Single-column 89 mm / double 183 mm.
+
+Palette is the house set in `manuscript/figures/nm_style.py` (`GENE_COLORS`), shared by
+every figure in the manuscript, **not** Okabe-Ito:
+TP53 `#5185C0` (blue), KRAS `#E99D4E` (orange), GATA1 `#8281B9` (purple),
+JAK1 `#55966B` (green); hotspot/held-out accent `#E69F00`, grey `#7A7A7A`,
+light grey `#D9D9D9`, ink `#1A1A1A`. One gene keeps one colour across all panels.
+(An earlier version of this README documented an Okabe-Ito set that the panels never
+used; corrected 2026-07-27.)
+
+### Legibility rule (enforced)
+
+Every panel is drawn at its exact placement width, so its placement scale is 1.00 (f 0.98)
+and its source type reaches the page unchanged. Measured across all eleven placed files,
+the median is 6.0-7.3 pt and the **minimum is 5.1 pt**, so the whole figure sits inside the
+5-7 pt Nature band. `Fig1a_editable.pdf`, the previous author-supplied panel a, was the one
+panel that failed this rule (36 of 94 words at 4.3-4.9 pt) and was replaced on 2026-07-27
+by `fig1a_pipeline.py`, which resolves the type, palette, font and encoding problems at
+once. Verify after any layout change with the on-page type audit, which measures every
+placed panel at its composite scale; single characters and mathematical subscripts are
+legitimately smaller than the body band and are excluded.
 
 ## Numbers that appear (all trace to the bench CSV)
 
 Real protein-coding variants **470** (TP53 98, KRAS 92, GATA1 254, JAK1 26); median
 cells/variant **929 / 1000 / 354 / 104**; protein lengths 393 / 189 / 413 / 1154 aa;
 technologies Perturb-seq (TP53, KRAS) · base editing (GATA1) · scSNV-seq (JAK1).
+
+> **RESOLVED (2026-07-27):** panel c prints the GATA1 median as **354** (WT-excluded,
+> 470-variant convention, reproduced by `python fig1c_depth.py`) and the manuscript Results
+> now also says "354 for GATA1". Figure and text agree.
+
+JAK1 domain labels in panel b are the short module names **JH2** / **JH1** (pseudokinase /
+kinase), matching the naming used in this script's docstring and Supplementary Table 1; the
+long forms "JH2 pseudokinase" / "JH1 kinase" overlapped each other at 5.5 pt.
 
 > **RESOLVED — variant count convention (2026-07-11): 470.** The committed CSV has 472
 > rows but 2 are WT reference rows (KRAS WT 644 cells; GATA1 WT 38,276 cells), so there
@@ -83,3 +123,20 @@ genes (medians 929, 1000, 354, 104). **d**, Each variant is represented by a 6-d
 biophysical feature vector θ, placing variants from all genes in a shared feature space.
 **e**, AllelePerturb-Eval separates direction recovery, allele discrimination and
 differential-expression fidelity. **f**, Six generalization splits.
+
+
+## Legend economy (Nature Methods, enforced 2026-07-27)
+
+Figure 1 carries exactly **two** keys, one per encoded variable, and **no gene legend**:
+
+* **b** `fig1b_legend.pdf`: shape = variant class (missense / nonsense / synonymous /
+  hotspot). The "colour = gene" half was removed because every track is already
+  direct-labelled with its gene name in the gene colour.
+* **f**: light grey = training variants, orange = held-out variants.
+
+The gene to colour mapping is carried by **direct labels only**: the gene-coloured track
+titles in b and the gene-coloured x tick labels in c. The PCA in d therefore has no legend
+of its own (it states "470 variants, coloured by gene" in grey). One consequence, recorded
+honestly: in the d PCA colour is the *only* encoding of gene, so that one sub-panel is not
+readable in greyscale; every other panel encodes its categories by position or shape as
+well.

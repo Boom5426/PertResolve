@@ -59,6 +59,15 @@ def apply_rcparams() -> None:
         # first available wins; Liberation Sans == Arial metrics, Nimbus == Helvetica
         "font.sans-serif": ["Arial", "Helvetica", "Liberation Sans",
                              "Nimbus Sans", "DejaVu Sans"],
+        # Math text ($...$) and italics must stay in the SAME sans family. Without
+        # this, matplotlib renders math with its bundled DejaVu Sans, which has
+        # visibly different glyph shapes from Liberation/Arial and mixed two font
+        # families inside single panels (seen in Fig 3 and Fig 4).
+        "mathtext.fontset": "custom",
+        "mathtext.rm": "Liberation Sans",
+        "mathtext.it": "Liberation Sans:italic",
+        "mathtext.bf": "Liberation Sans:bold",
+        "mathtext.default": "regular",
         "font.size": 7,
         "axes.titlesize": 7,
         "axes.labelsize": 7,
