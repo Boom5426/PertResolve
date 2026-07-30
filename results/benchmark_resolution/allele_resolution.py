@@ -4,10 +4,37 @@
 Same M=50 split-half, same fine alpha grid, same min_resolvable_gap coefficient as
 benchmark_resolution.py, but loading the four allele genes from the grid arrays via
 harness. Lets TP53/KRAS/GATA1/JAK1 be plotted on one axis with the 5 public datasets.
-Isolated output -> benchmark_resolution/allele_<gene>.json (does not touch manuscript).
+Isolated output -> <out>/allele_<gene>.json (does not touch manuscript).
+
+Usage:
+    python allele_resolution.py [--base BASE] --out OUT
+
+``--base`` (or the ``VCCOMPASS_BASE`` environment variable) points at the compute
+workspace holding ``unified/harness.py`` and ``allele_perturb_bench.csv``.
+``--out`` is required and must not point inside this repository's ``results/``,
+so a re-run can never overwrite a committed canonical table.
 """
 import sys, json, os, numpy as np
-sys.path.insert(0, "/data/boom/NUS/VCCompass/unified")
+import argparse
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from alleleperturb.paths import resolve_base, add_harness_to_path, require_inputs
+
+_parser = argparse.ArgumentParser(
+    description="Allele-level resolution curves on the public-benchmark axis.")
+_parser.add_argument("--base", default=None,
+                     help="VCCompass compute workspace (default: $VCCOMPASS_BASE).")
+_parser.add_argument("--out", required=True, type=Path,
+                     help="Directory receiving the allele_<gene>.json files.")
+_args = _parser.parse_args()
+
+BASE = resolve_base(_args.base)
+BENCH_CSV = BASE / "allele_perturb_bench.csv"
+require_inputs(BENCH_CSV)
+add_harness_to_path(BASE)
+OUT_DIR = _args.out
+
 import harness as H
 
 WT = ('WT', 'wt', 'WT_control')
@@ -34,7 +61,7 @@ def norm(Mx):
 
 
 import pandas as pd
-_bench = pd.read_csv("/data/boom/NUS/VCCompass/allele_perturb_bench.csv")
+_bench = pd.read_csv(BENCH_CSV)
 BENCH = {g: set(_bench[_bench.gene == g]["variant"]) for g in H.GENES}   # curated benchmark set (consistency)
 
 
@@ -80,8 +107,8 @@ def run(g):
                reliability_P_recover_order=round(nc / NBOOT, 3), oracle_ceiling=round(float(pvm[1.0].mean()), 3),
                min_resolvable_gap=(min(rg) if rg else None),
                gap_resolution={str(gaps[k]): round(float(winhi[k]), 3) for k in range(NA - 1)})
-    os.makedirs("/data/boom/NUS/benchmark_resolution", exist_ok=True)
-    json.dump(out, open(f"/data/boom/NUS/benchmark_resolution/allele_{g}.json", "w"), indent=2)
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    json.dump(out, open(OUT_DIR / f"allele_{g}.json", "w"), indent=2)
     print(f"allele_{g:6s} n={n:3d} rankable={out['frac_rankable']:.2f} oracle={out['oracle_ceiling']:.2f} "
           f"min_gap={out['min_resolvable_gap']} gap_res={out['gap_resolution']}")
 

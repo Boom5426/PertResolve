@@ -8,20 +8,61 @@ For a dataset we compute, in PCA-50 space on pseudobulk deltas (pert - control):
                    via controlled predictors delta_hat(p,alpha)=(1-alpha)*global_mean+alpha*build_delta[p],
                    bootstrapped over perturbations (same construction as the allele-level 1C keystone)
   min_gap        : smallest alpha-gap the benchmark resolves (P>0.9 that higher-alpha scores higher)
-Isolated exploratory output -> benchmark_resolution/<name>.json ; does not touch any manuscript file.
+Isolated exploratory output -> <out_dir>/<name>.json ; does not touch any manuscript file.
 
-Usage: python benchmark_resolution.py <NAME>
+The five .h5ad atlases are public but too large to redistribute, so they are not
+part of this repository. They originally lived under three different roots; this
+script now expects them side by side under a single --atlas-dir, with their
+original filenames unchanged:
+
+  Replogle  <atlas-dir>/ReplogleWeissman2022_K562_essential.h5ad
+  Norman    <atlas-dir>/NormanWeissman2019_filtered.h5ad
+  Adamson   <atlas-dir>/AdamsonWeissman2016_GSM2406681_10X010.h5ad
+  VCC       <atlas-dir>/adata_Training.h5ad
+  sciPlex   <atlas-dir>/SrivatsanTrapnell2020_sciplex3.h5ad
+
+Usage:
+  python benchmark_resolution.py NAME --out OUT_DIR [--atlas-dir ATLAS_DIR]
+
+    NAME                   one of: Adamson, Norman, Replogle, VCC, sciPlex
+    --out OUT_DIR          required; directory receiving <NAME>.json
+    --atlas-dir ATLAS_DIR  directory holding the five .h5ad atlases;
+                           falls back to $ALLELEPERTURB_ATLAS_DIR
 """
 import sys, json, numpy as np
+import argparse
+from pathlib import Path
+
+# This script lives two levels below the repository root and is normally run
+# directly, so make the repository importable without requiring an install.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from alleleperturb.paths import resolve_base, require_inputs, ATLAS_ENV_VAR
+
+DATASETS = ("Adamson", "Norman", "Replogle", "VCC", "sciPlex")
+
+_parser = argparse.ArgumentParser(
+    description="Benchmark-resolution + reliability coefficient for one public perturbation atlas.")
+_parser.add_argument("name", choices=DATASETS, metavar="NAME",
+                     help="dataset to analyse; one of: " + ", ".join(DATASETS))
+_parser.add_argument("--out", required=True, metavar="OUT_DIR",
+                     help="directory receiving <NAME>.json")
+_parser.add_argument("--atlas-dir", default=None, metavar="ATLAS_DIR",
+                     help="directory holding the five .h5ad atlases; "
+                          f"falls back to ${ATLAS_ENV_VAR}")
+_args = _parser.parse_args()
+ATLAS_DIR = resolve_base(_args.atlas_dir, what="the perturbation atlas directory",
+                         env_var=ATLAS_ENV_VAR, flag="--atlas-dir")
+OUT_DIR = Path(_args.out)
+
 import anndata as ad
 from sklearn.decomposition import PCA
 
 CFG = {
-  'Replogle': dict(path="/data/boom/NUS/floor_audit/ReplogleWeissman2022_K562_essential.h5ad", pcol=None, ctrl=None),
-  'Norman':   dict(path="/data/boom/NUS/floor_audit/NormanWeissman2019_filtered.h5ad",         pcol=None, ctrl=None),
-  'Adamson':  dict(path="/data/boom/NUS/floor_audit/AdamsonWeissman2016_GSM2406681_10X010.h5ad", pcol=None, ctrl=None),
-  'VCC':      dict(path="/data/boom/Tahoe-100M/vcc_data/adata_Training.h5ad", pcol='target_gene', ctrl='non-targeting'),
-  'sciPlex':  dict(path="/data/boom/VCData/DART/raw/SrivatsanTrapnell2020_sciplex3.h5ad", pcol='perturbation', ctrl='control'),
+  'Replogle': dict(path=ATLAS_DIR / "ReplogleWeissman2022_K562_essential.h5ad", pcol=None, ctrl=None),
+  'Norman':   dict(path=ATLAS_DIR / "NormanWeissman2019_filtered.h5ad",         pcol=None, ctrl=None),
+  'Adamson':  dict(path=ATLAS_DIR / "AdamsonWeissman2016_GSM2406681_10X010.h5ad", pcol=None, ctrl=None),
+  'VCC':      dict(path=ATLAS_DIR / "adata_Training.h5ad", pcol='target_gene', ctrl='non-targeting'),
+  'sciPlex':  dict(path=ATLAS_DIR / "SrivatsanTrapnell2020_sciplex3.h5ad", pcol='perturbation', ctrl='control'),
 }
 PCAND = ['perturbation', 'perturbation_type', 'target_gene', 'guide', 'condition', 'gene']
 CCAND = ['control', 'Control', 'CTRL', 'ctrl', 'non-targeting', 'NT', 'DMSO', 'unperturbed', 'None']
@@ -99,7 +140,9 @@ def norm(Mx):
 
 
 def analyze(name):
-    Xp, lab, has_ctrl, pcol, ctrl, perts = load(CFG[name])
+    cfg = CFG[name]
+    require_inputs(cfg['path'])
+    Xp, lab, has_ctrl, pcol, ctrl, perts = load(cfg)
     cell = {p: Xp[lab == p] for p in perts}
     ctrl_cells = Xp[lab == '__CTRL__'] if has_ctrl else None
     gmean_all = Xp.mean(0)
@@ -164,10 +207,10 @@ def analyze(name):
                gap_resolution={str(gaps[k]): round(float(winhi[k]), 3) for k in range(NA - 1)},
                pds_by_alpha={str(a): round(float(pvm[a].mean()), 3) for a in ALPHAS})
     print(json.dumps(out, indent=2))
-    import os
-    os.makedirs("/data/boom/NUS/benchmark_resolution", exist_ok=True)
-    json.dump(out, open(f"/data/boom/NUS/benchmark_resolution/{name}.json", "w"), indent=2)
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    with open(OUT_DIR / f"{name}.json", "w") as fh:
+        json.dump(out, fh, indent=2)
 
 
 if __name__ == "__main__":
-    analyze(sys.argv[1])
+    analyze(_args.name)

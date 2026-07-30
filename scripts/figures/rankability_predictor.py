@@ -124,8 +124,10 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--table", default="results/second_probe_rankability_table.csv",
                     help="canonical rankability table (input)")
-    ap.add_argument("--out", default="results/rankability_predictor_honest.csv",
-                    help="honest per-dataset predictor results (output)")
+    ap.add_argument("--out", required=True,
+                    help="honest per-dataset predictor results (output). Required and "
+                         "never defaulted, so an accidental re-run cannot overwrite the "
+                         "committed results/rankability_predictor_honest.csv")
     ap.add_argument("--metric", default="edist")
     ap.add_argument("--space", default="pca")
     args = ap.parse_args()

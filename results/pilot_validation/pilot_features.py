@@ -8,21 +8,56 @@ Pilot and eval never share a cell (the fix over the retrospective same-source pr
   pilot_eff_P  = || mean(pilot_P) - mean(control_P) ||           (pilot effect size)
   pilot_snr_P  = pilot_eff_P / pilot split-half noise
   rank_T       = 1 if split-half S=median(D_null)-median(D_self) > W=CI-width(D_self) on eval at depth T
-Output: pilot_validation/<DS>_pilot.csv . Usage: python pilot_features.py <DS>
+Output: <out>/<DS>_pilot.csv
+
+Usage:
+  python pilot_features.py <dataset> --out DIR [--base DIR] [--atlas-dir DIR]
+
+  <dataset>    allele_<GENE>, read through the harness under --base, or an
+               atlas name: Replogle, Norman, Adamson.
+  --out        required output directory for <dataset>_pilot.csv.
+  --base       VCCompass workspace holding unified/harness.py; falls back to
+               $VCCOMPASS_BASE.
+  --atlas-dir  directory holding the external .h5ad atlases; falls back to
+               $ALLELEPERTURB_ATLAS_DIR. Only read for atlas datasets.
 """
 import sys, numpy as np, pandas as pd, os
 from collections import defaultdict
-sys.path.insert(0, "/data/boom/NUS/VCCompass/unified")
+import argparse
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from alleleperturb.paths import ATLAS_ENV_VAR, add_harness_to_path, require_inputs, resolve_base
+
+_parser = argparse.ArgumentParser(
+    description="Per-perturbation PILOT features + DISJOINT-eval rankability label.")
+_parser.add_argument("dataset",
+                     help="allele_<GENE> (read through the harness under --base) "
+                          "or an atlas name: Replogle, Norman, Adamson")
+_parser.add_argument("--base", default=None,
+                     help="VCCompass workspace holding unified/harness.py "
+                          "(default: $VCCOMPASS_BASE)")
+_parser.add_argument("--atlas-dir", default=None,
+                     help=f"directory holding the external .h5ad atlases "
+                          f"(default: ${ATLAS_ENV_VAR}); only read for atlas datasets")
+_parser.add_argument("--out", required=True,
+                     help="output directory for <dataset>_pilot.csv")
+args = _parser.parse_args()
+
+BASE = resolve_base(args.base)
+add_harness_to_path(BASE)
 import harness as H
 import anndata as ad
 from sklearn.decomposition import PCA
 
-DS = sys.argv[1]
+DS = args.dataset
+OUT_DIR = Path(args.out)
 P_LIST = [25, 50]; T_LIST = [100, 200]; NSEED = 10; PILOTMAX = 50
 WT_TAGS = ('WT', 'wt', 'WT_control')
-ATLAS = {'Replogle': "/data/boom/NUS/floor_audit/ReplogleWeissman2022_K562_essential.h5ad",
-         'Norman': "/data/boom/NUS/floor_audit/NormanWeissman2019_filtered.h5ad",
-         'Adamson': "/data/boom/NUS/floor_audit/AdamsonWeissman2016_GSM2406681_10X010.h5ad"}
+# Filenames only; the directory comes from --atlas-dir / $ALLELEPERTURB_ATLAS_DIR.
+ATLAS = {'Replogle': "ReplogleWeissman2022_K562_essential.h5ad",
+         'Norman': "NormanWeissman2019_filtered.h5ad",
+         'Adamson': "AdamsonWeissman2016_GSM2406681_10X010.h5ad"}
 PCAND = ['perturbation', 'perturbation_type', 'target_gene', 'guide', 'condition', 'gene']
 CCAND = ['control', 'Control', 'CTRL', 'ctrl', 'non-targeting', 'NT', 'DMSO', 'unperturbed']
 need = PILOTMAX + 2 * max(T_LIST)
@@ -44,7 +79,11 @@ def load_allele(g):
 
 def load_atlas(name):
     import scipy.sparse as sp
-    A = ad.read_h5ad(ATLAS[name], backed='r'); obs = A.obs
+    atlas_dir = resolve_base(args.atlas_dir, what="the perturbation atlas directory",
+                             env_var=ATLAS_ENV_VAR, flag="--atlas-dir")
+    h5ad = atlas_dir / ATLAS[name]
+    require_inputs(h5ad)
+    A = ad.read_h5ad(h5ad, backed='r'); obs = A.obs
     pcol = next(c for c in PCAND if c in obs.columns); ser = obs[pcol].astype(str)
     ctrl = next((c for c in CCAND if (ser == c).sum() > 0), None)
     rng = np.random.RandomState(0); vc = ser.value_counts()
@@ -108,7 +147,7 @@ for p, c in cells.items():
             row[f'rank_T{T}'] = np.nan
     out.append(row)
 
-os.makedirs("/data/boom/NUS/pilot_validation", exist_ok=True)
-pd.DataFrame(out).to_csv(f"/data/boom/NUS/pilot_validation/{DS}_pilot.csv", index=False)
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+pd.DataFrame(out).to_csv(OUT_DIR / f"{DS}_pilot.csv", index=False)
 print(f"{DS}: {len(out)} perturbations -> {DS}_pilot.csv "
       f"(rank_T100 pos={int(pd.DataFrame(out)['rank_T100'].sum())})")

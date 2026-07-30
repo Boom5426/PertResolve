@@ -3,8 +3,53 @@
 """Patch: fix v2c parsing for GSE161824 data format.
 The v2c file is TAB-separated with variant columns as one-hot, 
 plus 'variant', 'variant.detailed_multi', 'cell' at the end.
+
+Usage:
+    python scripts/figures/pipeline_v2.py \\
+        --base /path/to/VCCompass --out /path/to/pipeline_v2_output_dir
+
+``--base`` names the external VCCompass compute workspace. It is read for
+raw/GSE161824_A549_*.{processed.matrix.mtx.gz,processed.genes.csv.gz,variants2cell.csv.gz}
+and allele_perturb_bench.csv, and it is also where the workspace-level artifacts
+joint_arrays.npz and the model_*.pt checkpoints are cached, exactly as before;
+the optional gata1_arrays.npz and jak1_arrays.npz are picked up from there too.
+It may be omitted when the VCCOMPASS_BASE environment variable is set. Nothing
+under raw/ is written to. The workspace is not redistributed with this
+repository.
+
+``--out`` is required and receives the two run outputs, all_metrics.csv and
+summary.json. Point it at a scratch directory so a re-run cannot overwrite the
+committed canonical tables under this repository's results/.
 """
 import os, sys, gzip, time, json
+import argparse
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from alleleperturb.paths import resolve_base, require_inputs
+
+_parser = argparse.ArgumentParser(
+    description="VCCompass pipeline v2: build the joint TP53/KRAS arrays and "
+                "train/evaluate the theta-conditioned VAE and its controls.")
+_parser.add_argument(
+    "--base", default=None,
+    help="VCCompass compute workspace holding raw/, allele_perturb_bench.csv "
+         "and the cached joint_arrays.npz. Defaults to $VCCOMPASS_BASE.")
+_parser.add_argument(
+    "--out", required=True,
+    help="Directory that receives all_metrics.csv and summary.json. Required, "
+         "and must not be the repository's results/ directory.")
+_args = _parser.parse_args()
+
+BASE = resolve_base(_args.base)
+OUT_DIR = Path(_args.out)
+
+RAW_DIR = BASE / 'raw'
+BENCH_CSV = BASE / 'allele_perturb_bench.csv'
+JOINT_NPZ = BASE / 'joint_arrays.npz'
+GATA1_NPZ = BASE / 'gata1_arrays.npz'
+JAK1_NPZ = BASE / 'jak1_arrays.npz'
+
 import numpy as np
 import pandas as pd
 import torch
@@ -15,16 +60,18 @@ from scipy.spatial.distance import cdist
 from scipy.io import mmread
 from scipy.sparse import issparse
 
-WORKDIR = "/data/boom/NUS/VCCompass"
-os.makedirs(WORKDIR, exist_ok=True)
-os.chdir(WORKDIR)
-
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 print(f"Device: {device}", flush=True)
 
 def process_tp53_kras():
     print("\n=== TP53 + KRAS (GSE161824) ===", flush=True)
-    bench = pd.read_csv('allele_perturb_bench.csv')
+    require_inputs(BENCH_CSV, *[
+        RAW_DIR / f"GSE161824_A549_{g}.{suffix}"
+        for g in ('TP53', 'KRAS')
+        for suffix in ('processed.matrix.mtx.gz',
+                       'processed.genes.csv.gz',
+                       'variants2cell.csv.gz')])
+    bench = pd.read_csv(BENCH_CSV)
     tcols = ['d_hydro','d_vol','d_charge','fold_core','cat_switch','is_hotspot']
     vt = {'WT': np.zeros(6, dtype=np.float32)}
     for _, r in bench.iterrows():
@@ -33,14 +80,14 @@ def process_tp53_kras():
     results = {}; shared_genes = None
     for gt in ['TP53','KRAS']:
         print(f"\n  Processing {gt}...", flush=True)
-        with gzip.open(f"raw/GSE161824_A549_{gt}.processed.matrix.mtx.gz",'rt') as f:
+        with gzip.open(RAW_DIR / f"GSE161824_A549_{gt}.processed.matrix.mtx.gz",'rt') as f:
             mat = mmread(f)
         if issparse(mat): mat = mat.toarray()
         mat = mat.T.astype(np.float32)
-        genes = pd.read_csv(f"raw/GSE161824_A549_{gt}.processed.genes.csv.gz").iloc[:,0].values
+        genes = pd.read_csv(RAW_DIR / f"GSE161824_A549_{gt}.processed.genes.csv.gz").iloc[:,0].values
         
         # v2c is TSV with variant one-hot + variant/cell columns
-        v2c = pd.read_csv(f"raw/GSE161824_A549_{gt}.variants2cell.csv.gz", sep='\t')
+        v2c = pd.read_csv(RAW_DIR / f"GSE161824_A549_{gt}.variants2cell.csv.gz", sep='\t')
         print(f"    v2c: {v2c.shape}, columns[-5:]: {v2c.columns[-5:].tolist()}")
         
         # Extract variant label per cell
@@ -81,7 +128,7 @@ def process_tp53_kras():
         results[gt].update({'X': X, 'theta': th})
         print(f"  {gt} final: {X.shape}, {len(np.unique(results[gt]['vlabels']))} variants", flush=True)
     
-    np.savez_compressed('joint_arrays.npz',
+    np.savez_compressed(JOINT_NPZ,
         Xtp=results['TP53']['X'], vtp=results['TP53']['vlabels'],
         rtp=np.zeros((len(results['TP53']['vlabels']),1),dtype=np.float32),
         THtp=results['TP53']['theta'],
@@ -94,7 +141,7 @@ def process_tp53_kras():
         gkr=np.ones(len(results['KRAS']['vlabels']),dtype=np.int8),
         shared=np.array(shared),
         theta_dims=np.array(['d_hydro','d_vol','d_charge','fold_core','cat_switch','is_hotspot','mech_sign']))
-    sz = os.path.getsize('joint_arrays.npz')/1e6
+    sz = os.path.getsize(JOINT_NPZ)/1e6
     print(f"  Saved joint_arrays.npz ({sz:.0f} MB)", flush=True)
 
 # --- Model + eval (copied from full_pipeline) ---
@@ -213,14 +260,15 @@ if __name__ == '__main__':
     t0_total = time.time()
     print("="*60); print("VCCompass Pipeline v2 (fixed v2c parsing)"); print("="*60, flush=True)
     
-    if not os.path.exists('joint_arrays.npz'):
+    if not JOINT_NPZ.exists():
         process_tp53_kras()
     else:
         print("joint_arrays.npz exists", flush=True)
     
     print("\nLoading data...", flush=True)
-    joint = np.load('joint_arrays.npz', allow_pickle=True)
-    bench = pd.read_csv('allele_perturb_bench.csv')
+    require_inputs(JOINT_NPZ, BENCH_CSV)
+    joint = np.load(JOINT_NPZ, allow_pickle=True)
+    bench = pd.read_csv(BENCH_CSV)
     tcols = ['d_hydro','d_vol','d_charge','fold_core','cat_switch','is_hotspot']
     vt = {'WT':np.zeros(6,dtype=np.float32)}
     for _,r in bench.iterrows(): vt[r['variant']]=np.array([r[c] for c in tcols],dtype=np.float32)
@@ -234,8 +282,8 @@ if __name__ == '__main__':
     dgmap = {'tp53':'TP53','kras':'KRAS'}
     
     # Add GATA1 if available
-    if os.path.exists('gata1_arrays.npz'):
-        gata1=np.load('gata1_arrays.npz',allow_pickle=True)
+    if GATA1_NPZ.exists():
+        gata1=np.load(GATA1_NPZ,allow_pickle=True)
         datasets['gata1']={'X':gata1['X'],'variant_labels':gata1['cell_variants'],'gene':'GATA1',
                            'n_genes':int(gata1['X'].shape[1])}
         dgmap['gata1']='GATA1'
@@ -247,8 +295,8 @@ if __name__ == '__main__':
         print("  GATA1 loaded", flush=True)
     
     # Add JAK1 if available
-    if os.path.exists('jak1_arrays.npz'):
-        jak1=np.load('jak1_arrays.npz',allow_pickle=True)
+    if JAK1_NPZ.exists():
+        jak1=np.load(JAK1_NPZ,allow_pickle=True)
         datasets['jak1']={'X':jak1['X'],'variant_labels':jak1['variant_labels'],'gene':'JAK1',
                           'n_genes':int(jak1['X'].shape[1])}
         dgmap['jak1']='JAK1'
@@ -297,7 +345,7 @@ if __name__ == '__main__':
             m=train_model(m,sl,epochs=100,dev=device)
         else:
             m=train_model(m,train_loaders,epochs=100,zero_th=zero_th,dev=device)
-        torch.save(m.state_dict(),ckpt)
+        torch.save(m.state_dict(),BASE/ckpt)
         print(f"\nEvaluating {name}...", flush=True)
         df=evaluate(m,datasets,dgmap,bench,tcols,zero_th=zero_th,dev=device)
         df['model_name']=name; all_dfs.append(df)
@@ -314,7 +362,7 @@ if __name__ == '__main__':
         bl[dn]=DataLoader(VDS(d['X'][mask],thm),batch_size=512,shuffle=True,drop_last=True,num_workers=4,pin_memory=True)
     mb=MDVC(gdims).to(device)
     mb=train_model(mb,bl,epochs=100,dev=device)
-    torch.save(mb.state_dict(),'model_biophys.pt')
+    torch.save(mb.state_dict(),BASE/'model_biophys.pt')
     dsb={}
     for dn,d in datasets.items():
         dsb[dn]=dict(d); dsb[dn]['theta_matrix']=d['theta_matrix'].copy(); dsb[dn]['theta_matrix'][:,3:]=0
@@ -322,7 +370,8 @@ if __name__ == '__main__':
     dfb['model_name']='Biophys_only_3dim'; all_dfs.append(dfb)
     
     all_results=pd.concat(all_dfs,ignore_index=True)
-    all_results.to_csv('all_metrics.csv',index=False)
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    all_results.to_csv(OUT_DIR/'all_metrics.csv',index=False)
     
     print("\n"+"="*80); print("FINAL SUMMARY"); print("="*80, flush=True)
     pivot=all_results.groupby(['model_name','split'])['cos_model'].mean().unstack()
@@ -334,5 +383,6 @@ if __name__ == '__main__':
              'per_split':pivot.to_dict(),'per_gene':gp.to_dict(),
              'total_variants':len(all_results[all_results['model_name']=='VCCompass_6dim']),
              'total_time_min':(time.time()-t0_total)/60}
-    with open('summary.json','w') as f: json.dump(summary,f,indent=2,default=str)
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    with open(OUT_DIR/'summary.json','w') as f: json.dump(summary,f,indent=2,default=str)
     print(f"\nTotal: {(time.time()-t0_total)/60:.1f} min"); print("DONE", flush=True)

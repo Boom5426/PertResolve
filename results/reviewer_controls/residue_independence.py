@@ -14,11 +14,24 @@ treating correlated substitutions at the same residue as independent units:
 Inputs (committed): data/allele_perturb_bench.csv, results/canonical/unified_results5.csv
 Output: results/reviewer_controls/residue_independence_summary.csv
 """
+import argparse
 import re
-import numpy as np
-import pandas as pd
+from pathlib import Path
 
-REPO = __import__("pathlib").Path(__file__).resolve().parents[2]
+_ap = argparse.ArgumentParser(description=__doc__,
+                              formatter_class=argparse.RawDescriptionHelpFormatter)
+_ap.add_argument("--out", required=True, type=Path,
+                 help="directory receiving residue_independence_summary.csv and "
+                      "residue_leakage.csv. Required and never defaulted, so a re-run "
+                      "cannot overwrite the committed tables under results/")
+_args = _ap.parse_args()
+
+import numpy as np  # noqa: E402
+import pandas as pd  # noqa: E402
+
+REPO = Path(__file__).resolve().parents[2]
+OUT_DIR = _args.out.expanduser().resolve()
+OUT_DIR.mkdir(parents=True, exist_ok=True)
 bench = pd.read_csv(REPO / "data/allele_perturb_bench.csv")
 res = pd.read_csv(REPO / "results/canonical/unified_results5.csv")
 NB = 2000
@@ -85,6 +98,6 @@ if __name__ == "__main__":
     print(f"\n=== residue-cluster bootstrap (split1), {n} non-null methods ===")
     print(f"PDS CI overlaps 0.50: {n_pds_ov}/{n}  (exceptions: {list(clust[~clust.pds_overlaps_0p5].method)})")
     print(f"Pearson-delta CI excludes 0: {n_pe_ex}/{n}  (exceptions: {list(clust[~clust.pearson_excludes_0].method)})")
-    clust.to_csv(REPO / "results/reviewer_controls/residue_independence_summary.csv", index=False)
-    leak.to_csv(REPO / "results/reviewer_controls/residue_leakage.csv", index=False)
+    clust.to_csv(OUT_DIR / "residue_independence_summary.csv", index=False)
+    leak.to_csv(OUT_DIR / "residue_leakage.csv", index=False)
     print("\nsaved residue_independence_summary.csv + residue_leakage.csv")

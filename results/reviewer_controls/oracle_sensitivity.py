@@ -12,16 +12,42 @@ or deeper measurement could gain:
                       (if this also ~0.5, variants are unrankable even with perfect measurement).
 Also a shrinkage check: PDS as a prediction is shrunk toward the gene mean (lambda), to confirm
 mean-shrinkage denoising DECREASES discrimination (so the replicate oracle is not beatable that way).
+
+Usage:
+  python oracle_sensitivity.py --out /path/to/output_dir [--base /path/to/VCCompass]
+  VCCOMPASS_BASE=/path/to/VCCompass python oracle_sensitivity.py --out /path/to/output_dir
 """
 import numpy as np, pandas as pd, sys
-sys.path.insert(0, "/data/boom/NUS/VCCompass/unified")
-import harness as H
+import argparse
+from pathlib import Path
 
-BASE = "/data/boom/NUS/VCCompass"; NSUB = 300; NSEED = 15
+_REPO_ROOT = Path(__file__).resolve().parents[2]
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+from alleleperturb.paths import add_harness_to_path, require_inputs, resolve_base
+
+ap = argparse.ArgumentParser(description=__doc__,
+                             formatter_class=argparse.RawDescriptionHelpFormatter)
+ap.add_argument("--base", default=None,
+                help="VCCompass compute workspace holding unified/harness.py and "
+                     "allele_perturb_bench.csv (env: VCCOMPASS_BASE)")
+ap.add_argument("--out", required=True,
+                help="directory to write oracle_sensitivity.csv into")
+args = ap.parse_args()
+
+BASE = resolve_base(args.base)
+BENCH_CSV = BASE / "allele_perturb_bench.csv"
+require_inputs(BENCH_CSV)
+OUT_DIR = Path(args.out).expanduser().resolve()
+
+add_harness_to_path(BASE)
+import harness as H  # noqa: E402
+
+NSUB = 300; NSEED = 15
 WT_TAGS = ('WT', 'wt', 'WT_control')
 np.random.seed(0)
 gene_cells = {g: (lambda X, l: (X, np.asarray(l)))(*H.load_gene(g)) for g in H.GENES}
-_bench = pd.read_csv(f"{BASE}/allele_perturb_bench.csv")
+_bench = pd.read_csv(BENCH_CSV)
 BENCH = {g: set(_bench[_bench.gene == g]["variant"]) for g in H.GENES}   # curated benchmark set (consistency)
 
 
@@ -84,7 +110,8 @@ for g in H.GENES:
 
 df = pd.DataFrame(rows)
 print(df.to_string(index=False))
-df.to_csv(f"{BASE}/unified/oracle_sensitivity.csv", index=False)
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+df.to_csv(OUT_DIR / "oracle_sensitivity.csv", index=False)
 print("\nInterpretation: if oracle_fulldepth and oracle_perfect stay ~0.5 for TP53/KRAS, the floor is")
 print("not a half-splitting artifact and no denoised/perfect prediction beats it at this resolution.")
 print("shrink_lam1 (=oracle) should be >= shrink_lam0 (=gene mean): mean-shrinkage does not beat the oracle.")

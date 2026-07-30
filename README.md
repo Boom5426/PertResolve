@@ -82,38 +82,90 @@ cd AllelePerturb
 conda create -n alleleperturb python=3.11 -y
 conda activate alleleperturb
 pip install -r requirements.txt
+pip install -e .          # puts alleleperturb.paths on the import path
 ```
 
 **Core dependencies:** `numpy` · `pandas` · `scipy` · `scikit-learn` · `matplotlib` · `seaborn` · `scanpy` · `fair-esm` · `torch`
+
+The analysis scripts under `scripts/` and `results/` import `alleleperturb.paths`, so
+`pip install -e .` is required before running them.
 
 ---
 
 ## 🚀 Quick Start
 
-Every figure is reproducible **from the pre-computed tables in `results/`** — no raw-data download required.
+Two analyses read **only committed tables** and therefore run on a fresh checkout with no
+external data:
 
 ```bash
-cd scripts/figures
-
-python draw_fig2.py   # Direction–ranking dissociation
-python draw_fig3.py   # Split-half measurement window
-python draw_fig4.py   # Robustness across splits and metrics
-python draw_fig5.py   # Rankability prediction + power-aware workflow
+python results/pilot_validation/pilot_validate.py --out /tmp/ap_out
+python scripts/figures/rankability_predictor.py   --out /tmp/ap_out/rankability.csv
 ```
 
-<details>
-<summary><b>Re-run the full evaluation grid from raw data</b></summary>
+Both reproduce their committed counterparts in `results/` byte for byte.
+
+Manuscript figures are built per panel under `manuscript/figures/figN/`, where each
+`figN*_<panel>.py` writes a panel PDF and `figN_assemble.tex` composes them. They read the
+committed canonical tables through `manuscript/figures/remote_data.py`; they do not use the
+retired `scripts/figures/draw_figN.py` family.
+
+### Locating data that is not in the repository
+
+Analyses that touch single-cell data need directories this repository does not ship. Each
+takes the location as an argument, or reads it from an environment variable:
+
+| Location | Argument | Environment variable | Holds |
+|---|---|---|---|
+| VCCompass compute workspace | `--base` | `VCCOMPASS_BASE` | `unified/harness.py`, `joint_arrays.npz`, `allele_perturb_bench.csv`, `esm1v_embeddings.npz` |
+| External atlas directory | `--atlas-dir`, `--prep` | `ALLELEPERTURB_ATLAS_DIR` | the Replogle, Norman, Adamson, sci-Plex and VCC `.h5ad` files |
+
+Neither is inferred. When a location is missing, the script names both the argument and the
+environment variable; when an input inside it is missing, the script prints the full path it
+expected.
 
 ```bash
-# after downloading the raw arrays into data/ (see Data below)
-python scripts/run_all_splits.py \
-    --data_dir data/ \
-    --output   results/results_v4_10metrics.csv
+export VCCOMPASS_BASE=/path/to/VCCompass
+python scripts/run_all_splits.py --out /tmp/grid          # or: --base /path/to/VCCompass
 ```
 
-Runs 20 methods × 5 splits × 4 genes × 10 metrics (~30 min on a 24-core CPU).
+`--out` is required everywhere and is never defaulted, so a re-run cannot overwrite the
+committed canonical tables under `results/`.
 
-</details>
+### Script interfaces
+
+| Script | Interface | Writes |
+|---|---|---|
+| `scripts/run_all_splits.py` | `[--base] --out` | `results_v4_10metrics.csv` |
+| `scripts/analysis/subspace_test.py` | `[--base] --out` | subspace-test JSON |
+| `scripts/figures/pipeline_v2.py` | `[--base] --out` | `all_metrics.csv`, `summary.json` |
+| `scripts/figures/run_split_half_power_analysis.py` | `[--base] --out` | split-half power curve |
+| `scripts/figures/rankability_audit.py` | `[--prep] --out <dataset>` | `<dataset>_rankability.csv` |
+| `scripts/figures/rankability_predictor.py` | `[--table] --out` | per-dataset predictor results |
+| `results/reviewer_controls/oracle_sensitivity.py` | `[--base] --out` | `oracle_sensitivity.csv` |
+| `results/reviewer_controls/residual_decomp.py` | `[--base] --out` | residual-decomposition tables |
+| `results/reviewer_controls/esm2_extract.py` | `[--base] --out [--device]` | four ESM2 feature `.npz` |
+| `results/pilot_validation/pilot_features.py` | `[--base] [--atlas-dir] --out` | `<DS>_pilot.csv` |
+| `results/pilot_validation/pilot_validate.py` | `--out` | `pilot_validation_summary.json` |
+| `results/benchmark_resolution/benchmark_resolution.py` | `--out [--atlas-dir] <name>` | `<name>.json` |
+| `results/benchmark_resolution/allele_resolution.py` | `[--base] --out` | `allele_<gene>.json` |
+
+`results/reviewer_controls/esm2_extract.py` downloads the ESM2-650M weights (about 2.5 GB)
+into the PyTorch hub cache on first use and expects a CUDA device.
+
+### Committed canonical artifacts
+
+Some tables are shipped as results rather than rebuilt here. No committed script regenerates
+`results/results_v4_exttheta.csv` (read by the Fig. 2 and Fig. 4 panels),
+`results/benchmark_resolution/summary.csv` (Fig. 5f) or `results/rankability_sensitivity.csv`
+(Supplementary Fig. 1). They are provided as canonical artifacts and are the authority for the
+values reported in the manuscript. `scripts/run_all_splits.py` produces a different table,
+`results_v4_10metrics.csv`.
+
+The adapters used to run the published models (scGen, scVIDR, Biolord, CellFlow, CPA,
+PerturbNet) and the shared evaluation harness are not part of this repository.
+
+`scripts/figures/all_splits_v4.py` is a superseded byte-identical copy of
+`scripts/run_all_splits.py` and is no longer maintained; use the latter.
 
 ---
 
@@ -168,20 +220,27 @@ for G in TP53 KRAS; do
     wget https://ftp.ncbi.nlm.nih.gov/geo/series/GSE161nnn/GSE161824/suppl/GSE161824_A549_${G}.${F}
   done
 done
-python ../scripts/preprocess_ursu.py     # -> joint_arrays.npz
 
 # GATA1 (Yu & Welch 2025)
 python -c "from huggingface_hub import hf_hub_download; \
   hf_hub_download('cyclopeta/PerturbNet_reproduce','GATA1_standard_hvg_pert_filtered.h5ad',local_dir='.')"
-python ../scripts/preprocess_gata1.py    # -> gata1_arrays.npz
 
 # JAK1 (Cooper et al. 2024)
 wget https://zenodo.org/records/10418435/files/scSNPseq_data.zip && unzip scSNPseq_data.zip -d jak1/
-python ../scripts/preprocess_jak1.py     # -> jak1_arrays.npz  (needs R: scran + SingleCellExperiment)
-
-# ESM-1v embeddings for all 470 variants
-python ../scripts/extract_esm_embeddings.py --bench allele_perturb_bench.csv --output esm1v_embeddings.npz
 ```
+
+**Preprocessing.** The workspace named by `VCCOMPASS_BASE` is expected to contain the
+following arrays. Only the first has a committed producer:
+
+| File | Produced by |
+|---|---|
+| `joint_arrays.npz` (TP53 + KRAS) | `scripts/figures/pipeline_v2.py`, which reads `raw/GSE161824_A549_*` under the workspace |
+| `gata1_arrays.npz` | not in this repository; read if present |
+| `jak1_arrays.npz` (needs R: scran + SingleCellExperiment) | not in this repository; read if present |
+| `esm1v_embeddings.npz` | not in this repository |
+| `allele_perturb_bench.csv` | not in this repository |
+
+`raw/` is treated as immutable and is only ever read.
 
 </details>
 

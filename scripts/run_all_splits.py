@@ -6,7 +6,42 @@ Metrics:
   Ranking:   PDS_cos, PDS_L1, PDS_L2
   DE:        DE_overlap, DE_LFC_spearman, direction_agreement
   Recon:     MAE
+
+Usage:
+  python scripts/run_all_splits.py --base /path/to/VCCompass --out /path/to/outdir
+  VCCOMPASS_BASE=/path/to/VCCompass python scripts/run_all_splits.py --out /path/to/outdir
+
+  --base       compute workspace holding allele_perturb_bench.csv, joint_arrays.npz,
+               gata1_arrays.npz, jak1_arrays.npz and esm1v_embeddings.npz.
+               Falls back to the VCCOMPASS_BASE environment variable.
+  --out        required output directory; results_v4_10metrics.csv is written into it.
 """
+import argparse
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from alleleperturb.paths import ENV_VAR, require_inputs, resolve_base
+
+# Arguments are resolved before the numeric stack is imported and before any data
+# is touched, so the order of every seeded operation below is unchanged.
+parser = argparse.ArgumentParser(
+    description="AllelePerturb-Eval v4: 10-metric enriched grid.")
+parser.add_argument(
+    "--base", default=None,
+    help="Compute workspace holding allele_perturb_bench.csv, joint_arrays.npz, "
+         "gata1_arrays.npz, jak1_arrays.npz and esm1v_embeddings.npz. "
+         f"Falls back to the {ENV_VAR} environment variable.")
+parser.add_argument(
+    "--out", required=True,
+    help="Output directory; results_v4_10metrics.csv is written into it. "
+         "Required on purpose, so a re-run cannot overwrite the committed "
+         "canonical table under the repository's results/ directory.")
+args = parser.parse_args()
+
+BASE = resolve_base(args.base)
+OUT_DIR = Path(args.out).expanduser()
+
 import numpy as np, pandas as pd, os, sys, warnings, time
 from scipy import stats
 from sklearn.linear_model import Ridge, Lasso
@@ -16,8 +51,8 @@ from sklearn.neural_network import MLPRegressor
 from sklearn.decomposition import PCA
 warnings.filterwarnings("ignore")
 
-BASE = "/data/boom/NUS/VCCompass"
 BENCH = os.path.join(BASE, "allele_perturb_bench.csv")
+require_inputs(Path(BENCH))
 NSUB = 300
 HOLDOUT_FRAC = 0.35
 DE_TOP_K = 50  # top-k DEGs for overlap/precision
@@ -187,7 +222,13 @@ def run_all():
     
     # ESM embeddings
     esm_path = os.path.join(BASE, "esm1v_embeddings.npz")
-    esm_data = np.load(esm_path, allow_pickle=True) if os.path.exists(esm_path) else None
+    if not os.path.exists(esm_path):
+        raise FileNotFoundError(
+            f"Required ESM-1v embeddings not found: {esm_path}. "
+            "This analysis requires the full representation grid and will not "
+            "silently fall back to a reduced set of heads."
+        )
+    esm_data = np.load(esm_path, allow_pickle=True)
     
     theta_cols = ['d_hydro','d_vol','d_charge','fold_core','cat_switch','is_hotspot']
     
@@ -316,7 +357,8 @@ def run_all():
         print(f" {sp} done, {n} rows, {elapsed:.0f}s", flush=True)
     
     df = pd.DataFrame(all_rows)
-    out_path = os.path.join(BASE, "results_v4_10metrics.csv")
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    out_path = OUT_DIR / "results_v4_10metrics.csv"
     df.to_csv(out_path, index=False)
     print(f"\nALL_DONE: {len(df)} rows -> {out_path}", flush=True)
     

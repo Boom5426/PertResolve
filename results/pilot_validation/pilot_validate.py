@@ -7,13 +7,45 @@ Pools all <DS>_pilot.csv. For each target depth T:
   - CALIBRATION: pooled out-of-fold predicted probability vs observed rankable rate.
 All pilot features come from cells DISJOINT from the eval cells that define the label, so this
 is a genuine prospective test (unlike the retrospective same-source Fig 6 predictor).
+
+The inputs are the committed ``results/pilot_validation/<DS>_pilot.csv`` tables, so this script
+runs from a fresh checkout without any external workspace.
+
+Usage:
+    python results/pilot_validation/pilot_validate.py --out OUT
+
+    --out   directory that receives pilot_validation_summary.json (required, no default).
 """
 import glob, numpy as np, pandas as pd, json
+import argparse
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from alleleperturb.paths import repo_root, require_inputs
+
+_parser = argparse.ArgumentParser(
+    description="Prospective pilot->eval validation from the committed <DS>_pilot.csv tables.")
+_parser.add_argument(
+    "--out", required=True, type=Path,
+    help="Directory that receives pilot_validation_summary.json. Required and never defaulted, "
+         "so an accidental re-run cannot overwrite the committed canonical tables under results/.")
+_args = _parser.parse_args()
+_out_dir = _args.out.expanduser().resolve()
+_out_path = _out_dir / "pilot_validation_summary.json"
+
+# Imported after argument parsing so that --help and argument errors do not depend on sklearn.
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import roc_auc_score
 
-df = pd.concat([pd.read_csv(f) for f in sorted(glob.glob("/data/boom/NUS/pilot_validation/*_pilot.csv"))],
+PILOT_DIR = repo_root() / "results" / "pilot_validation"
+require_inputs(PILOT_DIR)
+_pilot_csvs = sorted(glob.glob(str(PILOT_DIR / "*_pilot.csv")))
+if not _pilot_csvs:
+    raise SystemExit(f"No *_pilot.csv tables found in {PILOT_DIR}")
+
+df = pd.concat([pd.read_csv(f) for f in _pilot_csvs],
                ignore_index=True)
 print("datasets:", list(df.dataset.unique()), "n_perturbations=", len(df))
 summary = {}
@@ -55,5 +87,6 @@ for T in [100, 200]:
     summary[f"T{T}"] = dict(n=len(d), positives=int(d[lab].sum()),
                             learned_lodo_auroc=per, mean_learned_auroc=mean_auc,
                             mechanistic_auroc=mech, calibration=calib)
-json.dump(summary, open("/data/boom/NUS/pilot_validation/pilot_validation_summary.json", "w"), indent=2)
-print("\nsaved -> pilot_validation/pilot_validation_summary.json")
+_out_dir.mkdir(parents=True, exist_ok=True)
+json.dump(summary, open(_out_path, "w"), indent=2)
+print(f"\nsaved -> {_out_path}")

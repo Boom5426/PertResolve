@@ -5,24 +5,75 @@ For each gene × variant × n_subsample × seed, computes:
   D_null  = E(WT_sample, real_halfB)      -- WT-null baseline
   D_model = E(predicted, real_halfB)      -- model counterfactual
 Then classifies each gene as underpowered / detectable-not-modeled / model-improves / near-floor.
+
+Usage:
+    python scripts/figures/run_split_half_power_analysis.py \
+        --base /path/to/VCCompass --out /path/to/power_output_dir
+
+``--base`` names the external compute workspace that holds g1_real_cells.npz,
+g1_cf_cells_flagship.npz, allele_perturb_bench.csv, joint_arrays.npz,
+gata1_arrays.npz, jak1_arrays.npz, model_cfm_v3.pt and theta_v2.csv; it may be
+omitted when the VCCOMPASS_BASE environment variable is set. Neither the
+workspace nor the checkpoint is redistributed with this repository.
+
+``--out`` is required and receives all four outputs (split_half_power_table.csv,
+split_half_power_summary_by_gene.csv, split_half_power_curve.csv and
+decision_after_split_half_floor.md). Note the historical layout mismatch: this
+script originally wrote them into a ``results/power/`` subdirectory of the
+workspace, whereas the committed copy of split_half_power_curve.csv lives
+directly under this repository's ``results/``. The two locations are deliberately
+left unreconciled here; point ``--out`` at a scratch directory so a re-run cannot
+overwrite the committed canonical tables.
 """
 import os, time, json, sys
+import argparse
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from alleleperturb.paths import resolve_base, require_inputs
+
+parser = argparse.ArgumentParser(
+    description="Split-half power analysis of strict E-distance evaluation.")
+parser.add_argument(
+    "--base", default=None,
+    help="VCCompass compute workspace holding the cell arrays, the benchmark "
+         "table, theta_v2.csv and model_cfm_v3.pt. Defaults to $VCCOMPASS_BASE.")
+parser.add_argument(
+    "--out", required=True,
+    help="Directory that receives the power table, the per-gene summary, the "
+         "power curve and the decision document. Required, and must not be the "
+         "repository's results/ directory.")
+args = parser.parse_args()
+
+BASE = resolve_base(args.base)
+OUT_DIR = Path(args.out)
+
+REAL_CELLS_NPZ = BASE / 'g1_real_cells.npz'
+CF_CELLS_NPZ = BASE / 'g1_cf_cells_flagship.npz'
+BENCH_CSV = BASE / 'allele_perturb_bench.csv'
+JOINT_NPZ = BASE / 'joint_arrays.npz'
+GATA1_NPZ = BASE / 'gata1_arrays.npz'
+JAK1_NPZ = BASE / 'jak1_arrays.npz'
+CFM_CKPT = BASE / 'model_cfm_v3.pt'
+THETA_CSV = BASE / 'theta_v2.csv'
+require_inputs(REAL_CELLS_NPZ, CF_CELLS_NPZ, BENCH_CSV, JOINT_NPZ,
+               GATA1_NPZ, JAK1_NPZ, CFM_CKPT, THETA_CSV)
+
 import numpy as np, pandas as pd
 from scipy.spatial.distance import cdist
 from sklearn.decomposition import PCA
-os.chdir('/data/boom/NUS/VCCompass')
 np.random.seed(42)
 
 # Load all data sources
 print("Loading data...", flush=True)
-real = np.load('g1_real_cells.npz', allow_pickle=True)   # 474 keys (variants+WT, capped 300)
-cf_vae = np.load('g1_cf_cells_flagship.npz', allow_pickle=True)  # 472 keys (VAE counterfactual)
-bench = pd.read_csv('allele_perturb_bench.csv')
+real = np.load(REAL_CELLS_NPZ, allow_pickle=True)   # 474 keys (variants+WT, capped 300)
+cf_vae = np.load(CF_CELLS_NPZ, allow_pickle=True)  # 472 keys (VAE counterfactual)
+bench = pd.read_csv(BENCH_CSV)
 
 # Also load raw arrays for higher cell counts
-joint = np.load('joint_arrays.npz', allow_pickle=True)
-gata1_raw = np.load('gata1_arrays.npz', allow_pickle=True)
-jak1_raw = np.load('jak1_arrays.npz', allow_pickle=True)
+joint = np.load(JOINT_NPZ, allow_pickle=True)
+gata1_raw = np.load(GATA1_NPZ, allow_pickle=True)
+jak1_raw = np.load(JAK1_NPZ, allow_pickle=True)
 
 # Build raw cell pools (not capped at 300)
 RAW = {}
@@ -64,10 +115,10 @@ class VNet(nn.Module):
         h = h + self.trunk(h); return self.gout[g](h)
 
 model_cfm = VNet(GDIMS, nth=14).to(dev)
-model_cfm.load_state_dict(torch.load('model_cfm_v3.pt', map_location=dev, weights_only=True))
+model_cfm.load_state_dict(torch.load(CFM_CKPT, map_location=dev, weights_only=True))
 model_cfm.eval()
 
-tv2 = pd.read_csv('theta_v2.csv')
+tv2 = pd.read_csv(THETA_CSV)
 tcols = [c for c in tv2.columns if c not in ['gene','variant']]
 def theta_for(gene, v):
     r = tv2[(tv2.gene==gene)&(tv2.variant==v)]
@@ -198,8 +249,8 @@ mask_det = df['d_null'] > df['d_self']
 df.loc[mask_det, 'vae_progress'] = (df.loc[mask_det,'d_null'] - df.loc[mask_det,'d_vae']) / (df.loc[mask_det,'d_null'] - df.loc[mask_det,'d_self'])
 df.loc[mask_det, 'cfm_progress'] = (df.loc[mask_det,'d_null'] - df.loc[mask_det,'d_cfm']) / (df.loc[mask_det,'d_null'] - df.loc[mask_det,'d_self'])
 
-os.makedirs('results/power', exist_ok=True)
-df.to_csv('results/power/split_half_power_table.csv', index=False)
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+df.to_csv(OUT_DIR / 'split_half_power_table.csv', index=False)
 print(f"Saved split_half_power_table.csv ({len(df)} rows)", flush=True)
 
 # --- Summary by gene ---
@@ -247,7 +298,7 @@ for gene in GENES:
     print(f"  {gene}: {label} | detect={frac_det:.0%} | VAE<null={frac_vae:.0%} | CFM<null={frac_cfm:.0%} | D_self/D_null={row['median_ratio_self_null']:.3f}", flush=True)
 
 sumdf = pd.DataFrame(summary_rows)
-sumdf.to_csv('results/power/split_half_power_summary_by_gene.csv', index=False)
+sumdf.to_csv(OUT_DIR / 'split_half_power_summary_by_gene.csv', index=False)
 
 # --- Power curve (n_sub sweep, full space) ---
 print("\n=== POWER CURVE (frac detectable by n_sub, full space) ===", flush=True)
@@ -264,7 +315,7 @@ for ns in N_SUBS:
                                'frac_cfm_beats':(vagg['cfm_b']>0.5).mean(),
                                'n_variants':len(vagg)})
 curvedf = pd.DataFrame(curve_rows)
-curvedf.to_csv('results/power/split_half_power_curve.csv', index=False)
+curvedf.to_csv(OUT_DIR / 'split_half_power_curve.csv', index=False)
 print(curvedf[curvedf.space=='full'].to_string(index=False), flush=True)
 
 # --- PCA50 vs full comparison ---
@@ -346,7 +397,7 @@ This changes the Track A/B framing: before claiming "generation fails," the manu
 else:
     decision += f"Most genes ({4-n_underpowered}/4) are detectable. The E-distance failure is model-limited, not measurement-limited.\n"
 
-with open('results/power/decision_after_split_half_floor.md','w') as f:
+with open(OUT_DIR / 'decision_after_split_half_floor.md','w') as f:
     f.write(decision)
 print(decision, flush=True)
 print("POWER_DONE", flush=True)

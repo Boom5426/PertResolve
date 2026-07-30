@@ -10,18 +10,52 @@ Part A (measurement side, split-half, multi-seed):
     residual even measurable? Removing the shared gene direction isolates allele signal.
 Part B (model side): FULL Pearson-delta vs RESIDUAL Pearson-delta per model
   (does the model recover allele-specific direction, or only the gene-shared program?)
-"""
-import numpy as np, pandas as pd, sys, glob, os
-from scipy.stats import pearsonr
-sys.path.insert(0, "/data/boom/NUS/VCCompass/unified")
-import harness as H
 
-BASE = "/data/boom/NUS/VCCompass"; NSUB = 300; NSEED = 15
+Usage:
+  python residual_decomp.py --out /path/to/output_dir [--base /path/to/VCCompass]
+  VCCOMPASS_BASE=/path/to/VCCompass python residual_decomp.py --out /path/to/output_dir
+"""
+import argparse
+import sys
+from pathlib import Path
+
+_REPO_ROOT = Path(__file__).resolve().parents[2]
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+from alleleperturb.paths import add_harness_to_path, require_inputs, resolve_base  # noqa: E402
+
+# Arguments are parsed before the scientific stack is imported, so --help works
+# without numpy/scipy/pandas installed and a bad --base fails before any load.
+ap = argparse.ArgumentParser(description=__doc__,
+                             formatter_class=argparse.RawDescriptionHelpFormatter)
+ap.add_argument("--base", default=None,
+                help="VCCompass compute workspace holding unified/harness.py, "
+                     "unified/real_deltas.npz, unified/preds5/ and "
+                     "allele_perturb_bench.csv (env: VCCOMPASS_BASE)")
+ap.add_argument("--out", required=True,
+                help="directory to write residual_decomp_measurement.csv and "
+                     "residual_decomp_models.csv into")
+args = ap.parse_args()
+
+import numpy as np, pandas as pd, glob, os  # noqa: E402
+from scipy.stats import pearsonr  # noqa: E402
+
+BASE = resolve_base(args.base)
+BENCH_CSV = BASE / "allele_perturb_bench.csv"
+REAL_NPZ = BASE / "unified" / "real_deltas.npz"
+PREDS_DIR = BASE / "unified" / "preds5"
+require_inputs(BENCH_CSV, REAL_NPZ, PREDS_DIR)
+OUT_DIR = Path(args.out).expanduser().resolve()
+
+add_harness_to_path(BASE)
+import harness as H  # noqa: E402
+
+NSUB = 300; NSEED = 15
 SPLITS = ['split1', 'split2', 'split3', 'split5', 'split6']
 WT_TAGS = ('WT', 'wt', 'WT_control')
 np.random.seed(0)
 gene_cells = {g: (lambda X, l: (X, np.asarray(l)))(*H.load_gene(g)) for g in H.GENES}
-_bench = pd.read_csv(f"{BASE}/allele_perturb_bench.csv")
+_bench = pd.read_csv(BENCH_CSV)
 BENCH = {g: set(_bench[_bench.gene == g]["variant"]) for g in H.GENES}   # curated benchmark set (consistency)
 
 
@@ -79,15 +113,17 @@ for g in H.GENES:
                       oracle_residual=round(float(np.mean(resid_or)), 3)))
 dfA = pd.DataFrame(rowsA)
 print(dfA.to_string(index=False))
-dfA.to_csv(f"{BASE}/unified/residual_decomp_measurement.csv", index=False)
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+dfA.to_csv(OUT_DIR / "residual_decomp_measurement.csv", index=False)
 
 # ---------- Part B: model FULL vs RESIDUAL Pearson-delta ----------
 print("\n=== Part B: model FULL vs RESIDUAL Pearson-delta (pooled over genes) ===")
-real = dict(np.load(f"{BASE}/unified/real_deltas.npz"))
-methods = [os.path.basename(f)[:-4] for f in sorted(glob.glob(f"{BASE}/unified/preds5/*.npz"))]
+real = dict(np.load(REAL_NPZ))
+methods = [os.path.basename(f)[:-4]
+           for f in sorted(glob.glob(os.path.join(glob.escape(str(PREDS_DIR)), "*.npz")))]
 rowsB = []
 for m in methods:
-    P = np.load(f"{BASE}/unified/preds5/{m}.npz")
+    P = np.load(PREDS_DIR / f"{m}.npz")
     full_p, resid_p = [], []
     for g in H.GENES:
         # collect held-out test variants (union over splits) with both truth and prediction
@@ -113,5 +149,5 @@ for m in methods:
                           n=len(full_p)))
 dfB = pd.DataFrame(rowsB).sort_values('full_pearson', ascending=False)
 print(dfB.to_string(index=False))
-dfB.to_csv(f"{BASE}/unified/residual_decomp_models.csv", index=False)
-print("\nsaved -> unified/residual_decomp_{measurement,models}.csv")
+dfB.to_csv(OUT_DIR / "residual_decomp_models.csv", index=False)
+print("\nsaved -> " + str(OUT_DIR) + "/residual_decomp_{measurement,models}.csv")

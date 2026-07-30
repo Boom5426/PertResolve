@@ -2,11 +2,45 @@
 """Decisive test: does confining predictions to PerturbNet's 50-dim WT-PCA subspace
 inflate PDS? Project a KNOWN-at-chance predictor (Ridge-esm, full-space PDS ~0.476)
 into that subspace and re-score. Also a pure random-in-subspace baseline. If these
-jump to ~0.56, PerturbNet's 0.56 is a subspace artifact, not prediction."""
+jump to ~0.56, PerturbNet's 0.56 is a subspace artifact, not prediction.
+
+The six PDS values are printed exactly as before and additionally written, at full
+precision, to the JSON file named by --out. Those are the six numbers quoted in
+results/canonical/perturbnet_subspace_test.json; the permutation-null fields in that
+canonical table come from a separate script and are not recomputed here.
+
+Usage:
+  python subspace_test.py --out /path/to/subspace_test.json [--base /path/to/VCCompass]
+  VCCOMPASS_BASE=/path/to/VCCompass python subspace_test.py --out /path/to/subspace_test.json
+"""
 import numpy as np, sys, glob, os
-sys.path.insert(0, "/data/boom/NUS/VCCompass/unified"); import harness as H
+import argparse, json
+from pathlib import Path
+
+# The package is not installed by default; make this repository importable so that
+# the shared path helper can be used when the script is run directly.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from alleleperturb.paths import resolve_base, add_harness_to_path, require_inputs
+
+_ap = argparse.ArgumentParser(description=__doc__,
+                              formatter_class=argparse.RawDescriptionHelpFormatter)
+_ap.add_argument("--base", default=None,
+                 help="VCCompass compute workspace holding unified/ (env: VCCOMPASS_BASE)")
+_ap.add_argument("--out", required=True,
+                 help="path of the JSON file to write the six PDS values into")
+_args = _ap.parse_args()
+
+BASE = resolve_base(_args.base)
+OUT_PATH = Path(_args.out).expanduser()
+require_inputs(BASE / "unified" / "real_deltas.npz",
+               BASE / "unified" / "preds5" / "Ridge-esm.npz",
+               BASE / "unified" / "preds5" / "PerturbNet.npz",
+               BASE / "unified" / "preds5" / "Gene-mean.npz")
+add_harness_to_path(BASE)
+
+import harness as H
 from sklearn.decomposition import PCA
-np.random.seed(0); BASE = "/data/boom/NUS/VCCompass"
+np.random.seed(0)
 SPLITS = ['split1','split2','split3','split5','split6']
 real = {k: v for k, v in np.load(f"{BASE}/unified/real_deltas.npz").items()}
 cand = {(g, s): [v for v in (H.split_vars(g, s)[0] + H.split_vars(g, s)[1]) if f"{g}__{v}" in real] for g in H.GENES for s in SPLITS}
@@ -55,9 +89,25 @@ GM = np.load(f"{BASE}/unified/preds5/Gene-mean.npz")
 def gm_full(g, s, v): k = f"{g}__{s}__{v}"; return GM[k] if k in GM.files else None
 def gm_sub(g, s, v):  k = f"{g}__{s}__{v}"; return proj(g, GM[k]) if k in GM.files else None
 
-print(f"Ridge-esm  FULL space PDS      = {score(re_full):.3f}   (reference: ~0.476, at chance)")
-print(f"Ridge-esm  PROJECTED to subspace = {score(re_sub):.3f}")
-print(f"Gene-mean  FULL space PDS      = {score(gm_full):.3f}")
-print(f"Gene-mean  PROJECTED to subspace = {score(gm_sub):.3f}")
-print(f"PURE RANDOM in subspace PDS    = {score(rand_sub):.3f}   (any value >0.5 => pure artifact)")
-print(f"PerturbNet (as scored)         = {score(pn):.3f}")
+ridge_esm_full_pds = score(re_full)
+print(f"Ridge-esm  FULL space PDS      = {ridge_esm_full_pds:.3f}   (reference: ~0.476, at chance)")
+ridge_esm_subspace_pds = score(re_sub)
+print(f"Ridge-esm  PROJECTED to subspace = {ridge_esm_subspace_pds:.3f}")
+gene_mean_full_pds = score(gm_full)
+print(f"Gene-mean  FULL space PDS      = {gene_mean_full_pds:.3f}")
+gene_mean_subspace_pds = score(gm_sub)
+print(f"Gene-mean  PROJECTED to subspace = {gene_mean_subspace_pds:.3f}")
+pure_random_in_subspace_pds = score(rand_sub)
+print(f"PURE RANDOM in subspace PDS    = {pure_random_in_subspace_pds:.3f}   (any value >0.5 => pure artifact)")
+perturbnet_subspace_pds = score(pn)
+print(f"PerturbNet (as scored)         = {perturbnet_subspace_pds:.3f}")
+
+OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
+OUT_PATH.write_text(json.dumps({
+    "ridge_esm_full_pds": ridge_esm_full_pds,
+    "ridge_esm_subspace_pds": ridge_esm_subspace_pds,
+    "gene_mean_full_pds": gene_mean_full_pds,
+    "gene_mean_subspace_pds": gene_mean_subspace_pds,
+    "pure_random_in_subspace_pds": pure_random_in_subspace_pds,
+    "perturbnet_subspace_pds": perturbnet_subspace_pds,
+}, indent=2) + "\n")

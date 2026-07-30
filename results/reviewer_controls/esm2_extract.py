@@ -11,19 +11,59 @@ Long proteins (JAK1, 1154 aa > ESM2's 1022-residue limit) are cropped to a 1022-
 window centred on the mutation (global reps then span the crop; documented). Multi-substitution
 variants (e.g. GATA1 C204R,V205A) apply all substitutions and average their site deltas.
 Outputs 4 feature npz keyed {GENE}__{variant} (+ {GENE}__WT), ready for the 6-head grid.
-"""
-import json, re, os, numpy as np, torch, esm, sys
-sys.path.insert(0, "/data/boom/NUS/VCCompass/unified")
-import harness as H
 
-BASE = "/data/boom/NUS/VCCompass"
-OUT = f"{BASE}/esm2_control"; os.makedirs(OUT, exist_ok=True)
+Model weights: ``esm.pretrained.esm2_t33_650M_UR50D()`` downloads roughly 2.5 GB of
+ESM2-650M checkpoint into the torch hub cache (``~/.cache/torch/hub``, or ``$TORCH_HOME``)
+on first use. That download is how the model is obtained; nothing is copied into this
+repository. Extraction runs on ``--device``, which defaults to ``cuda`` because the
+published run was GPU-only; CPU extraction of every variant is impractically slow.
+
+Usage:
+  python esm2_extract.py --out /path/to/VCCompass/esm2_control [--base /path/to/VCCompass] [--device cuda]
+  VCCOMPASS_BASE=/path/to/VCCompass python esm2_extract.py --out /path/to/VCCompass/esm2_control
+"""
+import argparse
+import json, re, numpy as np, sys
+from pathlib import Path
+
+# These analysis scripts are executed as plain files, so the repository root has to be
+# importable before the shared path helper can be used.
+sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+from alleleperturb.paths import add_harness_to_path, require_inputs, resolve_base  # noqa: E402
+
+ap = argparse.ArgumentParser(description=__doc__,
+                             formatter_class=argparse.RawDescriptionHelpFormatter)
+ap.add_argument("--base",
+                help="VCCompass compute workspace holding unified/harness.py and "
+                     "wt_seqs.json (env: VCCOMPASS_BASE)")
+ap.add_argument("--out", required=True,
+                help="directory to write the four esm2_*.npz feature files into; the "
+                     "representation grid reads them from <base>/esm2_control")
+ap.add_argument("--device", default="cuda",
+                help="torch device for the model and token batches (default: cuda, the "
+                     "device the published run used)")
+args = ap.parse_args()
+
+BASE = resolve_base(args.base)
+OUT = Path(args.out).expanduser().resolve()
+DEVICE = args.device
+WT_PATH = BASE / "wt_seqs.json"
+require_inputs(WT_PATH)
+# Created before the model download and the GPU work, so a bad --out fails immediately
+# rather than after the full extraction.
+OUT.mkdir(parents=True, exist_ok=True)
+
+import torch, esm  # noqa: E402
+
+add_harness_to_path(BASE)
+import harness as H  # noqa: E402
+
 MAXLEN = 1022; WIN = 16
-WT = json.load(open(f"{BASE}/wt_seqs.json"))
+WT = json.load(open(WT_PATH))
 MUT_RE = re.compile(r'^([A-Z])(\d+)([A-Z])$')
 
 model, alphabet = esm.pretrained.esm2_t33_650M_UR50D()
-model = model.eval().cuda()
+model = model.eval().to(DEVICE)
 bc = alphabet.get_batch_converter()
 LAYER = model.num_layers
 
@@ -31,7 +71,7 @@ LAYER = model.num_layers
 @torch.no_grad()
 def per_residue(seq):
     _, _, toks = bc([("x", seq)])
-    out = model(toks.cuda(), repr_layers=[LAYER])
+    out = model(toks.to(DEVICE), repr_layers=[LAYER])
     rep = out["representations"][LAYER][0]          # (len+2, D) incl BOS/EOS
     return rep[1:len(seq) + 1].float().cpu().numpy()  # (len, D)
 
@@ -97,6 +137,7 @@ for g in H.GENES:
         reps[r][f"{g}__WT"] = np.zeros(D, np.float32)
     print(f"{g}: {ok} variants embedded, {skip} skipped (unparseable/validation)", flush=True)
 
+OUT.mkdir(parents=True, exist_ok=True)
 for r, d in reps.items():
-    np.savez_compressed(f"{OUT}/{r}.npz", **d)
+    np.savez_compressed(OUT / f"{r}.npz", **d)
     print(f"saved {OUT}/{r}.npz  ({len(d)} keys, dim {D})")
