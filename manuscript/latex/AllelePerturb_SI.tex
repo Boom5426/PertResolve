@@ -12,6 +12,7 @@
 \usepackage{array}
 \usepackage{hyperref}
 \usepackage[dvipsnames]{xcolor}
+\setlength{\emergencystretch}{3em} % match main text; absorbs long \texttt{} Source paths
 \hypersetup{colorlinks=true,linkcolor=MidnightBlue,citecolor=MidnightBlue,urlcolor=MidnightBlue}
 
 %% ---- Supplementary numbering (Supplementary Table 1, 2, ...) ----
@@ -21,7 +22,7 @@
 \renewcommand{\figurename}{Supplementary Figure}
 
 \title{Supplementary Information\\[4pt]
-\large AllelePerturb enables power-aware evaluation of allele-specific single-cell perturbation prediction}
+\large Measurement and model limits of allele-specific single-cell perturbation prediction}
 \author{}
 \date{}
 
@@ -71,7 +72,7 @@ JAK1  & Kinase domain, residues 866--1154 & -- & Functional-module membership: J
 %% ===== Supplementary Table 2 =====
 \begin{table}[H]
 \centering
-\caption{\textbf{Implementation and sampling parameters.} \emph{Regression heads (top):} the six heads were crossed with three feature spaces ($\theta$, ESM, ESM+$\theta$) to form the 18 in-house feature-model combinations; all heads used a fixed random seed and were fit by minimizing squared error on the training variants. \emph{Split-half and power-analysis sampling grid (bottom):} parameters for the energy-distance split-half analysis (Fig.~3) and the depth power analysis (Figs.~3, 5), each configuration summarized by the median and the 2.5--97.5 percentile interval across seeds.}
+\caption{\textbf{Implementation and sampling parameters.} \emph{Regression heads (top):} the six heads were crossed with three feature spaces ($\theta$, ESM, ESM+$\theta$) to form the 18 in-house feature-model combinations; all heads used a fixed random seed and were fit by minimizing squared error on the training variants. \emph{Split-half and power-analysis sampling grid (bottom):} parameters for the energy-distance split-half analysis (Fig.~4) and the depth power analysis (Figs.~4, 5), each configuration summarized by the median and the 2.5--97.5 percentile interval across seeds.}
 \label{stab:heads}
 \smallskip
 \begin{tabular}{@{}p{4.2cm} p{3.0cm} p{5.4cm}@{}}
@@ -116,12 +117,12 @@ Minimum cells for inclusion & 50 (split-half); 5 (pseudobulk profiles) \\
 %% ===== Supplementary Table 3 (decision) =====
 \begin{table}[H]
 \centering
-\caption{\textbf{A decision table for allele-resolution perturbation prediction.} Three nested questions of increasing difficulty locate a dataset by its failure mode: detection (a variant versus wild type; assay sensitivity), identification (one variant versus another; ground-truth resolution) and prediction (a held-out variant from its features; computational generalization). Prediction is only meaningful once identification is achievable. Detection is graded rather than binary: for the three low-effect genes the variant-to-wild-type separation is marginal (near the replicate-noise floor; Fig.~3c,e), so `marginal' denotes a weak but non-zero detection signal.}
+\caption{\textbf{Detection, identification and prediction: a decision table for allele-specific single-cell perturbation prediction.} Three nested questions of increasing difficulty locate a dataset by its failure mode: detection (a variant versus wild type; assay sensitivity), identification (one variant versus another; ground-truth resolution) and prediction (a held-out variant from its features; computational generalization). Prediction is only meaningful once identification is achievable. Detection is graded rather than binary: in the three datasets with low measured effect size the variant-to-wild-type separation is marginal (near the replicate-noise floor; Fig.~4c,e), so `marginal' detection denotes a weak but non-zero separation from wild type. Marginal identification likewise denotes a small fraction of resolvable sibling pairs with no reliable recovery of a variant's nearest sibling. Because each gene here is also a distinct dataset, assay and cell context, a row locates a measurement and modelling regime rather than an intrinsic property of the gene.}
 \label{stab:decision}
 \smallskip
 \begin{tabular}{@{}c c c l l@{}}
 \toprule
-Detection & Identification & Prediction & Limiting regime & In AllelePerturb \\
+Detection & Identification & Prediction & Limiting regime & Dataset in this study \\
 \midrule
 no  & --            & --            & assay-limited              & (none) \\
 marginal & no        & not evaluable  & measurement-limited         & TP53, KRAS \\
@@ -205,10 +206,10 @@ JAK1  & 0.21 & 0.792 (0.742--0.838) & 78.5\% & 90\%  & 0.52 \\
 \noindent\textit{Metric-family invariance.} The detection floor is not specific to energy distance. The split-half window ratio $D_\mathrm{self}/D_\mathrm{null}$ (50-component PCA, 50 cells per half) stayed near one for TP53, KRAS and GATA1 and low for JAK1 under all five distance families tested (energy, RBF maximum-mean-discrepancy, sliced-Wasserstein, cosine and Euclidean): TP53 1.01--1.03, KRAS 0.95--0.99, GATA1 0.90--1.04, JAK1 0.05--0.40. Source: \texttt{results/canonical/metric\_family\_floor.csv}.
 
 \smallskip
-\noindent\textit{Gene-shared versus allele-specific decomposition.} Splitting each effect as $\delta_v = \bar{\delta}_g + r_v$, the gene-shared fraction was 72\% (TP53), 59\% (KRAS), 29\% (GATA1) and 51\% (JAK1); across all 24 predictors the residual Pearson-$\delta$ lay between $-0.08$ and $0.03$, so direction recovery is essentially entirely gene-shared. An oracle scored on the allele-specific residual profiles stayed at chance for TP53 and KRAS (0.480 and 0.478), was marginal for GATA1 (0.588) and high for JAK1 (0.892), matching the full-profile ceiling.
+\noindent\textit{Gene-shared versus allele-specific decomposition.} Splitting each effect as $\delta_v = \bar{\delta}_g + r_v$ apportions the measured response between a component shared by all variants of a gene and an allele-specific residual; the shared fraction is a property of each dataset rather than of the metric, at 72\% (TP53), 59\% (KRAS), 29\% (GATA1) and 51\% (JAK1). What predictors actually recover follows instead from scoring the predictions against the residual: across all 24 predictors the residual Pearson-$\delta$ lay between $-0.08$ and $0.03$, so conventional direction recovery is carried almost entirely by the gene-shared component. An oracle scored on the allele-specific residual profiles stayed at chance for TP53 and KRAS (0.480 and 0.478), was marginal for GATA1 (0.588) and high for JAK1 (0.892), so the allele-specific residual is reproducible only where the measurement resolves sibling variants.
 
 \smallskip
-\noindent\textit{Representation robustness.} Under identical splits, heads and scoring (single deterministic pseudobulk draw; the multi-seed convention used in the main text gives PDS 0.49--0.52), every variant representation left allele discrimination at chance while recovering direction similarly: PDS-cosine 0.459--0.475 and Pearson-$\delta$ 0.627--0.656 for the biophysical $\theta$ vector, ESM-1v, four ESM2 constructions (global, mutant-minus-wild-type global, mutated-residue and local-window) and AlphaMissense; a featureless training-gene-mean predictor reached Pearson-$\delta$ 0.66 at PDS 0.45. Source: \texttt{results/reviewer\_controls/rep\_grid\_summary.csv}.
+\noindent\textit{Representation robustness.} Under identical splits, regression heads and scoring (single deterministic pseudobulk draw; the multi-seed convention used in the main text gives PDS 0.49--0.52), every variant representation left allele discrimination at chance while recovering direction similarly: PDS-cosine 0.458--0.473 and Pearson-$\delta$ 0.628--0.659 for the biophysical $\theta$ vector, ESM-1v, four ESM2 constructions (global, mutant-minus-wild-type global, mutated-residue and local-window) and AlphaMissense; a featureless training-gene-mean predictor reached Pearson-$\delta$ 0.66 at PDS 0.44. The scoring procedure is identical across representations, but variant coverage is not, because each representation is defined only where its input exists: AlphaMissense scores were available for 374 of the 470 benchmark variants (84 of 98 for TP53, 78 of 92 for KRAS, 201 of 254 for GATA1 and 11 of 26 for JAK1), giving 389 scored variant-by-split instances against 518 for $\theta$, 511 for ESM-1v and 497 for the ESM2 constructions. Correlations between AlphaMissense pathogenicity and measured effect size are therefore reported per gene only (Spearman $-0.08$ for TP53, $-0.05$ for KRAS and $0.09$ for GATA1); cross-gene pooling is not interpretable here, because both the pathogenicity distribution and the scale of the measured transcriptional effect differ between genes. Sources: \texttt{results/reviewer\_controls/rep\_grid\_summary.csv}, \texttt{am\_summary.csv} and \texttt{am\_effect\_spearman.csv}.
 
 \smallskip
 \noindent\textit{Oracle ceiling sensitivity.} The replicate ceiling was unchanged by depth (300-cell versus full-depth) and stayed at chance for TP53 and KRAS even for a perfect prediction scored against the benchmark's noisy pseudobulk truth (TP53 0.488, KRAS 0.490); GATA1 remained marginal (0.569) and JAK1 high. Shrinking a prediction fully to the gene mean lowered discrimination to 0.500 for every gene, so mean-shrinkage denoising does not raise the ceiling.

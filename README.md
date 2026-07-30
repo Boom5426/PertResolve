@@ -229,8 +229,8 @@ cd manuscript/latex && make
 
 ```bibtex
 @article{li2026alleleperturb,
-  title   = {AllelePerturb reveals measurement limits of protein-coding
-             variant prediction in single-cell transcriptomics},
+  title   = {Measurement and model limits of allele-specific single-cell
+             perturbation prediction},
   author  = {Li, Bo},
   year    = {2026},
   note    = {Manuscript in preparation}

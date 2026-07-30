@@ -69,10 +69,10 @@ Cost is incremental compute on the 4090 reusing existing pseudobulks + harness.
 | 2D | B | Continuous calibrated reliability score | low | Fig 4 / Methods | 1C | TODO |
 | 3A | C | One independent variant dataset (break gene-tech-celltype confound) | high | ext. validation | author matrices | BLOCKED |
 | 3B | C | Deeper gene-level atlas panel (7-10 datasets) | medium | Fig 4 extension | scPerturb pull | TODO |
-| 3C | C | Title / positioning upgrade | none | title, abstract | 1C,1D done | HOLD |
+| 3C | C | Title / positioning upgrade | none | title, abstract | 1C,1D done | DONE 2026-07-30 |
 
 Explicitly de-scoped now: adding more models (marginal value ~0; the paper is about *when a
-leaderboard is valid*, not who leads it); title change before 1C/1D exist.
+leaderboard is valid*, not who leads it).
 
 ---
 
@@ -280,10 +280,13 @@ without the resolution-curve validation).
 - 3B. Deeper gene-level atlas panel: 7-10 Perturb-seq datasets (CRISPRi/a/KO, varying depth,
   replicate structure) from the scPerturb portal; test whether measurement-reliability ->
   model-ranking-stability holds across datasets, generalizing the framework beyond allele level.
-- 3C. Title/positioning upgrade, only after 1C/1D exist. Candidates: "establishes power-aware
-  benchmarking for protein-coding variant prediction..." or "A measurement-aware framework for
-  benchmarking single-cell perturbation prediction at allele resolution." Keep the current
-  honest title until the validation is real.
+- 3C. Title/positioning upgrade. DONE 2026-07-30, ahead of 1C/1D: the title is now
+  "Measurement and model limits of allele-specific single-cell perturbation prediction",
+  and the abstract, introduction, Results, Discussion and figure captions were repositioned
+  so that allele-specific prediction, not AllelePerturb, is the paper's subject. The new
+  title states scope rather than a result, so it does not depend on 1C/1D landing; both
+  limbs (measurement and model) are required, because attributing the failure to
+  measurement alone contradicts the JAK1 model-limited regime.
 
 ---
 
