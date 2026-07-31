@@ -11,6 +11,12 @@
 \usepackage[left=2cm,right=2cm,top=1.4cm,bottom=1.4cm]{geometry}
 \usepackage{graphicx}
 \usepackage{float}
+% Captions one size down. Adding the statistical definitions Nature requires
+% in the legend (interval type, n, band edges) pushed three figure floats past
+% \textheight at 10 pt; shrinking the legend keeps every definition rather than
+% dropping one, and matches the 8-9 pt legend size Nature Methods typesets.
+\usepackage{caption}
+\captionsetup{font=small}
 \usepackage{amsmath,amssymb}
 \usepackage{booktabs}
 \usepackage{hyperref}

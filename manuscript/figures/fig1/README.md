@@ -10,7 +10,7 @@ are **superseded**; do not reuse them.
 
 ## Composite
 
-`fig1_composite.pdf` (assembled by `fig1_assemble.tex`, build: `pdflatex fig1_assemble.tex`).
+`fig1_composite.pdf` (assembled by `fig1_assemble.tex`, build: `lualatex fig1_assemble.tex`).
 Layout: row 1 **a | b**, row 2 **c | d (schematic + PCA data inset)**, row 3 **e | f**,
 with bold lowercase 8 pt panel letters **a-f**; page 185 x 172.2 mm (bounding box
 183 x 170.2 mm, slightly *shorter* than the previous 183 x 171 mm composite, never wider). Every placed file is vector; the composite contains zero

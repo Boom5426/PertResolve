@@ -1,4 +1,4 @@
-% Figure 2 composite (vector). Build: pdflatex fig2_assemble.tex
+% Figure 2 composite (vector). Build: lualatex fig2_assemble.tex
 % Page 183 x 170 mm (<= 183 mm wide; height reduced from the previous 174 mm).
 % Every panel is drawn at its final placement size, so each is placed at scale
 % 1.00 and on-page type stays 5.2-7 pt. Panel PDFs carry a 0.01 in savefig pad,
@@ -12,7 +12,8 @@
 %   * b and c additionally share one axes band, so their 20 rows line up; the
 %     method-label column and the feature-space key are drawn once, inside b
 \documentclass[tikz,border=0mm]{standalone}
-\usepackage{graphicx}\usepackage{helvet}\renewcommand{\familydefault}{\sfdefault}
+\usepackage{graphicx}
+\input{../nm_fonts.tex}
 \begin{document}
 \begin{tikzpicture}[x=1mm,y=1mm]
   \useasboundingbox (0,0) rectangle (183,170);

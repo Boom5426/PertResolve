@@ -11,9 +11,18 @@ signal does not clearly exceed replicate noise). An earlier version of the
 sign-corrected so all five criteria report the un-rankable fraction on the same
 convention. The remote generator should carry the same sign fix.
 
+Style: this panel is drawn through manuscript/figures/nm_style.py, the same shared
+house style as the six main figures. It previously set its own rcParams with a
+font stack of Arial/Helvetica/DejaVu Sans and, since neither Arial nor Helvetica is
+installed, fell through to DejaVu Sans, so Extended Data Fig. 1 was the only
+display item in the paper set in a different typeface. Its three external atlases
+also carried invented hues that collided with the gene palette.
+
 Run from: AllelePerturb/scripts/figures/
 """
 import os
+import sys
+
 import numpy as np
 import pandas as pd
 import matplotlib
@@ -22,18 +31,20 @@ import matplotlib.pyplot as plt
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, '..', '..'))
+sys.path.insert(0, os.path.join(ROOT, 'manuscript', 'figures'))
+import nm_style as S  # noqa: E402
+
 CSV = os.path.join(ROOT, 'results', 'rankability_sensitivity.csv')
 
 # criterion label -> display label (order preserved)
 CRIT_ORDER = ['S > W (current)', 'D_self_hi < D_null', 'S > 1.5×W', 'S > 2×W', 'ratio < 0.8']
-CRIT_DISPLAY = ['S > W\n(default)', 'CI(S) > 0', 'S > 1.5W', 'S > 2W', 'D/D_null\n< 0.8']
+CRIT_DISPLAY = ['S > W\n(default)', 'CI(S) > 0', 'S > 1.5W', 'S > 2W',
+                r'$D_\mathrm{self}/D_\mathrm{null}$' '\n< 0.8']
 
-# dataset -> colour (allele genes share the manuscript GENE_COLORS; atlases distinct)
+# dataset -> colour: the shared house mapping (gene hues for the four allele genes,
+# neutral slate ramp for the external atlases), identical to Fig. 6.
 DS_ORDER = ['TP53', 'KRAS', 'GATA1', 'JAK1', 'Replogle', 'Norman', 'Adamson']
-DS_COLORS = {
-    'TP53': '#5185C0', 'KRAS': '#E99D4E', 'GATA1': '#8281B9', 'JAK1': '#55966B',
-    'Replogle': '#C96144', 'Norman': '#D6B26B', 'Adamson': '#6BAAA7',
-}
+DS_COLORS = {d: S.DATASET_COLORS[d] for d in DS_ORDER}
 
 
 def main():
@@ -42,18 +53,12 @@ def main():
     pivot = (df.pivot(index='dataset', columns='criterion', values='unrankable_frac') * 100.0)
     pivot = pivot.reindex(index=DS_ORDER, columns=CRIT_ORDER)
 
-    plt.rcParams.update({
-        'font.family': 'sans-serif',
-        'font.sans-serif': ['Arial', 'Helvetica', 'DejaVu Sans'],
-        'font.size': 7, 'axes.labelsize': 8, 'xtick.labelsize': 7, 'ytick.labelsize': 7,
-        'legend.fontsize': 6.5, 'figure.dpi': 300, 'savefig.dpi': 300,
-        'axes.spines.top': False, 'axes.spines.right': False,
-        'axes.linewidth': 0.6, 'xtick.major.width': 0.5, 'ytick.major.width': 0.5,
-    })
+    S.apply_rcparams()
+    plt.rcParams.update({'figure.dpi': 300, 'savefig.dpi': 300})
 
     n_crit = len(CRIT_ORDER)
     n_ds = len(DS_ORDER)
-    fig, ax = plt.subplots(figsize=(7.0, 3.2))
+    fig, ax = plt.subplots(figsize=(178.0 * S.MM, 81.0 * S.MM))
     group_w = 0.8
     bar_w = group_w / n_ds
     x = np.arange(n_crit)

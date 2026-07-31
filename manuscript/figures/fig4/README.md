@@ -121,5 +121,5 @@ failure; keep that wording.
   lacks ✓/✗), so they are font-independent.
 - All eight panels regenerate from committed result files; none depends on a remote pull.
 - Rebuild: run each `fig4*.py`, then
-  `pdflatex -interaction=nonstopmode fig4_assemble.tex`, then copy `fig4_assemble.pdf`
+  `lualatex -interaction=nonstopmode fig4_assemble.tex`, then copy `fig4_assemble.pdf`
   over `fig4_composite.pdf` and over `../../latex/figures/fig4.pdf`.

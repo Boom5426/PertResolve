@@ -1,0 +1,23 @@
+% Shared font contract for every AllelePerturb composite (Nature Methods).
+% Input from each figN_assemble.tex as \input{../nm_fonts.tex}.
+%
+% ONE sans family per figure. The matplotlib panels resolve their family through
+% nm_style.py as Arial -> Helvetica -> Liberation Sans (first installed wins), so
+% the panel letters stamped by figN_assemble.tex must resolve the same way or the
+% composite embeds two families. Until 2026-07-31 these files loaded helvet, which
+% put NimbusSanL (a Helvetica clone, Type 1) in every composite for the letters
+% while every other glyph was Liberation Sans (an Arial clone, CID TrueType).
+% Nature Methods asks for Arial or Helvetica; it does not accept both in one figure.
+%
+% Requires lualatex, i.e. fontspec + luaotfload (Debian/Ubuntu: texlive-luatex).
+% Build every composite with:
+%     lualatex -interaction=nonstopmode figN_assemble.tex
+% pdflatex will fail here by design: it cannot load a system OpenType/TrueType
+% family, and silently falling back to helvet is the defect this file removes.
+\usepackage{fontspec}
+\IfFontExistsTF{Arial}%
+  {\setsansfont{Arial}}%
+  {\IfFontExistsTF{Helvetica}%
+     {\setsansfont{Helvetica}}%
+     {\setsansfont{Liberation Sans}}}
+\renewcommand{\familydefault}{\sfdefault}

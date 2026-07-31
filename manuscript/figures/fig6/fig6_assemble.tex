@@ -1,4 +1,4 @@
-% Figure 6 composite (vector). Build: pdflatex fig6_assemble.tex
+% Figure 6 composite (vector). Build: lualatex fig6_assemble.tex
 %
 % Layout rules applied (Nature Methods, 2026-07-27 rework):
 %   * page 183 mm wide, 159.0 mm tall (was 187 mm: panel g no longer needs half
@@ -15,7 +15,8 @@
 %   * panel g is drawn in matplotlib at 168 x 52 mm and placed at 176 mm
 %     (scale 1.048), so its in-panel type is 5.7 pt or larger on the page.
 \documentclass[tikz,border=1mm]{standalone}
-\usepackage{graphicx}\usepackage{helvet}\renewcommand{\familydefault}{\sfdefault}
+\usepackage{graphicx}
+\input{../nm_fonts.tex}
 \begin{document}
 \begin{tikzpicture}[x=1mm,y=1mm]
   \useasboundingbox (0,0) rectangle (183,159.0);

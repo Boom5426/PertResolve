@@ -69,7 +69,9 @@ def main() -> None:
 
     for gene in S.GENE_ORDER:
         sub = g[g.gene == gene]
+        # shape repeats the gene so the panel survives greyscale and CVD
         ax.scatter(sub.pds, sub.pear, s=16, c=S.GENE_COLORS[gene],
+                   marker=S.GENE_MARKERS[gene],
                    edgecolors="white", linewidths=0.4, zorder=3)
         x, y, ha, va = GENE_LABEL_XY[gene]
         ax.text(x, y, gene, fontsize=6.0, color=S.GENE_COLORS[gene],

@@ -1,4 +1,4 @@
-% Figure 4 composite (vector). Build: pdflatex fig4_assemble.tex
+% Figure 4 composite (vector). Build: lualatex fig4_assemble.tex
 % Placement rule: every panel is drawn at its final size, so each \includegraphics
 % width equals the panel PDF's native width (scale = 1.00) and the on-page type
 % stays in the 5-7 pt house band.
@@ -15,7 +15,8 @@
 % Gutters are equal within each row (6.7 / 6.65 / 5.3 mm); panels in a row share
 % a common top edge and a common baseline to within 0.8 mm.
 \documentclass[tikz,border=1mm]{standalone}
-\usepackage{graphicx}\usepackage{helvet}\renewcommand{\familydefault}{\sfdefault}
+\usepackage{graphicx}
+\input{../nm_fonts.tex}
 \begin{document}
 \begin{tikzpicture}[x=1mm,y=1mm]
   \useasboundingbox (0,0) rectangle (183,166);

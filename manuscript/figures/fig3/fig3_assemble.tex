@@ -1,10 +1,11 @@
-% Figure 3 composite (vector). Build: pdflatex fig3_assemble.tex
+% Figure 3 composite (vector). Build: lualatex fig3_assemble.tex
 % Identification-first order: row1 define+detect | row2 identification | row3 determinants
 % Every panel is drawn natively at its placed width, so the composite scale is 1.0
 % and on-page type stays at 5.5-7 pt. Rows are bottom-aligned (common baseline);
 % gutters are 6.2 / 8.0 / 7.6 mm and left/right margins are 3 mm throughout.
 \documentclass[tikz,border=0mm]{standalone}
-\usepackage{graphicx}\usepackage{helvet}\renewcommand{\familydefault}{\sfdefault}
+\usepackage{graphicx}
+\input{../nm_fonts.tex}
 \begin{document}
 \begin{tikzpicture}[x=1mm,y=1mm]
   \useasboundingbox (0,0) rectangle (183,167);

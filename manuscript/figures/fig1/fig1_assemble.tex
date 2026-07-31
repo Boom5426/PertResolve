@@ -1,7 +1,7 @@
 % Figure 1 composite assembly (vector-preserving) for AllelePerturb.
 % 6 panels: a pipeline (measurement->model->evaluation->verdict + single-cell
 % resolution diagnostic; subsumes old workflow g), b tracks+class key, c depth,
-% d features+PCA, e evaluation, f splits. Build: pdflatex fig1_assemble.tex.
+% d features+PCA, e evaluation, f splits. Build: lualatex fig1_assemble.tex.
 %
 % Placement rules enforced here:
 %   * every panel is placed at (or within 2% of) the width it was drawn at, so
@@ -16,8 +16,7 @@
 % Page envelope 183 x 170.2 mm (was 183 x 171 mm; never increased).
 \documentclass[tikz,border=1mm]{standalone}
 \usepackage{graphicx}
-\usepackage{helvet}
-\renewcommand{\familydefault}{\sfdefault}
+\input{../nm_fonts.tex}
 \begin{document}
 \begin{tikzpicture}[x=1mm,y=1mm]
   \useasboundingbox (0,32.8) rectangle (183,203);

@@ -96,7 +96,7 @@ definition panel only; every result begins in Figure 2 and later.
 - Edit `fig1_assemble.tex`: place the new `Fig1a.pdf` in the panel-a slot, **delete the
   `Fig1g.pdf` node and its `g` panel letter**, and reflow so panel a takes part of the
   width freed by removing g (b-f keep their content). Panel letters become **a-f**.
-- Recompile `pdflatex fig1_assemble.tex`, then copy `fig1_composite.pdf` over
+- Recompile `lualatex fig1_assemble.tex`, then copy `fig1_composite.pdf` over
   `../../latex/figures/fig1.pdf` so the rendered figure matches the a-f caption already
   in the manuscript.
 - This also resolves the current mismatch: the embedded `fig1.pdf` is still the old

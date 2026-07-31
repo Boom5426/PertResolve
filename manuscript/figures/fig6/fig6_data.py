@@ -28,14 +28,9 @@ RESULTS = S.repo_root() / "results"
 # light in the order in which they rank across panels c/d/f. The previous
 # teal/mauve/tan set collided with the gene hues (tan vs KRAS orange in
 # particular) and made the figure speak two colour languages.
-DATASET_COLORS = {
-    "TP53": S.GENE_COLORS["TP53"], "KRAS": S.GENE_COLORS["KRAS"],
-    "GATA1": S.GENE_COLORS["GATA1"], "JAK1": S.GENE_COLORS["JAK1"],
-    "Replogle": S.FEATURE_COLORS["ESM+theta"],   # dark slate  #2E3742
-    "Norman": S.FEATURE_COLORS["ESM"],           # mid slate   #5F6B76
-    "Adamson": S.FEATURE_COLORS["theta"],        # light slate #9AA7B3
-    "VCC": S.GREY, "sciPlex": S.LIGHT_GREY,
-}
+# Promoted to nm_style so Extended Data Fig. 1, which plots the same seven
+# datasets, cannot drift away from it; re-exported here for the fig6 panels.
+DATASET_COLORS = dict(S.DATASET_COLORS)
 # datasets with non-degenerate LODO labels, in a sensible display order
 LODO_DATASETS = ["Replogle", "Norman", "Adamson", "GATA1", "JAK1"]
 

@@ -70,11 +70,13 @@ def main() -> None:
         m = ~rank
         if m.any():
             ax.scatter(es[m], nc[m], s=3.6, facecolors="none", edgecolors=col,
+                       marker=S.GENE_MARKERS[gene],
                        linewidths=0.3, alpha=0.5, zorder=3)
         # rankable: larger, opaque, white-rimmed, on top
         m = rank
         if m.any():
             ax.scatter(es[m], nc[m], s=13, facecolors=col, edgecolors="white",
+                       marker=S.GENE_MARKERS[gene],
                        linewidths=0.4, alpha=1.0, zorder=5)
 
     # explicit censoring guide: the analysis cap, not a trend
@@ -112,11 +114,14 @@ def main() -> None:
     # fill key: the panel's only legend (the gene names above are direct labels).
     # Placed in the verified-empty lower-left block: no perturbation has an effect
     # size below 1.72 together with fewer than 190 scored cells.
+    # neutral hexagon, deliberately not one of GENE_MARKERS: this key encodes fill
+    # (rankable vs not), and reusing the TP53 circle would make one shape mean two
+    # things now that shape identifies the gene
     fill_handles = [
-        Line2D([0], [0], marker="o", linestyle="none", markersize=3.0,
+        Line2D([0], [0], marker="h", linestyle="none", markersize=3.0,
                markerfacecolor=S.GREY, markeredgecolor="white",
                markeredgewidth=0.4, label="rankable"),
-        Line2D([0], [0], marker="o", linestyle="none", markersize=2.4,
+        Line2D([0], [0], marker="h", linestyle="none", markersize=2.4,
                markerfacecolor="none", markeredgecolor=S.GREY,
                markeredgewidth=0.4, label="un-rankable"),
     ]

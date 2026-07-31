@@ -55,8 +55,11 @@ def main() -> None:
     order = sorted(S.GENE_ORDER, key=lambda g: -(df.gene == g).sum())
     for gene in order:
         m = (df.gene == gene).to_numpy()
+        # marker shape repeats the gene, which hue alone cannot carry in
+        # greyscale or under deuteranopia (nm_style.GENE_MARKERS)
         ax.scatter(Z[m, 0], Z[m, 1], s=3.5, color=S.GENE_COLORS[gene], alpha=0.7,
-                   linewidths=0, label=gene)  # vector: 470 points, no rasterization
+                   marker=S.GENE_MARKERS[gene], linewidths=0,
+                   label=gene)  # vector: 470 points, no rasterization
 
     ax.set_xlabel(f"PC1 ({ev[0]:.0f}%)", labelpad=1)
     ax.set_ylabel(f"PC2 ({ev[1]:.0f}%)", labelpad=1)

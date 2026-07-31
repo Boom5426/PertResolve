@@ -90,7 +90,7 @@ native-depth per-gene oracle of the main-text window table (that is panel 5b).
 - All panels import the shared `nm_style`; vector PDF (0 raster) + 600 dpi PNG.
 - Schematics a/d/e carry no results by design (no ceiling value, no model or dataset
   name); the quantitative statements live in b, c, f, g.
-- Re-render the composite with `pdflatex fig5_assemble.tex`, then copy
+- Re-render the composite with `lualatex fig5_assemble.tex`, then copy
   `fig5_assemble.pdf` over `fig5_composite.pdf` and `../../latex/figures/fig5.pdf`.
 - Do NOT put split-half ratio, external model audit, feature comparison, rankability
   predictor or the pilot workflow in Fig 5 (those are Fig 3/4/6).
