@@ -46,12 +46,18 @@ def main() -> None:
         ncell = n["n_cells"].to_numpy(float)
         good = np.isfinite(es) & np.isfinite(ratio) & (es > 0)
         sizes = 3 + 22 * (ncell[good] - ncell[good].min()) / (np.ptp(ncell[good]) + 1e-9)
+        # shape repeats the gene; marker area still encodes cells per variant
         ax.scatter(es[good], ratio[good], s=sizes, color=S.GENE_COLORS[gene],
+                   marker=S.GENE_MARKERS[gene],
                    alpha=0.55, linewidths=0, zorder=3)
 
     ax.axhline(1.0, color=S.GREY, ls="--", lw=0.7, zorder=1)
     ax.set_xscale("log")
-    ax.set_xlabel(r"Variant-to-WT effect size (energy $D_\mathrm{null}$)")
+    # NOT "(energy D_null)": the plotted column is `effect_size`, and
+    # effect_size / D_null ranges 1.01-6.65 across the four genes, so naming the
+    # x-axis D_null told the reader it was the denominator of the y-axis and
+    # manufactured a structural relationship that is not there.
+    ax.set_xlabel("Variant-to-WT effect size")
     ax.set_ylabel(r"$D_\mathrm{self}/D_\mathrm{null}$")
     ax.set_xlim(0.62, 16.0)
     # plain tick labels: matplotlib's 10^n superscripts render at ~4.7 pt, below
@@ -73,7 +79,9 @@ def main() -> None:
                                     shrinkA=2.0, shrinkB=2.0, alpha=0.8))
 
     # ---- the only key in this panel: marker area = cells per variant ----
-    size_handles = [Line2D([0], [0], marker="o", ls="none", markeredgecolor="none",
+    # neutral hexagon, deliberately not one of GENE_MARKERS: this key encodes cells
+    # per variant, and reusing the TP53 circle would make one shape mean two things
+    size_handles = [Line2D([0], [0], marker="h", ls="none", markeredgecolor="none",
                            markerfacecolor=S.GREY, markersize=ms, label=lab)
                     for ms, lab in [(1.9, "few"), (4.4, "many")]]
     leg = ax.legend(handles=size_handles, loc="lower left", title="cells per variant",

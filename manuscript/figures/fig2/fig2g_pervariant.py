@@ -5,8 +5,18 @@ Message: direction of the predicted allele effect is stable across variants
 whole 0-1 range. Similar direction, very different allele ranking.
 
 Data: D.exttheta(), method=='Ridge-esm', gene=='TP53', per variant.
-A representative subset of 10 distinct variants (deduplicated by variant, one
-row each) evenly spaced across the observed PDS_cos range is shown.
+Each variant is summarised by the MEAN over the splits in which it was held out
+(84 evaluations of 59 distinct variants across split1/2/3/6); 10 variants evenly
+spaced across the resulting PDS_cos range are shown.
+
+Selection rule (corrected 2026-07-31): this panel previously kept, for each
+variant, the split with the LOWEST PDS_cos
+(``sort_values("PDS_cos").drop_duplicates("variant", keep="first")``). That is a
+selection on the quantity the panel plots, and its bias runs toward the null:
+mean PDS_cos 0.383 with 61.0% of variants below chance, against 0.410 and 55.9%
+under the per-variant mean (0.436 and 55.9% under a maximum). The panel's claim,
+stable direction with ranking spread over the whole range, holds under all three
+rules, so the minimum was costing the figure its credibility for nothing.
 
 Nature Methods pass:
   * The two bands are now two real axes with real y-axis labels; the former
@@ -45,12 +55,21 @@ AX_TOP_MM = 27.0                  # top axis (Pearson) sits here
 
 
 def select_variants():
+    """One row per variant: the mean over every split in which it was held out.
+
+    Never select on PDS_cos here; see the module docstring. The mean is the
+    unbiased summary of the repeated evaluations of the same variant.
+    """
     df = D.exttheta()
-    sub = df[(df.method == METHOD) & (df.gene == GENE)].copy()
-    # one representative row per distinct variant, sorted by ranking score
-    sub = sub.sort_values("PDS_cos").drop_duplicates("variant", keep="first")
-    idx = np.linspace(0, len(sub) - 1, N_SHOW).round().astype(int)
-    return sub.iloc[idx].reset_index(drop=True)
+    sub = df[(df.method == METHOD) & (df.gene == GENE)]
+    agg = (sub.groupby("variant")
+              .agg(pearson_delta=("pearson_delta", "mean"),
+                   PDS_cos=("PDS_cos", "mean"),
+                   n_splits=("split", "nunique"))
+              .reset_index()
+              .sort_values("PDS_cos"))
+    idx = np.linspace(0, len(agg) - 1, N_SHOW).round().astype(int)
+    return agg.iloc[idx].reset_index(drop=True)
 
 
 def canvas():
@@ -77,14 +96,11 @@ def lollipops(ax, x, y, color):
 
 def main():
     S.apply_rcparams()
-    # Keep Greek/maths glyphs in the same Arial-metric sans as the body text.
-    # nm_style sets the text font but not mathtext, whose default (DejaVu Sans)
-    # would embed a second typeface for every $\theta$, $\delta$ and subscript.
-    plt.rcParams.update({"mathtext.fontset": "custom",
-                         "mathtext.rm": "Liberation Sans",
-                         "mathtext.it": "Liberation Sans:italic",
-                         "mathtext.bf": "Liberation Sans:bold",
-                         "mathtext.default": "it"})
+    # nm_style already binds mathtext to the one resolved sans family; only the
+    # default style is panel-specific here. Do not re-pin the family by name: a
+    # hard-coded "Liberation Sans" would keep this panel on the stand-in after
+    # Arial is installed, which is exactly the two-family split we removed.
+    plt.rcParams.update({"mathtext.default": "it"})
     pick = select_variants()
     x = np.arange(len(pick))
     labels = pick["variant"].tolist()
@@ -120,13 +136,14 @@ def main():
     ax_pds.set_xticklabels(labels, fontsize=5.8)
     ax_pds.tick_params(axis="x", length=0, pad=1.5)
     ax_pds.set_ylabel(r"PDS$_{cos}$", labelpad=1.5)
-    ax_pds.set_xlabel("held-out TP53 variant (Ridge ESM)", labelpad=1.5)
+    ax_pds.set_xlabel("held-out TP53 variant (Ridge ESM, mean over splits)",
+                      labelpad=1.5)
 
     S.save(fig, os.path.join(HERE, "fig2g_pervariant"))
 
     # echo numbers plotted
     for _, r in pick.iterrows():
-        print(f"{r.variant:>7s}  split={r.split}  "
+        print(f"{r.variant:>7s}  n_splits={int(r.n_splits)}  "
               f"pearson_delta={r.pearson_delta:.3f}  PDS_cos={r.PDS_cos:.3f}")
 
 

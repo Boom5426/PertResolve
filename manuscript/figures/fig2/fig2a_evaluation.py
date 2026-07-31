@@ -6,7 +6,7 @@ below), not data, and no PDS / Pearson value, chance line or model name appears.
 Content follows fig2a_prompt.md and the Fig 2 caption: a held-out variant's
 predicted response is scored two ways, direction recovery (Pearson-delta) and
 allele discrimination (PDS, whether it identifies its own variant among the
-other held-out variants).
+candidate variants of the same gene, training and held out; Methods, C_g).
 
 Numbers reproduced: none (schematic only).
 One-line message: one prediction, two distinct questions.
@@ -152,7 +152,9 @@ def main() -> None:
     rx = 43.8
     ax.text(rx, 30.7, "Allele discrimination", ha="center", va="center",
             fontsize=FS_HEAD, color=INK, fontweight="bold", zorder=6)
-    ax.text(rx, 28.1, "vs other held-out variants", ha="center", va="center",
+    # Methods defines the candidate set as C_g = train(g) u test(g), so the pool is
+    # every measured variant of the gene, not only the held-out ones.
+    ax.text(rx, 28.1, "vs all same-gene candidates", ha="center", va="center",
             fontsize=FS_SMALL, color=GREY, zorder=6)
 
     # predicted profile on the left of this column

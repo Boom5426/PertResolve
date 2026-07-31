@@ -30,8 +30,13 @@ def main() -> None:
     for gene in S.GENE_ORDER:
         s = pw[pw.gene == gene].sort_values("n_sub")
         ax.plot(s.n_sub, s.frac_detectable, "-o", color=S.GENE_COLORS[gene],
-                lw=1.0, ms=2.6, zorder=3)
-        ends[gene] = (float(s.n_sub.iloc[-1]), float(s.frac_detectable.iloc[-1]))
+                marker=S.GENE_MARKERS[gene], lw=1.0, ms=2.6, zorder=3)
+        # n at the deepest rung is carried to the end label: the number of variants
+        # that still HAVE that rung falls steeply with depth (JAK1 reaches 300 cells
+        # per half with a single variant), and a curve endpoint resting on n = 1
+        # must not read like the endpoints beside it.
+        ends[gene] = (float(s.n_sub.iloc[-1]), float(s.frac_detectable.iloc[-1]),
+                      int(s.n_variants.iloc[-1]))
 
     # reference line stops before the label column so it cannot strike a label
     ax.plot([35, 305], [0.75, 0.75], color=S.GREY, ls=":", lw=0.6, zorder=1)
@@ -50,14 +55,18 @@ def main() -> None:
     ax.tick_params(length=2.2)
 
     # ---- direct end-of-curve labels (replace the repeated gene legend) ----
-    for gene, (x, y) in ends.items():
+    for gene, (x, y, n_end) in ends.items():
         col = S.GENE_COLORS[gene]
         if x >= 300:                      # curve reaches the right edge
-            ax.text(x * 1.06, y, gene, color=col, fontsize=6, fontweight="bold",
-                    va="center", ha="left")
-        else:                             # TP53 stops at 150 (no 300-cell rung)
-            ax.text(x + 10, y + 0.022, gene, color=col, fontsize=6,
+            ax.text(x * 1.06, y + 0.020, gene, color=col, fontsize=6,
                     fontweight="bold", va="center", ha="left")
+            ax.text(x * 1.06, y - 0.032, f"n = {n_end}", color=S.GREY,
+                    fontsize=5.2, va="center", ha="left")
+        else:                             # TP53 stops at 150 (no 300-cell rung)
+            ax.text(x + 10, y + 0.040, gene, color=col, fontsize=6,
+                    fontweight="bold", va="center", ha="left")
+            ax.text(x + 10, y - 0.012, f"n = {n_end}", color=S.GREY,
+                    fontsize=5.2, va="center", ha="left")
 
     S.save(fig, "fig3e_titration")
     print(pw.pivot_table(index="gene", columns="n_sub", values="frac_detectable")

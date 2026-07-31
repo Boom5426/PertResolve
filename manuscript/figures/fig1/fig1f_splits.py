@@ -9,6 +9,19 @@ only the split names and one-line definitions, which match the Fig. 1f caption
 ("random, positional-extrapolation, mechanistic-extrapolation, cross-gene,
 low-depth and compatibility settings") and ``fig1f_prompt.md``.
 
+The mini bars indicate WHICH slice each split holds out, not the exact fraction;
+the held-out counts in ``data/allele_perturb_bench.csv`` (of 472 rows, 470
+variants plus 2 wild-type controls) are:
+
+    split1 random        85     split4 cross-gene    280  (GATA1 254 + JAK1 26)
+    split2 positional   230     split5 low-depth      62
+    split3 mechanistic   71     split6 compatibility  70
+
+Two cards used to contradict those counts and were corrected on 2026-07-31: the
+Compatibility card had no ``HELD`` entry and so drew a split that holds out
+nothing, and the Cross-gene card drew one of four equal blocks held out, which
+understated both the number of genes (two) and the share of the data (59%).
+
 One-line message: generalization is stress-tested along six complementary axes,
 each holding out a different slice of the variant set.
 
@@ -37,7 +50,7 @@ CARDS = [
     ("Random", ["random held-out variants"], "random"),
     ("Positional", ["hold out one protein region", "(C-terminal half)"], "positional"),
     ("Mechanistic", ["hold out hotspot or", "functional-switch residues"], "mechanistic"),
-    ("Cross-gene", ["hold out a whole gene,", "train on the others"], "crossgene"),
+    ("Cross-gene", ["hold out whole genes,", "train on the others"], "crossgene"),
     ("Low-depth", ["hold out shallow-sampling", "variants"], "lowdepth"),
     ("Compatibility", ["match a prior evaluation", "protocol"], "compat"),
 ]
@@ -46,7 +59,15 @@ HELD = {  # which cells of the mini bar are held out (orange)
     "random": {2, 5, 9, 13, 17},
     "positional": set(range(10, N_CELL)),
     "mechanistic": {3, 4, 10, 15},
+    # split6 holds out 70 of 472 rows. Without this entry the card fell through to
+    # HELD.get(key, set()) and drew a Compatibility split that holds out nothing.
+    "compat": {4, 11, 16},
 }
+# split4_role holds out GATA1 (254) and JAK1 (26), i.e. 280 of 472 variants across
+# TWO genes, not one. Block widths follow the four genes' variant counts so the
+# held-out area matches that share instead of reading as a quarter of the data.
+CROSSGENE_COUNTS = [98, 92, 254, 26]   # TP53, KRAS, GATA1, JAK1
+CROSSGENE_HELD = {2, 3}                # GATA1, JAK1
 # deterministic per-cell "depth" for the low-depth motif (design constant, not data)
 DEPTHS = [1.0, .55, .85, .35, .95, .70, .30, 1.0, .60, .40,
           .90, .25, .75, 1.0, .45, .80, .35, .95, .65]
@@ -56,12 +77,18 @@ def draw_bar(ax, x0, y0, key):
     """Mini protein bar: grey = training variants, orange = held-out variants."""
     cw = BAR_W / N_CELL
     if key == "crossgene":
-        # four genes as four separate blocks; the last whole gene is held out
-        blk = (BAR_W - 3 * 0.7) / 4
-        for i in range(4):
-            col = S.HOTSPOT if i == 3 else S.LIGHT_GREY
-            ax.add_patch(Rectangle((x0 + i * (blk + 0.7), y0), blk, 1.8,
-                                   facecolor=col, edgecolor="none"))
+        # four genes as four blocks, width proportional to their variant counts;
+        # the two held-out genes are orange (see CROSSGENE_* above)
+        gap = 0.7
+        avail = BAR_W - 3 * gap
+        tot = sum(CROSSGENE_COUNTS)
+        xi = x0
+        for i, n in enumerate(CROSSGENE_COUNTS):
+            w = avail * n / tot
+            col = S.HOTSPOT if i in CROSSGENE_HELD else S.LIGHT_GREY
+            ax.add_patch(Rectangle((xi, y0), w, 1.8, facecolor=col,
+                                   edgecolor="none"))
+            xi += w + gap
         return
     if key == "lowdepth":
         for i, d in enumerate(DEPTHS):
