@@ -26,7 +26,8 @@ import os
 import sys
 from pathlib import Path
 
-__all__ = ["resolve_base", "repo_root", "add_harness_to_path", "require_inputs"]
+__all__ = ["resolve_base", "repo_root", "add_harness_to_path", "require_inputs",
+           "reject_repo_results"]
 
 #: Files that identify the repository root, used to validate the inferred path.
 _REPO_MARKERS = ("alleleperturb", "results", "setup.py")
@@ -113,6 +114,36 @@ def require_inputs(*paths: Path) -> None:
             f"Missing required input(s):\n  {listing}\n"
             f"Pass --base or set {ENV_VAR} to the workspace that contains them."
         )
+
+
+def reject_repo_results(out: str | os.PathLike[str], *, flag: str = "--out") -> Path:
+    """Refuse an output directory that lies inside this repository's ``results/``.
+
+    The tables under ``results/`` back manuscript numbers and are promoted there
+    deliberately, one at a time, after being checked. A re-run that wrote straight
+    back into that tree could silently replace a cited value with the output of a
+    changed script, which is the failure this guard exists to make impossible.
+    Write to a scratch directory and promote explicitly instead.
+
+    Args:
+        out: the directory the caller intends to write to. It need not exist yet.
+        flag: the argument name to quote back to the user in the error message.
+
+    Returns:
+        The expanded, absolute output directory.
+
+    Raises:
+        SystemExit: if the path resolves inside ``<repo>/results``.
+    """
+    resolved = Path(out).expanduser().resolve()
+    protected = repo_root() / "results"
+    if resolved == protected or protected in resolved.parents:
+        raise SystemExit(
+            f"{flag} may not point inside {protected}: {resolved}\n"
+            "Those tables back manuscript numbers. Write to a scratch directory, "
+            "compare against the committed table, then promote the file deliberately."
+        )
+    return resolved
 
 
 def add_harness_to_path(base: Path) -> Path:
