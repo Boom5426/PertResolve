@@ -47,6 +47,22 @@ results/_remote/
 # and *_assemble.tex; only the vector composites and AI-panel PDFs are tracked)
 manuscript/figures/**/*_assemble.pdf
 manuscript/figures/**/*.png
+# .svg (editable) and .tiff (600 dpi LZW) are production-bundle formats written
+# alongside every Fig. 1 panel PDF. They are ~2.8 MB per regeneration and carry
+# nothing the tracked PDF does not, so they stay out of git and are rebuilt with
+# `python manuscript/figures/fig1/<panel>.py` when a submission bundle is needed.
+manuscript/figures/**/*.svg
+manuscript/figures/**/*.tiff
+
+# Externally designed panel bundles as delivered (~79 MB of zips and unpacked
+# trees). Every panel they contain has been extracted, corrected and adapted
+# into manuscript/figures/fig<N>/, which is what the composites build from, and
+# their bundled provenance scripts are older than this repository's own. Kept on
+# disk for reference only.
+manuscript/Figure*_delivery/
+manuscript/Figure*_delivery.zip
+manuscript/Figure*_refined/
+manuscript/Figure*_refined.zip
 
 # Local-only skills toolkit; never commit or publish (kept out of GitHub)
 Nature-Paper-Skills/
