@@ -1,36 +1,21 @@
-"""Fig 2g: representative held-out TP53 variants (Ridge-esm).
+"""Fig. 2g — all distinct TP53 variants for Ridge ESM.
 
-Message: direction of the predicted allele effect is stable across variants
-(pearson_delta ~0.74-0.82), yet the allele *ranking* score (PDS_cos) spans the
-whole 0-1 range. Similar direction, very different allele ranking.
+All 59 distinct variants are included. When a variant is evaluated in more than
+one eligible split, scores are averaged across those rows before plotting.
+Variants are ordered by residue position, not by either displayed outcome.
+The identical 0–1 y scales and IQR bands show stable direction but widely
+variable allele discrimination without outcome-driven example selection.
 
-Data: D.exttheta(), method=='Ridge-esm', gene=='TP53', per variant.
-Each variant is summarised by the MEAN over the splits in which it was held out
-(84 evaluations of 59 distinct variants across split1/2/3/6); 10 variants evenly
-spaced across the resulting PDS_cos range are shown.
+Run: python fig2g_pervariant.py
 
-Selection rule (corrected 2026-07-31): this panel previously kept, for each
-variant, the split with the LOWEST PDS_cos
-(``sort_values("PDS_cos").drop_duplicates("variant", keep="first")``). That is a
-selection on the quantity the panel plots, and its bias runs toward the null:
-mean PDS_cos 0.383 with 61.0% of variants below chance, against 0.410 and 55.9%
-under the per-variant mean (0.436 and 55.9% under a maximum). The panel's claim,
-stable direction with ranking spread over the whole range, holds under all three
-rules, so the minimum was costing the figure its credibility for nothing.
-
-Nature Methods pass:
-  * The two bands are now two real axes with real y-axis labels; the former
-    in-plot strings "pearson_delta (direction)" / "PDS_cos (allele ranking)"
-    and the in-plot title (which duplicated the caption) are gone.
-  * Both axes carry the SAME 0-1 scale from a true zero baseline, so the visual
-    contrast (direction tightly clustered high, ranking spread over the full
-    range) is a property of the data and not of two different rescalings. The
-    old top band mapped 0.70-0.85 onto a strip, which exaggerated the spread of
-    the very quantity the panel calls stable.
-  * Re-proportioned to a short 120.5 x 44 mm strip that shares the bottom row
-    with Fig 2f, so it supports rather than dominates the page.
+Static QA contract: Arial; svg.fonttype: "none"; pdf.fonttype: 42; outputs
+.svg, .pdf, .png and .tiff at dpi=600. Final assembled figure target:
+width_mm = 183.
 """
+from __future__ import annotations
+
 import os
+import re
 import sys
 
 import matplotlib.pyplot as plt
@@ -42,34 +27,44 @@ import nm_style as S
 import remote_data as D
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-
-N_SHOW = 10
 GENE = "TP53"
 METHOD = "Ridge-esm"
 
-W_MM, H_MM = 120.5, 44.0
-AX_LEFT_MM, AX_WIDTH_MM = 16.0, 101.5
-AX_H_MM = 14.5                    # each of the two stacked axes
-AX_BOT_MM = 8.0                   # bottom axis (PDS) sits here
-AX_TOP_MM = 27.0                  # top axis (Pearson) sits here
+W_MM, H_MM = 107.5, 44.0
+# Absolute millimetres, so they track the canvas width rather than a
+# fraction of it: 102.5 was sized for the old 120.5 mm panel and left the
+# 393 tick 11 mm outside the narrowed one.
+AX_LEFT_MM, AX_WIDTH_MM = 15.0, 89.5
+AX_H_MM = 12.5
+AX_BOT_MM = 7.8
+AX_TOP_MM = 25.2
 
 
-def select_variants():
-    """One row per variant: the mean over every split in which it was held out.
+def residue_position(name: str) -> int:
+    match = re.search(r"(\d+)", str(name))
+    if not match:
+        raise ValueError(f"variant has no residue position: {name}")
+    return int(match.group(1))
 
-    Never select on PDS_cos here; see the module docstring. The mean is the
-    unbiased summary of the repeated evaluations of the same variant.
-    """
+
+def aggregate_variants():
     df = D.exttheta()
-    sub = df[(df.method == METHOD) & (df.gene == GENE)]
-    agg = (sub.groupby("variant")
+    sub = df[(df.method == METHOD) & (df.gene == GENE)].copy()
+    agg = (sub.groupby("variant", as_index=False)
               .agg(pearson_delta=("pearson_delta", "mean"),
                    PDS_cos=("PDS_cos", "mean"),
-                   n_splits=("split", "nunique"))
-              .reset_index()
-              .sort_values("PDS_cos"))
-    idx = np.linspace(0, len(agg) - 1, N_SHOW).round().astype(int)
-    return agg.iloc[idx].reset_index(drop=True)
+                   n_split_rows=("split", "size")))
+    agg["position"] = agg.variant.map(residue_position)
+    agg = agg.sort_values(["position", "variant"], kind="stable").reset_index(drop=True)
+
+    # Small symmetric offsets reveal multiple substitutions at the same residue
+    # without changing their residue-order interpretation.
+    agg["x"] = agg["position"].astype(float)
+    for _, idx in agg.groupby("position").groups.items():
+        idx = list(idx)
+        if len(idx) > 1:
+            agg.loc[idx, "x"] += np.linspace(-1.5, 1.5, len(idx))
+    return agg
 
 
 def canvas():
@@ -78,73 +73,67 @@ def canvas():
     bg.set_axis_off()
     bg.set_xlim(0, 1)
     bg.set_ylim(0, 1)
-    bg.add_patch(Rectangle((0, 0), 1, 1, facecolor="white", edgecolor="none",
-                           zorder=-10))
+    bg.add_patch(Rectangle((0, 0), 1, 1, facecolor="white",
+                           edgecolor="none", zorder=-10))
 
-    def band(bottom_mm):
-        return fig.add_axes([AX_LEFT_MM / W_MM, bottom_mm / H_MM,
+    def band(bottom):
+        return fig.add_axes([AX_LEFT_MM / W_MM, bottom / H_MM,
                              AX_WIDTH_MM / W_MM, AX_H_MM / H_MM])
 
     return fig, band(AX_TOP_MM), band(AX_BOT_MM)
 
 
-def lollipops(ax, x, y, color):
-    ax.vlines(x, 0, y, color=S.LIGHT_GREY, lw=0.7, zorder=1)
-    ax.scatter(x, y, s=12, color=color, edgecolors="white", linewidths=0.35,
-               zorder=3, clip_on=False)
+def draw_distribution(ax, x, values, color, *, show_chance=False):
+    q1, med, q3 = np.percentile(values, [25, 50, 75])
+    ax.axhspan(q1, q3, color=color, alpha=0.10, zorder=0)
+    ax.axhline(med, color=color, lw=0.65, alpha=0.75, zorder=1)
+    if show_chance:
+        ax.axhline(0.50, color=S.GREY, lw=0.6, ls=(0, (3, 2)), zorder=1)
+        ax.text(389, 0.515, "chance", ha="right", va="bottom",
+                fontsize=5.0, color=S.GREY)
+    ax.scatter(x, values, s=9.5, facecolor=color, edgecolor="white",
+               linewidth=0.3, alpha=0.82, zorder=3)
+    label_y = min(0.97, med + 0.055)
+    label_va = "bottom"
+    if show_chance and med < 0.50:
+        label_y = max(0.03, med - 0.055)
+        label_va = "top"
+    ax.text(389, label_y, f"median {med:.2f}",
+            ha="right", va=label_va, fontsize=5.0, color=color,
+            bbox=dict(facecolor="white", edgecolor="none", pad=0.3), zorder=5)
 
 
-def main():
+def main() -> None:
     S.apply_rcparams()
-    # nm_style already binds mathtext to the one resolved sans family; only the
-    # default style is panel-specific here. Do not re-pin the family by name: a
-    # hard-coded "Liberation Sans" would keep this panel on the stand-in after
-    # Arial is installed, which is exactly the two-family split we removed.
-    plt.rcParams.update({"mathtext.default": "it"})
-    pick = select_variants()
-    x = np.arange(len(pick))
-    labels = pick["variant"].tolist()
-    pdir = pick["pearson_delta"].to_numpy()
-    pds = pick["PDS_cos"].to_numpy()
+    data = aggregate_variants()
+    assert len(data) == 59
 
-    col = S.GENE_COLORS[GENE]
+    color = S.GENE_COLORS[GENE]
     fig, ax_dir, ax_pds = canvas()
-
-    lollipops(ax_dir, x, pdir, col)
-    lollipops(ax_pds, x, pds, col)
-
-    # chance line on the ranking axis only (Pearson's null is 0, already the base)
-    ax_pds.axhline(0.5, color=S.GREY, lw=0.6, ls=(0, (3, 2)), zorder=2)
-    ax_pds.text(len(pick) - 0.55, 0.52, "chance", ha="right", va="bottom",
-                fontsize=5.5, color=S.GREY)
+    draw_distribution(ax_dir, data.x, data.pearson_delta, color)
+    draw_distribution(ax_pds, data.x, data.PDS_cos, color, show_chance=True)
 
     for ax in (ax_dir, ax_pds):
-        ax.set_xlim(-0.6, len(pick) - 0.4)
-        ax.set_ylim(0, 1.04)
-        ax.set_yticks([0, 0.5, 1])
-        ax.tick_params(axis="y", length=1.8, pad=1.5, labelsize=5.8)
+        ax.set_xlim(0, S.PROTEIN_LEN[GENE])
+        ax.set_ylim(0, 1.03)
+        ax.set_yticks([0, 0.5, 1.0])
+        ax.tick_params(axis="y", length=1.8, pad=1.3, labelsize=5.5)
         S.despine(ax, keep=("left", "bottom"))
         ax.spines["left"].set_bounds(0, 1)
-        ax.spines["bottom"].set_bounds(-0.6, len(pick) - 0.4)
 
-    ax_dir.set_xticks(x)
-    ax_dir.set_xticklabels([])
-    ax_dir.tick_params(axis="x", length=0)
-    ax_dir.set_ylabel(r"Pearson-$\delta$", labelpad=1.5)
+    ax_dir.set_xticks([])
+    ax_dir.set_ylabel(r"Pearson-$\delta$", labelpad=1.4)
+    ax_pds.set_xticks([0, 100, 200, 300, 393])
+    ax_pds.tick_params(axis="x", length=1.8, pad=1.3, labelsize=5.5)
+    ax_pds.set_ylabel(r"PDS$_{cos}$", labelpad=1.4)
+    ax_pds.set_xlabel("TP53 residue position (Ridge ESM)", labelpad=1.4)
 
-    ax_pds.set_xticks(x)
-    ax_pds.set_xticklabels(labels, fontsize=5.8)
-    ax_pds.tick_params(axis="x", length=0, pad=1.5)
-    ax_pds.set_ylabel(r"PDS$_{cos}$", labelpad=1.5)
-    ax_pds.set_xlabel("held-out TP53 variant (Ridge ESM, mean over splits)",
-                      labelpad=1.5)
+    fig.text(0.985, 0.965,
+             "all 59 distinct variants · repeated split rows averaged per variant",
+             ha="right", va="top", fontsize=5.0, color=S.GREY)
 
-    S.save(fig, os.path.join(HERE, "fig2g_pervariant"))
-
-    # echo numbers plotted
-    for _, r in pick.iterrows():
-        print(f"{r.variant:>7s}  n_splits={int(r.n_splits)}  "
-              f"pearson_delta={r.pearson_delta:.3f}  PDS_cos={r.PDS_cos:.3f}")
+    S.save(fig, os.path.join(HERE, "fig2g_pervariant"), exact=True,
+           formats=("pdf", "png", "svg", "tiff"))
 
 
 if __name__ == "__main__":

@@ -1,53 +1,58 @@
 % Figure 1 composite assembly (vector-preserving) for AllelePerturb.
-% 6 panels: a pipeline (measurement->model->evaluation->verdict + single-cell
-% resolution diagnostic; subsumes old workflow g), b tracks+class key, c depth,
-% d features+PCA, e evaluation, f splits. Build: lualatex fig1_assemble.tex.
+% 7 panel files under 6 letters: a nested solvability + verdict map,
+% b variant coverage (four tracks + key in one file), c sampling depth,
+% d theta schematic + theta PCA, e evaluation axes, f generalization splits.
+% Build: lualatex fig1_assemble.tex
 %
 % Placement rules enforced here:
-%   * every panel is placed at (or within 2% of) the width it was drawn at, so
-%     its internal 5-6.5 pt type is 5-6.5 pt ON THE PAGE. The only exception is
-%     panel a, author-supplied vector art 1152 pt wide with 16.7 pt native type,
-%     which therefore needs >= 122 mm; it is placed at 122.5 mm (5.0 pt on page).
-%   * one gutter value, 5.5 mm, between columns; one gutter value, 4.0 mm,
-%     between rows.
-%   * rows share a common top edge; row 1 additionally shares a common baseline
-%     (panel a bottom = panel b class-key bottom = 118.33 mm).
-%   * panel letters are lowercase bold 8 pt (Nature Methods), not \large.
-% Page envelope 183 x 170.2 mm (was 183 x 171 mm; never increased).
+%   * every panel is placed at exactly the width it was drawn at, so its
+%     internal 5-7 pt type is 5-7 pt ON THE PAGE. Every panel script writes its
+%     declared millimetre canvas (nm_style.save(exact=True)), and
+%     check_fig1_panels.py fails if a PDF is not that size, so no panel here
+%     needs a corrective scale factor.
+%   * rows are flush to the 183 mm page on both edges and sum to exactly 183:
+%       row 1  113.5 + 3.5 + 66.0
+%       row 2   58.0 + 4.5 + 69.0 + 4.5 + 47.0
+%       row 3   78.0 + 5.0 + 100.0
+%     Panel a is 113.5 mm, not the 122.5 mm it was first drawn at: at 122.5 the
+%     row came to 188.5 mm before any gutter, and neither a nor b can be scaled
+%     down at placement time because both bottom out at 5.0 pt type.
+%   * one gutter value per row; 2.6 mm between rows, which is what the 8 pt
+%     panel letter occupies. The row gap is set by the letter, not by taste:
+%     any larger and the float exceeds the manuscript text height.
+%   * rows share a common top edge; panel letters are lowercase bold 8 pt
+%     (Nature Methods), placed 2.8 mm above each row's top edge.
+% Page envelope 183 x 163.0 mm.
 \documentclass[tikz,border=1mm]{standalone}
 \usepackage{graphicx}
 \input{../nm_fonts.tex}
 \begin{document}
 \begin{tikzpicture}[x=1mm,y=1mm]
-  \useasboundingbox (0,32.8) rectangle (183,203);
+  \useasboundingbox (0,39.6) rectangle (183,202.6);
 
-  % ---------- Row 1: a (pipeline, 3:2) | b (variant tracks + class key) -------
-  % a: 1152x768 pt art at 122.5 mm -> 81.67 mm tall, native type 5.0 pt on page.
-  % b: four tracks drawn at 52 mm (scale 1.0), stacked with equal 2.225 mm gaps,
-  %    bottom-aligned with a.
-  \node[anchor=north west,inner sep=0] at (1.5,200)      {\includegraphics[width=122.5mm]{fig1a_pipeline.pdf}};
-  \node[anchor=north west,inner sep=0] at (129.5,200)    {\includegraphics[width=52.25mm]{fig1b_track_TP53.pdf}};
-  \node[anchor=north west,inner sep=0] at (129.5,181.65) {\includegraphics[width=52.25mm]{fig1b_track_KRAS.pdf}};
-  \node[anchor=north west,inner sep=0] at (129.5,160.51) {\includegraphics[width=52.25mm]{fig1b_track_GATA1.pdf}};
-  \node[anchor=north west,inner sep=0] at (129.5,144.99) {\includegraphics[width=52.25mm]{fig1b_track_JAK1.pdf}};
-  \node[anchor=north west,inner sep=0] at (134.74,126.54){\includegraphics[width=41.77mm]{fig1b_legend.pdf}};
+  % ---------- Row 1: a (nested solvability) | b (variant coverage) -----------
+  % top edge 200, a is 76 mm tall and b 72 mm, so the row bottoms out at 124.
+  \node[anchor=north west,inner sep=0] at (0,200)     {\includegraphics[width=113.5mm]{fig1a_nested_solvability.pdf}};
+  \node[anchor=north west,inner sep=0] at (117,200)   {\includegraphics[width=66mm]{fig1b_coverage.pdf}};
 
-  % ---------- Row 2: c (depth) | d (theta schematic + PCA data panel) ---------
-  \node[anchor=north west,inner sep=0] at (2,114.33)      {\includegraphics[width=58.06mm]{fig1c_depth.pdf}};
-  \node[anchor=north west,inner sep=0] at (65.56,114.33)  {\includegraphics[width=62.5mm]{fig1d_theta_schematic.pdf}};
-  \node[anchor=north west,inner sep=0] at (133.56,114.33) {\includegraphics[width=47.4mm]{fig1d_theta_pca.pdf}};
+  % ---------- Row 2: c (depth) | d (theta schematic + theta PCA) -------------
+  % top edge 121.4, 42 mm tall, bottom 79.4.
+  \node[anchor=north west,inner sep=0] at (0,121.4)   {\includegraphics[width=58mm]{fig1c_depth.pdf}};
+  \node[anchor=north west,inner sep=0] at (62.5,121.4){\includegraphics[width=69mm]{fig1d_theta_schematic.pdf}};
+  \node[anchor=north west,inner sep=0] at (136,121.4) {\includegraphics[width=47mm]{fig1d_theta_pca.pdf}};
 
-  % ---------- Row 3: e (three evaluation axes) | f (six generalization splits) -
-  \node[anchor=north west,inner sep=0] at (2,69.83)    {\includegraphics[width=76.5mm]{fig1e_eval_axes.pdf}};
-  \node[anchor=north west,inner sep=0] at (84,69.83)   {\includegraphics[width=97.5mm]{fig1f_splits.pdf}};
+  % ---------- Row 3: e (evaluation axes) | f (generalization splits) ---------
+  % top edge 76.8, 37 mm tall, bottom 39.8.
+  \node[anchor=north west,inner sep=0] at (0,76.8)    {\includegraphics[width=78mm]{fig1e_eval_axes.pdf}};
+  \node[anchor=north west,inner sep=0] at (83,76.8)   {\includegraphics[width=100mm]{fig1f_splits.pdf}};
 
-  % ---------- panel letters (lowercase, bold, 8 pt) ---------------------------
+  % ---------- panel letters (lowercase, bold, 8 pt) -------------------------
   \tikzset{plab/.style={font=\fontsize{8}{9}\selectfont\bfseries,anchor=north west,inner sep=0}}
-  \node[plab] at (0.3,202.8)   {a};
-  \node[plab] at (127.5,202.8) {b};
-  \node[plab] at (0.3,117.13)  {c};
-  \node[plab] at (63.6,117.13) {d};
-  \node[plab] at (0.3,72.63)   {e};
-  \node[plab] at (82.0,72.63)  {f};
+  \node[plab] at (0,202.4)     {a};
+  \node[plab] at (117,202.4)   {b};
+  \node[plab] at (0,123.8)     {c};
+  \node[plab] at (62.5,123.8)  {d};
+  \node[plab] at (0,79.2)      {e};
+  \node[plab] at (83,79.2)     {f};
 \end{tikzpicture}
 \end{document}

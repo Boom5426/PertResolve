@@ -1,16 +1,16 @@
-"""Figure 1c - Per-variant cell depth spans distinct sampling regimes.
+"""Figure 1c — per-variant sampling depth.
 
-Data-direct panel. Source: data/allele_perturb_bench.csv (committed), column
-`n_cells` per variant. Reproduces the manuscript Fig 1c numbers exactly:
-  median cells/variant  TP53 929, KRAS 1000, GATA1 355, JAK1 104
-  total cells/gene      TP53 83.4k, KRAS 83.6k, GATA1 149.2k, JAK1 4.9k
-  variants              98 / 93 / 255 / 26   (total 472; 321,043 cells)
+All non-WT variant conditions are shown.  Raw points are retained; the pale
+half-violin is a descriptive density, the vertical segment is the IQR and the
+horizontal segment is the median.  The log axis is labelled explicitly because
+nominal cell count is not itself a measurement-power estimate.
 
-Half-violin (density) + jittered points + median marker, log y. No result is
-stated here; the depth spread only sets up the Fig 3 measurement analysis.
+Run: python fig1c_depth.py
+Output: fig1c_depth.svg/.pdf/.png
 
-Run:  python fig1c_depth.py
-Out:  fig1c_depth.pdf (+ .png preview)
+Imported export contract: Arial; svg.fonttype: "none"; pdf.fonttype: 42;
+outputs .svg, .pdf, .png and .tiff at dpi=600. Final assembled figure target:
+width_mm = 183.
 """
 from __future__ import annotations
 
@@ -22,70 +22,119 @@ import numpy as np
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import nm_style as S
 
-RNG = np.random.default_rng(0)  # explicit seed for the point jitter only
+from pathlib import Path
 
+HERE = Path(__file__).resolve().parent
+
+W_MM, H_MM = 58.0, 42.0
 
 def main() -> None:
     S.apply_rcparams()
-    df = S.load_bench(exclude_wt=True)  # per-variant depth excludes the 2 WT rows
+    data = S.load_bench(exclude_wt=True, corrected=True)
+    fig, ax = S.panel(W_MM, H_MM)
+    fig.subplots_adjust(left=0.22, right=0.98, bottom=0.23, top=0.95)
 
-    fig, ax = S.panel(60, 41)
     for i, gene in enumerate(S.GENE_ORDER):
-        vals = df.loc[df.gene == gene, "n_cells"].to_numpy(dtype=float)
-        color = S.GENE_COLORS[gene]
+        values = data.loc[data.gene == gene, "n_cells"].to_numpy(dtype=float)
+        if np.any(values <= 0):
+            raise ValueError(f"{gene}: log-scale cell counts must be positive")
+        log_values = np.log10(values)
+        colour = S.GENE_COLORS[gene]
 
-        # half-violin (KDE) on the right side of each gene position
-        parts = ax.violinplot(np.log10(vals), positions=[i], widths=0.9,
-                              showextrema=False)
-        for body in parts["bodies"]:
-            verts = body.get_paths()[0].vertices
-            verts[:, 0] = np.clip(verts[:, 0], i, np.inf)  # keep right half only
-            body.set_facecolor(color)
+        violin = ax.violinplot(log_values, positions=[i], widths=0.82, showextrema=False)
+        for body in violin["bodies"]:
+            vertices = body.get_paths()[0].vertices
+            vertices[:, 0] = np.clip(vertices[:, 0], i, np.inf)
+            body.set_facecolor(colour)
             body.set_edgecolor("none")
-            body.set_alpha(0.22)
+            body.set_alpha(0.16)
 
-        # jittered raw points on the left (kept vector: only ~470 points total)
-        jit = i - 0.06 - RNG.uniform(0, 0.22, size=vals.size)
-        ax.scatter(jit, np.log10(vals), s=2.0, color=color, alpha=0.55,
-                   linewidths=0, zorder=3)
+        index = np.arange(len(values), dtype=float)
+        jitter = i - 0.08 - 0.20 * ((index * 0.61803398875) % 1.0)
+        ax.scatter(
+            jitter,
+            log_values,
+            s=2.1,
+            color=colour,
+            alpha=0.55,
+            linewidths=0,
+            zorder=3,
+        )
 
-        # median marker + label
-        med = np.median(vals)
-        ax.plot([i - 0.34, i + 0.30], [np.log10(med)] * 2, color=S.INK, lw=1.0,
-                zorder=4, solid_capstyle="round")
-        ax.text(i + 0.02, np.log10(med) + 0.06, f"{med:.0f}", ha="center",
-                va="bottom", fontsize=6, color=S.INK)
-        # n variants below axis
-        n = int((df.gene == gene).sum())
-        ax.text(i, -0.14, f"n={n}", ha="center", va="top", fontsize=5.5,
-                color=S.GREY, transform=ax.get_xaxis_transform())
+        q1, median, q3 = np.quantile(values, [0.25, 0.5, 0.75])
+        x_summary = i + 0.07
+        ax.plot(
+            [x_summary, x_summary],
+            [np.log10(q1), np.log10(q3)],
+            color=S.INK,
+            lw=1.05,
+            solid_capstyle="round",
+            zorder=5,
+        )
+        ax.plot(
+            [i - 0.24, i + 0.30],
+            [np.log10(median)] * 2,
+            color=S.INK,
+            lw=1.05,
+            solid_capstyle="round",
+            zorder=6,
+        )
+        ax.text(
+            x_summary,
+            np.log10(q3) + 0.065,
+            f"{median:.0f}",
+            ha="center",
+            va="bottom",
+            fontsize=5.8,
+            bbox={"facecolor": "white", "edgecolor": "none", "pad": 0.15,
+                  "alpha": 0.92},
+            zorder=8,
+        )
+        ax.text(
+            i,
+            -0.155,
+            f"n={len(values)}",
+            transform=ax.get_xaxis_transform(),
+            ha="center",
+            va="top",
+            fontsize=5.2,
+            color=S.GREY,
+        )
 
     ax.set_xticks(range(len(S.GENE_ORDER)))
-    # gene names in the gene colour: this panel is the figure's shared key for
-    # "colour = gene" (direct labelling), so no detached gene legend is needed
-    # anywhere in Figure 1.
     ax.set_xticklabels(S.GENE_ORDER)
-    for lab, gene in zip(ax.get_xticklabels(), S.GENE_ORDER):
-        lab.set_color(S.GENE_COLORS[gene])
-        lab.set_fontweight("bold")
-    ax.set_xlim(-0.6, len(S.GENE_ORDER) - 0.4)
-    ax.set_ylabel("Cells per variant")
+    for label, gene in zip(ax.get_xticklabels(), S.GENE_ORDER):
+        label.set_color(S.INK)
+        label.set_fontweight("bold")
 
-    # log-scale y with 10^k ticks shown as plain numbers; limits are tightened
-    # to the observed range (33 to 1,987 cells per variant) so the panel is not
-    # mostly empty axis
+    ax.set_xlim(-0.55, 3.55)
     ax.set_ylim(np.log10(25), np.log10(3000))
     ticks = [50, 100, 300, 1000, 3000]
     ax.set_yticks(np.log10(ticks))
-    ax.set_yticklabels([f"{t:,}" for t in ticks])
+    ax.set_yticklabels([f"{tick:,}" for tick in ticks])
+    ax.set_ylabel("Cells per variant condition")
+    ax.text(
+        0.99,
+        1.005,
+        "log scale · sampling depth only",
+        transform=ax.transAxes,
+        ha="right",
+        va="bottom",
+        fontsize=5.0,
+        color=S.GREY,
+    )
     S.despine(ax)
-    ax.tick_params(length=2.2)
+    ax.tick_params(length=2.0)
 
-    S.save(fig, "fig1c_depth")
-    # report to stdout for the audit trail
-    tot = df.groupby("gene")["n_cells"].agg(["median", "sum", "count"]).reindex(S.GENE_ORDER)
-    print(tot.to_string())
-    print("total cells:", int(df.n_cells.sum()), " total variants:", len(df))
+    S.save(fig, HERE / "fig1c_depth", exact=True,
+           formats=("pdf", "png", "svg", "tiff"))
+
+    summary = (
+        data.groupby("gene")["n_cells"]
+        .agg(["median", "sum", "count"])
+        .reindex(S.GENE_ORDER)
+    )
+    print(summary.to_string())
 
 
 if __name__ == "__main__":

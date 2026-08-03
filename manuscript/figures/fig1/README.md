@@ -1,8 +1,8 @@
-# Figure 1 — assembly guide
+# Figure 1, assembly guide
 
 **One-line message:** AllelePerturb defines perturbation prediction at protein-coding
-variant resolution (pipeline, coverage, sampling regime, features, evaluation) — a
-definition figure, **no results**.
+variant resolution (nested solvability, coverage, sampling regime, features, evaluation,
+splits); a definition figure, **no results**.
 
 Source of truth is the LaTeX manuscript `manuscript/latex/AllelePerturb_manuscript.tex`.
 The older `manuscript/figures/` composites (`fig1_final.*`, `fig1_benchmark_overview.*`)
@@ -11,59 +11,77 @@ are **superseded**; do not reuse them.
 ## Composite
 
 `fig1_composite.pdf` (assembled by `fig1_assemble.tex`, build: `lualatex fig1_assemble.tex`).
-Layout: row 1 **a | b**, row 2 **c | d (schematic + PCA data inset)**, row 3 **e | f**,
-with bold lowercase 8 pt panel letters **a-f**; page 185 x 172.2 mm (bounding box
-183 x 170.2 mm, slightly *shorter* than the previous 183 x 171 mm composite, never wider). Every placed file is vector; the composite contains zero
-embedded raster (`pdfimages -list fig1_composite.pdf | tail -n +3 | wc -l` -> 0). To
-reposition anything, edit the coordinates in `fig1_assemble.tex` and recompile. The d PCA
-inset (`fig1d_theta_pca.pdf`) sits where the d schematic's "shared feature space" arrow
-points; nudge a few mm if it clips.
+Layout: row 1 **a | b**, row 2 **c | d (schematic + PCA)**, row 3 **e | f**, with bold
+lowercase 8 pt panel letters **a-f**; page 185 x 165.0 mm (bounding box 183 x 163.0 mm).
+Every placed file is vector; the composite contains zero embedded raster
+(`pdfimages -list fig1_composite.pdf | tail -n +3 | wc -l` -> 0).
 
-**Panel a is pipeline-first.** Panel a is the end-to-end AllelePerturb pipeline
-(measurement -> model -> evaluation -> verdict, with a parallel single-cell resolution
-diagnostic). It replaces the old gene-vs-variant concept panel and **subsumes the old
-workflow panel (old g, now removed)**; the gene-vs-variant motivation survives inside the
-discrimination axis. Spec in `PIPELINE_SPEC.md`, prompt in `fig1a_prompt.md`. The
-manuscript caption (panel a) and the Results opening already describe exactly this pipeline.
+Each row is flush to the 183 mm page on both edges and sums to exactly 183 mm:
+
+| Row | Panels | Widths (mm) | Gutter |
+|---|---|---|---|
+| 1 | a, b | 113.5 + 66.0 | 3.5 |
+| 2 | c, d schematic, d PCA | 58.0 + 69.0 + 47.0 | 4.5 |
+| 3 | e, f | 78.0 + 100.0 | 5.0 |
+
+Every panel is placed at exactly the width it was drawn at, so its internal 5-7 pt type is
+5-7 pt on the page; no placement carries a corrective scale factor. Panel scripts write
+their declared canvas through `nm_style.save(exact=True)`.
+
+**Do not change a panel's width without re-running its script.** The panels are drawn in
+absolute millimetres with type in points, so scaling one at placement time shrinks its type
+below the 5 pt Nature Methods floor. Panel a is 113.5 mm rather than the 122.5 mm it was
+first drawn at for exactly this reason: at 122.5 mm row 1 came to 188.5 mm before any
+gutter, and neither a nor b could absorb the difference by scaling because both bottom out
+at 5.0 pt.
+
+## Quality gate
+
+`python check_fig1_panels.py` is the gate. It re-runs every panel in memory and fails on:
+
+- text outside the declared canvas (this is how the clipped legend footer in b and the
+  overrunning "own observed" label in e were found);
+- a figure whose size is not its declared millimetre canvas;
+- any text below 5 pt;
+- a composite row wider than 183 mm.
+
+It also writes `../nm_font_resolved.tex`, which records the family the panels actually
+resolved to so `nm_fonts.tex` stamps the panel letters in the same one. Run it after
+editing any panel, then rebuild the composite.
 
 ## Panel inventory (each panel is its own file)
 
-| Panel | Content | Type | File(s) | Data source |
-|-------|---------|------|---------|-------------|
-| a | end-to-end pipeline: measurement / model / evaluation / verdict, plus a parallel single-cell resolution diagnostic | matplotlib schematic | `fig1a_pipeline.py` (spec: `fig1a_prompt.md`) | — |
-| b | variant positions on 4 proteins | **data-direct** | `fig1b_track_{TP53,KRAS,GATA1,JAK1}.pdf` + `fig1b_legend.pdf` (variant-**class** key only) | `data/allele_perturb_bench.csv`, `data/hotspot_external_definition.txt` |
-| c | per-variant cell depth | **data-direct** | `fig1c_depth.pdf` | `data/allele_perturb_bench.csv` (`n_cells`) |
-| d | variant feature concept | matplotlib schematic + **data inset** | `fig1d_theta_schematic.py` + `fig1d_theta_pca.pdf` | θ columns of the bench CSV |
-| e | evaluation decomposition | matplotlib schematic | `fig1e_eval_axes.py` | — |
-| f | six generalization splits | matplotlib schematic | `fig1f_splits.py` | — |
+| Panel | Content | Type | Script | Output | Data source |
+|-------|---------|------|--------|--------|-------------|
+| a | nested detection / identification / prediction, with the measurement-limited vs model-limited verdict map | matplotlib schematic | `fig1a_nested_solvability.py` | `fig1a_nested_solvability.*` | none |
+| b | variant positions on 4 proteins, tracks and key in one file | **data-direct** | `fig1b_variant_tracks.py` | `fig1b_coverage.*` | `data/allele_perturb_bench_v2.csv` |
+| c | per-variant cell depth | **data-direct** | `fig1c_depth.py` | `fig1c_depth.*` | `allele_perturb_bench_v2.csv` (`n_cells`) |
+| d | variant feature concept + shared feature space | matplotlib schematic + **data panel** | `fig1d_theta_schematic.py`, `fig1d_theta_pca.py` | `fig1d_theta_schematic.*`, `fig1d_theta_pca.*` | theta columns of `allele_perturb_bench_v2.csv` |
+| e | evaluation decomposition, PDS primary | matplotlib schematic | `fig1e_eval_axes.py` | `fig1e_eval_axes.*` | none |
+| f | six generalization splits | **data-direct** | `fig1f_splits.py` | `fig1f_splits.*` | `split*_role` columns of `allele_perturb_bench_v2.csv` |
 
-**Superseded (2026-07-27), archived in `../_superseded/`.** Every externally made panel
-was replaced by a matplotlib panel drawn at its exact placement size, because each was
-authored on a canvas far larger than its slot and its type collapsed on the page:
+Each panel writes `.pdf` (deliverable), `.png` (600 dpi preview), `.svg` (editable) and
+`.tiff` (LZW, 600 dpi).
 
-| Archived file | Problem as placed | Replaced by |
-|---|---|---|
-| `Fig1a_editable.pdf` | 36 of 94 words below 5 pt (min 4.3 pt); off-palette blues (#0072B2/#00A0C6/#5AB4E6); a third font family (Arimo); its Direction/Discrimination block restated panel e | `fig1a_pipeline.py` |
-| `Fig1d_schematic_highres.pdf` | embedded raster, placed at scale 0.41 | `fig1d_theta_schematic.py` |
-| `Fig1e_Eval_highres.pdf` | embedded raster, placed at scale 0.38 | `fig1e_eval_axes.py` |
-| `Fig1f.pdf` | placed at scale 0.18, type at 3.4 pt | `fig1f_splits.py` |
-| `Fig1a.pdf` (old concept panel), `Fig1g.pdf` (old workflow) | panel g was dropped; its content folded into the new pipeline panel a | not replaced |
-
-The prompts (`fig1a_prompt.md`, `fig1d_prompt.md`, `fig1e_prompt.md`, `fig1f_prompt.md`,
-`fig1g_prompt.md`) remain as the content spec; the redraws keep the same conceptual
-content, simplified to what stays legible at 122.5 / 62.5 / 76.5 / 99.5 mm. The composite
-is now **100% vector, zero embedded raster**, and every panel regenerates from code.
-
-Every panel is a matplotlib script that imports `nm_style.py` and emits a vector PDF plus
-a 600 dpi PNG preview: `fig1a_pipeline.py`, `fig1b_variant_tracks.py`, `fig1c_depth.py`,
-`fig1d_theta_schematic.py`, `fig1d_theta_pca.py`, `fig1e_eval_axes.py`, `fig1f_splits.py`.
-The `*_prompt.md` files are retained as the content specification for the schematics, not
-as a build step; no panel in this figure is generated by an image model any more.
+**The data source is `allele_perturb_bench_v2.csv`, not `allele_perturb_bench.csv`.**
+The two differ in `is_hotspot` on 182 of the 470 rows. In the default table that column is
+a leaked continuous score that is not even an indicator (it sums to -6.16 over TP53 and
++11.27 over KRAS); v2 replaces it with the external-annotation definition and keeps the old
+values as `is_hotspot_leaked_OLD`. Methods states the external definition
+("defined exclusively from external prior knowledge, with no reference to the single-cell
+outcome"), and the reported evaluation grid `results/results_v4_exttheta.csv` is computed
+on the de-leaked theta, so drawing Fig. 1 from the default table put the figure at odds
+with both. Pass `corrected=True` to `nm_style.load_bench`.
 
 ## Style (Nature Methods)
 
-Helvetica/Arial (Liberation/Nimbus Sans stand-ins locally), 5–7 pt, 0.5 pt axes, no
-top/right spines, vector PDF with editable text. Single-column 89 mm / double 183 mm.
+One sans family per figure, resolved by `nm_style.resolve_sans()`, 5-7 pt, 0.5 pt axes,
+no top/right spines, vector PDF with editable text. Single-column 89 mm / double 183 mm.
+Resolution is by glyph coverage, not just by whether a family is installed: the Arial from
+Debian/Ubuntu `ttf-mscorefonts-installer` has no U+0302, so every `\hat{...}` in this
+figure would take its accent from STIXGeneral and put a third typeface in the panel. On
+this machine the stack therefore resolves to Liberation Sans, which is Arial-metric and
+covers the whole set.
 
 Palette is the house set in `manuscript/figures/nm_style.py` (`GENE_COLORS`), shared by
 every figure in the manuscript, **not** Okabe-Ito:
@@ -75,15 +93,10 @@ used; corrected 2026-07-27.)
 
 ### Legibility rule (enforced)
 
-Every panel is drawn at its exact placement width, so its placement scale is 1.00 (f 0.98)
-and its source type reaches the page unchanged. Measured across all eleven placed files,
-the median is 6.0-7.3 pt and the **minimum is 5.1 pt**, so the whole figure sits inside the
-5-7 pt Nature band. `Fig1a_editable.pdf`, the previous author-supplied panel a, was the one
-panel that failed this rule (36 of 94 words at 4.3-4.9 pt) and was replaced on 2026-07-27
-by `fig1a_pipeline.py`, which resolves the type, palette, font and encoding problems at
-once. Verify after any layout change with the on-page type audit, which measures every
-placed panel at its composite scale; single characters and mathematical subscripts are
-legitimately smaller than the body band and are excluded.
+Every panel is drawn at its exact placement width, so its placement scale is 1.00 and its
+source type reaches the page unchanged. `check_fig1_panels.py` fails on any text below
+5 pt and on any panel whose PDF is not its declared millimetre canvas, which is what makes
+the scale-1.00 claim checkable rather than asserted.
 
 ## Numbers that appear (all trace to the bench CSV)
 
@@ -99,7 +112,7 @@ JAK1 domain labels in panel b are the short module names **JH2** / **JH1** (pseu
 kinase), matching the naming used in this script's docstring and Supplementary Table 1; the
 long forms "JH2 pseudokinase" / "JH1 kinase" overlapped each other at 5.5 pt.
 
-> **RESOLVED — variant count convention (2026-07-11): 470.** The committed CSV has 472
+> **RESOLVED, variant count convention (2026-07-11): 470.** The committed CSV has 472
 > rows but 2 are WT reference rows (KRAS WT 644 cells; GATA1 WT 38,276 cells), so there
 > are **470** real coding variants (TP53 98, KRAS 92, GATA1 254, JAK1 26). These panels
 > use the 470-variant (WT-excluded) convention via `nm_style.load_bench(exclude_wt=True)`,
@@ -108,35 +121,27 @@ long forms "JH2 pseudokinase" / "JH1 kinase" overlapped each other at 5.5 pt.
 > statements now note the 321,043 includes wild-type/control cells. Set
 > `exclude_wt=False` only to reproduce the old 472/93/255 numbers.
 
-## Recommended figure legend (covers a–f)
+## Figure legend
 
-**Figure 1 | AllelePerturb defines perturbation prediction at protein-coding variant
-resolution. a**, The AllelePerturb pipeline: a held-out variant's single cells give the
-pseudobulk target δ_v (mean(variant) − mean(WT)); a model maps variant features (θ / ESM),
-not identity or cells, to a predicted profile δ̂_v, scored for direction recovery
-(Pearson-δ) and allele discrimination (PDS); a parallel single-cell resolution diagnostic
-(detection versus wild type, identification versus siblings) yields a power-aware verdict
-(measurable / benchmarkable / worth modelling). **b**, Benchmark coverage: variant
-positions along TP53, KRAS, GATA1 and JAK1 with annotated domains; hotspot/pathogenic
-residues highlighted. **c**, Per-variant cell depth spans distinct sampling regimes across
-genes (medians 929, 1000, 354, 104). **d**, Each variant is represented by a 6-dimensional
-biophysical feature vector θ, placing variants from all genes in a shared feature space.
-**e**, AllelePerturb-Eval separates direction recovery, allele discrimination and
-differential-expression fidelity. **f**, Six generalization splits.
+The caption lives in `manuscript/latex/AllelePerturb_manuscript.tex` only. A second copy
+here would drift from it; the panels changed on 2026-08-03 and the copy that used to sit
+in this file still described the superseded panel a.
 
-
-## Legend economy (Nature Methods, enforced 2026-07-27)
+## Legend economy (Nature Methods)
 
 Figure 1 carries exactly **two** keys, one per encoded variable, and **no gene legend**:
 
-* **b** `fig1b_legend.pdf`: shape = variant class (missense / nonsense / synonymous /
-  hotspot). The "colour = gene" half was removed because every track is already
-  direct-labelled with its gene name in the gene colour.
-* **f**: light grey = training variants, orange = held-out variants.
+* **b**, inside `fig1b_coverage.pdf`: marker shape = variant consequence (missense /
+  nonsense / synonymous), amber fill = external hotspot annotation. The "colour = gene"
+  half was removed because every track is already direct-labelled with its gene name in
+  the gene colour.
+* **f**: light grey = training variants, steel blue (`nm_style.HELDOUT`) = held-out. Amber
+  is **not** used here; it means external hotspot annotation everywhere in this figure and
+  must not also mean "held out".
 
 The gene to colour mapping is carried by **direct labels only**: the gene-coloured track
-titles in b and the gene-coloured x tick labels in c. The PCA in d therefore has no legend
-of its own (it states "470 variants, coloured by gene" in grey). One consequence, recorded
-honestly: in the d PCA colour is the *only* encoding of gene, so that one sub-panel is not
-readable in greyscale; every other panel encodes its categories by position or shape as
-well.
+titles in b and the gene-coloured tick labels in c. The PCA in d has no legend of its own;
+it direct-labels each gene cluster and additionally varies the marker (circle, square,
+triangle, diamond), because `GENE_COLORS` is not separable in greyscale or under
+deuteranopia (see the `nm_style` docstring), so no panel in this figure encodes gene by
+hue alone.

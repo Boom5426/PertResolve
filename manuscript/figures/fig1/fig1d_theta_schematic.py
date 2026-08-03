@@ -1,123 +1,162 @@
-"""Figure 1d (schematic) - a variant is encoded by a 6-dimensional biophysical vector.
+"""Figure 1d (left) — auditable allele-derived representations.
 
-Replaces the raster panel ``Fig1d_schematic_highres.pdf`` with a vector panel
-drawn at its FINAL composite size (62 x 40 mm, placed at 62 mm, scale 1.0), so
-all type lands at 5.5-6.5 pt on the page instead of ~2 pt after down-scaling.
+The six bars are the actual corrected-table values for TP53 R175H, not decorative
+bullets.  A separate ESM branch makes clear that a six-dimensional biophysical
+vector and a 1,280-dimensional protein embedding are alternative inputs.  Only
+the theta representation is projected in the adjacent PCA panel.
 
-Source file: none (concept panel). No measured quantity is drawn here; the only
-numbers shown are the feature-vector dimensionality (6) and the worked-example
-variant name TP53 R175H, both fixed by the manuscript text and Fig. 1d caption.
-The six feature names are verbatim from the caption: changes in hydrophobicity,
-side-chain volume and charge, fold-core location, functional-switch residue
-status and hotspot/pathogenic annotation. The companion data panel
-``fig1d_theta_pca.py`` supplies the real "shared feature space" scatter that
-this schematic's right-hand arrow points into.
+Run: python fig1d_theta_schematic.py
+Output: fig1d_theta_schematic.svg/.pdf/.png
 
-One-line message: the model input is a protein-level feature vector, not a
-variant identifier, which is what makes held-out allele prediction possible.
-
-Run:  python fig1d_theta_schematic.py
-Out:  fig1d_theta_schematic.pdf (+ .png preview)
-Vector check:  pdfimages -list fig1d_theta_schematic.pdf | tail -n +3 | wc -l  -> 0
+Imported export contract: Arial; svg.fonttype: "none"; pdf.fonttype: 42;
+outputs .svg, .pdf, .png and .tiff at dpi=600. Final assembled figure target:
+width_mm = 183.
 """
 from __future__ import annotations
 
 import os
 import sys
 
+import numpy as np
 from matplotlib.patches import FancyArrowPatch, FancyBboxPatch, Rectangle
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import nm_style as S
 
-W, H = 62.0, 40.0  # final placement size in mm (composite places at 62 mm)
+from pathlib import Path
 
-# The six theta features, verbatim from the Fig. 1d caption, grouped exactly as
-# the caption groups them ("changes in hydrophobicity, side-chain volume and
-# charge, TOGETHER WITH fold-core location, functional-switch residue status and
-# hotspot/pathogenic annotation"). The grouping is what gives the list its
-# hierarchy; the accent colour is reserved for the single annotation feature.
-FEATURE_GROUPS = [
-    ("substitution chemistry",
-     [("Δ hydrophobicity", False), ("Δ side-chain volume", False),
-      ("Δ charge", False)]),
-    ("structural context",
-     [("fold-core location", False), ("functional-switch residue", False)]),
-    ("annotation",
-     [("hotspot / pathogenic", True)]),
+HERE = Path(__file__).resolve().parent
+
+W_MM, H_MM = 69.0, 42.0
+FEATURES = [
+    ("Δ hydrophobicity", "d_hydro"),
+    ("Δ side-chain volume", "d_vol"),
+    ("Δ charge", "d_charge"),
+    ("fold-core location", "fold_core"),
+    ("functional switch", "cat_switch"),
+    ("external hotspot", "is_hotspot"),
 ]
 
 
-def arrow(ax, x0, x1, y):
-    ax.add_patch(FancyArrowPatch((x0, y), (x1, y), arrowstyle="-|>",
-                                 mutation_scale=4.5, lw=0.5, color=S.GREY,
-                                 shrinkA=0, shrinkB=0))
+def arrow(ax, x0, y0, x1, y1, *, color=S.GREY):
+    ax.add_patch(
+        FancyArrowPatch(
+            (x0, y0),
+            (x1, y1),
+            arrowstyle="-|>",
+            mutation_scale=4.8,
+            lw=0.55,
+            color=color,
+            shrinkA=0,
+            shrinkB=0,
+        )
+    )
 
 
 def main() -> None:
     S.apply_rcparams()
-    fig, ax = S.panel(W, H)
+    data = S.load_bench(exclude_wt=True, corrected=True)
+    row = data[(data.gene == "TP53") & (data.variant == "R175H")]
+    if len(row) != 1:
+        raise ValueError(f"Expected one corrected-table TP53 R175H row, found {len(row)}")
+    values = row.iloc[0]
+
+    fig, ax = S.panel(W_MM, H_MM)
     fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
-    ax.set_xlim(0, W)
-    ax.set_ylim(0, H)
+    ax.set_xlim(0, W_MM)
+    ax.set_ylim(0, H_MM)
     ax.set_aspect("equal")
     ax.axis("off")
-    # full-extent white patch pins the tight bounding box to exactly W x H
-    ax.add_patch(Rectangle((0, 0), W, H, facecolor="white", edgecolor="none", zorder=0))
+    ax.add_patch(Rectangle((0, 0), W_MM, H_MM, facecolor="white", edgecolor="none"))
 
+    # Variant condition -----------------------------------------------------
     blue = S.GENE_COLORS["TP53"]
+    ax.text(1.0, 34.8, "TP53", fontsize=6.4, fontweight="bold", color=S.INK, ha="left")
+    ax.add_patch(Rectangle((1.0, 29.9), 12.5, 2.4, facecolor=S.LIGHT_GREY, edgecolor="none"))
+    ax.add_patch(Rectangle((3.6, 29.9), 6.6, 2.4, facecolor=blue, alpha=0.52, edgecolor="none"))
+    ax.plot([7.2, 7.2], [29.4, 33.1], color=S.HOTSPOT, lw=0.85)
+    ax.scatter([7.2], [33.1], s=8, color=S.HOTSPOT, edgecolor=S.INK, linewidths=0.35)
+    ax.text(7.2, 26.7, "R175H", fontsize=6.0, ha="center")
+    ax.text(7.2, 23.6, "R → H", fontsize=5.4, color=S.GREY, ha="center")
 
-    # ---- stage 1: worked example (TP53 R175H) --------------------------------
-    # same idiom as panel b (light backbone, coloured domain, orange hotspot
-    # lollipop) so the reader recognises the object being encoded
-    ax.text(1.0, 25.4, "TP53", ha="left", va="bottom", fontsize=6.5,
-            fontweight="bold", color=blue)
-    ax.add_patch(Rectangle((1.0, 22.1), 12.0, 2.2, facecolor=S.LIGHT_GREY,
-                           edgecolor="none"))
-    ax.add_patch(Rectangle((3.4, 22.1), 6.4, 2.2, facecolor=blue, alpha=0.55,
-                           edgecolor="none"))
-    ax.plot([6.2, 6.2], [21.5, 24.9], color=S.HOTSPOT, lw=0.8, solid_capstyle="butt")
-    ax.plot([6.2], [24.9], marker="o", ms=2.0, color=S.HOTSPOT,
-            markeredgecolor=S.INK, markeredgewidth=0.3)
-    ax.text(7.0, 18.9, "R175H", ha="center", va="center", fontsize=6.0, color=S.INK)
-    ax.text(7.0, 15.7, "R → H", ha="center", va="center", fontsize=6.0,
-            color=S.GREY)
+    arrow(ax, 14.6, 29.8, 17.7, 29.8)
+    arrow(ax, 14.6, 25.1, 17.7, 10.5)
 
-    arrow(ax, 13.8, 16.8, 19.0)
+    # Theta vector ---------------------------------------------------------
+    ax.text(18.5, 39.2, r"$\theta$  6D biophysical feature vector",
+            fontsize=6.1, fontweight="bold", ha="left")
+    # Not "standardized values": only d_hydro, d_vol and d_charge are z-scored
+    # over the 470 variants (mean 0, sd 1). fold_core, cat_switch and is_hotspot
+    # are on their native 0-1 annotation scale, so the hotspot bar reads +1.00
+    # where its z-score would be +2.35. Labelling the axis as the values the
+    # model actually receives is both true and the more informative statement.
+    ax.text(66.6, 36.8, r"$\theta$ as supplied to the model", fontsize=5.0,
+            color=S.GREY, ha="right")
 
-    # ---- stage 2: the six-dimensional theta vector ---------------------------
-    ax.text(18.0, 37.4, "θ   6-dimensional biophysical vector", ha="left",
-            va="center", fontsize=6.0, fontweight="bold", color=S.INK)
-    x_rule, x_swatch, x_label = 18.0, 19.1, 21.9
-    y = 33.6
-    for gname, rows in FEATURE_GROUPS:
-        ax.text(x_rule, y, gname, ha="left", va="center", fontsize=5.2,
-                color=S.GREY)
-        y -= 2.9
-        y_first = y
-        for label, accent in rows:
-            col = S.HOTSPOT if accent else S.GREY
-            ax.add_patch(Rectangle((x_swatch, y - 0.85), 1.7, 1.7,
-                                   facecolor=col, edgecolor="none"))
-            ax.text(x_label, y, label, ha="left", va="center", fontsize=6.0,
-                    color=S.INK)
-            y -= 2.9
-        # hairline bracket: groups the rows without drawing a decorative box
-        ax.plot([x_rule, x_rule], [y_first + 1.2, y + 1.7], color=S.LIGHT_GREY,
-                lw=0.6, solid_capstyle="butt")
-        y -= 0.9
+    x_label = 18.5
+    x_zero = 48.5
+    max_width = 9.0
+    ax.plot([x_zero, x_zero], [15.7, 36.4], color=S.LIGHT_GREY, lw=0.55)
+    ys = np.linspace(34.4, 17.2, len(FEATURES))
+    for y, (label, column) in zip(ys, FEATURES):
+        value = float(values[column])
+        clipped = float(np.clip(value, -1.0, 1.0))
+        colour = S.HOTSPOT if column == "is_hotspot" else S.FEATURE_COLORS["theta"]
+        ax.text(x_label, y, label, fontsize=5.1, ha="left", va="center",
+                color=S.INK)
+        x1 = x_zero + clipped * max_width
+        left = min(x_zero, x1)
+        width = max(0.22, abs(x1 - x_zero))
+        ax.add_patch(
+            Rectangle(
+                (left, y - 0.72),
+                width,
+                1.44,
+                facecolor=colour,
+                edgecolor="none",
+                alpha=0.92 if column == "is_hotspot" else 0.75,
+            )
+        )
+        ax.text(59.1, y, f"{value:+.2f}", fontsize=5.0,
+                ha="left", va="center", color=S.GREY)
 
-    arrow(ax, 49.6, 52.6, 19.0)
+    ax.text(63.0, 14.2, "shared space", fontsize=5.0,
+            color=S.RESOLUTION, ha="center")
+    arrow(ax, 60.8, 12.9, 67.4, 12.9, color=S.RESOLUTION)
 
-    # ---- stage 3: pointer into the data panel (fig1d_theta_pca.pdf) ----------
-    ax.text(57.4, 19.0, "shared\nfeature\nspace", ha="center", va="center",
-            fontsize=5.5, color=S.INK, linespacing=1.35)
+    # Alternative ESM representation --------------------------------------
+    ax.add_patch(
+        FancyBboxPatch(
+            (18.5, 4.6),
+            41.0,
+            8.0,
+            boxstyle="round,pad=0.25,rounding_size=0.8",
+            facecolor="white",
+            edgecolor=S.LIGHT_GREY,
+            lw=0.6,
+        )
+    )
+    ax.text(20.0, 10.5, "ESM", fontsize=5.8, fontweight="bold",
+            color=S.FEATURE_COLORS["ESM"], ha="left")
+    ax.text(27.2, 10.5, "mutant protein sequence", fontsize=5.0,
+            color=S.GREY, ha="left")
+    ax.add_patch(Rectangle((20.0, 6.4), 21.5, 2.0,
+                           facecolor=S.FEATURE_COLORS["ESM"], alpha=0.18,
+                           edgecolor=S.FEATURE_COLORS["ESM"], lw=0.4))
+    ax.plot([30.4, 30.4], [6.1, 8.7], color=S.HOTSPOT, lw=0.85)
+    arrow(ax, 42.7, 7.4, 47.5, 7.4)
+    for i, alpha in enumerate((0.25, 0.42, 0.60, 0.78, 0.95)):
+        ax.add_patch(Rectangle((48.3 + i * 1.8, 6.3), 1.25, 2.2,
+                               facecolor=S.FEATURE_COLORS["ESM"], alpha=alpha,
+                               edgecolor="none"))
+    ax.text(57.7, 7.4, "1,280D", fontsize=5.0, color=S.GREY,
+            ha="left", va="center")
 
-    # ---- footnote ------------------------------------------------------------
-    ax.text(1.0, 2.4, "alternative feature spaces tested later: ESM, ESM + θ",
-            ha="left", va="center", fontsize=5.5, color=S.GREY)
+    ax.text(1.0, 1.15, "Input representations are derived from the allele, not its response cells.",
+            fontsize=5.0, color=S.GREY, ha="left")
 
-    S.save(fig, "fig1d_theta_schematic")
+    S.save(fig, HERE / "fig1d_theta_schematic", exact=True,
+           formats=("pdf", "png", "svg", "tiff"))
 
 
 if __name__ == "__main__":

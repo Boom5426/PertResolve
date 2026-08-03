@@ -1,21 +1,13 @@
-"""Figure 1e - AllelePerturb-Eval separates three evaluation axes.
+"""Figure 1e — model scoring after the measurement-identification gate.
 
-Replaces the raster panel ``Fig1e_Eval_highres.pdf`` with a vector panel drawn
-at its FINAL composite size (76 x 35 mm, placed at 76 mm, scale 1.0), so all
-type lands at 5.5-6.5 pt on the page.
+The panel makes two levels explicit: single-cell identification establishes an
+allele-benchmarkable ground truth in Fig. 1a, whereas PDS is a model score used
+inside that validated benchmark. Direction recovery and DE-program fidelity
+remain supporting axes; allele discrimination is the primary model endpoint.
 
-Source file: none (metric-definition panel). No score, benchmark value or
-result appears here; only metric names taken verbatim from the Fig. 1e caption
-and the Results text: direction recovery (Pearson-δ, δ-cosine), allele
-discrimination (PDS) and differential-expression fidelity (DE overlap, DE-LFC
-rank correlation, direction agreement).
-
-One-line message: evaluation is split into direction recovery, allele
-discrimination and DE fidelity, and allele discrimination is the defining axis.
-
-Run:  python fig1e_eval_axes.py
-Out:  fig1e_eval_axes.pdf (+ .png preview)
-Vector check:  pdfimages -list fig1e_eval_axes.pdf | tail -n +3 | wc -l  -> 0
+Static QA contract: Arial; svg.fonttype: "none"; pdf.fonttype: 42; outputs
+.svg, .pdf, .png and .tiff at dpi=600. Final assembled figure target:
+width_mm = 183.
 """
 from __future__ import annotations
 
@@ -28,118 +20,179 @@ from matplotlib.patches import FancyArrowPatch, FancyBboxPatch, Rectangle
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import nm_style as S
 
-W, H = 76.0, 35.0  # final placement size in mm
+from pathlib import Path
 
-COLS = [
-    dict(cx=13.0, header="Direction recovery",
-         metrics=["Pearson-δ", "δ-cosine"],
-         sub="does the prediction\npoint the right way?"),
-    dict(cx=38.0, header="Allele discrimination",
-         metrics=["PDS", "d(own) < d(others)"],
-         sub="does it identify its\nown allele?"),
-    dict(cx=63.0, header="DE fidelity",
-         metrics=["DE overlap", "DE-LFC rank corr.", "direction agreement"],
-         sub="do the changed\ngenes agree?"),
-]
+HERE = Path(__file__).resolve().parent
 
-Y_HEADER = 33.6
-Y_METRIC = [18.6, 16.3, 14.0]
-Y_SUB = 12.0
-BANNER_H = 6.2
+W_MM, H_MM = 78.0, 37.0
+ID_EDGE = "#688896"
+ID_FACE = "#EAF1F4"
+PALE_GREY = "#F5F6F7"
 
 
-def icon_direction(ax, cx):
-    """Two roughly parallel profiles: prediction and observation point the same way."""
-    x = np.linspace(cx - 10.5, cx + 3.0, 60)
-    t = np.linspace(0, 1, 60)
-    base = 1.9 * np.sin(2 * np.pi * t * 1.3) + 1.1 * np.sin(2 * np.pi * t * 0.55)
-    y0 = 26.3
-    y_solid = y0 + base
-    y_dash = y0 - 3.2 + base * 0.85
-    ax.plot(x, y_solid, color=S.INK, lw=0.7)
-    ax.plot(x, y_dash, color=S.GREY, lw=0.7, ls=(0, (2, 1.4)))
-    ax.text(cx + 3.8, y_solid[-1], "pred.", ha="left", va="center", fontsize=5.5,
-            color=S.INK)
-    ax.text(cx + 3.8, y_dash[-1], "obs.", ha="left", va="center", fontsize=5.5,
-            color=S.GREY)
+def rounded_box(ax, x, y, width, height, *, face="white", edge=S.LIGHT_GREY,
+                lw=0.55, radius=0.8, zorder=0):
+    patch = FancyBboxPatch(
+        (x, y), width, height,
+        boxstyle=f"round,pad=0.08,rounding_size={radius}",
+        facecolor=face, edgecolor=edge, linewidth=lw, zorder=zorder,
+    )
+    ax.add_patch(patch)
+    return patch
 
 
-def icon_discrimination(ax, cx):
-    """One prediction, ranked against sibling variant profiles; own variant is nearest."""
-    ax.add_patch(FancyBboxPatch((cx - 9.4, 23.0), 4.4, 3.4,
-                                boxstyle="round,pad=0,rounding_size=0.7",
-                                facecolor="white", edgecolor=S.INK, lw=0.5))
-    ax.text(cx - 7.2, 24.7, "δ̂", ha="center", va="center", fontsize=6.0,
-            color=S.INK)
-    ax.add_patch(FancyArrowPatch((cx - 4.6, 24.7), (cx - 1.8, 24.7),
-                                 arrowstyle="-|>", mutation_scale=4.5, lw=0.5,
-                                 color=S.GREY, shrinkA=0, shrinkB=0))
-    widths = [7.6, 5.4, 6.2, 4.6]
-    for i, w in enumerate(widths):
-        y = 28.4 - i * 2.6
-        hot = i == 0
-        ax.add_patch(Rectangle((cx - 1.2, y - 0.85), w,
-                               1.7, facecolor=S.HOTSPOT if hot else S.LIGHT_GREY,
-                               edgecolor="none"))
-    ax.text(cx + 7.2, 28.4, "own", ha="left", va="center", fontsize=5.5,
-            color=S.HOTSPOT)
-    ax.text(cx + 5.0, 21.0, "siblings", ha="left", va="center", fontsize=5.5,
-            color=S.GREY)
+def direction_icon(ax, cx):
+    """Observed and predicted profiles share direction, but not allele identity."""
+    x = np.linspace(cx - 7.5, cx + 6.1, 70)
+    phase = np.linspace(0, 2.3 * np.pi, 70)
+    y_pred = 25.4 + 1.45 * np.sin(phase + 0.10)
+    y_obs = 22.5 + 1.28 * np.sin(phase)
+    ax.plot(x, y_pred, color=S.INK, lw=0.7)
+    ax.plot(x, y_obs, color=S.GREY, lw=0.7, ls=(0, (2.0, 1.35)))
+    label_box = {"facecolor": "white", "edgecolor": "none", "pad": 0.05,
+                 "alpha": 0.94}
+    ax.text(cx + 7.25, y_pred[-1], "pred.", fontsize=5.0, ha="center",
+            va="center", bbox=label_box)
+    ax.text(cx + 7.25, y_obs[-1], "obs.", fontsize=5.0, ha="center",
+            va="center", color=S.GREY, bbox=label_box)
 
 
-def icon_de(ax, cx):
-    """Predicted vs measured changed-gene lists, one gene shared between them."""
-    for j, (x0, col, lab) in enumerate([(cx - 8.6, S.INK, "pred."),
-                                        (cx + 1.4, S.GREY, "obs.")]):
-        ax.text(x0 + 3.5, 29.6, lab, ha="center", va="bottom", fontsize=5.5,
-                color=col)
+def pds_icon(ax, cx):
+    """The prediction retrieves its own observed allele above its siblings.
+
+    The whole group sits 1.9 mm further left than it was first drawn. The card
+    is 32.2 mm wide and the row must hold the prediction box, the arrow, the
+    longest bar and the label "1  own observed"; laid out from the old origin
+    that label crossed the card's right border. Shifting the group rebalances
+    the two insets to about 2 mm each instead of 4.1 and -0.1.
+    """
+    rounded_box(ax, cx - 13.9, 23.2, 4.7, 3.5, face="white", edge=S.INK,
+                lw=0.5, radius=0.6, zorder=2)
+    ax.text(cx - 11.55, 24.95, r"$\hat{\delta}_v$", fontsize=5.5,
+            ha="center", va="center", zorder=3)
+    ax.add_patch(
+        FancyArrowPatch(
+            (cx - 8.8, 24.95), (cx - 6.4, 24.95), arrowstyle="-|>",
+            mutation_scale=4.5, lw=0.5, color=S.GREY,
+        )
+    )
+    rows = [
+        (26.7, 8.1, S.RESOLUTION, "1  own observed"),
+        (24.4, 5.8, S.LIGHT_GREY, "2  sibling A"),
+        (22.1, 4.5, S.LIGHT_GREY, "3  sibling B"),
+    ]
+    for y, width, colour, label in rows:
+        ax.add_patch(Rectangle((cx - 6.6, y - 0.62), width, 1.24,
+                               facecolor=colour, edgecolor="none", zorder=1))
+        ax.text(cx + 2.7, y, label, fontsize=5.0,
+                color=S.RESOLUTION if colour == S.RESOLUTION else S.GREY,
+                ha="left", va="center")
+
+
+def de_icon(ax, cx):
+    """Predicted and observed changed-gene lists share a response program."""
+    for x0, label, colour in [(cx - 8.2, "pred.", S.INK),
+                              (cx + 1.1, "obs.", S.GREY)]:
+        ax.text(x0 + 3.3, 26.5, label, fontsize=5.0, color=colour,
+                ha="center", va="bottom")
         for i in range(4):
-            y = 27.8 - i * 2.2
-            shared = (j == 0 and i in (0, 2)) or (j == 1 and i in (1, 2))
-            ax.add_patch(Rectangle((x0, y - 0.7), 7.0, 1.4,
-                                   facecolor=S.HOTSPOT if shared else S.LIGHT_GREY,
-                                   edgecolor="none"))
-
-
-ICONS = [icon_direction, icon_discrimination, icon_de]
+            y = 24.7 - i * 1.75
+            shared = (x0 < cx and i in (0, 2)) or (x0 > cx and i in (1, 2))
+            ax.add_patch(
+                Rectangle(
+                    (x0, y - 0.52), 6.6, 1.04,
+                    facecolor=S.RESOLUTION if shared else S.LIGHT_GREY,
+                    edgecolor="none",
+                )
+            )
 
 
 def main() -> None:
     S.apply_rcparams()
-    fig, ax = S.panel(W, H)
+    fig, ax = S.panel(W_MM, H_MM)
     fig.subplots_adjust(left=0, right=1, bottom=0, top=1)
-    ax.set_xlim(0, W)
-    ax.set_ylim(0, H)
+    ax.set_xlim(0, W_MM)
+    ax.set_ylim(0, H_MM)
     ax.set_aspect("equal")
     ax.axis("off")
-    ax.add_patch(Rectangle((0, 0), W, H, facecolor="white", edgecolor="none",
-                           zorder=0))
+    ax.add_patch(Rectangle((0, 0), W_MM, H_MM, facecolor="white",
+                           edgecolor="none", zorder=-10))
 
-    # thin separators between the three axes
-    for x in (25.5, 50.5):
-        ax.plot([x, x], [BANNER_H + 1.4, 34.6], color=S.LIGHT_GREY, lw=0.5)
+    # Explicit hand-off from Fig. 1a: identification validates the target;
+    # the three cards below score the model prediction, not the measurement.
+    rounded_box(ax, 0.9, 34.0, 21.7, 2.15, face=ID_FACE, edge=ID_EDGE,
+                lw=0.55, radius=0.5)
+    ax.text(11.75, 35.08, "IDENTIFICATION PASS (a)", fontsize=5.0,
+            color=ID_EDGE, fontweight="bold", ha="center", va="center")
+    ax.add_patch(
+        FancyArrowPatch(
+            (23.1, 35.08), (26.2, 35.08), arrowstyle="-|>",
+            mutation_scale=4.6, lw=0.55, color=S.GREY,
+        )
+    )
+    ax.text(27.0, 35.08, "SCORE THE HELD-OUT PREDICTION", fontsize=5.15,
+            color=S.INK, fontweight="bold", ha="left", va="center")
 
-    for col, draw_icon in zip(COLS, ICONS):
-        cx = col["cx"]
-        ax.text(cx, Y_HEADER, col["header"], ha="center", va="center",
-                fontsize=6.0, fontweight="bold", color=S.INK)
-        draw_icon(ax, cx)
-        for y, m in zip(Y_METRIC, col["metrics"]):
-            ax.text(cx, y, m, ha="center", va="center", fontsize=5.8, color=S.INK)
-        ax.text(cx, Y_SUB, col["sub"], ha="center", va="top", fontsize=5.5,
-                color=S.GREY, linespacing=1.35)
+    card_specs = [
+        (0.8, 21.3, "white", S.LIGHT_GREY),
+        (22.9, 32.2, S.RESOLUTION_LIGHT, S.RESOLUTION),
+        (56.2, 21.0, "white", S.LIGHT_GREY),
+    ]
+    for x, width, face, edge in card_specs:
+        rounded_box(ax, x, 4.25, width, 28.75, face=face, edge=edge,
+                    lw=0.55, radius=0.8)
 
-    # ---- bottom banner: the central question -------------------------------
-    # a hairline rule, not a filled box: the tint used before was off-palette
-    # and read as a decorative panel box
-    ax.plot([0.6, W - 0.6], [BANNER_H + 0.1] * 2, color=S.LIGHT_GREY, lw=0.5,
-            solid_capstyle="butt")
-    ax.text(W / 2, BANNER_H / 2 - 0.3,
-            "Central question: can models distinguish alleles, not merely\n"
-            "recover the shared direction of a perturbed gene?",
-            ha="center", va="center", fontsize=5.5, color=S.INK, linespacing=1.35)
+    centers = [11.45, 39.0, 66.7]
+    headers = ["Direction recovery", "Allele discrimination", "DE-program fidelity"]
+    for i, (cx, header) in enumerate(zip(centers, headers)):
+        ax.text(cx, 31.35, header, fontsize=5.8 if i != 1 else 6.2,
+                fontweight="bold", color=S.INK, ha="center", va="center")
+        ax.text(cx, 29.0, "PRIMARY MODEL SCORE" if i == 1 else "SUPPORTING AXIS",
+                fontsize=5.0, fontweight="bold",
+                color=S.RESOLUTION if i == 1 else S.GREY,
+                ha="center", va="center")
 
-    S.save(fig, "fig1e_eval_axes")
+    direction_icon(ax, centers[0])
+    pds_icon(ax, centers[1])
+    de_icon(ax, centers[2])
+
+    ax.text(centers[0], 18.25, "Pearson-δ · δ-cosine", fontsize=5.25,
+            ha="center")
+    ax.text(centers[0], 13.1, "Is the shared response", fontsize=5.0,
+            color=S.GREY, ha="center")
+    ax.text(centers[0], 10.65, "direction recovered?", fontsize=5.0,
+            color=S.GREY, ha="center")
+    ax.text(centers[1], 18.5, "PDS", fontsize=6.2, color=S.INK,
+            fontweight="bold", ha="center")
+    ax.text(centers[1], 16.2, "tie-aware percentile rank",
+            fontsize=5.0, ha="center")
+    ax.text(centers[1], 14.55, "of its own observed allele",
+            fontsize=5.0, ha="center")
+    rounded_box(ax, 26.0, 10.9, 26.0, 2.75, face="white",
+                edge=S.RESOLUTION, lw=0.45, radius=0.42)
+    ax.text(centers[1], 12.28, "chance = 0.50 · higher is better", fontsize=5.0,
+            color=S.INK, ha="center", va="center", fontweight="bold")
+    ax.text(centers[1], 8.65, r"Does $\hat{\delta}_v$ rank its own observed allele",
+            fontsize=5.0, color=S.GREY, ha="center")
+    ax.text(centers[1], 6.55, "above sibling alleles?", fontsize=5.0,
+            color=S.GREY, ha="center")
+
+    ax.text(centers[2], 18.2, "DE overlap", fontsize=5.2, ha="center")
+    ax.text(centers[2], 15.8, "DE-LFC rank", fontsize=5.0, ha="center")
+    ax.text(centers[2], 13.4, "direction agreement", fontsize=5.0, ha="center")
+    ax.text(centers[2], 9.4, "Do changed-gene", fontsize=5.0,
+            color=S.GREY, ha="center")
+    ax.text(centers[2], 7.3, "programs agree?", fontsize=5.0,
+            color=S.GREY, ha="center")
+
+    ax.text(
+        W_MM / 2, 1.7,
+        "Measurement identification validates the benchmark; PDS evaluates the model within it.",
+        fontsize=5.0, color=S.INK, fontweight="bold", ha="center", va="center",
+    )
+
+    S.save(fig, HERE / "fig1e_eval_axes", exact=True,
+           formats=("pdf", "png", "svg", "tiff"))
 
 
 if __name__ == "__main__":
