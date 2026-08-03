@@ -1,0 +1,239 @@
+{
+  "tag": "dnp63a_asfrozen",
+  "ceiling": 0.860566448801743,
+  "best_cheat": {
+    "features": "cheat_resid",
+    "model": "nn",
+    "PDS": 0.2156862745098039,
+    "top1": 0.0,
+    "resid_r": 0.6918196872553749,
+    "frac_of_ceiling": -0.7885196374622353
+  },
+  "pipeline_detects_signal": false,
+  "rows": [
+    {
+      "features": "cheat_resid",
+      "model": "ridge",
+      "PDS": 0.2135076252723312,
+      "top1": 0.0,
+      "resid_r": 0.7073490352322067,
+      "frac_of_ceiling": -0.7945619335347428
+    },
+    {
+      "features": "cheat_resid",
+      "model": "krr",
+      "PDS": 0.21241830065359477,
+      "top1": 0.0,
+      "resid_r": 0.7070319469346562,
+      "frac_of_ceiling": -0.7975830815709967
+    },
+    {
+      "features": "cheat_resid",
+      "model": "pls",
+      "PDS": 0.16013071895424838,
+      "top1": 0.0,
+      "resid_r": 0.7140850774715548,
+      "frac_of_ceiling": -0.942598187311178
+    },
+    {
+      "features": "cheat_resid",
+      "model": "nn",
+      "PDS": 0.2156862745098039,
+      "top1": 0.0,
+      "resid_r": 0.6918196872553749,
+      "frac_of_ceiling": -0.7885196374622353
+    },
+    {
+      "features": "cheat_snr8",
+      "model": "ridge",
+      "PDS": 0.210239651416122,
+      "top1": 0.0,
+      "resid_r": 0.7057628242179883,
+      "frac_of_ceiling": -0.8036253776435043
+    },
+    {
+      "features": "cheat_snr8",
+      "model": "krr",
+      "PDS": 0.20588235294117646,
+      "top1": 0.0,
+      "resid_r": 0.7088275687969267,
+      "frac_of_ceiling": -0.8157099697885194
+    },
+    {
+      "features": "cheat_snr8",
+      "model": "pls",
+      "PDS": 0.16013071895424835,
+      "top1": 0.0,
+      "resid_r": 0.7135365160276274,
+      "frac_of_ceiling": -0.942598187311178
+    },
+    {
+      "features": "cheat_snr8",
+      "model": "nn",
+      "PDS": 0.21895424836601307,
+      "top1": 0.0,
+      "resid_r": 0.6902857105606457,
+      "frac_of_ceiling": -0.779456193353474
+    },
+    {
+      "features": "cheat_snr4",
+      "model": "ridge",
+      "PDS": 0.2058823529411765,
+      "top1": 0.0,
+      "resid_r": 0.7023924570881569,
+      "frac_of_ceiling": -0.8157099697885192
+    },
+    {
+      "features": "cheat_snr4",
+      "model": "krr",
+      "PDS": 0.19389978213507625,
+      "top1": 0.0,
+      "resid_r": 0.7089740344542643,
+      "frac_of_ceiling": -0.8489425981873109
+    },
+    {
+      "features": "cheat_snr4",
+      "model": "pls",
+      "PDS": 0.1721132897603486,
+      "top1": 0.0,
+      "resid_r": 0.713630414571001,
+      "frac_of_ceiling": -0.9093655589123865
+    },
+    {
+      "features": "cheat_snr4",
+      "model": "nn",
+      "PDS": 0.2233115468409586,
+      "top1": 0.0,
+      "resid_r": 0.6886342083614706,
+      "frac_of_ceiling": -0.7673716012084589
+    },
+    {
+      "features": "cheat_snr2",
+      "model": "ridge",
+      "PDS": 0.19281045751633988,
+      "top1": 0.0,
+      "resid_r": 0.6985455511892382,
+      "frac_of_ceiling": -0.8519637462235647
+    },
+    {
+      "features": "cheat_snr2",
+      "model": "krr",
+      "PDS": 0.19389978213507625,
+      "top1": 0.0,
+      "resid_r": 0.7072349374849144,
+      "frac_of_ceiling": -0.8489425981873109
+    },
+    {
+      "features": "cheat_snr2",
+      "model": "pls",
+      "PDS": 0.17429193899782136,
+      "top1": 0.0,
+      "resid_r": 0.714648056122886,
+      "frac_of_ceiling": -0.9033232628398788
+    },
+    {
+      "features": "cheat_snr2",
+      "model": "nn",
+      "PDS": 0.23965141612200438,
+      "top1": 0.0,
+      "resid_r": 0.6853801015293611,
+      "frac_of_ceiling": -0.7220543806646523
+    },
+    {
+      "features": "cheat_snr1",
+      "model": "ridge",
+      "PDS": 0.1917211328976035,
+      "top1": 0.0,
+      "resid_r": 0.7084805398568528,
+      "frac_of_ceiling": -0.8549848942598184
+    },
+    {
+      "features": "cheat_snr1",
+      "model": "krr",
+      "PDS": 0.18954248366013074,
+      "top1": 0.0,
+      "resid_r": 0.7072152017277912,
+      "frac_of_ceiling": -0.861027190332326
+    },
+    {
+      "features": "cheat_snr1",
+      "model": "pls",
+      "PDS": 0.17429193899782136,
+      "top1": 0.0,
+      "resid_r": 0.7141618957636261,
+      "frac_of_ceiling": -0.9033232628398788
+    },
+    {
+      "features": "cheat_snr1",
+      "model": "nn",
+      "PDS": 0.25054466230936817,
+      "top1": 0.0,
+      "resid_r": 0.6586075890820404,
+      "frac_of_ceiling": -0.6918429003021146
+    },
+    {
+      "features": "cheat_snr0.5",
+      "model": "ridge",
+      "PDS": 0.1710239651416122,
+      "top1": 0.0,
+      "resid_r": 0.7159207179910949,
+      "frac_of_ceiling": -0.9123867069486401
+    },
+    {
+      "features": "cheat_snr0.5",
+      "model": "krr",
+      "PDS": 0.1775599128540305,
+      "top1": 0.0,
+      "resid_r": 0.7159021123737465,
+      "frac_of_ceiling": -0.8942598187311175
+    },
+    {
+      "features": "cheat_snr0.5",
+      "model": "pls",
+      "PDS": 0.17102396514161222,
+      "top1": 0.0,
+      "resid_r": 0.7126911742049999,
+      "frac_of_ceiling": -0.9123867069486401
+    },
+    {
+      "features": "cheat_snr0.5",
+      "model": "nn",
+      "PDS": 0.21132897603485834,
+      "top1": 0.0,
+      "resid_r": 0.6544837659027912,
+      "frac_of_ceiling": -0.8006042296072506
+    },
+    {
+      "features": "cheat_snr0.25",
+      "model": "ridge",
+      "PDS": 0.173202614379085,
+      "top1": 0.0,
+      "resid_r": 0.7168707515226147,
+      "frac_of_ceiling": -0.9063444108761325
+    },
+    {
+      "features": "cheat_snr0.25",
+      "model": "krr",
+      "PDS": 0.16775599128540306,
+      "top1": 0.0,
+      "resid_r": 0.7163519677042554,
+      "frac_of_ceiling": -0.9214501510574014
+    },
+    {
+      "features": "cheat_snr0.25",
+      "model": "pls",
+      "PDS": 0.17973856209150327,
+      "top1": 0.0,
+      "resid_r": 0.7136582358789,
+      "frac_of_ceiling": -0.8882175226586099
+    },
+    {
+      "features": "cheat_snr0.25",
+      "model": "nn",
+      "PDS": 0.23529411764705882,
+      "top1": 0.0,
+      "resid_r": 0.6656995756778348,
+      "frac_of_ceiling": -0.7341389728096674
+    }
+  ]
+}

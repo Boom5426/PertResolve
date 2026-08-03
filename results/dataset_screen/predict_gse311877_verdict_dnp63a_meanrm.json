@@ -1,0 +1,39 @@
+{
+  "isoform": "dnp63a",
+  "remove_mean": true,
+  "tag": "dnp63a_meanrm",
+  "n_alleles": 18,
+  "ceiling_pds": 0.9978213507625272,
+  "ceiling_ci": [
+    0.9934640522875817,
+    1.0
+  ],
+  "headroom": 0.4978213507625272,
+  "thr_25H": 0.6244553376906318,
+  "thr_50H": 0.7489106753812635,
+  "best": {
+    "features": "position",
+    "model": "position_nn",
+    "PDS": 0.6546840958605664,
+    "lo": 0.5555555555555556,
+    "hi": 0.747276688453159,
+    "top1": 0.0,
+    "resid_r": 0.031877435441391926,
+    "perm_p": 0.06896551724137931,
+    "perm_null_mean": 0.5712162309368191,
+    "headroom_recovery": 0.3107221006564551,
+    "n_perm": 2000,
+    "secs": 1.1
+  },
+  "ceiling_lo_gt_chance": true,
+  "all_models_hi_below_25H": false,
+  "all_models_perm_ns": false,
+  "sibling_beats": 0,
+  "sibling_n": 10,
+  "mde_80pct_power": 0.6322379713538926,
+  "mde_below_50H": true,
+  "verdict": "INCONCLUSIVE_UNDERPOWERED",
+  "n_perm": 2000,
+  "n_boot": 10000,
+  "seed": 0
+}

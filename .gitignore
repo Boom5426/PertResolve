@@ -54,3 +54,6 @@ Nature-Paper-Skills/
 # Superseded figure panels and the old fig1 snapshot: kept on disk for
 # reference, not part of the published artifact (originals are in git history).
 manuscript/figures/_superseded/
+
+# external datasets downloaded for screening (never commit)
+data_external/

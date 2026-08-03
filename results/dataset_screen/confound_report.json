@@ -1,0 +1,187 @@
+{
+  "layout": {
+    "L514F": {
+      "gsm_min": 9333769,
+      "rows": "EFGH",
+      "col": "5",
+      "block": "rows_E-H"
+    },
+    "L514D": {
+      "gsm_min": 9333773,
+      "rows": "ABCD",
+      "col": "7",
+      "block": "rows_A-D"
+    },
+    "C522G": {
+      "gsm_min": 9333777,
+      "rows": "ABCD",
+      "col": "5",
+      "block": "rows_A-D"
+    },
+    "C522D": {
+      "gsm_min": 9333781,
+      "rows": "EFGH",
+      "col": "7",
+      "block": "rows_E-H"
+    },
+    "L548N": {
+      "gsm_min": 9333785,
+      "rows": "",
+      "col": "",
+      "block": "no_well_id"
+    },
+    "I550D": {
+      "gsm_min": 9333789,
+      "rows": "",
+      "col": "",
+      "block": "no_well_id"
+    },
+    "L531E": {
+      "gsm_min": 9333793,
+      "rows": "ABCD",
+      "col": "6",
+      "block": "rows_A-D"
+    },
+    "L531R": {
+      "gsm_min": 9333797,
+      "rows": "EFGH",
+      "col": "6",
+      "block": "rows_E-H"
+    },
+    "H556A": {
+      "gsm_min": 9333801,
+      "rows": "EFGH",
+      "col": "8",
+      "block": "rows_E-H"
+    },
+    "T527I": {
+      "gsm_min": 9333805,
+      "rows": "ABCD",
+      "col": "8",
+      "block": "rows_A-D"
+    },
+    "R304Q": {
+      "gsm_min": 9333809,
+      "rows": "",
+      "col": "",
+      "block": "no_well_id"
+    },
+    "R304T": {
+      "gsm_min": 9333813,
+      "rows": "",
+      "col": "",
+      "block": "no_well_id"
+    },
+    "R279Q": {
+      "gsm_min": 9333817,
+      "rows": "ABCD",
+      "col": "3",
+      "block": "rows_A-D"
+    },
+    "R279S": {
+      "gsm_min": 9333821,
+      "rows": "ABCD",
+      "col": "2",
+      "block": "rows_A-D"
+    },
+    "G310Q": {
+      "gsm_min": 9333825,
+      "rows": "EFGH",
+      "col": "2",
+      "block": "rows_E-H"
+    },
+    "G293H": {
+      "gsm_min": 9333829,
+      "rows": "ABCD",
+      "col": "3",
+      "block": "rows_A-D"
+    },
+    "R311I": {
+      "gsm_min": 9333833,
+      "rows": "",
+      "col": "",
+      "block": "no_well_id"
+    },
+    "G297L": {
+      "gsm_min": 9333837,
+      "rows": "",
+      "col": "",
+      "block": "no_well_id"
+    }
+  },
+  "raw_space": {
+    "space": "raw delta",
+    "n_same_col_pairs": 6,
+    "mean_r_same_column": 0.840752260593026,
+    "mean_r_other_pairs": 0.8216043895757073,
+    "difference": 0.01914787101731874,
+    "perm_null_sd": 0.025451371223703972,
+    "perm_p_two_sided": 0.5717214139293035,
+    "per_pair": {
+      "C522G/L514F": 0.8617074418647293,
+      "C522D/L514D": 0.9340373708887314,
+      "L531E/L531R": 0.9100667470800612,
+      "H556A/T527I": 0.9029771026458684,
+      "G293H/R279Q": 0.6155576628364057,
+      "G310Q/R279S": 0.8201672382423596
+    }
+  },
+  "residual_space": {
+    "space": "residual (top-5 PC removed)",
+    "n_same_col_pairs": 6,
+    "mean_r_same_column": 0.8363383292340947,
+    "mean_r_other_pairs": 0.8396409525760209,
+    "difference": -0.003302623341926214,
+    "perm_null_sd": 0.015414926134856429,
+    "perm_p_two_sided": 0.8269086545672716,
+    "per_pair": {
+      "C522G/L514F": 0.8565858208974889,
+      "C522D/L514D": 0.8361235425446457,
+      "L531E/L531R": 0.8489145089316673,
+      "H556A/T527I": 0.8185314065227943,
+      "G293H/R279Q": 0.8832914457383754,
+      "G310Q/R279S": 0.7745832507695964
+    }
+  },
+  "block_effect_residual_space": {
+    "no_well_id": {
+      "n_alleles": 6,
+      "members": [
+        "L548N",
+        "I550D",
+        "R304Q",
+        "R304T",
+        "R311I",
+        "G297L"
+      ],
+      "mean_resid_r_within_block": 0.7561207448472201,
+      "mean_resid_r_across_block": 0.8224995996419528
+    },
+    "rows_A-D": {
+      "n_alleles": 7,
+      "members": [
+        "L514D",
+        "C522G",
+        "L531E",
+        "T527I",
+        "R279Q",
+        "R279S",
+        "G293H"
+      ],
+      "mean_resid_r_within_block": 0.8423798829742628,
+      "mean_resid_r_across_block": 0.8290526863866053
+    },
+    "rows_E-H": {
+      "n_alleles": 5,
+      "members": [
+        "L514F",
+        "C522D",
+        "L531R",
+        "H556A",
+        "G310Q"
+      ],
+      "mean_resid_r_within_block": 0.8425641209103306,
+      "mean_resid_r_across_block": 0.8299177089116614
+    }
+  }
+}

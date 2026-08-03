@@ -1,0 +1,239 @@
+{
+  "tag": "dnp63a_meanrm",
+  "ceiling": 0.9978213507625272,
+  "best_cheat": {
+    "features": "cheat_resid",
+    "model": "nn",
+    "PDS": 0.6230936819172113,
+    "top1": 0.0,
+    "resid_r": 0.030532702716437463,
+    "frac_of_ceiling": 0.2472647702407001
+  },
+  "pipeline_detects_signal": false,
+  "rows": [
+    {
+      "features": "cheat_resid",
+      "model": "ridge",
+      "PDS": 0.5511982570806101,
+      "top1": 0.0,
+      "resid_r": 0.00914744655496021,
+      "frac_of_ceiling": 0.10284463894967193
+    },
+    {
+      "features": "cheat_resid",
+      "model": "krr",
+      "PDS": 0.616557734204793,
+      "top1": 0.0,
+      "resid_r": 0.029032600236977277,
+      "frac_of_ceiling": 0.2341356673960612
+    },
+    {
+      "features": "cheat_resid",
+      "model": "pls",
+      "PDS": 0.4139433551198257,
+      "top1": 0.0,
+      "resid_r": -0.03266653931048638,
+      "frac_of_ceiling": -0.17286652078774617
+    },
+    {
+      "features": "cheat_resid",
+      "model": "nn",
+      "PDS": 0.6230936819172113,
+      "top1": 0.0,
+      "resid_r": 0.030532702716437463,
+      "frac_of_ceiling": 0.2472647702407001
+    },
+    {
+      "features": "cheat_snr8",
+      "model": "ridge",
+      "PDS": 0.5925925925925926,
+      "top1": 0.0,
+      "resid_r": 0.022067837534629955,
+      "frac_of_ceiling": 0.18599562363238506
+    },
+    {
+      "features": "cheat_snr8",
+      "model": "krr",
+      "PDS": 0.6416122004357299,
+      "top1": 0.0,
+      "resid_r": 0.03452885513840353,
+      "frac_of_ceiling": 0.2844638949671773
+    },
+    {
+      "features": "cheat_snr8",
+      "model": "pls",
+      "PDS": 0.46623093681917216,
+      "top1": 0.0,
+      "resid_r": -0.008011581461191042,
+      "frac_of_ceiling": -0.06783369803063448
+    },
+    {
+      "features": "cheat_snr8",
+      "model": "nn",
+      "PDS": 0.6448801742919389,
+      "top1": 0.0,
+      "resid_r": 0.03604839411796765,
+      "frac_of_ceiling": 0.29102844638949654
+    },
+    {
+      "features": "cheat_snr4",
+      "model": "ridge",
+      "PDS": 0.6176470588235294,
+      "top1": 0.0,
+      "resid_r": 0.03568434041906611,
+      "frac_of_ceiling": 0.23632385120350116
+    },
+    {
+      "features": "cheat_snr4",
+      "model": "krr",
+      "PDS": 0.6111111111111112,
+      "top1": 0.0,
+      "resid_r": 0.03070731617123123,
+      "frac_of_ceiling": 0.22319474835886224
+    },
+    {
+      "features": "cheat_snr4",
+      "model": "pls",
+      "PDS": 0.45533769063180823,
+      "top1": 0.0,
+      "resid_r": -0.023444835726565087,
+      "frac_of_ceiling": -0.08971553610503291
+    },
+    {
+      "features": "cheat_snr4",
+      "model": "nn",
+      "PDS": 0.5806100217864922,
+      "top1": 0.0,
+      "resid_r": 0.020326586955507382,
+      "frac_of_ceiling": 0.16192560175054677
+    },
+    {
+      "features": "cheat_snr2",
+      "model": "ridge",
+      "PDS": 0.5599128540305011,
+      "top1": 0.0,
+      "resid_r": 0.017949714814521695,
+      "frac_of_ceiling": 0.12035010940919032
+    },
+    {
+      "features": "cheat_snr2",
+      "model": "krr",
+      "PDS": 0.5239651416122003,
+      "top1": 0.0,
+      "resid_r": 0.006221355751079431,
+      "frac_of_ceiling": 0.04814004376367591
+    },
+    {
+      "features": "cheat_snr2",
+      "model": "pls",
+      "PDS": 0.4923747276688453,
+      "top1": 0.0,
+      "resid_r": -0.009089123655550166,
+      "frac_of_ceiling": -0.015317286652078758
+    },
+    {
+      "features": "cheat_snr2",
+      "model": "nn",
+      "PDS": 0.5620915032679737,
+      "top1": 0.0,
+      "resid_r": -0.00019066829671265034,
+      "frac_of_ceiling": 0.1247264770240698
+    },
+    {
+      "features": "cheat_snr1",
+      "model": "ridge",
+      "PDS": 0.49782135076252726,
+      "top1": 0.0,
+      "resid_r": 0.0018485529720337094,
+      "frac_of_ceiling": -0.004376367614879598
+    },
+    {
+      "features": "cheat_snr1",
+      "model": "krr",
+      "PDS": 0.5501089324618735,
+      "top1": 0.0,
+      "resid_r": 0.010706598498440335,
+      "frac_of_ceiling": 0.10065645514223175
+    },
+    {
+      "features": "cheat_snr1",
+      "model": "pls",
+      "PDS": 0.49673202614379086,
+      "top1": 0.0,
+      "resid_r": -0.0010877471968798497,
+      "frac_of_ceiling": -0.006564551422319452
+    },
+    {
+      "features": "cheat_snr1",
+      "model": "nn",
+      "PDS": 0.5729847494553376,
+      "top1": 0.0,
+      "resid_r": 0.006860786116732276,
+      "frac_of_ceiling": 0.14660831509846814
+    },
+    {
+      "features": "cheat_snr0.5",
+      "model": "ridge",
+      "PDS": 0.5326797385620914,
+      "top1": 0.0,
+      "resid_r": 0.015636349402745373,
+      "frac_of_ceiling": 0.06564551422319452
+    },
+    {
+      "features": "cheat_snr0.5",
+      "model": "krr",
+      "PDS": 0.5250544662309368,
+      "top1": 0.0,
+      "resid_r": 0.0017590251349302811,
+      "frac_of_ceiling": 0.05032822757111587
+    },
+    {
+      "features": "cheat_snr0.5",
+      "model": "pls",
+      "PDS": 0.48039215686274506,
+      "top1": 0.0,
+      "resid_r": 0.0002605714288404365,
+      "frac_of_ceiling": -0.039387308533916934
+    },
+    {
+      "features": "cheat_snr0.5",
+      "model": "nn",
+      "PDS": 0.5261437908496731,
+      "top1": 0.0,
+      "resid_r": -0.009514786427696924,
+      "frac_of_ceiling": 0.052516411378555616
+    },
+    {
+      "features": "cheat_snr0.25",
+      "model": "ridge",
+      "PDS": 0.5326797385620914,
+      "top1": 0.0,
+      "resid_r": 0.007823671862232606,
+      "frac_of_ceiling": 0.06564551422319452
+    },
+    {
+      "features": "cheat_snr0.25",
+      "model": "krr",
+      "PDS": 0.5250544662309368,
+      "top1": 0.0,
+      "resid_r": -0.004172161735619961,
+      "frac_of_ceiling": 0.05032822757111587
+    },
+    {
+      "features": "cheat_snr0.25",
+      "model": "pls",
+      "PDS": 0.5239651416122003,
+      "top1": 0.0,
+      "resid_r": 0.008140286269840265,
+      "frac_of_ceiling": 0.04814004376367591
+    },
+    {
+      "features": "cheat_snr0.25",
+      "model": "nn",
+      "PDS": 0.5620915032679739,
+      "top1": 0.0,
+      "resid_r": 0.0010590994438206176,
+      "frac_of_ceiling": 0.12472647702407003
+    }
+  ]
+}

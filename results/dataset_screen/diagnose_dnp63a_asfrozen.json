@@ -1,0 +1,32 @@
+{
+  "tag": "dnp63a_asfrozen",
+  "n_alleles": 18,
+  "residual_pairwise_r_mean": 0.8238698092722632,
+  "residual_pairwise_r_sd": 0.046556879444286985,
+  "frac_in_span_of_others_mean": 0.9999999999999998,
+  "frac_in_span_of_others_per_allele": {
+    "C522D": 0.9999999999999989,
+    "C522G": 1.0000000000000027,
+    "G293H": 1.0000000000000053,
+    "G297L": 1.0000000000000022,
+    "G310Q": 1.0000000000000022,
+    "H556A": 1.0,
+    "I550D": 0.9999999999999978,
+    "L514D": 0.9999999999999993,
+    "L514F": 0.9999999999999993,
+    "L531E": 1.0000000000000004,
+    "L531R": 0.9999999999999971,
+    "L548N": 0.9999999999999987,
+    "R279Q": 0.9999999999999978,
+    "R279S": 0.9999999999999958,
+    "R304Q": 1.000000000000003,
+    "R304T": 0.9999999999999956,
+    "R311I": 1.0000000000000018,
+    "T527I": 0.9999999999999956
+  },
+  "oracle_pds": 0.2657952069716775,
+  "oracle_top1": 0.0,
+  "ceiling_pds": 0.860566448801743,
+  "reachable_fraction_of_headroom": -0.6495468277945619,
+  "conclusion": "model class CANNOT reach the ceiling: 'model at chance' is forced by geometry, not evidence about features"
+}
