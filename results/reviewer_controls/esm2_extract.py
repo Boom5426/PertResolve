@@ -19,8 +19,8 @@ repository. Extraction runs on ``--device``, which defaults to ``cuda`` because 
 published run was GPU-only; CPU extraction of every variant is impractically slow.
 
 Usage:
-  python esm2_extract.py --out /path/to/VCCompass/esm2_control [--base /path/to/VCCompass] [--device cuda]
-  VCCOMPASS_BASE=/path/to/VCCompass python esm2_extract.py --out /path/to/VCCompass/esm2_control
+  python esm2_extract.py --out /path/to/processed-data/esm2_control [--base /path/to/processed-data] [--device cuda]
+  ALLELEPERTURB_DATA=/path/to/processed-data python esm2_extract.py --out /path/to/processed-data/esm2_control
 """
 import argparse
 import json, re, numpy as np, sys
@@ -34,8 +34,8 @@ from alleleperturb.paths import add_harness_to_path, require_inputs, resolve_bas
 ap = argparse.ArgumentParser(description=__doc__,
                              formatter_class=argparse.RawDescriptionHelpFormatter)
 ap.add_argument("--base",
-                help="VCCompass compute workspace holding unified/harness.py and "
-                     "wt_seqs.json (env: VCCOMPASS_BASE)")
+                help="directory holding the shared scorerharness.py and "
+                     "wt_seqs.json (env: ALLELEPERTURB_DATA)")
 ap.add_argument("--out", required=True,
                 help="directory to write the four esm2_*.npz feature files into; the "
                      "representation grid reads them from <base>/esm2_control")

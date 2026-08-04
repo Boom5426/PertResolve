@@ -57,7 +57,7 @@ from alleleperturb.paths import (
 _ap = argparse.ArgumentParser(description=__doc__,
                               formatter_class=argparse.RawDescriptionHelpFormatter)
 _ap.add_argument("--base", default=None,
-                 help="VCCompass compute workspace holding unified/ (env: VCCOMPASS_BASE)")
+                 help="directory holding the shared scorer (env: ALLELEPERTURB_DATA)")
 _ap.add_argument("--out", required=True, metavar="OUT_DIR",
                  help="directory receiving residual_axis_models.csv and "
                       "residual_axis_summary.csv; may not be inside the repository's results/")

@@ -24,7 +24,7 @@ the shared scorer, which are not redistributed (see the manuscript's Data availa
 the workspace holding them is named explicitly and never guessed:
 
 ```sh
-export VCCOMPASS_BASE=/path/to/VCCompass          # or pass --base
+export ALLELEPERTURB_DATA=/path/to/processed-data          # or pass --base
 python scripts/analysis/oracle_ceiling.py --out /scratch/rerun
 ```
 

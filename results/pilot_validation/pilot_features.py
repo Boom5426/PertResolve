@@ -16,8 +16,8 @@ Usage:
   <dataset>    allele_<GENE>, read through the harness under --base, or an
                atlas name: Replogle, Norman, Adamson.
   --out        required output directory for <dataset>_pilot.csv.
-  --base       VCCompass workspace holding unified/harness.py; falls back to
-               $VCCOMPASS_BASE.
+  --base       processed-data directory holding unified/harness.py; falls back to
+               $ALLELEPERTURB_DATA.
   --atlas-dir  directory holding the external .h5ad atlases; falls back to
                $ALLELEPERTURB_ATLAS_DIR. Only read for atlas datasets.
 """
@@ -35,8 +35,8 @@ _parser.add_argument("dataset",
                      help="allele_<GENE> (read through the harness under --base) "
                           "or an atlas name: Replogle, Norman, Adamson")
 _parser.add_argument("--base", default=None,
-                     help="VCCompass workspace holding unified/harness.py "
-                          "(default: $VCCOMPASS_BASE)")
+                     help="processed-data directory holding unified/harness.py "
+                          "(default: $ALLELEPERTURB_DATA)")
 _parser.add_argument("--atlas-dir", default=None,
                      help=f"directory holding the external .h5ad atlases "
                           f"(default: ${ATLAS_ENV_VAR}); only read for atlas datasets")

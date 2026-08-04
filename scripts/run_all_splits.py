@@ -8,12 +8,12 @@ Metrics:
   Recon:     MAE
 
 Usage:
-  python scripts/run_all_splits.py --base /path/to/VCCompass --out /path/to/outdir
-  VCCOMPASS_BASE=/path/to/VCCompass python scripts/run_all_splits.py --out /path/to/outdir
+  python scripts/run_all_splits.py --base /path/to/processed-data --out /path/to/outdir
+  ALLELEPERTURB_DATA=/path/to/processed-data python scripts/run_all_splits.py --out /path/to/outdir
 
   --base       compute workspace holding allele_perturb_bench.csv, joint_arrays.npz,
                gata1_arrays.npz, jak1_arrays.npz and esm1v_embeddings.npz.
-               Falls back to the VCCOMPASS_BASE environment variable.
+               Falls back to the ALLELEPERTURB_DATA environment variable.
   --out        required output directory; results_v4_10metrics.csv is written into it.
 """
 import argparse

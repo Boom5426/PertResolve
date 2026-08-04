@@ -8,12 +8,12 @@ Then classifies each gene as underpowered / detectable-not-modeled / model-impro
 
 Usage:
     python scripts/figures/run_split_half_power_analysis.py \
-        --base /path/to/VCCompass --out /path/to/power_output_dir
+        --base /path/to/processed-data --out /path/to/power_output_dir
 
 ``--base`` names the external compute workspace that holds g1_real_cells.npz,
 g1_cf_cells_flagship.npz, allele_perturb_bench.csv, joint_arrays.npz,
 gata1_arrays.npz, jak1_arrays.npz, model_cfm_v3.pt and theta_v2.csv; it may be
-omitted when the VCCOMPASS_BASE environment variable is set. Neither the
+omitted when the ALLELEPERTURB_DATA environment variable is set. Neither the
 workspace nor the checkpoint is redistributed with this repository.
 
 ``--out`` is required and receives all four outputs (split_half_power_table.csv,
@@ -36,8 +36,8 @@ parser = argparse.ArgumentParser(
     description="Split-half power analysis of strict E-distance evaluation.")
 parser.add_argument(
     "--base", default=None,
-    help="VCCompass compute workspace holding the cell arrays, the benchmark "
-         "table, theta_v2.csv and model_cfm_v3.pt. Defaults to $VCCOMPASS_BASE.")
+    help="processed-data directory holding the cell arrays, the benchmark "
+         "table, theta_v2.csv and model_cfm_v3.pt. Defaults to $ALLELEPERTURB_DATA.")
 parser.add_argument(
     "--out", required=True,
     help="Directory that receives the power table, the per-gene summary, the "

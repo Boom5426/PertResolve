@@ -9,7 +9,7 @@ Isolated output -> <out>/allele_<gene>.json (does not touch manuscript).
 Usage:
     python allele_resolution.py [--base BASE] --out OUT
 
-``--base`` (or the ``VCCOMPASS_BASE`` environment variable) points at the compute
+``--base`` (or the ``ALLELEPERTURB_DATA`` environment variable) points at the compute
 workspace holding ``unified/harness.py`` and ``allele_perturb_bench.csv``.
 ``--out`` is required and must not point inside this repository's ``results/``,
 so a re-run can never overwrite a committed canonical table.
@@ -24,7 +24,7 @@ from alleleperturb.paths import resolve_base, add_harness_to_path, require_input
 _parser = argparse.ArgumentParser(
     description="Allele-level resolution curves on the public-benchmark axis.")
 _parser.add_argument("--base", default=None,
-                     help="VCCompass compute workspace (default: $VCCOMPASS_BASE).")
+                     help="processed-data directory (default: $ALLELEPERTURB_DATA).")
 _parser.add_argument("--out", required=True, type=Path,
                      help="Directory receiving the allele_<gene>.json files.")
 _args = _parser.parse_args()

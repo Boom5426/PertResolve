@@ -11,9 +11,10 @@ existed on the original machine.
 Two distinct roots are involved and must not be confused:
 
 ``resolve_base``
-    the external compute workspace, supplied per run through ``--base`` or the
-    ``VCCOMPASS_BASE`` environment variable. It is never inferred, because
-    guessing it would turn a missing dependency into a confusing read error.
+    the directory of processed per-gene arrays and the shared scorer, supplied per run
+    through ``--base`` or the ``ALLELEPERTURB_DATA`` environment variable. It is never
+    inferred, because guessing it would turn a missing dependency into a confusing read
+    error.
 
 ``repo_root``
     this repository, which is inferred from this file's location and holds the
@@ -32,8 +33,11 @@ __all__ = ["resolve_base", "repo_root", "add_harness_to_path", "require_inputs",
 #: Files that identify the repository root, used to validate the inferred path.
 _REPO_MARKERS = ("alleleperturb", "results", "setup.py")
 
-#: Environment variable naming the VCCompass compute workspace (arrays, harness).
-ENV_VAR = "VCCOMPASS_BASE"
+#: Environment variable naming the directory of processed per-gene arrays and the shared
+#: scorer. It was once named after an internal project, which meant nothing to anyone
+#: outside it; the old name is still accepted and reported when used.
+ENV_VAR = "ALLELEPERTURB_DATA"
+LEGACY_ENV_VAR = "VCCOMPASS_BASE"
 
 #: Environment variable naming the directory holding the external ``.h5ad``
 #: perturbation atlases (Replogle, Norman, Adamson, sci-Plex, VCC). These are
@@ -85,6 +89,10 @@ def resolve_base(cli_value: str | os.PathLike[str] | None = None,
             environment variable so the caller knows how to proceed.
     """
     raw = cli_value or os.environ.get(env_var)
+    if not raw and env_var == ENV_VAR and os.environ.get(LEGACY_ENV_VAR):
+        raw = os.environ[LEGACY_ENV_VAR]
+        print(f"note: {LEGACY_ENV_VAR} is the former name of {ENV_VAR} and is still "
+              f"honoured; set {ENV_VAR} instead.", file=sys.stderr)
     if not raw:
         raise SystemExit(
             f"Could not locate {what}. Pass {flag} /path/to/dir or set "

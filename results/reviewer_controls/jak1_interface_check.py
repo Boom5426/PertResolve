@@ -21,8 +21,8 @@ directly comparable to the published JAK1 ceiling 0.792 and best in-house model
 0.517.
 
 Usage (remote, `Agent` env):
-    python jak1_interface_check.py --base /data/boom/NUS/VCCompass --out jak1_interface_check
-    VCCOMPASS_BASE=/data/boom/NUS/VCCompass python jak1_interface_check.py --out ...
+    python jak1_interface_check.py --base /path/to/processed-data --out jak1_interface_check
+    ALLELEPERTURB_DATA=/path/to/processed-data python jak1_interface_check.py --out ...
 """
 from __future__ import annotations
 
@@ -39,7 +39,7 @@ from alleleperturb.paths import add_harness_to_path, require_inputs, resolve_bas
 
 ap = argparse.ArgumentParser(description=__doc__,
                              formatter_class=argparse.RawDescriptionHelpFormatter)
-ap.add_argument("--base", help="VCCompass compute workspace (env: VCCOMPASS_BASE)")
+ap.add_argument("--base", help="processed-data directory (env: ALLELEPERTURB_DATA)")
 ap.add_argument("--out", required=True, help="directory for the check's CSV/JSON output")
 args = ap.parse_args()
 

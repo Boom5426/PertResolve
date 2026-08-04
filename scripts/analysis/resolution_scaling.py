@@ -74,8 +74,8 @@ from alleleperturb.resolution import (
 _ap = argparse.ArgumentParser(description=__doc__,
                               formatter_class=argparse.RawDescriptionHelpFormatter)
 _ap.add_argument("--base", default=None,
-                 help="VCCompass compute workspace holding unified/ and the gene "
-                      "arrays (env: VCCOMPASS_BASE)")
+                 help="directory holding the shared scorer and the gene "
+                      "arrays (env: ALLELEPERTURB_DATA)")
 _ap.add_argument("--out", required=True, metavar="OUT_DIR",
                  help="directory receiving floor_law_v2.csv; may not be inside the "
                       "repository's results/")

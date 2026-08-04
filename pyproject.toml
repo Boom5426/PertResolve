@@ -53,5 +53,5 @@ testpaths = ["tests"]
 # able to detect a bias rather than only a crash. They take a couple of minutes.
 addopts = "-q --durations=5"
 markers = [
-    "workspace: needs the compute workspace named by VCCOMPASS_BASE; skipped without it",
+    "workspace: needs the compute workspace named by ALLELEPERTURB_DATA; skipped without it",
 ]

@@ -14,8 +14,8 @@ Also a shrinkage check: PDS as a prediction is shrunk toward the gene mean (lamb
 mean-shrinkage denoising DECREASES discrimination (so the replicate oracle is not beatable that way).
 
 Usage:
-  python oracle_sensitivity.py --out /path/to/output_dir [--base /path/to/VCCompass]
-  VCCOMPASS_BASE=/path/to/VCCompass python oracle_sensitivity.py --out /path/to/output_dir
+  python oracle_sensitivity.py --out /path/to/output_dir [--base /path/to/processed-data]
+  ALLELEPERTURB_DATA=/path/to/processed-data python oracle_sensitivity.py --out /path/to/output_dir
 """
 import numpy as np, pandas as pd, sys
 import argparse
@@ -29,8 +29,8 @@ from alleleperturb.paths import add_harness_to_path, require_inputs, resolve_bas
 ap = argparse.ArgumentParser(description=__doc__,
                              formatter_class=argparse.RawDescriptionHelpFormatter)
 ap.add_argument("--base", default=None,
-                help="VCCompass compute workspace holding unified/harness.py and "
-                     "allele_perturb_bench.csv (env: VCCOMPASS_BASE)")
+                help="directory holding the shared scorerharness.py and "
+                     "allele_perturb_bench.csv (env: ALLELEPERTURB_DATA)")
 ap.add_argument("--out", required=True,
                 help="directory to write oracle_sensitivity.csv into")
 args = ap.parse_args()

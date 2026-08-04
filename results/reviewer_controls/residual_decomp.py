@@ -12,8 +12,8 @@ Part B (model side): FULL Pearson-delta vs RESIDUAL Pearson-delta per model
   (does the model recover allele-specific direction, or only the gene-shared program?)
 
 Usage:
-  python residual_decomp.py --out /path/to/output_dir [--base /path/to/VCCompass]
-  VCCOMPASS_BASE=/path/to/VCCompass python residual_decomp.py --out /path/to/output_dir
+  python residual_decomp.py --out /path/to/output_dir [--base /path/to/processed-data]
+  ALLELEPERTURB_DATA=/path/to/processed-data python residual_decomp.py --out /path/to/output_dir
 """
 import argparse
 import sys
@@ -29,9 +29,9 @@ from alleleperturb.paths import add_harness_to_path, require_inputs, resolve_bas
 ap = argparse.ArgumentParser(description=__doc__,
                              formatter_class=argparse.RawDescriptionHelpFormatter)
 ap.add_argument("--base", default=None,
-                help="VCCompass compute workspace holding unified/harness.py, "
+                help="directory holding the shared scorerharness.py, "
                      "unified/real_deltas.npz, unified/preds5/ and "
-                     "allele_perturb_bench.csv (env: VCCOMPASS_BASE)")
+                     "allele_perturb_bench.csv (env: ALLELEPERTURB_DATA)")
 ap.add_argument("--out", required=True,
                 help="directory to write residual_decomp_measurement.csv and "
                      "residual_decomp_models.csv into")

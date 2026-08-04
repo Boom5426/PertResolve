@@ -16,7 +16,7 @@ from sklearn.neural_network import MLPRegressor
 from sklearn.decomposition import PCA
 warnings.filterwarnings("ignore")
 
-BASE = "/data/boom/NUS/VCCompass"
+BASE = "/data/boom/NUS/processed-data directory"
 BENCH = os.path.join(BASE, "allele_perturb_bench.csv")
 NSUB = 300
 HOLDOUT_FRAC = 0.35

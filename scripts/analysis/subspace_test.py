@@ -10,8 +10,8 @@ results/canonical/perturbnet_subspace_test.json; the permutation-null fields in 
 canonical table come from a separate script and are not recomputed here.
 
 Usage:
-  python subspace_test.py --out /path/to/subspace_test.json [--base /path/to/VCCompass]
-  VCCOMPASS_BASE=/path/to/VCCompass python subspace_test.py --out /path/to/subspace_test.json
+  python subspace_test.py --out /path/to/subspace_test.json [--base /path/to/processed-data]
+  ALLELEPERTURB_DATA=/path/to/processed-data python subspace_test.py --out /path/to/subspace_test.json
 """
 import numpy as np, sys, glob, os
 import argparse, json
@@ -25,7 +25,7 @@ from alleleperturb.paths import resolve_base, add_harness_to_path, require_input
 _ap = argparse.ArgumentParser(description=__doc__,
                               formatter_class=argparse.RawDescriptionHelpFormatter)
 _ap.add_argument("--base", default=None,
-                 help="VCCompass compute workspace holding unified/ (env: VCCOMPASS_BASE)")
+                 help="directory holding the shared scorer (env: ALLELEPERTURB_DATA)")
 _ap.add_argument("--out", required=True,
                  help="path of the JSON file to write the six PDS values into")
 _args = _ap.parse_args()

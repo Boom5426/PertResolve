@@ -6,14 +6,14 @@ plus 'variant', 'variant.detailed_multi', 'cell' at the end.
 
 Usage:
     python scripts/figures/pipeline_v2.py \\
-        --base /path/to/VCCompass --out /path/to/pipeline_v2_output_dir
+        --base /path/to/processed-data --out /path/to/pipeline_v2_output_dir
 
-``--base`` names the external VCCompass compute workspace. It is read for
+``--base`` names the external processed-data directory. It is read for
 raw/GSE161824_A549_*.{processed.matrix.mtx.gz,processed.genes.csv.gz,variants2cell.csv.gz}
 and allele_perturb_bench.csv, and it is also where the workspace-level artifacts
 joint_arrays.npz and the model_*.pt checkpoints are cached, exactly as before;
 the optional gata1_arrays.npz and jak1_arrays.npz are picked up from there too.
-It may be omitted when the VCCOMPASS_BASE environment variable is set. Nothing
+It may be omitted when the ALLELEPERTURB_DATA environment variable is set. Nothing
 under raw/ is written to. The workspace is not redistributed with this
 repository.
 
@@ -29,12 +29,12 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from alleleperturb.paths import resolve_base, require_inputs
 
 _parser = argparse.ArgumentParser(
-    description="VCCompass pipeline v2: build the joint TP53/KRAS arrays and "
+    description="processed-data directory pipeline v2: build the joint TP53/KRAS arrays and "
                 "train/evaluate the theta-conditioned VAE and its controls.")
 _parser.add_argument(
     "--base", default=None,
-    help="VCCompass compute workspace holding raw/, allele_perturb_bench.csv "
-         "and the cached joint_arrays.npz. Defaults to $VCCOMPASS_BASE.")
+    help="processed-data directory holding raw/, allele_perturb_bench.csv "
+         "and the cached joint_arrays.npz. Defaults to $ALLELEPERTURB_DATA.")
 _parser.add_argument(
     "--out", required=True,
     help="Directory that receives all_metrics.csv and summary.json. Required, "
@@ -258,7 +258,7 @@ def evaluate(model, datasets, dgmap, bench, tcols, zero_th=False, dev='cuda'):
 # ============ MAIN ============
 if __name__ == '__main__':
     t0_total = time.time()
-    print("="*60); print("VCCompass Pipeline v2 (fixed v2c parsing)"); print("="*60, flush=True)
+    print("="*60); print("processed-data directory Pipeline v2 (fixed v2c parsing)"); print("="*60, flush=True)
     
     if not JOINT_NPZ.exists():
         process_tp53_kras()
@@ -326,7 +326,7 @@ if __name__ == '__main__':
     
     all_dfs=[]
     for name, zero_th, shuffle_th, ckpt in [
-        ('VCCompass_6dim',False,False,'model_full.pt'),
+        ('processed-data directory_6dim',False,False,'model_full.pt'),
         ('Dosage_only',True,False,'model_dosage.pt'),
         ('Random_theta',False,True,'model_random.pt'),
     ]:
@@ -381,7 +381,7 @@ if __name__ == '__main__':
     
     summary={'overall':all_results.groupby('model_name')['cos_model'].mean().to_dict(),
              'per_split':pivot.to_dict(),'per_gene':gp.to_dict(),
-             'total_variants':len(all_results[all_results['model_name']=='VCCompass_6dim']),
+             'total_variants':len(all_results[all_results['model_name']=='processed-data directory_6dim']),
              'total_time_min':(time.time()-t0_total)/60}
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     with open(OUT_DIR/'summary.json','w') as f: json.dump(summary,f,indent=2,default=str)

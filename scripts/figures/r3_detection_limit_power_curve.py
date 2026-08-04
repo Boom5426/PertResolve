@@ -8,7 +8,7 @@ import os, time, json
 import numpy as np, pandas as pd
 from scipy.spatial.distance import cdist
 from sklearn.decomposition import PCA
-os.chdir('/data/boom/NUS/VCCompass')
+os.chdir('/data/boom/NUS/processed-data directory')
 
 def edist(A,B,nsub=None,seed=0):
     """standard energy distance E = 2*mean(d_AB) - mean(d_AA) - mean(d_BB)."""

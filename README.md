@@ -204,21 +204,22 @@ width, per-figure height budget, single font family and label collisions.
 
 ### Locating data that is not in the repository
 
-Analyses that touch single-cell data need directories this repository does not ship. Each
-takes the location as an argument, or reads it from an environment variable:
+Analyses that touch single-cell data need two directories this repository does not ship,
+because the files in them are either too large or not ours to redistribute. Each is named
+explicitly, as an argument or an environment variable, and is never guessed:
 
-| Location | Argument | Environment variable | Holds |
+| What | Argument | Environment variable | Must contain |
 |---|---|---|---|
-| VCCompass compute workspace | `--base` | `VCCOMPASS_BASE` | `unified/harness.py`, `joint_arrays.npz`, `allele_perturb_bench.csv`, `esm1v_embeddings.npz` |
-| External atlas directory | `--atlas-dir`, `--prep` | `ALLELEPERTURB_ATLAS_DIR` | the Replogle, Norman, Adamson, sci-Plex and VCC `.h5ad` files |
+| **Processed allele data** | `--base` | `ALLELEPERTURB_DATA` | the per-gene cell matrices (`joint_arrays.npz` for TP53 and KRAS, `gata1_arrays.npz`, `jak1_arrays.npz`), the variant table `allele_perturb_bench.csv`, the protein embeddings `esm1v_embeddings.npz`, and the shared scorer at `unified/harness.py` |
+| **Public perturbation atlases** | `--atlas-dir`, `--prep` | `ALLELEPERTURB_ATLAS_DIR` | the Replogle, Norman, Adamson, sci-Plex and Virtual Cell Challenge `.h5ad` files, under their original filenames |
 
 Neither is inferred. When a location is missing, the script names both the argument and the
 environment variable; when an input inside it is missing, the script prints the full path it
 expected.
 
 ```bash
-export VCCOMPASS_BASE=/path/to/VCCompass
-python scripts/run_all_splits.py --out /tmp/grid          # or: --base /path/to/VCCompass
+export ALLELEPERTURB_DATA=/path/to/processed-data
+python scripts/run_all_splits.py --out /tmp/grid          # or: --base /path/to/processed-data
 ```
 
 `--out` is required everywhere and is refused if it resolves inside `results/`, so a re-run
@@ -308,7 +309,7 @@ python -c "from huggingface_hub import hf_hub_download; \
 wget https://zenodo.org/records/10418435/files/scSNPseq_data.zip && unzip scSNPseq_data.zip -d jak1/
 ```
 
-**Preprocessing.** The workspace named by `VCCOMPASS_BASE` is expected to contain the
+**Preprocessing.** The workspace named by `ALLELEPERTURB_DATA` is expected to contain the
 following arrays. Only the first has a committed producer:
 
 | File | Produced by |
