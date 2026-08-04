@@ -31,6 +31,7 @@ from alleleperturb.resolution import (  # noqa: E402
     permutation_null_delta2,
     signal_noise,
     stats_from_gram,
+    summarise_separations,
 )
 
 K = 40      # profile dimension
@@ -204,6 +205,25 @@ def test_nearest_neighbour_separates_configurations_the_mean_cannot():
     assert measured["spread"] > 10 * measured["line"], (
         f"nearest-neighbour statistic failed to separate the configurations: "
         f"{measured}")
+
+
+def test_geometric_mean_is_undefined_rather_than_floored():
+    """Guards against a summary that prints a number where the data support none.
+
+    Debiasing sends individual separations below zero whenever the true separation is under
+    the noise, which is the regime these datasets sit in. Flooring them at a small positive
+    value makes the geometric mean a function of the floor and of how many values hit it,
+    while still looking like a measurement. The median and the above-noise fraction stay
+    defined and are what should be read there.
+    """
+    sep = np.array([-0.5, 0.1, 0.4, 2.0])
+    out = summarise_separations(sep, 1.0)
+    assert np.isnan(out["nn_geomean"]), "geometric mean should be undefined here"
+    assert np.isfinite(out["nn_median"]), "median should stay defined"
+    assert out["frac_above_noise"] == 0.75
+    assert out["n_nonpositive"] == 1
+    positive = summarise_separations(np.array([0.5, 2.0]), 1.0)
+    assert np.isfinite(positive["nn_geomean"]), "geometric mean should exist when all > 0"
 
 
 def test_nearest_neighbour_rejects_a_single_measurement():

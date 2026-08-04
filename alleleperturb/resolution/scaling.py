@@ -61,6 +61,7 @@ __all__ = [
     "permutation_null_delta2",
     "signal_noise",
     "stats_from_gram",
+    "summarise_separations",
     "tie_aware_pds",
 ]
 
@@ -255,11 +256,17 @@ def nearest_neighbour_rho2(profiles: np.ndarray, eta2: float, h: int = 2) -> dic
         h: measurements per perturbation; at least 2 are needed to cross-fit.
 
     Returns:
-        ``nn_median`` and ``nn_geomean``, the median and geometric mean over perturbations
-        of the debiased nearest-competitor squared separation, and the same divided by
-        ``2 * eta2`` as ``rho2_nn_median`` and ``rho2_nn_geomean``. Debiasing can send an
-        individual separation negative; those are floored at a small positive value for the
-        geometric mean only, and the count is returned as ``n_nonpositive``.
+        ``separations``, the debiased nearest-competitor squared separation per
+        perturbation, plus ``nn_median`` and ``nn_geomean`` summarising it and the same
+        divided by ``2 * eta2`` as ``rho2_nn_median`` and ``rho2_nn_geomean``. Debiasing
+        can send an individual separation negative; those are floored at a small positive
+        value for the geometric mean only, and the count is returned as ``n_nonpositive``.
+
+        Callers averaging over several cell splits must average ``separations`` across
+        splits and summarise afterwards, rather than averaging the profiles and calling
+        this once: averaged profiles carry ``1 / n_splits`` of the noise that ``eta2``
+        describes, so the debiasing would over-subtract and drive every separation
+        negative.
 
     Raises:
         ValueError: if fewer than two measurements or two perturbations are supplied.
@@ -282,14 +289,44 @@ def nearest_neighbour_rho2(profiles: np.ndarray, eta2: float, h: int = 2) -> dic
     eval_b, eval_a = _sq_dists(b), _sq_dists(a)
     sep = 0.5 * (eval_b[np.arange(n), chosen_a] + eval_a[np.arange(n), chosen_b]) - noise
 
-    floored = np.maximum(sep, 1e-9)
+    return summarise_separations(sep, eta2)
+
+
+def summarise_separations(separations: np.ndarray, eta2: float) -> dict:
+    """Summarise per-perturbation nearest-competitor separations against the noise.
+
+    Split out so a caller can average :func:`nearest_neighbour_rho2`'s ``separations``
+    over several cell splits and then summarise once, which is the correct order.
+
+    Args:
+        separations: debiased nearest-competitor squared separation per perturbation.
+        eta2: per-profile noise the separations are measured against.
+
+    Returns:
+        The same fields :func:`nearest_neighbour_rho2` returns.
+    """
+    sep = np.asarray(separations, dtype=np.float64)
+    n_nonpositive = int((sep <= 0).sum())
+    median = float(np.median(sep))
+
+    # A geometric mean is undefined once any separation debiases below zero, which happens
+    # for a large share of perturbations in exactly the regimes this is used to describe.
+    # Flooring those at a small positive number does not rescue it: the result is then set
+    # by the floor and by how many values hit it, and it prints as a small positive number
+    # that looks like a measurement. It is reported as undefined instead.
+    geomean = (float(np.exp(np.mean(np.log(sep)))) if n_nonpositive == 0
+               else float("nan"))
+
+    scale = 2.0 * eta2
+    usable = eta2 > 0
     return dict(
-        nn_median=float(np.median(sep)),
-        nn_geomean=float(np.exp(np.mean(np.log(floored)))),
-        rho2_nn_median=float(np.median(sep)) / (2.0 * eta2) if eta2 > 0 else float("nan"),
-        rho2_nn_geomean=(float(np.exp(np.mean(np.log(floored)))) / (2.0 * eta2)
-                         if eta2 > 0 else float("nan")),
-        n_nonpositive=int((sep <= 0).sum()),
+        separations=sep,
+        nn_median=median,
+        nn_geomean=geomean,
+        rho2_nn_median=median / scale if usable else float("nan"),
+        rho2_nn_geomean=geomean / scale if usable else float("nan"),
+        n_nonpositive=n_nonpositive,
+        frac_above_noise=float((sep > 0).mean()),
     )
 
 

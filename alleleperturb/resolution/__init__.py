@@ -16,6 +16,7 @@ from .scaling import (
     permutation_null_delta2,
     signal_noise,
     stats_from_gram,
+    summarise_separations,
     tie_aware_pds,
 )
 
@@ -26,5 +27,6 @@ __all__ = [
     "permutation_null_delta2",
     "signal_noise",
     "stats_from_gram",
+    "summarise_separations",
     "tie_aware_pds",
 ]
