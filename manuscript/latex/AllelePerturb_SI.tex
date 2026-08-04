@@ -192,6 +192,126 @@ JAK1  & 0.21 & 0.792 (0.742--0.838) & 78.5\% & 90\%  & 0.52 \\
 \end{table}
 
 
+%% ===== Supplementary Table 6 (signal and noise) =====
+\begin{table}[H]
+\centering
+\caption{\textbf{Per-profile sampling noise and between-variant signal, by gene and depth.} Each variant's cells are cut into four disjoint groups of $m$ cells: two score the replicate ceiling and two estimate the signal, so no noise realisation enters both. $\bar{\Delta}^2$ is the mean squared separation between variants after subtracting the sampling-noise term, reported unclipped with a 95\% interval bootstrapped over both variants and cell splits; it is negative about half the time when the true separation is at the floor, and clipping it at zero would report certainty the data do not carry. $P$ is a permutation test re-partitioning the half-profiles among pseudo-variants, and is conservative because the null averages five splits and the observed estimate twenty. Rows are the eligible cohort, every variant with $4m$ cells; the file also carries a fixed cohort held constant across depths, which is underpowered and is not reproduced here. Source: \texttt{results/canonical/floor\_law\_v2.csv}.}
+\label{tab:signal}
+\smallskip
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}l r r r l r r r@{}}
+\toprule
+Gene & $m$ & $n$ & $\eta^2$ & $\bar{\Delta}^2$ (95\% CI) & $\rho^2$ & $P$ & Ceiling \\
+\midrule
+TP53 & 25 & 98 & 37.61 & -0.051 (-0.403, +0.339) & -0.0007 & 0.581 & 0.499 \\
+TP53 & 50 & 98 & 18.87 & -0.034 (-0.231, +0.156) & -0.0009 & 0.630 & 0.499 \\
+TP53 & 100 & 68 & 9.39 & -0.050 (-0.162, +0.069) & -0.0026 & 0.786 & 0.497 \\
+TP53 & 150 & 35 & 6.29 & -0.060 (-0.164, +0.036) & -0.0048 & 0.840 & 0.473 \\
+KRAS & 25 & 92 & 37.57 & -0.095 (-0.400, +0.210) & -0.0013 & 0.686 & 0.495 \\
+KRAS & 50 & 92 & 18.78 & -0.066 (-0.247, +0.108) & -0.0017 & 0.757 & 0.497 \\
+KRAS & 100 & 84 & 9.39 & -0.022 (-0.138, +0.096) & -0.0011 & 0.638 & 0.498 \\
+KRAS & 150 & 49 & 6.25 & +0.055 (-0.043, +0.150) & +0.0044 & 0.135 & 0.510 \\
+GATA1 & 25 & 247 & 98.18 & +2.373 (+0.561, +4.170) & +0.0121 & 0.009 & 0.512 \\
+GATA1 & 50 & 209 & 49.31 & +2.153 (+0.766, +3.670) & +0.0218 & 0.001 & 0.524 \\
+GATA1 & 100 & 107 & 24.82 & +0.605 (-0.226, +1.486) & +0.0122 & 0.072 & 0.520 \\
+GATA1 & 150 & 57 & 16.46 & +0.778 (-0.056, +1.736) & +0.0236 & 0.021 & 0.521 \\
+GATA1 & 250 & 15 & 9.67 & +0.865 (+0.128, +1.700) & +0.0447 & 0.035 & 0.540 \\
+JAK1 & 25 & 14 & 78.11 & +97.183 (+56.173, +126.186) & +0.6221 & 0.001 & 0.780 \\
+JAK1 & 50 & 9 & 39.92 & +83.626 (+8.442, +140.473) & +1.0475 & 0.001 & 0.821 \\
+JAK1 & 100 & 5 & 19.74 & +128.768 (+4.291, +205.959) & +3.2615 & 0.002 & 0.970 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+%% ===== Supplementary Table 7 (depth prescriptions) =====
+\begin{table}[H]
+\centering
+\caption{\textbf{Depth required to reach a target replicate ceiling, and where the calculator refuses.} The nearest-competitor separation belongs to the perturbations and does not change with depth while the noise falls as $1/m$, so resolution scales linearly from a pilot and the depth reaching a target is read off the calibration by inversion. The calculator returns nothing when the pilot separation's lower confidence bound does not clear zero: no finite depth recovers a separation that is not there, and a number extrapolated from noise reads as a plan. JAK1 is a check on the scaling rather than a fit, since three pilots at different depths, on different cells and different candidate sets, agree within a factor of two. Source: \texttt{results/canonical/resolution\_law\_prescriptions.csv}.}
+\label{tab:depth}
+\smallskip
+\begin{tabular}{@{}l r r l r r@{}}
+\toprule
+ & Pilot & & Nearest-competitor & \multicolumn{2}{c}{Cells per group to reach} \\
+\cmidrule(l){5-6}
+Gene & depth & $n$ & $\rho^2$ (95\% lower) & ceiling 0.7 & ceiling 0.9 \\
+\midrule
+TP53 & 25 & 98 & -0.0026 (-0.0058) & refused & refused \\
+TP53 & 50 & 98 & +0.0005 (-0.0079) & refused & refused \\
+TP53 & 100 & 68 & +0.0019 (-0.0033) & refused & refused \\
+KRAS & 25 & 92 & +0.0004 (-0.0056) & refused & refused \\
+KRAS & 50 & 92 & +0.0009 (-0.0063) & refused & refused \\
+KRAS & 100 & 84 & -0.0073 (-0.0133) & refused & refused \\
+GATA1 & 25 & 247 & +0.0157 (+0.0027) & 62 & 232 \\
+GATA1 & 50 & 209 & +0.0010 (-0.0108) & refused & refused \\
+GATA1 & 100 & 107 & +0.0051 (-0.0141) & refused & refused \\
+JAK1 & 25 & 14 & +0.0750 (+0.0486) & 10 & 55 \\
+JAK1 & 50 & 9 & +0.1273 (+0.0910) & 12 & 65 \\
+JAK1 & 100 & 5 & +0.1670 (+0.1419) & 19 & 99 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+%% ===== Supplementary Table 8 (both scoring axes) =====
+\begin{table}[H]
+\centering
+\caption{\textbf{Every method on both scoring axes, each against its own permutation null.} The residual axis scores after removing a gene-shared programme computed from training variants only. Its chance level is not 0.50: WT-null, which predicts a zero vector and therefore one constant shared by every held-out variant, scores 0.524 and its permutation null is 0.524 exactly, because training variants entering the mean have their residuals shrunk toward the origin while held-out variants do not. Nulls are formed by permuting predictions across the held-out variants of a gene; intervals are 2,000 bootstraps over variants. Six methods ($^{*}$) exceed their own null at $P<0.05$, by 0.011 to 0.025. None is established: fifty permutations floor the attainable $P$ at 0.0196, four of the six sit on that floor, and twenty-five methods were tested. Source: \texttt{results/canonical/residual\_axis\_models.csv}.}
+\label{tab:axes}
+\smallskip
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}l r l r l r r@{}}
+\toprule
+Method & $n$ & PDS (95\% CI) & null & residual-PDS (95\% CI) & null & $P$ \\
+\midrule
+scVIDR & 308 & 0.540 (0.505--0.574) & 0.532 & 0.557 (0.522--0.590) & 0.552 & 0.118 \\
+KNN-theta & 308 & 0.486 (0.456--0.518) & 0.473 & 0.555 (0.526--0.584) & 0.531 & 0.118 \\
+KNN-esm+theta & 305 & 0.486 (0.456--0.516) & 0.477 & 0.554 (0.524--0.580) & 0.531 & 0.118 \\
+KNN-esm & 305 & 0.483 (0.452--0.514) & 0.478 & 0.540 (0.511--0.570) & 0.534 & 0.333 \\
+PerturbNet & 303 & 0.537 (0.510--0.567) & 0.519 & 0.539 (0.510--0.571) & 0.529 & 0.216 \\
+MLP-theta$^{*}$ & 308 & 0.455 (0.426--0.485) & 0.449 & 0.538 (0.507--0.567) & 0.513 & 0.020 \\
+scGen$^{*}$ & 308 & 0.483 (0.452--0.515) & 0.482 & 0.528 (0.498--0.558) & 0.517 & 0.020 \\
+GBoost-theta$^{*}$ & 308 & 0.475 (0.447--0.505) & 0.464 & 0.528 (0.501--0.555) & 0.512 & 0.039 \\
+RF-theta$^{*}$ & 308 & 0.455 (0.425--0.485) & 0.451 & 0.527 (0.498--0.554) & 0.512 & 0.039 \\
+Ridge-theta$^{*}$ & 308 & 0.460 (0.431--0.489) & 0.449 & 0.525 (0.498--0.552) & 0.502 & 0.020 \\
+CellFlow & 303 & 0.501 (0.471--0.532) & 0.501 & 0.524 (0.493--0.554) & 0.524 & 0.471 \\
+WT-null & 308 & 0.500 (0.500--0.500) & 0.500 & 0.524 (0.493--0.554) & 0.524 & 1.000 \\
+GBoost-esm+theta & 305 & 0.471 (0.442--0.500) & 0.462 & 0.523 (0.498--0.548) & 0.508 & 0.078 \\
+RF-esm+theta & 305 & 0.454 (0.424--0.484) & 0.452 & 0.522 (0.495--0.547) & 0.512 & 0.196 \\
+Biolord$^{*}$ & 308 & 0.497 (0.467--0.528) & 0.493 & 0.521 (0.491--0.551) & 0.504 & 0.020 \\
+Ridge-esm+theta & 305 & 0.461 (0.432--0.491) & 0.454 & 0.521 (0.493--0.548) & 0.505 & 0.059 \\
+GBoost-esm & 305 & 0.471 (0.442--0.499) & 0.463 & 0.516 (0.491--0.541) & 0.508 & 0.255 \\
+RF-esm & 305 & 0.452 (0.422--0.482) & 0.451 & 0.516 (0.490--0.543) & 0.511 & 0.372 \\
+Ridge-esm & 305 & 0.451 (0.421--0.481) & 0.453 & 0.512 (0.487--0.538) & 0.505 & 0.353 \\
+Lasso-theta & 308 & 0.458 (0.427--0.487) & 0.449 & 0.510 (0.484--0.536) & 0.500 & 0.157 \\
+Lasso-esm+theta & 305 & 0.452 (0.421--0.482) & 0.451 & 0.506 (0.479--0.533) & 0.500 & 0.275 \\
+MLP-esm & 305 & 0.449 (0.419--0.479) & 0.450 & 0.503 (0.473--0.532) & 0.503 & 0.529 \\
+Gene-mean & 308 & 0.447 (0.417--0.476) & 0.447 & 0.500 (0.500--0.500) & 0.500 & 1.000 \\
+MLP-esm+theta & 305 & 0.448 (0.417--0.478) & 0.449 & 0.499 (0.469--0.530) & 0.492 & 0.176 \\
+Lasso-esm & 305 & 0.450 (0.420--0.479) & 0.451 & 0.493 (0.463--0.524) & 0.495 & 0.804 \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
+%% ===== Supplementary Table 9 (the pre-registered panel) =====
+\begin{table}[H]
+\centering
+\caption{\textbf{The frozen criterion applied to six published perturbation screens.} The criterion, its parameters, the datasets and four predictions were fixed before any dataset was measured (\texttt{docs/PREREG\_RESOLUTION\_PANEL\_v1.md}); nothing was tuned afterwards and no dataset was dropped. Three of the six took no part in developing the criterion. Not one is benchmarkable: every screen has a far lower identifiable than detectable fraction, and the two largest atlases still order graded predictors at 0.997 and 0.96 while 0.5\% and 1.4\% of their perturbations are identifiable. One of the four predictions failed: Adamson and Replogle are reversed on the detectable fraction relative to the manuscript's own pipeline, by 3.3 percentage points, so the packaged criterion and that pipeline are not interchangeable. Source: \texttt{results/canonical/resolution\_panel.csv}.}
+\label{tab:panel}
+\smallskip
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}l r r r r r l@{}}
+\toprule
+Dataset & $n$ & Detectable (\%) & Identifiable (\%) & Ceiling & $P$(order) & Verdict \\
+\midrule
+McFarland & 10 & 90.0 & 20.0 & 0.928 & 0.418 & detectable \\
+Tahoe-100M & 7 & 71.4 & 42.9 & 0.929 & 0.106 & detectable \\
+Norman 2019 & 195 & 68.7 & 0.5 & 0.898 & 0.997 & detectable \\
+Replogle 2022 & 414 & 51.2 & 1.4 & 0.865 & 0.959 & detectable \\
+Adamson 2016 & 94 & 47.9 & 3.2 & 0.851 & 0.974 & not detectable \\
+Virtual Cell Challenge & 139 & 25.9 & 4.3 & 0.806 & 0.903 & not detectable \\
+\bottomrule
+\end{tabular}}
+\end{table}
+
 \bigskip
 
 \noindent\textbf{Supplementary Note: robustness and sensitivity controls.}
@@ -206,7 +326,7 @@ JAK1  & 0.21 & 0.792 (0.742--0.838) & 78.5\% & 90\%  & 0.52 \\
 \noindent\textit{Metric-family invariance.} The detection floor is not specific to energy distance. The split-half window ratio $D_\mathrm{self}/D_\mathrm{null}$ (50-component PCA, 50 cells per half) stayed near one for TP53, KRAS and GATA1 and low for JAK1 under all five distance families tested (energy, RBF maximum-mean-discrepancy, sliced-Wasserstein, cosine and Euclidean): TP53 1.01--1.03, KRAS 0.95--0.99, GATA1 0.90--1.04, JAK1 0.05--0.40. Source: \texttt{results/canonical/metric\_family\_floor.csv}.
 
 \smallskip
-\noindent\textit{Gene-shared versus allele-specific decomposition.} Splitting each effect as $\delta_v = \bar{\delta}_g + r_v$ apportions the measured response between a component shared by all variants of a gene and an allele-specific residual; the shared fraction is a property of each dataset rather than of the metric, at 72\% (TP53), 59\% (KRAS), 29\% (GATA1) and 51\% (JAK1). What predictors actually recover follows instead from scoring the predictions against the residual: across all 24 predictors the residual Pearson-$\delta$ lay between $-0.08$ and $0.03$, so conventional direction recovery is carried almost entirely by the gene-shared component. An oracle scored on the allele-specific residual profiles stayed at chance for TP53 and KRAS (0.480 and 0.478), was marginal for GATA1 (0.588) and high for JAK1 (0.892), so the allele-specific residual is reproducible only where the measurement resolves sibling variants.
+\noindent\textit{Gene-shared versus allele-specific decomposition.} Splitting each effect as $\delta_v = \bar{\delta}_g + r_v$ apportions the measured response between a component shared by all variants of a gene and an allele-specific residual; the shared fraction is a property of each dataset rather than of the metric, at 72\% (TP53), 59\% (KRAS), 29\% (GATA1) and 51\% (JAK1). What predictors actually recover follows instead from scoring the predictions against the residual: across all 24 predictors the residual Pearson-$\delta$ lay between $-0.08$ and $0.03$, so conventional direction recovery is carried almost entirely by the gene-shared component. An oracle scored on the allele-specific residual profiles, with the gene mean taken from training variants only, stayed at the axis's own 0.524 reference for TP53 and KRAS (0.509 and 0.518), was marginal for GATA1 (0.576) and high for JAK1 (0.839), so the allele-specific residual is reproducible only where the measurement resolves sibling variants. An earlier decomposition centred on a mean that included the variants being scored and gave 0.892 for JAK1; self-inclusion in the mean makes that figure optimistic. Source: \texttt{results/canonical/residual\_axis\_ceiling.csv}.
 
 \smallskip
 \noindent\textit{Representation robustness.} Under identical splits, regression heads and scoring (single deterministic pseudobulk draw; the multi-seed convention used in the main text gives PDS 0.49--0.52), every variant representation left allele discrimination at chance while recovering direction similarly: PDS-cosine 0.458--0.473 and Pearson-$\delta$ 0.628--0.659 for the biophysical $\theta$ vector, ESM-1v, four ESM2 constructions (global, mutant-minus-wild-type global, mutated-residue and local-window) and AlphaMissense; a featureless training-gene-mean predictor reached Pearson-$\delta$ 0.66 at PDS 0.44. The scoring procedure is identical across representations, but variant coverage is not, because each representation is defined only where its input exists: AlphaMissense scores were available for 374 of the 470 benchmark variants (84 of 98 for TP53, 78 of 92 for KRAS, 201 of 254 for GATA1 and 11 of 26 for JAK1), giving 389 scored variant-by-split instances against 518 for $\theta$, 511 for ESM-1v and 497 for the ESM2 constructions. Correlations between AlphaMissense pathogenicity and measured effect size are therefore reported per gene only (Spearman $-0.08$ for TP53, $-0.05$ for KRAS and $0.09$ for GATA1); cross-gene pooling is not interpretable here, because both the pathogenicity distribution and the scale of the measured transcriptional effect differ between genes. Sources: \texttt{results/reviewer\_controls/rep\_grid\_summary.csv}, \texttt{am\_summary.csv} and \texttt{am\_effect\_spearman.csv}.
