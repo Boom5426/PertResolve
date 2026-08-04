@@ -2,26 +2,27 @@
 
 <h1>🧬 AllelePerturb</h1>
 
-<h3>Can models predict the transcriptional effect of <em>individual</em> protein-coding variants?</h3>
+<h3>Can your perturbation dataset arbitrate a model comparison at all?</h3>
 
-<p><b>A benchmark for allele-resolution single-cell perturbation prediction</b></p>
+<p><b>Measurement-resolution diagnostics for single-cell perturbation benchmarks, and the allele-resolution benchmark that motivated them</b></p>
 
 <p>
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-green.svg"></a>
-  <img alt="Python" src="https://img.shields.io/badge/python-3.11%2B-blue.svg">
+  <img alt="Python" src="https://img.shields.io/badge/python-3.10%2B-blue.svg">
+  <img alt="Dependencies" src="https://img.shields.io/badge/core%20deps-numpy%20%2B%20pandas-brightgreen.svg">
+  <img alt="Tests" src="https://img.shields.io/badge/tests-23%20passing-success.svg">
   <img alt="Cells" src="https://img.shields.io/badge/single%20cells-321%2C043-orange.svg">
   <img alt="Variants" src="https://img.shields.io/badge/variants-470-9cf.svg">
-  <img alt="Genes" src="https://img.shields.io/badge/genes-TP53%20%C2%B7%20KRAS%20%C2%B7%20GATA1%20%C2%B7%20JAK1-lightgrey.svg">
   <a href="https://github.com/Boom5426/AllelePerturb/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/Boom5426/AllelePerturb?style=social"></a>
 </p>
 
 <p>
-  <a href="#-overview">Overview</a> ·
-  <a href="#-key-results">Key Results</a> ·
+  <a href="#-run-it-on-your-data">Run it</a> ·
+  <a href="#-what-governs-whether-a-benchmark-works">The finding</a> ·
+  <a href="#-the-allele-benchmark">Benchmark</a> ·
   <a href="#-installation">Install</a> ·
-  <a href="#-quick-start">Quick Start</a> ·
-  <a href="#-data">Data</a> ·
-  <a href="#-evaluation-protocol">Metrics</a> ·
+  <a href="#-reproducing-the-paper">Reproduce</a> ·
+  <a href="#-limitations">Limitations</a> ·
   <a href="#-citation">Cite</a>
 </p>
 
@@ -30,46 +31,143 @@
 ---
 
 > [!IMPORTANT]
-> **TL;DR** — Across 20 predictors, every method recovers the *direction* of a variant's transcriptional effect (Pearson-δ **0.60–0.68**), but **none reliably distinguishes individual alleles of the same gene** (PDS **0.49–0.52**, indistinguishable from chance 0.50). A split-half analysis traces this to a **measurement-resolution floor** set by effect size, sampling noise and sequencing depth — reframing variant-level benchmarking as a *power-aware* problem.
+> **A leaderboard is only as good as the measurement under it.** If a dataset's ground truth
+> cannot tell two perturbations apart, it cannot order two models that differ in how well
+> they tell them apart, and its ranking reports the measurement as much as the methods. That
+> is a property of the data, measurable before any model is trained. This repository makes it
+> a one-line check, and reports what happens when you run it: across six published
+> perturbation screens, **not one supports identification of individual perturbations** at 50
+> cells per group.
 
 ---
 
-## ✨ Overview
+## 🚀 Run it on your data
 
-Most single-cell perturbation benchmarks define a perturbation at the level of a **gene**, **drug** or **condition** ("knock down *TP53*", "apply compound X"). But many disease mechanisms are **allele-specific**: `TP53 R175H` unfolds the protein, `R273C` keeps it folded yet DNA-binding-dead, and `R248Q` shows dominant-negative / gain-of-function behavior.
+```bash
+pip install -e ".[io]"
+alleleperturb-resolution data.h5ad --perturbation-key perturbation --control non-targeting
+```
 
-**AllelePerturb** asks the finer question: *can a model tell these alleles apart from their single-cell transcriptional response?* It packages the publicly available single-cell perturbation data that resolve individual protein-coding variants into one benchmark, with a fixed evaluation protocol and generalization splits.
+```python
+from alleleperturb.resolution import resolution_report
 
-<div align="center">
+report = resolution_report(X, labels, control="non-targeting", depth=50)
+print(report.summary())
+```
 
-| 🧫 Genes | 🔬 Variants | 🧮 Cells | 🧪 Technologies | 🎲 Splits | 📐 Metrics |
-|:--:|:--:|:--:|:--:|:--:|:--:|
-| 4 | 470 | 321,043 | 3 | 6 | 10 |
+```
+verdict: detectable
+  perturbations differ from the control but only 1% are separable from their closest
+  competitor, so a discrimination score has nothing to reward
+  414 perturbations at 50 cells per group, 1643 excluded
+  detectable    51.2% of perturbations clear their replicate noise
+  identifiable   1.4% are separable from their closest competitor
+  ceiling      0.865 attainable by a second measurement
+  ordering     orders predictors differing by 0.035 in quality (P(full order) = 0.96)
+```
 
-*TP53 · KRAS · GATA1 · JAK1   —   Perturb-seq · base editing · scSNV-seq*
+Three ordered questions, and the verdict names the first that fails:
 
-</div>
+| level | question | why it is not the previous one |
+|---|---|---|
+| **detectable** | does each perturbation differ from the control by more than its own replicate noise? | |
+| **identifiable** | is each perturbation separable from its *closest competitor*? | several perturbations can each depart from the control while remaining indistinguishable from one another |
+| **benchmarkable** | can the panel as a whole order predictors of graded, known quality? | a large screen can pool many individually unresolved perturbations into a benchmark that still orders predictors |
+
+Where more cells would help, the report says so; where they would not, it says that too, and
+the design calculator returns nothing rather than a number when the pilot separation's lower
+bound does not clear zero. No finite depth recovers a separation that is not there, and a
+confident cell count extrapolated from noise reads as a plan.
+
+**The core diagnostics depend on numpy and pandas alone.** Everything they compute is a
+distance, a mean or a rank. Requiring a scientific stack before someone can find out whether
+their dataset can arbitrate a comparison would put the answer out of reach at the point it is
+most useful.
 
 ---
 
-## 🔑 Key Results
+## 🔍 What governs whether a benchmark works
 
-The central finding is a clean **direction–discrimination dissociation**:
+A natural guess, and the one an earlier version of this analysis made, is that discrimination
+depends on the ratio of the average separation between perturbations to the sampling noise.
+**It does not.** Holding that ratio fixed at 0.59 and changing only the geometry of the
+configuration, the attainable discrimination ranges from **0.999 to 0.632**.
+
+The reason is that a discrimination score is a ranking question, which only a perturbation's
+*nearest* competitor can spoil, while an average over pairs is dominated by far-apart pairs
+the ranking never has to resolve. Over 1,452 controlled configurations:
+
+| candidate axis | Spearman with attainable discrimination |
+|---|---|
+| mean squared separation over pairs | 0.767 |
+| **median nearest-competitor separation** | **0.961** |
+
+On four real datasets alone the two are indistinguishable (0.965 and 0.881), which is why
+this took controlled configurations to settle rather than more data.
+
+Two further results that change how such numbers should be read:
+
+- **Ordering recovery is not monotone in resolution.** It peaks near an attainable
+  discrimination of 0.705 and falls above it, because two predictors that both reach the
+  ceiling become mutually indistinguishable. Only the ceiling can be inverted into a depth
+  requirement.
+- **Detection is common; identification is rare.** Across six screens run through the frozen
+  criterion, detectable fractions span 26% to 90% while identifiable fractions span 0.5% to
+  43%. The two largest gene-level atlases are 68.7% and 51.2% detectable against 0.5% and
+  1.4% identifiable, and both still order graded predictors at probability 0.997 and 0.96.
+
+Full derivations and the negative result that started them:
+`docs/RESULT_COLLAPSE_REFUTED_2026-08-04.md`, `docs/RESULT_RESOLUTION_LAW_2026-08-04.md`,
+`docs/RESULT_RESOLUTION_PANEL_2026-08-04.md`. The panel was
+[pre-registered](docs/PREREG_RESOLUTION_PANEL_v1.md) before it was run, and the one
+prediction that failed is reported as such.
+
+```bash
+pip install -e ".[dev]" && pytest      # 23 tests, simulations whose answer is known
+```
+
+The tests check the estimators against data with a known between-perturbation separation,
+including that an unbiased estimate is recovered when the true separation is exactly zero.
+
+---
+
+## 🧪 The allele benchmark
+
+The diagnostics came out of a concrete question. Most perturbation benchmarks define a
+perturbation as a **gene**, **drug** or **condition**. Many disease mechanisms are
+**allele-specific**: `TP53 R175H` unfolds the protein, `R273C` keeps it folded yet
+DNA-binding-dead, `R248Q` behaves dominant-negatively. Can a model tell these apart from
+single-cell transcriptional response?
+
+AllelePerturb packages the publicly available single-cell data that resolve individual
+protein-coding variants into one benchmark, with a fixed protocol: **470 protein-coding
+variants, 321,043 cells**, ten metrics and six generalization splits.
+
+The result is a clean **direction-discrimination dissociation**:
 
 <div align="center">
 
 | | 🧭 **Direction recovery** | 🎯 **Allele discrimination** |
 |:--|:--:|:--:|
 | **Metric** | Pearson-δ | PDS (perturbation discrimination score) |
-| **Result** | ✅ **0.60 – 0.68** | ❌ **0.49 – 0.52**  (chance = 0.50) |
-| **Meaning** | models capture the shared, gene-level program | models cannot tell one allele from another |
+| **Result** | ✅ **0.60 to 0.68** | ❌ **0.49 to 0.52** (chance = 0.50) |
+| **Meaning** | models capture the shared, gene-level programme | models cannot tell one allele from another |
 
 </div>
 
 > [!NOTE]
-> **Why?** A split-half analysis shows the culprit is not the models but the **ground truth**: within-variant replicate noise approaches the variant-to-wild-type signal. When the *effect-size-to-noise window* is narrow, no method — however expressive — can rank held-out variants. The same floor appears in gene-level Perturb-seq atlases, where a large fraction of perturbations are un-rankable at native depth.
+> **The culprit is not the models.** A replicate ceiling, the discrimination a second
+> measurement of the *same* variant attains, sits at chance for two of the four datasets: the
+> measurement cannot reward even an essentially correct answer. For one dataset the ceiling
+> is high while every model stays near chance, which is a genuine computational gap rather
+> than a measurement one. Separating those two regimes is what the diagnostics above are for.
 
-**Takeaway for practitioners:** before benchmarking models on variant-level data, first ask whether the ground truth is *measurable enough* to rank them. AllelePerturb provides the diagnostics and effect-size-conditioned guidance to do so.
+Scoring after removing the gene-shared programme does not rescue the models. That axis does
+not have chance at 0.50 either: an uninformative prediction scores 0.524 on it, matching its
+own permutation null exactly. Read against that null, six of 25 methods exceed it by 0.011 to
+0.025 and none survives correction for the number tested, while the measurement's own ceiling
+on the same axis rises, **widening** the gap between what the data permit and what the models
+reach.
 
 ---
 
@@ -82,64 +180,15 @@ pip install -e .                 # resolution diagnostics; numpy and pandas only
 pip install -e ".[io,bench]"     # add .h5ad reading and the benchmark analysis scripts
 ```
 
-The measurement-resolution diagnostics depend on **numpy and pandas alone**. Everything
-they compute is a distance, a mean or a rank, and asking someone to install a scientific
-stack before they can find out whether their dataset can arbitrate a model comparison would
-put the answer out of reach at exactly the point it is most useful. Reading `.h5ad` and
-reducing dimension need `anndata` and `scikit-learn` (`[io]`); the benchmark loader and the
-older analysis scripts under `scripts/` need `scipy` and `pyyaml` (`[bench]`).
+Reading `.h5ad` and reducing dimension need `anndata` and `scikit-learn` (`[io]`); the
+benchmark loader and the analysis scripts under `scripts/` need `scipy` and `pyyaml`
+(`[bench]`); `pytest` is `[dev]`.
 
 ---
 
-## 📐 Is your dataset able to arbitrate a model comparison?
+## 🔁 Reproducing the paper
 
-Before a leaderboard means anything, the measurement behind it has to separate the things
-being compared. A benchmark whose ground truth cannot tell two perturbations apart cannot
-order two models that differ in how well they tell them apart, so its ranking reports the
-measurement as much as the methods. That is a property of the data, and it can be measured
-before any model is trained.
-
-```bash
-alleleperturb-resolution data.h5ad --perturbation-key perturbation --control non-targeting
-```
-
-```python
-from alleleperturb.resolution import resolution_report
-
-report = resolution_report(X, labels, control="non-targeting", depth=50)
-print(report.summary())
-```
-
-The report answers three ordered questions, and names the first that fails:
-
-| level | question |
-|---|---|
-| **detectable** | does each perturbation differ from the control by more than its own replicate noise? |
-| **identifiable** | is each perturbation separable from its *closest competitor*? Detection does not imply this. |
-| **benchmarkable** | can the panel as a whole order predictors of graded, known quality? |
-
-On Adamson 2016 at 50 cells per group it reports 50% detectable but 6% identifiable; on
-Norman 2019, 71% and 1%. Both are largely un-identifiable while still ordering graded
-predictors reliably, which is the dissociation between per-perturbation and set-level
-resolution that the manuscript reports for allele-resolved data.
-
-One result is worth knowing before using the numbers. The mean squared separation over
-pairs, which earlier versions of this analysis used as the measurement axis, does **not**
-govern discrimination: at a fixed mean separation the attainable score ranges from 0.63 to
-0.999 depending on the geometry of the configuration. The nearest competitor governs it.
-See `docs/RESULT_COLLAPSE_REFUTED_2026-08-04.md` and
-`docs/RESULT_RESOLUTION_LAW_2026-08-04.md`.
-
-```bash
-pip install -e ".[dev]" && pytest      # 23 tests, simulations with a known answer
-```
-
----
-
-## 🚀 Quick Start
-
-Two analyses read **only committed tables** and therefore run on a fresh checkout with no
-external data:
+Two analyses read **only committed tables** and run on a fresh checkout with no external data:
 
 ```bash
 python results/pilot_validation/pilot_validate.py --out /tmp/ap_out
@@ -149,9 +198,9 @@ python scripts/figures/rankability_predictor.py   --out /tmp/ap_out/rankability.
 Both reproduce their committed counterparts in `results/` byte for byte.
 
 Manuscript figures are built per panel under `manuscript/figures/figN/`, where each
-`figN*_<panel>.py` writes a panel PDF and `figN_assemble.tex` composes them. They read the
-committed canonical tables through `manuscript/figures/remote_data.py`; they do not use the
-retired `scripts/figures/draw_figN.py` family.
+`figN*_<panel>.py` writes a panel PDF and `figN_assemble.tex` composes them.
+`manuscript/figures/check_panels.py` gates all 73 panels on size, type floor, overflow, row
+width, per-figure height budget, single font family and label collisions.
 
 ### Locating data that is not in the repository
 
@@ -172,14 +221,25 @@ export VCCOMPASS_BASE=/path/to/VCCompass
 python scripts/run_all_splits.py --out /tmp/grid          # or: --base /path/to/VCCompass
 ```
 
-`--out` is required everywhere and is never defaulted, so a re-run cannot overwrite the
-committed canonical tables under `results/`.
+`--out` is required everywhere and is refused if it resolves inside `results/`, so a re-run
+cannot overwrite a committed canonical table.
 
-### Script interfaces
+<details>
+<summary><b>Script interfaces</b></summary>
 
 | Script | Interface | Writes |
 |---|---|---|
 | `scripts/run_all_splits.py` | `[--base] --out` | `results_v4_10metrics.csv` |
+| `scripts/analysis/oracle_ceiling.py` | `[--base] --out` | `oracle_ceiling.csv` |
+| `scripts/analysis/pairwise_resolvability.py` | `[--base] --out` | `pairwise_resolvability.csv` |
+| `scripts/analysis/classifier_two_sample.py` | `[--base] --out` | `classifier_two_sample.csv` |
+| `scripts/analysis/metric_floor.py` | `[--base] --out` | `metric_family_floor.csv` |
+| `scripts/analysis/controlled_predictors.py` | `[--base] --out` | `controlled_recovery.csv` |
+| `scripts/analysis/floor_law_fit.py` | `[--base] --out` | `floor_law.csv` (superseded) |
+| `scripts/analysis/resolution_scaling.py` | `[--base] --out` | `floor_law_v2.csv` |
+| `scripts/analysis/resolution_sweep.py` | `[--base] --out` | `resolution_sweep.csv` |
+| `scripts/analysis/resolution_law.py` | `--sweep --out` | calibration and depth prescriptions |
+| `scripts/analysis/residual_axis.py` | `[--base] --out` | both scoring axes for every method |
 | `scripts/analysis/subspace_test.py` | `[--base] --out` | subspace-test JSON |
 | `scripts/figures/pipeline_v2.py` | `[--base] --out` | `all_metrics.csv`, `summary.json` |
 | `scripts/figures/run_split_half_power_analysis.py` | `[--base] --out` | split-half power curve |
@@ -196,39 +256,14 @@ committed canonical tables under `results/`.
 `results/reviewer_controls/esm2_extract.py` downloads the ESM2-650M weights (about 2.5 GB)
 into the PyTorch hub cache on first use and expects a CUDA device.
 
-### Committed canonical artifacts
-
 Some tables are shipped as results rather than rebuilt here. No committed script regenerates
 `results/results_v4_exttheta.csv` (read by the Fig. 2 and Fig. 4 panels),
 `results/benchmark_resolution/summary.csv` (Fig. 5f) or `results/rankability_sensitivity.csv`
-(Supplementary Fig. 1). They are provided as canonical artifacts and are the authority for the
-values reported in the manuscript. `scripts/run_all_splits.py` produces a different table,
-`results_v4_10metrics.csv`.
+(Supplementary Fig. 1). The adapters used to run the published models (scGen, scVIDR,
+Biolord, CellFlow, CPA, PerturbNet) and the shared evaluation harness are not part of this
+repository.
 
-The adapters used to run the published models (scGen, scVIDR, Biolord, CellFlow, CPA,
-PerturbNet) and the shared evaluation harness are not part of this repository.
-
-`scripts/figures/all_splits_v4.py` is a superseded byte-identical copy of
-`scripts/run_all_splits.py` and is no longer maintained; use the latter.
-
----
-
-## 🗂️ Repository Structure
-
-```
-AllelePerturb/
-├── alleleperturb/          # Python package: bench loading, θ features, evaluation
-├── data/                   # Benchmark tables (θ features, split assignments)
-├── results/                # Pre-computed result tables (reproducibility backbone)
-├── scripts/
-│   ├── figures/            # Self-contained figure-drawing scripts
-│   ├── baselines/          # Baseline method implementations
-│   └── run_all_splits.py   # Full evaluation-grid runner
-├── figures/                # Generated figures (composites + panels)
-├── manuscript/             # LaTeX manuscript + references
-├── requirements.txt
-└── README.md
-```
+</details>
 
 ---
 
@@ -238,13 +273,13 @@ AllelePerturb/
 
 | File | Description |
 |------|-------------|
-| `data/allele_perturb_bench.csv` | 470 protein-coding variants (+2 WT reference rows): gene, protein, θ₆ biophysical features, 6 split assignments |
+| `data/allele_perturb_bench.csv` | 470 protein-coding variants (plus 2 WT reference rows): gene, protein, θ₆ biophysical features, 6 split assignments |
+| `results/canonical/` | Every table behind a manuscript number, each annotated with the panels it supports and each with a committed generator |
 | `results/results_v4_exttheta.csv` | Full evaluation grid (canonical, external-θ) |
-| `results/rankability_predictor_honest.csv` | Per-perturbation rankability predictor (leave-one-dataset-out) |
 
-### Raw single-cell data (download separately, ~2 GB)
+### Raw single-cell data (download separately, about 2 GB)
 
-Needed only to **re-run the evaluation grid** — not to draw figures.
+Needed only to re-run the evaluation grid, not to draw figures.
 
 | Genes | Source | Assay |
 |-------|--------|-------|
@@ -253,7 +288,7 @@ Needed only to **re-run the evaluation grid** — not to draw figures.
 | **JAK1** | [Zenodo 10418435](https://doi.org/10.5281/zenodo.10418435) · ENA PRJEB48915 | scSNV-seq (HT-29) |
 
 <details>
-<summary><b>Download commands & preprocessing</b></summary>
+<summary><b>Download commands and preprocessing</b></summary>
 
 ```bash
 cd data/
@@ -290,37 +325,68 @@ following arrays. Only the first has a committed producer:
 
 ---
 
-## 📏 Evaluation Protocol
-
-### Metrics
+## 📏 Evaluation protocol
 
 | Metric | Question | Range |
 |--------|----------|:-----:|
-| **PDS** *(primary)* | Is a prediction closer to its own target than to other variants? | 0–1 · **0.5 = chance** |
+| **PDS** *(primary)* | Is a prediction closer to its own target than to other variants? | 0 to 1 · **0.5 = chance** |
+| **residual-PDS** | The same, after removing the gene-shared programme | **chance is 0.524, not 0.5**; read against a permutation null |
 | **Pearson-δ** | Do predicted and true perturbation directions agree? | −1 to 1 |
-| **DE overlap** | Fraction of top-50 DE genes shared | 0–1 |
-| **Direction agreement** | Sign concordance across genes | 0–1 |
+| **DE overlap** | Fraction of top-50 DE genes shared | 0 to 1 |
+| **Direction agreement** | Sign concordance across genes | 0 to 1 |
 | **DE-LFC Spearman** | Rank correlation of log-fold-changes | −1 to 1 |
 | **MAE** | Mean absolute error of predicted profiles | ≥ 0 |
 
-*PDS is computed under cosine, L1 and L2 distances; **PDS-cosine** is the primary metric.*
+PDS is computed under cosine, L1 and L2 distances; **PDS-cosine** is primary.
 
-### Generalization splits
+| Split | Held out | Tests | Scored |
+|-------|----------|-------|:--:|
+| **Random** | 35% of variants | standard generalization | ✅ |
+| **OOD-Position** | C-terminal half | positional extrapolation | ✅ |
+| **OOD-Mechanism** | hotspot / functional residues | mechanistic extrapolation | ✅ |
+| **Low-N** | variants under 200 cells | low-depth regime | ✅ |
+| **Compatibility** | matched holdouts | comparison with prior work | ✅ |
+| **Cross-Gene** | one whole gene | gene transfer | ❌ defined but not scored |
 
-| Split | Held out | Tests |
-|-------|----------|-------|
-| **Random** | 35% of variants | Standard generalization |
-| **OOD-Position** | C-terminal half | Positional extrapolation |
-| **OOD-Mechanism** | Hotspot / functional residues | Mechanistic extrapolation |
-| **Cross-Gene** | one whole gene | Gene transfer |
-| **Low-N** | variants < 200 cells | Low-depth regime |
-| **Compatibility** | matched holdouts | Comparison with prior work |
+Cross-gene is defined and released so others can use it, but is not scored here: the four
+datasets do not share a gene space, so a model trained on one cannot emit a profile in
+another's coordinates.
+
+---
+
+## ⚠️ Limitations
+
+Stated here rather than buried, because they bound what any number in this repository means.
+
+- **Four genes, and gene identity is confounded with everything else.** Each gene is also a
+  distinct assay, cell line, stimulation condition and analysis protocol, so a difference
+  between genes is a difference between measurement regimes and not a statement about the
+  biology of those proteins. These are the publicly available datasets that resolve
+  individual protein-coding variants with reusable per-variant labels; the scope is set by
+  what exists, not by design.
+- **The model-limited verdict rests on a small panel.** The one dataset whose measurement
+  supports allele discrimination contributes 26 variants in total, 20 at native depth and
+  fewer at greater depths, so its intervals are wide.
+- **The external panel is six screens, not the ten to fifteen planned.** Six is the number of
+  usable perturbation screens available; two of them carry fewer than a dozen perturbations.
+- **The packaged criterion and the manuscript's own pipeline are not interchangeable.** On
+  the three datasets common to both, they agree on the extremes and disagree on the middle
+  two by about three points. Do not quote a fraction from one as if it came from the other.
+- **The nearest-competitor estimator is biased upward near the floor** and is reliable for
+  ranking configurations rather than as a point estimate where the separation is far below
+  the noise.
+- **Split-half replicate noise is an optimistic lower bound.** Two halves of one experiment
+  share batch, library preparation and editing, so a replicate-aware floor would be stricter.
+- **Pseudobulk profiles are the prediction target.** Cell-level classifier controls show the
+  identification floor is not an artefact of averaging, but pseudobulk evaluation may still
+  underrepresent effects confined to rare subpopulations.
+- **Transcriptomic response is not the whole phenotype.** Alleles indistinguishable in
+  expression space may still differ in protein state, signalling activity or organismal
+  consequence.
 
 ---
 
 ## 📄 Manuscript
-
-The LaTeX manuscript lives under `manuscript/latex/` and compiles with:
 
 ```bash
 cd manuscript/latex && make
@@ -342,13 +408,14 @@ cd manuscript/latex && make
 
 ---
 
-## 📝 License & Contact
+## 📝 License and contact
 
 Released under the [MIT License](LICENSE).
-Questions and contributions welcome — please open an [issue](https://github.com/Boom5426/AllelePerturb/issues).
+Questions and contributions welcome, please open an
+[issue](https://github.com/Boom5426/AllelePerturb/issues).
 
-**Bo Li** · University of Florida, Department of Biomedical Engineering
+**Bo Li** · Department of Artificial Intelligence, University of Macau
 
 <div align="center">
-<sub>If AllelePerturb is useful for your work, consider leaving a ⭐ — it helps others find it.</sub>
+<sub>If AllelePerturb is useful for your work, consider leaving a ⭐, it helps others find it.</sub>
 </div>
