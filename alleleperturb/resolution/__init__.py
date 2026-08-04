@@ -12,6 +12,7 @@ and the between-perturbation signal, together with the dimensionless ratio of th
 from .scaling import (
     bootstrap_delta2,
     gram_of,
+    nearest_neighbour_rho2,
     permutation_null_delta2,
     signal_noise,
     stats_from_gram,
@@ -21,6 +22,7 @@ from .scaling import (
 __all__ = [
     "bootstrap_delta2",
     "gram_of",
+    "nearest_neighbour_rho2",
     "permutation_null_delta2",
     "signal_noise",
     "stats_from_gram",

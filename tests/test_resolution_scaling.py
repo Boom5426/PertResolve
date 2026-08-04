@@ -27,6 +27,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from alleleperturb.resolution import (  # noqa: E402
     bootstrap_delta2,
     gram_of,
+    nearest_neighbour_rho2,
     permutation_null_delta2,
     signal_noise,
     stats_from_gram,
@@ -176,6 +177,42 @@ def test_two_level_bootstrap_is_wider_than_resampling_perturbations_alone():
         width1.append(hi1 - lo1)
     assert np.mean(cover2) >= 0.88, f"two-level coverage {np.mean(cover2):.3f}"
     assert np.mean(width2) > np.mean(width1), "two-level interval should not be narrower"
+
+
+def test_nearest_neighbour_separates_configurations_the_mean_cannot():
+    """Guards the finding that drives the law: the mean over pairs is the wrong statistic.
+
+    Two configurations are built with an identical mean squared separation, one spread over
+    many directions and one collapsed onto a line. A discrimination score is a
+    nearest-neighbour question, so the collapsed configuration is far harder, and a
+    statistic that cannot see the difference cannot describe discrimination.
+    """
+    rng = np.random.RandomState(0)
+    n = 20
+    configs = {
+        "line": np.linspace(-1, 1, n)[:, None] * rng.normal(size=(1, K)),
+        "spread": rng.normal(size=(n, K)),
+    }
+    measured = {}
+    for name, mu in configs.items():
+        mu = mu - mu.mean(0)
+        g = mu @ mu.T
+        d2 = np.diag(g)[:, None] + np.diag(g)[None, :] - 2 * g
+        mu = mu / np.sqrt(d2[np.triu_indices(n, 1)].mean()) * np.sqrt(2.0)
+        S = mu[:, None, :] + rng.normal(0, 1.0 / np.sqrt(K), size=(n, H, K))
+        measured[name] = nearest_neighbour_rho2(S, 1.0)["nn_median"]
+    assert measured["spread"] > 10 * measured["line"], (
+        f"nearest-neighbour statistic failed to separate the configurations: "
+        f"{measured}")
+
+
+def test_nearest_neighbour_rejects_a_single_measurement():
+    """Cross-fitting needs two measurements; one cannot remove the selection bias."""
+    try:
+        nearest_neighbour_rho2(np.zeros((5, 1, 3)), 1.0)
+    except ValueError:
+        return
+    raise AssertionError("a single measurement should raise")
 
 
 def test_single_measurement_is_refused():
