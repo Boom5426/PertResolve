@@ -22,7 +22,6 @@
   <a href="#-the-allele-benchmark">Benchmark</a> ·
   <a href="#-installation">Install</a> ·
   <a href="#-reproducing-the-paper">Reproduce</a> ·
-  <a href="#-limitations">Limitations</a> ·
   <a href="#-citation">Cite</a>
 </p>
 
@@ -352,46 +351,6 @@ PDS is computed under cosine, L1 and L2 distances; **PDS-cosine** is primary.
 Cross-gene is defined and released so others can use it, but is not scored here: the four
 datasets do not share a gene space, so a model trained on one cannot emit a profile in
 another's coordinates.
-
----
-
-## ⚠️ Limitations
-
-Stated here rather than buried, because they bound what any number in this repository means.
-
-- **Four genes, and gene identity is confounded with everything else.** Each gene is also a
-  distinct assay, cell line, stimulation condition and analysis protocol, so a difference
-  between genes is a difference between measurement regimes and not a statement about the
-  biology of those proteins. These are the publicly available datasets that resolve
-  individual protein-coding variants with reusable per-variant labels; the scope is set by
-  what exists, not by design.
-- **The model-limited verdict rests on a small panel.** The one dataset whose measurement
-  supports allele discrimination contributes 26 variants in total, 20 at native depth and
-  fewer at greater depths, so its intervals are wide.
-- **The external panel is six screens, not the ten to fifteen planned.** Six is the number of
-  usable perturbation screens available; two of them carry fewer than a dozen perturbations.
-- **The packaged criterion and the manuscript's own pipeline are not interchangeable.** On
-  the three datasets common to both, they agree on the extremes and disagree on the middle
-  two by about three points. Do not quote a fraction from one as if it came from the other.
-- **The nearest-competitor estimator is biased upward near the floor** and is reliable for
-  ranking configurations rather than as a point estimate where the separation is far below
-  the noise.
-- **Split-half replicate noise is an optimistic lower bound.** Two halves of one experiment
-  share batch, library preparation and editing, so a replicate-aware floor would be stricter.
-- **Pseudobulk profiles are the prediction target.** Cell-level classifier controls show the
-  identification floor is not an artefact of averaging, but pseudobulk evaluation may still
-  underrepresent effects confined to rare subpopulations.
-- **Transcriptomic response is not the whole phenotype.** Alleles indistinguishable in
-  expression space may still differ in protein state, signalling activity or organismal
-  consequence.
-
----
-
-## 📄 Manuscript
-
-```bash
-cd manuscript/latex && make
-```
 
 ---
 
