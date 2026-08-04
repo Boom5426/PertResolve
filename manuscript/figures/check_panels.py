@@ -155,14 +155,14 @@ SPECS: dict[int, dict] = {
             "fig5b_ceiling_vs_models": ("fig5b_ceiling_vs_models", 78.0, 42.0),
             "fig5c_phase_map": ("fig5c_phase_map", 48.0, 31.0),
             "fig5d_predictor_family": ("fig5d_predictor_family", 130.0, 31.0),
-            "fig5e_rank_recovery_concept": ("fig5e_rank_recovery_concept", 110.0, 34.0),
+            "fig5e_governing_quantity": ("fig5e_governing_quantity", 110.0, 34.0),
             "fig5f_external_benchmarks": ("fig5f_external_benchmarks", 68.0, 34.0),
             "fig5g_recovery_support": ("fig5g_recovery_support", 182.5, 43.0),
         },
         "rows": [
             ("1", ["fig5a_replicate_ceiling", "fig5b_ceiling_vs_models"], 4.5),
             ("2", ["fig5c_phase_map", "fig5d_predictor_family"], 4.5),
-            ("3", ["fig5e_rank_recovery_concept", "fig5f_external_benchmarks"], 4.5),
+            ("3", ["fig5e_governing_quantity", "fig5f_external_benchmarks"], 4.5),
             ("4", ["fig5g_recovery_support"], 4.5),
         ],
     },
@@ -212,6 +212,36 @@ def capture(figure_dir: Path, module_name: str):
     return captured["fig"]
 
 
+def out_of_view_tick_labels(fig) -> set[int]:
+    """Identify tick labels whose tick lies outside its axis view interval.
+
+    A tick locator can place a tick outside the limits; matplotlib keeps the Text artist,
+    leaves ``get_visible()`` True and simply does not draw it. Measuring such an artist
+    reports an overflow for a glyph that never reaches the page: a panel with the default y
+    locator on limits of 0.46 to 1.03 carries a label for 1.2 sitting three millimetres above
+    a 34 mm canvas, which the rendered PDF does not contain.
+
+    This runs once, before anything is measured, because asking an axis for its tick labels
+    refreshes its ticks. Doing that inside the measurement loop changes the figure while it
+    is being measured, and turned an axis that had been switched off back on partway through,
+    which flagged every tick of a schematic panel that draws no axis at all.
+    """
+    out = set()
+    for ax in fig.axes:
+        if not getattr(ax, "axison", True):
+            continue          # a schematic that draws no axis has no tick to be out of view
+        for which in ("x", "y"):
+            axis = ax.xaxis if which == "x" else ax.yaxis
+            lo, hi = ax.get_xlim() if which == "x" else ax.get_ylim()
+            lo, hi = min(lo, hi), max(lo, hi)
+            index = 0 if which == "x" else 1
+            for label in axis.get_ticklabels():
+                value = label.get_position()[index]
+                if not (lo - 1e-9 <= value <= hi + 1e-9):
+                    out.add(id(label))
+    return out
+
+
 def text_extent(text, renderer):
     """Extent of the glyphs alone, excluding an annotation's leader line.
 
@@ -249,10 +279,19 @@ def check_panel(figure_dir: Path, module_name: str, stem: str,
             f"{stem}: figure is {got_w:.2f} x {got_h:.2f} mm, declared "
             f"{w_mm:.2f} x {h_mm:.2f} mm")
 
+    # Visibility is snapshotted from the pristine state first, because asking an axis for
+    # its tick labels refreshes its ticks and can turn labels visible that matplotlib had
+    # not been drawing. Reading visibility afterwards flagged every tick of a schematic
+    # panel that switches its axis off.
+    visible_before = {id(a) for a in fig.findobj(matplotlib.text.Text) if a.get_visible()}
+    undrawn = out_of_view_tick_labels(fig)
+
     px_per_mm = fig.dpi / 25.4
     overflow, small = [], []
     for text in fig.findobj(matplotlib.text.Text):
-        if not text.get_text().strip() or not text.get_visible():
+        if not text.get_text().strip() or id(text) not in visible_before:
+            continue
+        if id(text) in undrawn:
             continue
         if text.get_fontsize() < MIN_PT - 1e-9:
             small.append(f"{text.get_fontsize():.2f} pt {text.get_text()[:40]!r}")
@@ -275,7 +314,7 @@ def check_panel(figure_dir: Path, module_name: str, stem: str,
         # Two characters, not three: short labels like "P5" are exactly the
         # ones that stack in a compressed row list, and skipping them hid a
         # five-way collision in fig5e.
-        if len(body) < 2 or not text.get_visible():
+        if len(body) < 2 or id(text) not in visible_before or id(text) in undrawn:
             continue
         bb = text_extent(text, renderer)
         if bb.width > 0 and bb.height > 0:
