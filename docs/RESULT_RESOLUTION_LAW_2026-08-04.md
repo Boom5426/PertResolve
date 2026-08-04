@@ -30,7 +30,7 @@ construction rather than measuring it.
 | `rho2`, the mean squared separation over pairs, what Methods names | 1,452 | 0.767 |
 | **`rho2_nn_median`, the median nearest-competitor separation** | 1,452 | **0.961** |
 | `rho2_nn_geomean` | 329 | 0.818 |
-| `frac_above_noise` | 1,452 | 0.923 |
+| `frac_above_noise` | 1,452 | 0.950 |
 
 On the twelve real points alone `rho2` scores 0.965 and the nearest-competitor median
 0.881, so **four datasets cannot distinguish the two**. That is why the assertion survived
@@ -40,6 +40,13 @@ The geometric mean is unusable and is reported as undefined rather than floored:
 1,452 points contain at least one perturbation whose separation debiases below zero, and a
 floored geometric mean is set by the floor and by how many values hit it while still
 printing as a number.
+
+The above-noise fraction is close behind the chosen axis but is computed per cell split and
+then averaged, never from separations averaged first. Thresholding an average shrinks the
+noise around a residual bias rather than the bias itself, which on data with exactly zero
+separation reads 0.59 instead of 0.52; the table was regenerated after that was fixed, and
+the fraction's agreement with the ceiling moved from 0.923 to 0.950 while the chosen axis
+and every conclusion below were unaffected.
 
 ## What the calibration can and cannot be inverted
 

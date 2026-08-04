@@ -4,7 +4,7 @@
     "rho2": 0.7672149724679865,
     "rho2_nn_median": 0.9610656940441735,
     "rho2_nn_geomean": 0.818475660302334,
-    "frac_above_noise": 0.9234511522825437
+    "frac_above_noise": 0.9504928296822236
   },
   "monotone": {
     "ceiling_pds": true,

@@ -272,9 +272,12 @@ def measure(gene: str, m: int, variants: list[str], label: str, *,
 
     # nearest-competitor separations are formed per split against that configuration's own
     # noise, then averaged; forming them from averaged profiles over-subtracts and floors
-    seps = np.mean([nearest_neighbour_rho2(S, obs["eta2"])["separations"]
-                    for S in per_split], axis=0)
+    per_split_nn = [nearest_neighbour_rho2(S, obs["eta2"]) for S in per_split]
+    seps = np.mean([r["separations"] for r in per_split_nn], axis=0)
     nn = summarise_separations(seps, obs["eta2"])
+    # per split, then averaged: thresholding an average of separations inflates this, since
+    # averaging shrinks the noise around a residual bias rather than the bias itself
+    frac_above = float(np.mean([r["frac_above_noise"] for r in per_split_nn]))
 
     # The calculator must not extrapolate a depth from a resolution estimate that is
     # consistent with zero: no finite depth rescues a separation that is not there, and a
@@ -293,7 +296,7 @@ def measure(gene: str, m: int, variants: list[str], label: str, *,
         rho2_nn_median_lo=round(float(nn_lo), 5),
         rho2_nn_median_hi=round(float(nn_hi), 5),
         rho2_nn_geomean=round(nn["rho2_nn_geomean"], 6),
-        frac_above_noise=round(nn["frac_above_noise"], 4),
+        frac_above_noise=round(frac_above, 4),
         nn_nonpositive=nn["n_nonpositive"],
         ceiling_pds=round(float(np.mean(ceil)), 4),
         p_correct=round(p_correct, 3), p_winner=round(p_winner, 3),
