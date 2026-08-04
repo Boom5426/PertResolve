@@ -175,13 +175,14 @@ SPECS: dict[int, dict] = {
             "fig6d_prospective_validation": ("fig6d_prospective_validation", 80.5, 43.0),
             "fig6e_effect_depth_landscape": ("fig6e_effect_depth_landscape", 80, 37.0),
             "fig6f_paired_depthmatch": ("fig6f_paired_depthmatch", 80.5, 37.0),
-            "fig6g_probability_workflow": ("fig6g_probability_workflow", 165, 38.0),
+            "fig6g_probability_workflow": ("fig6g_probability_workflow", 96.0, 38.0),
+            "fig6h_screen_panel": ("fig6h_screen_panel", 64.5, 38.0),
         },
         "rows": [
             ("1", ["fig6a_pilot_pipeline", "fig6b_retrospective_roc"], 4.5),
             ("2", ["fig6c_dataset_auroc", "fig6d_prospective_validation"], 4.5),
             ("3", ["fig6e_effect_depth_landscape", "fig6f_paired_depthmatch"], 4.5),
-            ("4", ["fig6g_probability_workflow"], 4.5),
+            ("4", ["fig6g_probability_workflow", "fig6h_screen_panel"], 4.5),
         ],
     },
 }

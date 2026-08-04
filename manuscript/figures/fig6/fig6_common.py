@@ -14,6 +14,8 @@ from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent))
+import pandas as pd
+
 import nm_style as S  # noqa: E402
 
 # Source tables live in the repository, not in a private copy beside the panels.
@@ -47,6 +49,16 @@ DATASET_COLORS = {
 }
 GENE_ORDER = ["TP53", "KRAS", "GATA1", "JAK1"]
 EXTERNAL_ORDER = ["Replogle", "Norman", "Adamson"]
+
+
+def read_csv(name: str):
+    """Read a committed canonical table by name, as the other figures do.
+
+    Panels in this figure historically read only from ``DERIVED``. Panels that draw from
+    ``results/canonical/`` need the same resolver the rest of the figures use, which
+    searches the committed data directories and raises rather than falling back.
+    """
+    return pd.read_csv(S.data_path(name))
 
 
 def apply_style() -> None:
