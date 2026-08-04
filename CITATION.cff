@@ -1,0 +1,39 @@
+cff-version: 1.2.0
+title: >-
+  AllelePerturb: measurement-resolution diagnostics for single-cell
+  perturbation benchmarks
+message: >-
+  If you use this software or the benchmark, please cite the article below.
+type: software
+authors:
+  - family-names: Li
+    given-names: Bo
+    affiliation: >-
+      Department of Artificial Intelligence, University of Macau
+repository-code: https://github.com/Boom5426/AllelePerturb
+license: MIT
+keywords:
+  - single-cell
+  - perturbation prediction
+  - benchmark
+  - measurement resolution
+  - protein-coding variants
+abstract: >-
+  A benchmark whose ground truth cannot separate two perturbations cannot order
+  two models that differ in how well they separate them, so its ranking reports
+  the measurement as much as the methods. AllelePerturb measures that property
+  of a dataset before any model is trained, and applies it to allele-resolution
+  single-cell perturbation prediction across 470 protein-coding variants and
+  321,043 cells.
+preferred-citation:
+  type: article
+  title: >-
+    Measurement and model limits of allele-specific single-cell perturbation
+    prediction
+  authors:
+    - family-names: Li
+      given-names: Bo
+      affiliation: >-
+        Department of Artificial Intelligence, University of Macau
+  year: 2026
+  notes: Manuscript in preparation

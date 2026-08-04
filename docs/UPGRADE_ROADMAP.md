@@ -1,3 +1,20 @@
+> [!WARNING]
+> **Superseded, 2026-08-04.** This document plans an upgrade whose centrepiece, a collapse of
+> discrimination onto a single dimensionless group `g(rho)`, was executed and then **refuted**.
+> Holding `rho2` fixed and changing only the geometry of the configuration, the attainable
+> discrimination ranges from 0.999 to 0.632, so `rho` does not govern discrimination and the
+> "definition of done" in Section 11 is not achievable as written. The quantity that does
+> govern it is the separation of each perturbation's nearest competitor.
+>
+> The body below is left unedited as a record of what was planned and why. For what was
+> actually established, read `docs/RESULT_COLLAPSE_REFUTED_2026-08-04.md` and
+> `docs/RESULT_RESOLUTION_LAW_2026-08-04.md`; for the estimator defects found on the way,
+> `docs/RESULT_RESOLUTION_SCALING_2026-08-03.md`.
+>
+> Items 1A, 1B, 1C, 2A and 2B were completed and are in the manuscript. Item 1D was completed
+> and refuted. Item 3B was completed in a different form, as a pre-registered six-screen panel
+> (`docs/PREREG_RESOLUTION_PANEL_v1.md`).
+
 # AllelePerturb Upgrade Roadmap (long-term, to structurally secure Nature Methods)
 
 Author-facing planning doc. Text and tables only; figures are drawn separately by the

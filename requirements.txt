@@ -1,5 +1,9 @@
-numpy>=1.23
-pandas>=1.5
-scipy>=1.10
-scikit-learn>=1.2
-pyyaml>=6.0
+# The dependency set lives in pyproject.toml. Listing it again here would let the two
+# disagree, which they did: this file used to name scipy, scikit-learn and pyyaml as core
+# requirements while the package needs only numpy and pandas for its diagnostics.
+#
+#   pip install -e .              resolution diagnostics, numpy and pandas only
+#   pip install -e ".[io]"        adds .h5ad reading and dimension reduction
+#   pip install -e ".[bench]"     adds the benchmark loader and the analysis scripts
+#   pip install -e ".[dev]"       adds pytest
+-e .[io,bench]

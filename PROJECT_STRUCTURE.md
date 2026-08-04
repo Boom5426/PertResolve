@@ -1,75 +1,106 @@
-# Project Structure — AllelePerturb
+# Project structure
 
-A reproducible map of the AllelePerturb benchmark: every figure ties back to its
-source script, its input data, and the manuscript. Organized figure-by-figure for reuse.
+Two things live here, and the layout follows that split.
+
+**A tool.** `alleleperturb.resolution` measures whether a perturbation dataset can arbitrate
+a model comparison, before any model is trained. It depends on numpy and pandas alone and is
+usable on any dataset, not only the ones studied here.
+
+**A study.** The allele-resolution benchmark that motivated the tool, its manuscript, and
+every table behind every number in it.
 
 ```
 AllelePerturb/
-├── alleleperturb/            # pip-installable package (metrics, PDS, eval)
-│   ├── bench.py              # benchmark loader
-│   ├── features.py           # θ feature construction
-│   ├── metrics.py            # top-level metric API
-│   └── evaluation/           # pds.py, de_metrics.py, direction_metrics.py
-├── data/                     # benchmark tables (inputs)
-│   ├── allele_perturb_bench.csv          # 472 variants, θ, n_cells, splits (primary)
-│   ├── allele_perturb_bench_v2.csv       # corrected external-hotspot version
-│   ├── allele_perturb_bench_extθ.csv     # external-θ (de-leaked)
-│   └── hotspot_external_definition.txt   # external hotspot criteria (COSMIC/IARC/ClinVar)
-├── results/                  # computed result tables (see results/README.md)
-├── scripts/figures/          # figure-generating code (run from this dir)
-│   ├── fig_config.py         # shared style + data loaders (anchors DATA_DIR=results/)
-│   ├── draw_fig2.py … draw_fig5.py
-│   ├── all_splits_v4.py      # the full 20-method × 5-split × 4-gene grid
-│   └── rankability_audit.py  # split-half D_self/D_null + energy distance
-├── figures/                  # FIGURE-CENTRIC organization (one dir per figure)
-│   ├── fig1/  … fig5/         # each: composite (.png+.pdf), panels/, figure.md manifest
-│   └── extended_data/         # ED Fig 1 rankability sensitivity
-└── manuscript/
-    ├── AllelePerturb_manuscript_en.md   # canonical English manuscript (with equations)
-    ├── AllelePerturb_manuscript_cn.md   # Chinese draft (superseded; EN is canonical)
-    └── latex/
-        ├── AllelePerturb_manuscript.tex # NM-style LaTeX (Palatino, lineno, natbib)
-        ├── AllelePerturb_manuscript.pdf # compiled, 17 pp, all 5 figures embedded
-        └── figures/          # fig1.pdf … fig5.pdf (embedded by \includegraphics)
+├── alleleperturb/                  # the installable package
+│   ├── resolution/                 # measurement-resolution diagnostics (numpy + pandas only)
+│   │   ├── profiles.py             # cut cells into disjoint measurement groups
+│   │   ├── window.py               # detection: each perturbation against its control
+│   │   ├── scaling.py              # sampling noise, between-perturbation signal, their ratio
+│   │   ├── recovery.py             # whether a known predictor ordering survives the benchmark
+│   │   ├── report.py               # the three levels together, with a verdict
+│   │   └── cli.py                  # alleleperturb-resolution
+│   ├── bench.py                    # benchmark loader
+│   ├── features.py                 # theta feature construction
+│   ├── metrics.py                  # top-level metric API
+│   ├── paths.py                    # external-location resolution; refuses to guess
+│   └── evaluation/                 # pds.py (incl. residual_pds_score), de_metrics, direction_metrics
+├── tests/                          # simulations whose answer is known by construction
+│   ├── test_resolution_scaling.py  # estimator: unbiasedness, calibration, coverage
+│   └── test_resolution_report.py   # verdict: the ladder, the null case, saturation
+├── data/                           # benchmark tables
+│   ├── allele_perturb_bench.csv        # 470 variants (plus 2 WT rows): theta, n_cells, splits
+│   ├── allele_perturb_bench_v2.csv     # external-hotspot definition; used by Fig. 1
+│   └── hotspot_external_definition.txt # COSMIC / IARC / ClinVar criteria
+├── results/
+│   ├── canonical/                  # every table behind a manuscript number, each with a generator
+│   ├── benchmark_resolution/       # per-dataset resolution JSON + its scripts
+│   ├── pilot_validation/           # pilot-to-full validation
+│   └── reviewer_controls/          # pre-submission controls
+├── scripts/
+│   ├── analysis/                   # generators for the canonical tables
+│   └── figures/                    # panel data preparation and the height-budget measurer
+├── manuscript/
+│   ├── figures/                    # one script per panel, one composite per figure
+│   │   ├── nm_style.py             # shared style; resolves the sans face by glyph coverage
+│   │   ├── check_panels.py         # the gate every panel must pass
+│   │   ├── compose.py              # builds a composite from a row spec
+│   │   └── fig1/ ... fig6/         # figN<letter>_<panel>.py + figN_assemble.tex
+│   └── latex/                      # AllelePerturb_manuscript.tex, AllelePerturb_SI.tex
+├── docs/                           # pre-registrations, result records, audits
+├── pyproject.toml                  # package metadata and dependency extras
+└── requirements.txt                # defers to pyproject; kept only for older tooling
 ```
 
-## Figure → Script → Data map
+## Figures
 
-| Figure | Role | Script | Input data | Type |
-|--------|------|--------|-----------|------|
-| **Fig 1** | Task + benchmark + protocol | (design spec) | `data/allele_perturb_bench.csv` | GPT art (data panels backed) |
-| **Fig 2** | Direction-ranking dissociation | `draw_fig2.py` | `results/results_v4_10metrics.csv` + `bootstrap_CIs.json` | Data-direct |
-| **Fig 3** | Measurement-window mechanism | `draw_fig3.py` | `second_probe_rankability_table.csv` + `split_half_power_curve.csv` | Data-direct (3a schematic) |
-| **Fig 4** | Robustness (metric/feature/split) | `draw_fig4.py` | `results_v4_exttheta.csv` | Data-direct |
-| **Fig 5** | Power-aware reporting protocol | `draw_fig5.py` | `second_probe_predictor_results.csv` + rankability table | Data-direct (5e workflow) |
-| **ED Fig 1** | Rankability criterion sensitivity | (round-2 probe) | `results/rankability_sensitivity.csv` | Data-direct |
+Each figure is built one panel at a time. `manuscript/figures/figN/figN<letter>_<panel>.py`
+writes a vector PDF, and `figN_assemble.tex` places them from a row specification produced by
+`compose.py`. Nothing is scaled at placement: type is set in points on a canvas declared in
+millimetres, so a panel is drawn at the size it will be printed.
 
-## Reproducing figures
+`check_panels.py` is the gate. It checks canvas overflow with a 0.4 mm margin, the declared
+millimetre size, a 5 pt type floor, row width against the 183 mm double-column width, the
+per-figure stacked height budget, a single embedded font family, and label collisions.
+
+Height budgets are per figure and are **not** interchangeable, because a float carries its
+caption and each caption is a different length. `scripts/figures/measure_figure_budget.py`
+measures them by bisecting against LaTeX's own float verdict. Lengthening a caption shrinks
+that figure's budget, so captions and panels have to be changed together.
+
+The printed figure numbers and the build directories cross over for two figures: printed
+Figure 3 is built in `fig4/` and printed Figure 4 in `fig3/`. The composite filenames follow
+the directories, not the printed numbers.
+
+## Reproducing
 
 ```bash
-cd scripts/figures
-python draw_fig2.py     # -> ../../figures/composites/... (see --out flag)
-python draw_fig3.py
-python draw_fig4.py
-python draw_fig5.py
+pip install -e ".[dev]" && pytest          # the tool, checked against known answers
+cd manuscript/latex && make                # the manuscript and the Supplementary Information
+python manuscript/figures/check_panels.py  # every panel, against every constraint
 ```
 
-Loaders in `fig_config.py` resolve `results/` automatically (anchored to `DATA_DIR`).
-Each `figures/figN/figure.md` documents that figure's panels, script, and data dependencies.
-
-## Compiling the manuscript
+Two analyses read only committed tables and run on a fresh checkout:
 
 ```bash
-cd manuscript/latex
-pdflatex AllelePerturb_manuscript.tex   # run twice for cross-references
+python results/pilot_validation/pilot_validate.py --out /tmp/ap_out
+python scripts/figures/rankability_predictor.py   --out /tmp/ap_out/rankability.csv
 ```
-Requires Palatino fonts (`tlmgr install mathpazo palatino psnfss` on TinyTeX).
-Figure PDFs live in `manuscript/latex/figures/`.
+
+Anything that touches single-cell data needs the processed arrays, which are not shipped.
+Point `ALLELEPERTURB_DATA` at them, or pass `--base`. The location is never inferred, and
+`--out` is refused if it resolves inside `results/`.
 
 ## Canonical numbers
 
-Frozen in `results/canonical_numbers.json`. Key values:
-- 472 variants, 321,043 cells, 4 genes, 3 technologies
-- D_self/D_null: TP53 0.96, KRAS 1.01, GATA1 0.90, JAK1 0.14
-- Un-rankable (native): TP53/KRAS/GATA1/JAK1 = 100/100/98/10%
-- No method exceeds chance PDS (0.5); Pearson-δ 0.60–0.69
+Frozen in `results/canonical/canonical_numbers.json`; the values below are read from it
+rather than restated by hand.
+
+- 470 protein-coding variants, 321,043 cells
+- `D_self / D_null` at native depth: TP53 0.965, KRAS 1.004, GATA1 0.878, JAK1 0.21
+- un-rankable at native depth: TP53 100%, KRAS 100%, GATA1 97.6%, JAK1 10%
+- gene-level atlases, un-rankable at native depth: Replogle 55.3%, Adamson 14.6%, Norman 3.4%
+- no method exceeds chance PDS (0.50); Pearson-delta 0.60 to 0.68
+
+Later results have their own records under `docs/`: the refutation of the one-variable
+scaling claim, the quantity that governs discrimination and its depth calculator, the
+residual scoring axis and its 0.524 chance level, and the pre-registered six-screen panel.
