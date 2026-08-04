@@ -99,6 +99,7 @@ SPECS: dict[int, dict] = {
             "fig2e_de_gradient": ("fig2e_de_gradient", 89.5, 44.0),
             "fig2f_gene_gap": ("fig2f_gene_gap", 58.0, 44.0),
             "fig2g_pervariant": ("fig2g_pervariant", 107.5, 44.0),
+            "fig2h_residual_axis": ("fig2h_residual_axis", 170.0, 20.0),
         },
         # One gutter value, and one content width: every row comes to 170.0 mm
         # and is centred, so all three share the same left and right edge. Row 3
@@ -108,6 +109,7 @@ SPECS: dict[int, dict] = {
             ("1", ["fig2a_evaluation", "fig2b_pds_forest", "fig2c_pearson_forest"], 4.5),
             ("2", ["fig2d_scatter", "fig2e_de_gradient"], 4.5),
             ("3", ["fig2f_gene_gap", "fig2g_pervariant"], 4.5),
+            ("4", ["fig2h_residual_axis"], 4.5),
         ],
     },
     3: {
