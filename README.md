@@ -78,17 +78,61 @@ The central finding is a clean **direction–discrimination dissociation**:
 ```bash
 git clone https://github.com/Boom5426/AllelePerturb.git
 cd AllelePerturb
-
-conda create -n alleleperturb python=3.11 -y
-conda activate alleleperturb
-pip install -r requirements.txt
-pip install -e .          # puts alleleperturb.paths on the import path
+pip install -e .                 # resolution diagnostics; numpy and pandas only
+pip install -e ".[io,bench]"     # add .h5ad reading and the benchmark analysis scripts
 ```
 
-**Core dependencies:** `numpy` · `pandas` · `scipy` · `scikit-learn` · `matplotlib` · `seaborn` · `scanpy` · `fair-esm` · `torch`
+The measurement-resolution diagnostics depend on **numpy and pandas alone**. Everything
+they compute is a distance, a mean or a rank, and asking someone to install a scientific
+stack before they can find out whether their dataset can arbitrate a model comparison would
+put the answer out of reach at exactly the point it is most useful. Reading `.h5ad` and
+reducing dimension need `anndata` and `scikit-learn` (`[io]`); the benchmark loader and the
+older analysis scripts under `scripts/` need `scipy` and `pyyaml` (`[bench]`).
 
-The analysis scripts under `scripts/` and `results/` import `alleleperturb.paths`, so
-`pip install -e .` is required before running them.
+---
+
+## 📐 Is your dataset able to arbitrate a model comparison?
+
+Before a leaderboard means anything, the measurement behind it has to separate the things
+being compared. A benchmark whose ground truth cannot tell two perturbations apart cannot
+order two models that differ in how well they tell them apart, so its ranking reports the
+measurement as much as the methods. That is a property of the data, and it can be measured
+before any model is trained.
+
+```bash
+alleleperturb-resolution data.h5ad --perturbation-key perturbation --control non-targeting
+```
+
+```python
+from alleleperturb.resolution import resolution_report
+
+report = resolution_report(X, labels, control="non-targeting", depth=50)
+print(report.summary())
+```
+
+The report answers three ordered questions, and names the first that fails:
+
+| level | question |
+|---|---|
+| **detectable** | does each perturbation differ from the control by more than its own replicate noise? |
+| **identifiable** | is each perturbation separable from its *closest competitor*? Detection does not imply this. |
+| **benchmarkable** | can the panel as a whole order predictors of graded, known quality? |
+
+On Adamson 2016 at 50 cells per group it reports 50% detectable but 6% identifiable; on
+Norman 2019, 71% and 1%. Both are largely un-identifiable while still ordering graded
+predictors reliably, which is the dissociation between per-perturbation and set-level
+resolution that the manuscript reports for allele-resolved data.
+
+One result is worth knowing before using the numbers. The mean squared separation over
+pairs, which earlier versions of this analysis used as the measurement axis, does **not**
+govern discrimination: at a fixed mean separation the attainable score ranges from 0.63 to
+0.999 depending on the geometry of the configuration. The nearest competitor governs it.
+See `docs/RESULT_COLLAPSE_REFUTED_2026-08-04.md` and
+`docs/RESULT_RESOLUTION_LAW_2026-08-04.md`.
+
+```bash
+pip install -e ".[dev]" && pytest      # 23 tests, simulations with a known answer
+```
 
 ---
 

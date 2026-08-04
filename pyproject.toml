@@ -1,0 +1,57 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "alleleperturb"
+version = "0.2.0"
+description = "Measurement-resolution diagnostics for single-cell perturbation benchmarks"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+    { name = "Bob Zhang", email = "boom5426@ufl.edu" },
+    { name = "Qianqian Song" },
+]
+keywords = ["single-cell", "perturbation", "benchmark", "measurement resolution"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Intended Audience :: Science/Research",
+]
+
+# The resolution diagnostics are deliberately numpy-only. Everything they compute is a
+# distance, a mean or a rank, and requiring a scientific stack to answer "can this dataset
+# arbitrate a model comparison" would put the answer out of reach of the people who most
+# need it, before they have committed to a pipeline. pandas is used only to hand back
+# tables, and the heavier dependencies belong to the optional entry points that need them.
+dependencies = [
+    "numpy>=1.23",
+    "pandas>=1.5",
+]
+
+[project.optional-dependencies]
+# Reading .h5ad, and reducing dimension before measuring.
+io = ["anndata>=0.9", "scikit-learn>=1.2"]
+# The benchmark loader and the older analysis scripts under scripts/.
+bench = ["scipy>=1.10", "scikit-learn>=1.2", "pyyaml>=6.0"]
+dev = ["pytest>=7.0"]
+
+[project.scripts]
+alleleperturb-resolution = "alleleperturb.resolution.cli:main"
+
+[project.urls]
+Repository = "https://github.com/Boom5426/AllelePerturb"
+
+[tool.setuptools.packages.find]
+include = ["alleleperturb*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# The estimator tests are simulations with hundreds of replicates, which is what makes them
+# able to detect a bias rather than only a crash. They take a couple of minutes.
+addopts = "-q --durations=5"
+markers = [
+    "workspace: needs the compute workspace named by VCCOMPASS_BASE; skipped without it",
+]

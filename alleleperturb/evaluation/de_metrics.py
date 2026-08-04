@@ -5,7 +5,10 @@ the correct set of differentially expressed genes (DEGs), their effect sizes,
 and their directions.
 """
 import numpy as np
-from scipy import stats
+# scipy is imported where it is used rather than at module import, so that the
+# numpy-only resolution diagnostics can be installed and used without it. Calling a
+# function that needs it raises there, which is clearer than a package that will not
+# import at all.
 
 
 def compute_de_genes(X, variant_mask, wt_mask, n_sub=300):
@@ -61,6 +64,7 @@ def de_lfc_spearman(
     p_lfc = pred_delta[de_idx]
     if np.std(r_lfc) < 1e-12 or np.std(p_lfc) < 1e-12:
         return 0.0
+    from scipy import stats
     return float(stats.spearmanr(r_lfc, p_lfc)[0])
 
 

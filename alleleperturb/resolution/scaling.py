@@ -330,6 +330,21 @@ def summarise_separations(separations: np.ndarray, eta2: float) -> dict:
     )
 
 
+def _frac_above_noise_warning() -> str:
+    """Why ``frac_above_noise`` must be averaged over splits rather than computed from an
+    average.
+
+    It counts how many separations exceed zero, which is a threshold on a quantity whose
+    noise shrinks as more splits are averaged. Averaging first therefore pushes the count
+    toward whatever the sign of the mean is, and any residual bias, however small, ends up
+    determining the answer: on data with exactly zero separation the fraction reads 0.52
+    from single splits and 0.59 once six are averaged. Compute it per split and average the
+    fractions. The median has no such problem: averaging moves it toward the mean, which is
+    unbiased.
+    """
+    return _frac_above_noise_warning.__doc__ or ""
+
+
 def tie_aware_pds(query: np.ndarray, truth: np.ndarray) -> float:
     """Mean tie-aware cosine perturbation discrimination score.
 
