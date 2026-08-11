@@ -149,7 +149,7 @@ The result is a clean **direction-discrimination dissociation**:
 | | 🧭 **Direction recovery** | 🎯 **Allele discrimination** |
 |:--|:--:|:--:|
 | **Metric** | Pearson-δ | PDS (perturbation discrimination score) |
-| **Result** | ✅ **0.60 to 0.68** | ❌ **0.49 to 0.52** (chance = 0.50) |
+| **Result** | ✅ **0.55 to 0.65** | ❌ **0.49 to 0.52** (chance = 0.50) |
 | **Meaning** | models capture the shared, gene-level programme | models cannot tell one allele from another |
 
 </div>

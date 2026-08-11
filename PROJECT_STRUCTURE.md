@@ -92,14 +92,18 @@ Point `ALLELEPERTURB_DATA` at them, or pass `--base`. The location is never infe
 
 ## Canonical numbers
 
-Frozen in `results/canonical/canonical_numbers.json`; the values below are read from it
-rather than restated by hand.
+The first four lines below are frozen in `results/canonical/canonical_numbers.json` and are
+read from it rather than restated by hand.
 
 - 470 protein-coding variants, 321,043 cells
 - `D_self / D_null` at native depth: TP53 0.965, KRAS 1.004, GATA1 0.878, JAK1 0.21
 - un-rankable at native depth: TP53 100%, KRAS 100%, GATA1 97.6%, JAK1 10%
 - gene-level atlases, un-rankable at native depth: Replogle 55.3%, Adamson 14.6%, Norman 3.4%
-- no method exceeds chance PDS (0.50); Pearson-delta 0.60 to 0.68
+
+The two model-score ranges come from their own tables, `definitive_summary.csv` and
+`results/pearson_delta_bootstrap_summary.csv`:
+
+- no method exceeds chance PDS (0.50); PDS 0.49 to 0.52, Pearson-delta 0.55 to 0.65
 
 Later results have their own records under `docs/`: the refutation of the one-variable
 scaling claim, the quantity that governs discrimination and its depth calculator, the
