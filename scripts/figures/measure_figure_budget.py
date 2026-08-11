@@ -20,13 +20,16 @@ Usage:
 Takes a few minutes: each bisection step is a full manuscript build. The real
 figure PDFs are restored after every probe.
 """
-import re, shutil, subprocess
+import os, re, shutil, subprocess, tempfile
 from pathlib import Path
 
-LATEX = Path("/home/boom/ICLR/AllelePerturb/manuscript/latex")
+LATEX = Path(__file__).resolve().parents[2] / "manuscript" / "latex"
 FIGS = LATEX / "figures"
-PROBE = Path("/tmp/claude-1000/-home-boom-ICLR-AllelePerturb/bdabb47a-c5a8-4bcb-9c9c-32ef057407ef/scratchpad/probe")
-PROBE.mkdir(exist_ok=True)
+# Scratch space for the blank probe PDFs. Overridable so a sandboxed run can put
+# them somewhere writable; never inside the repo, since they are throwaway.
+PROBE = Path(os.environ.get("ALLELEPERTURB_PROBE_DIR")
+             or tempfile.mkdtemp(prefix="alleleperturb_budget_"))
+PROBE.mkdir(parents=True, exist_ok=True)
 
 src = (LATEX / "AllelePerturb_manuscript.tex").read_text().splitlines()
 RANGES, start, which = {}, None, None

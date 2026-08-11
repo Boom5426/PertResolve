@@ -76,7 +76,11 @@ def main() -> None:
     key.text(0.348, 0.5, "above its own permutation null", fontsize=5.3,
              color=S.INK, va="center")
 
-    S.save(fig, os.path.join(HERE, "fig2h_residual_axis"))
+    # exact=True, as every other Fig. 2 panel: fig2_assemble.tex places this at the 170 mm
+    # it is drawn at, so a tight bounding box would rescale the whole panel and with it the
+    # 5.2 pt type. Saved tight it came out 158.7 mm and was stretched by 7.1% on the page.
+    S.save(fig, os.path.join(HERE, "fig2h_residual_axis"), exact=True,
+           formats=("pdf", "png", "svg", "tiff"))
 
 
 if __name__ == "__main__":

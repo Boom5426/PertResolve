@@ -53,7 +53,7 @@ ROW_GAP_MM = 2.6
 # journal's 247 mm maximum: the float carries its caption too, so a figure with
 # a long caption has less room, which is why the five numbers differ. Keyed by
 # PRINTED figure number. Re-measure whenever a caption changes length.
-HEIGHT_BUDGET_MM = {1: 165.4, 2: 187.6, 3: 187.6, 4: 174.2, 5: 160.9, 6: 169.6}
+HEIGHT_BUDGET_MM = {1: 165.4, 2: 183.0, 3: 187.6, 4: 174.2, 5: 160.9, 6: 169.6}
 
 # Printed figure number -> the file the manuscript includes. For figures 3 and 4
 # these differ: manuscript/figures/README.md records that fig3/ and fig4/ are
