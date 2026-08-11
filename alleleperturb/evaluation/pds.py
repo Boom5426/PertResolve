@@ -102,8 +102,23 @@ def pds_score(
     -------
     float
         PDS in [0, 1]. Tie-aware: zero-vector prediction → 0.5.
+
+    Raises
+    ------
+    ValueError
+        If ``pred_delta`` is not finite. A non-finite prediction makes every distance
+        comparison False, which leaves no tied entry to average and silently produces a
+        value outside [0, 1] rather than a score. A model that cannot produce a finite
+        prediction has to be reported as such, not scored.
     """
     dist_fn = _DIST_FNS[distance]
+
+    pred_delta = np.asarray(pred_delta, dtype=float)
+    if not np.all(np.isfinite(pred_delta)):
+        raise ValueError(
+            f"prediction for {target_variant!r} contains non-finite values "
+            f"({int(np.sum(~np.isfinite(pred_delta)))} of {pred_delta.size}); "
+            "PDS is undefined for it")
 
     if np.linalg.norm(pred_delta) < 1e-12:
         return 0.5  # zero prediction = chance

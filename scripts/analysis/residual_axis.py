@@ -85,7 +85,16 @@ REAL = {k: v for k, v in np.load(BASE / "unified" / "real_deltas.npz").items()}
 
 
 def tie_aware_pds(pred: np.ndarray, target_index: int, truths: np.ndarray) -> float:
-    """Rank one prediction against every candidate's measured profile, ties at mid-rank."""
+    """Rank one prediction against every candidate's measured profile, ties at mid-rank.
+
+    A non-finite prediction is refused rather than scored. Without this guard every
+    comparison against it is False, so ``less`` and ``eq`` are both zero and the formula
+    below returns ``1 + 0.5/(n-1)``, a value above the metric's range that reads as a
+    perfect score. That is how scVIDR's non-finite JAK1 predictions scored exactly 1.020
+    on 26 candidates and lifted its pooled PDS to 0.540.
+    """
+    if not np.all(np.isfinite(pred)):
+        return float("nan")
     if np.linalg.norm(pred) < 1e-12:
         return 0.5
     pn = pred / np.linalg.norm(pred)
@@ -252,6 +261,19 @@ for method in methods:
     # average the repeated scorings of a variant across splits first, so a variant held out
     # by several splits does not count several times in the interval
     per_var = frame.groupby(["gene", "variant"])[["pds", "residual_pds"]].mean()
+    # Variants whose prediction was non-finite carry NaN from tie_aware_pds. They are dropped
+    # here, but the count is carried into the summary and printed: a method that could not
+    # produce a finite prediction for part of the benchmark must be read as scored on the
+    # remainder, not as scored on all of it.
+    n_nonfinite = int(per_var["pds"].isna().sum())
+    if n_nonfinite:
+        print(f"  {method:20s} WARNING non-finite predictions for {n_nonfinite} of "
+              f"{len(per_var)} held-out variants; scored on the remaining "
+              f"{len(per_var) - n_nonfinite}")
+        per_var = per_var.dropna()
+    if per_var.empty:
+        print(f"  {method:20s} no finite held-out prediction, not scored")
+        continue
     f, f_lo, f_hi = bootstrap_mean(per_var["pds"].to_numpy())
     r, r_lo, r_hi = bootstrap_mean(per_var["residual_pds"].to_numpy())
 
@@ -269,6 +291,7 @@ for method in methods:
                if null_resid else np.nan)
 
     summary_rows.append(dict(method=method, n_variants=len(per_var),
+                             n_nonfinite=n_nonfinite,
                              pds=round(f, 3), pds_lo=round(f_lo, 3), pds_hi=round(f_hi, 3),
                              residual_pds=round(r, 3), residual_lo=round(r_lo, 3),
                              residual_hi=round(r_hi, 3),
@@ -282,8 +305,17 @@ for method in methods:
           f"P={p_full:.3f})   residual {r:.3f} (null {np.mean(null_resid):.3f}, P={p_resid:.3f})")
 
     for gene, sub in frame.groupby("gene"):
-        pv = sub.groupby("variant")[["pds", "residual_pds"]].mean()
+        pv_all = sub.groupby("variant")[["pds", "residual_pds"]].mean()
+        pv = pv_all.dropna()
+        # n_refused separates "this gene is absent from the grid" (0 and 0) from
+        # "the gene is there and the method produced nothing scorable on it" (0 and 26).
+        n_refused = len(pv_all) - len(pv)
+        if pv.empty:
+            gene_rows.append(dict(method=method, gene=gene, n_variants=0,
+                                  n_refused=n_refused, pds=np.nan, residual_pds=np.nan))
+            continue
         gene_rows.append(dict(method=method, gene=gene, n_variants=len(pv),
+                              n_refused=n_refused,
                               pds=round(float(pv["pds"].mean()), 3),
                               residual_pds=round(float(pv["residual_pds"].mean()), 3)))
 
