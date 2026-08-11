@@ -12,8 +12,23 @@
 \usepackage{array}
 \usepackage{hyperref}
 \usepackage[dvipsnames]{xcolor}
+\usepackage{titling}
+\setlength{\droptitle}{-2.2cm}
+\usepackage[font=small,labelfont=bf,skip=4pt]{caption}
 \setlength{\emergencystretch}{3em} % match main text; absorbs long \texttt{} Source paths
 \hypersetup{colorlinks=true,linkcolor=MidnightBlue,citecolor=MidnightBlue,urlcolor=MidnightBlue}
+
+%% ---- Compaction ----
+%% Every table here is placed with [H], so a table that does not fit in the space
+%% left on a page pushes a page break and leaves the rest of that page blank. The
+%% captions carry most of the text, so they are set one size down and the float
+%% separations are tightened; that recovers the space without shortening anything.
+\setlength{\textfloatsep}{8pt plus 2pt minus 2pt}
+\setlength{\intextsep}{8pt plus 2pt minus 2pt}
+\setlength{\floatsep}{8pt plus 2pt minus 2pt}
+\setlength{\abovecaptionskip}{4pt}
+\setlength{\belowcaptionskip}{0pt}
+\renewcommand{\arraystretch}{1.0}
 
 %% ---- Supplementary numbering (Supplementary Table 1, 2, ...) ----
 \renewcommand{\thetable}{\arabic{table}}
@@ -22,17 +37,14 @@
 \renewcommand{\figurename}{Supplementary Figure}
 
 \title{Supplementary Information\\[4pt]
-\large Measurement and model limits of allele-specific single-cell perturbation prediction}
+\large Measurement resolution governs allele-specific single-cell perturbation prediction}
 \author{}
 \date{}
 
 \begin{document}
 \maketitle
 
-\bigskip
 \noindent This document contains the full parameter tables underlying the variant feature representation, the prediction methods and the split-half rankability analysis. Complete assignments and code are also available at \url{https://github.com/Boom5426/AllelePerturb}.
-
-\bigskip
 
 
 %% ===== Supplementary Figure 1 =====
@@ -43,16 +55,14 @@
 \label{sfig:sensitivity}
 \end{figure}
 
-\bigskip
-
 
 %% ===== Supplementary Table 1 =====
 \begin{table}[H]
 \centering
 \caption{\textbf{Variant feature ($\theta$) structural and hotspot annotations.} Per-gene residue assignments for the three structural components of the biophysical feature vector. The fold-core term $f_v$ was additionally set to $0.5$ for annotated interaction regions and $0.0$ elsewhere. The hotspot/pathogenic marker $h_v$ was defined exclusively from external prior knowledge, with no reference to the single-cell outcome.}
 \label{stab:features}
-\smallskip
-\begin{tabular}{@{}p{1.6cm} p{3.6cm} p{2.9cm} p{5.0cm}@{}}
+\small
+\begin{tabular}{@{}p{1.5cm} p{4.3cm} p{2.8cm} p{6.7cm}@{}}
 \toprule
 Gene & Structural core ($f_v=1$) & Catalytic / switch ($s_v=1$) & Hotspot / pathogenic ($h_v=1$) \\
 \midrule
@@ -66,16 +76,14 @@ JAK1  & Kinase domain, residues 866--1154 & -- & Functional-module membership: J
 
 \noindent\textit{Note.} An earlier version of $h_v$ used the top quintile of measured effect size, which leaks the evaluation outcome into the feature; it was removed and the entire evaluation grid was re-run, with ranking performance unchanged ($\theta$-only PDS shifted by at most 0.02 and every method remained at chance).
 
-\bigskip
-
 
 %% ===== Supplementary Table 2 =====
 \begin{table}[H]
 \centering
 \caption{\textbf{Implementation and sampling parameters.} \emph{Regression heads (top):} the six heads were crossed with three feature spaces ($\theta$, ESM, ESM+$\theta$) to form the 18 in-house feature-model combinations; all heads used a fixed random seed and were fit by minimizing squared error on the training variants. \emph{Split-half and power-analysis sampling grid (bottom):} parameters for the energy-distance split-half analysis (Fig.~4) and the depth power analysis (Figs.~4, 5), each configuration summarized by the median and the 2.5--97.5 percentile interval across seeds.}
 \label{stab:heads}
-\smallskip
-\begin{tabular}{@{}p{4.2cm} p{3.0cm} p{5.4cm}@{}}
+\small
+\begin{tabular}{@{}p{4.4cm} p{3.0cm} p{8.3cm}@{}}
 \toprule
 Head & Family & Settings \\
 \midrule
@@ -83,35 +91,26 @@ Ridge regression & Linear (L2) & $\alpha = 1.0$ \\
 Lasso regression & Linear (L1) & $\alpha = 0.01$; up to 2{,}000 iterations \\
 Random forest & Tree ensemble & 50 trees; maximum depth 6 \\
 Gradient-boosted trees & Tree ensemble & 50 estimators; maximum depth 3; multi-output wrapper \\
-$k$-nearest-neighbors & Neighbor & $k = 3$ \\
+$k$-nearest-neighbours & Neighbour & $k = 3$ \\
 Multilayer perceptron & Neural network & hidden layers 128 and 64; ReLU; up to 500 iterations \\
 \bottomrule
 \end{tabular}
 
 \smallskip
-\begin{tabular}{@{}p{5.2cm} p{9.0cm}@{}}
+\begin{tabular}{@{}p{5.4cm} p{10.7cm}@{}}
 \toprule
 Sampling parameter & Values \\
 \midrule
-Split-half subsample sizes (per half) & 25, 50, 100, 150, 250, 400 cells \\
-Representation spaces & 50-component PCA (canonical), gene space, pathway-score space \\
+Split-half subsample sizes (per half) & 30, 50, 100, 150 cells (allele datasets); 25, 50, 100, 200, 400, 800 cells (gene-level atlases) \\
+Representation spaces & 50-component PCA (canonical), gene space, pathway-score space (pathway scores computed for GATA1 and the three gene-level atlases only) \\
 Random seeds per configuration & 50 \\
-Power-analysis depths (per variant) & 50, 100, 150, 300 cells \\
+Power-analysis depths (per half) & 30, 50, 100, 150 cells \\
 Minimum cells for inclusion & 50 (split-half); 5 (pseudobulk profiles) \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\noindent\textit{Note.} Linear and neighbor heads regress directly onto the full expression profile. Because tree ensembles scale poorly to thousands of output genes, for output spaces larger than 200 genes the random forest and gradient-boosted heads were fit on a $q$-component PCA of the training profiles and predictions were mapped back to gene space by the inverse transform, with $q = \min(50,\, G,\, n_{\mathrm{train}} - 1)$.
-
-\bigskip
-
-
-
-
-
-
-
+\noindent\textit{Note.} Linear and neighbour heads regress directly onto the full expression profile. Because tree ensembles scale poorly to thousands of output genes, for output spaces larger than 200 genes the random forest and gradient-boosted heads were fit on a $q$-component PCA of the training profiles and predictions were mapped back to gene space by the inverse transform, with $q = \min(50,\, G,\, n_{\mathrm{train}} - 1)$.
 
 
 %% ===== Supplementary Table 3 (decision) =====
@@ -119,7 +118,7 @@ Minimum cells for inclusion & 50 (split-half); 5 (pseudobulk profiles) \\
 \centering
 \caption{\textbf{Detection, identification and prediction: a decision table for allele-specific single-cell perturbation prediction.} Three nested questions of increasing difficulty locate a dataset by its failure mode: detection (a variant versus wild type; assay sensitivity), identification (one variant versus another; ground-truth resolution) and prediction (a held-out variant from its features; computational generalization). Prediction is only meaningful once identification is achievable. Detection is graded rather than binary: in the three datasets with low measured effect size the variant-to-wild-type separation is marginal (near the replicate-noise floor; Fig.~4c,e), so `marginal' detection denotes a weak but non-zero separation from wild type. Marginal identification likewise denotes a small fraction of resolvable sibling pairs with no reliable recovery of a variant's nearest sibling. Because each gene here is also a distinct dataset, assay and cell context, a row locates a measurement and modelling regime rather than an intrinsic property of the gene.}
 \label{stab:decision}
-\smallskip
+\small
 \begin{tabular}{@{}c c c l l@{}}
 \toprule
 Detection & Identification & Prediction & Limiting regime & Dataset in this study \\
@@ -138,15 +137,15 @@ yes & yes            & yes            & successful regime          & (target) \\
 \centering
 \caption{\textbf{Published perturbation models under a unified allele-level evaluation.} Perturbation-discrimination score (PDS, cosine) with 95\% bootstrap confidence intervals, pooled over five generalization splits and four genes; chance is 0.50. Variant-conditionable models are scored directly; gene-keyed models are allele-blind by construction and reported by resolution coverage. Every method was scored through one harness (identical held-out variants, pseudobulk profiles, tie-aware PDS and permutation null).}
 \label{tab:models}
-\smallskip
-\begin{tabular}{@{}p{4.2cm} p{3.0cm} l c@{}}
+\small
+\begin{tabular}{@{}p{5.0cm} p{4.2cm} l c@{}}
 \toprule
 Model family & Method & PDS (95\% CI) & Pearson-$\delta$ \\
 \midrule
 \multicolumn{4}{@{}l}{\textit{Variant-conditionable (run to completion)}}\\
 Optimal-transport flow & CellFlow & 0.51 (0.48--0.54) & 0.12 \\
 Attribute disentanglement & Biolord & 0.49 (0.47--0.52) & 0.13 \\
-Latent arithmetic (dose) & scVIDR & 0.50 (0.48--0.53) & 0.13 \\
+Latent arithmetic (dose) & scVIDR$^{\S}$ & 0.50 (0.48--0.53) & 0.13 \\
 Latent arithmetic & scGen & 0.49 (0.46--0.52) & 0.18 \\
 Conditional-flow generative & PerturbNet$^{\dagger}$ & 0.54 (0.51--0.57) & 0.13 \\
 Feature regression & baselines (Fig.~2) & 0.49--0.52 & 0.55--0.65 \\
@@ -166,26 +165,25 @@ Compositional autoencoder & variant-CPA & non-finite loss & -- \\
 \end{tabular}
 
 \smallskip
-\footnotesize $^{\dagger}$PerturbNet generates within a 50-dimensional principal-component subspace in which random predictions already score 0.52; full-space-at-chance predictors (Ridge-esm, Gene-mean) projected into the same subspace are likewise inflated to 0.52, and its exceedance over a subspace permutation null is not significant (permutation $P=0.13$). $^{\ddagger}$These models condition on perturbed-gene identity and assign an identical prediction to every variant of a gene, so an allele-level PDS is undefined (a category error).
+\footnotesize $^{\dagger}$PerturbNet generates within a 50-dimensional principal-component subspace in which random predictions already score 0.52; full-space-at-chance predictors (Ridge-esm, Gene-mean) projected into the same subspace are likewise inflated to 0.52, and its exceedance over a subspace permutation null is not significant (permutation $P=0.13$). $^{\ddagger}$These models condition on perturbed-gene identity and assign an identical prediction to every variant of a gene, so an allele-level PDS is undefined (a category error). $^{\S}$The scVIDR re-implementation diverged on JAK1 and returned non-finite predictions for all 26 variants, so 59 of its 518 held-out evaluations (11.4\%, four of 17 gene-by-split cells) take the harness's chance value for an unscorable prediction rather than a measurement; dropping those cells instead gives 0.505 in place of 0.504. It is at chance on the three genes where it produced predictions and absent on the fourth. No other method returned a non-finite prediction anywhere in the grid.
 \end{table}
 
 %% ===== Supplementary Table 5 (per-gene backbone) =====
 \begin{table}[H]
 \centering
-\caption{\textbf{Per-gene detection ratio, achievable ceiling and model performance.} Split-half energy-distance ratio $D_\mathrm{self}/D_\mathrm{null}$; oracle discrimination ceiling (independent second measurement, estimating attainable discrimination); fraction of allele pairs resolvable above replicate noise; fraction of variants rankable at native depth; and best in-house model PDS (canonical multi-seed harness). Chance is 0.50.}
+\caption{\textbf{Per-gene detection ratio, replicate ceiling and model performance.} Split-half energy-distance ratio $D_\mathrm{self}/D_\mathrm{null}$; replicate ceiling (an independent second measurement, estimating attainable discrimination); fraction of allele pairs resolvable above replicate noise; fraction of variants rankable at native depth; and best in-house model PDS (canonical multi-seed harness). Chance is 0.50.}
 \label{tab:window}
-\smallskip
-\resizebox{\textwidth}{!}{%
+\small
 \begin{tabular}{@{}l c c c c c@{}}
 \toprule
-Gene & $D_\mathrm{self}/D_\mathrm{null}$ & Oracle ceiling (95\% CI) & Pairs resolvable & Rankable (native) & Best model PDS$^{\dagger}$ \\
+Gene & $D_\mathrm{self}/D_\mathrm{null}$ & Replicate ceiling (95\% CI) & Pairs resolvable & Rankable (native) & Best model$^{\dagger}$ \\
 \midrule
 TP53  & 0.96 & 0.485 (0.445--0.525) & 0\%    & 0\%   & 0.51 \\
 KRAS  & 1.00 & 0.500 (0.440--0.566) & 0\%    & 0\%   & 0.54 \\
 GATA1 & 0.88 & 0.572 (0.549--0.595) & 3.8\%  & 2.4\% & 0.50 \\
 JAK1  & 0.21 & 0.792 (0.742--0.838) & 78.5\% & 90\%  & 0.52 \\
 \bottomrule
-\end{tabular}}
+\end{tabular}
 
 \smallskip
 \footnotesize $^{\dagger}$Best model is the highest-scoring in-house feature-regression head per gene under the canonical multi-seed harness (published variant-conditionable models are compared separately in Supplementary Table~\ref{tab:models}). PerturbNet is excluded; its higher per-gene values (0.53--0.54) arise from its 50-dimensional principal-component subspace, in which random predictions already score 0.52.
@@ -195,10 +193,9 @@ JAK1  & 0.21 & 0.792 (0.742--0.838) & 78.5\% & 90\%  & 0.52 \\
 %% ===== Supplementary Table 6 (signal and noise) =====
 \begin{table}[H]
 \centering
-\caption{\textbf{Per-profile sampling noise and between-variant signal, by gene and depth.} Each variant's cells are cut into four disjoint groups of $m$ cells: two score the replicate ceiling and two estimate the signal, so no noise realisation enters both. $\bar{\Delta}^2$ is the mean squared separation between variants after subtracting the sampling-noise term, reported unclipped with a 95\% interval bootstrapped over both variants and cell splits; it is negative about half the time when the true separation is at the floor, and clipping it at zero would report certainty the data do not carry. $P$ is a permutation test re-partitioning the half-profiles among pseudo-variants, and is conservative because the null averages five splits and the observed estimate twenty. Rows are the eligible cohort, every variant with $4m$ cells; the file also carries a fixed cohort held constant across depths, which is underpowered and is not reproduced here. Source: \texttt{results/canonical/floor\_law\_v2.csv}.}
+\caption{\textbf{Per-profile sampling noise and between-variant signal, by gene and depth.} Each variant's cells are cut into four disjoint groups of $m$ cells: two score the replicate ceiling and two estimate the signal, so no noise realization enters both. $\bar{\Delta}^2$ is the mean squared separation between variants after subtracting the sampling-noise term, reported unclipped with a 95\% interval bootstrapped over both variants and cell splits; it is negative about half the time when the true separation is at the floor, and clipping it at zero would report certainty the data do not carry. $P$ is a permutation test re-partitioning the half-profiles among pseudo-variants, and is conservative because the null averages five splits and the observed estimate twenty. Rows are the eligible cohort, every variant with $4m$ cells; the file also carries a fixed cohort held constant across depths, which is underpowered and is not reproduced here. Source: \texttt{results/canonical/floor\_law\_v2.csv}.}
 \label{tab:signal}
-\smallskip
-\resizebox{\textwidth}{!}{%
+\small
 \begin{tabular}{@{}l r r r l r r r@{}}
 \toprule
 Gene & $m$ & $n$ & $\eta^2$ & $\bar{\Delta}^2$ (95\% CI) & $\rho^2$ & $P$ & Ceiling \\
@@ -220,7 +217,7 @@ JAK1 & 25 & 14 & 78.11 & +97.183 (+56.173, +126.186) & +0.6221 & 0.001 & 0.780 \
 JAK1 & 50 & 9 & 39.92 & +83.626 (+8.442, +140.473) & +1.0475 & 0.001 & 0.821 \\
 JAK1 & 100 & 5 & 19.74 & +128.768 (+4.291, +205.959) & +3.2615 & 0.002 & 0.970 \\
 \bottomrule
-\end{tabular}}
+\end{tabular}
 \end{table}
 
 %% ===== Supplementary Table 7 (depth prescriptions) =====
@@ -228,7 +225,7 @@ JAK1 & 100 & 5 & 19.74 & +128.768 (+4.291, +205.959) & +3.2615 & 0.002 & 0.970 \
 \centering
 \caption{\textbf{Depth required to reach a target replicate ceiling, and where the calculator refuses.} The nearest-competitor separation belongs to the perturbations and does not change with depth while the noise falls as $1/m$, so resolution scales linearly from a pilot and the depth reaching a target is read off the calibration by inversion. The calculator returns nothing when the pilot separation's lower confidence bound does not clear zero: no finite depth recovers a separation that is not there, and a number extrapolated from noise reads as a plan. JAK1 is a check on the scaling rather than a fit, since three pilots at different depths, on different cells and different candidate sets, agree within a factor of two. Source: \texttt{results/canonical/resolution\_law\_prescriptions.csv}.}
 \label{tab:depth}
-\smallskip
+\small
 \begin{tabular}{@{}l r r l r r@{}}
 \toprule
  & Pilot & & Nearest-competitor & \multicolumn{2}{c}{Cells per group to reach} \\
@@ -254,15 +251,13 @@ JAK1 & 100 & 5 & +0.1670 (+0.1419) & 19 & 99 \\
 %% ===== Supplementary Table 8 (both scoring axes) =====
 \begin{table}[H]
 \centering
-\caption{\textbf{Every method on both scoring axes, each against its own permutation null.} The residual axis scores after removing a gene-shared programme computed from training variants only. Its chance level is not 0.50: WT-null, which predicts a zero vector and therefore one constant shared by every held-out variant, scores 0.524 and its permutation null is 0.524 exactly, because training variants entering the mean have their residuals shrunk toward the origin while held-out variants do not. Nulls are formed by permuting predictions across the held-out variants of a gene; intervals are 2,000 bootstraps over variants. Six methods ($^{*}$) exceed their own null at $P<0.05$, by 0.011 to 0.025. None is established: fifty permutations floor the attainable $P$ at 0.0196, four of the six sit on that floor, and twenty-five methods were tested. Source: \texttt{results/canonical/residual\_axis\_models.csv}.}
+\caption{\textbf{Every method on both scoring axes, each against its own permutation null.} \emph{The PDS column here is not the estimate reported in Fig.~2b and Supplementary Table~\ref{tab:models}, and the two are not interchangeable.} This table scores a single deterministic pseudobulk draw and pools held-out variants across genes, whereas the main comparison averages 15 independent subsamples and takes the mean over (split, gene) cells; the two differ by roughly 0.03 to 0.05 for the same method. Neither axis has chance at 0.50 on this scoring path, which is why both columns carry their own null. On the residual axis, WT-null predicts a zero vector and therefore one constant shared by every held-out variant; it scores 0.524 and its permutation null is 0.524 exactly, because training variants entering the mean have their residuals shrunk towards the origin while held-out variants do not. On the PDS axis the same structure acts with the opposite sign: the Gene-mean prediction, likewise a single constant, scores 0.447 and its permutation null is 0.447 exactly, because the candidate set contains the training variants that define that mean and they lie closer to it than the held-out variant being scored. Fourteen methods accordingly carry PDS intervals lying entirely below 0.50 while sitting at their own null, and a fifteenth reaches 0.500 exactly at its upper limit; that is a property of this scoring path and not a below-chance result. PerturbNet is the only method whose PDS interval lies above 0.50, the 50-dimensional subspace artefact described beneath Supplementary Table~\ref{tab:models}. Every value in this table is read against the null beside it, never against 0.50. Nulls are formed by permuting predictions across the held-out variants of a gene; intervals are 2,000 bootstraps over variants. Six methods ($^{*}$) exceed their own null at $P<0.05$, by 0.011 to 0.025. None is established: fifty permutations floor the attainable $P$ at 0.0196, four of the six sit on that floor, and twenty-five methods were tested. Source: \texttt{results/canonical/residual\_axis\_models.csv}.}
 \label{tab:axes}
-\smallskip
-\resizebox{\textwidth}{!}{%
+\footnotesize
 \begin{tabular}{@{}l r l r l r r@{}}
 \toprule
 Method & $n$ & PDS (95\% CI) & null & residual-PDS (95\% CI) & null & $P$ \\
 \midrule
-scVIDR & 308 & 0.540 (0.505--0.574) & 0.532 & 0.557 (0.522--0.590) & 0.552 & 0.118 \\
 KNN-theta & 308 & 0.486 (0.456--0.518) & 0.473 & 0.555 (0.526--0.584) & 0.531 & 0.118 \\
 KNN-esm+theta & 305 & 0.486 (0.456--0.516) & 0.477 & 0.554 (0.524--0.580) & 0.531 & 0.118 \\
 KNN-esm & 305 & 0.483 (0.452--0.514) & 0.478 & 0.540 (0.511--0.570) & 0.534 & 0.333 \\
@@ -280,6 +275,7 @@ Biolord$^{*}$ & 308 & 0.497 (0.467--0.528) & 0.493 & 0.521 (0.491--0.551) & 0.50
 Ridge-esm+theta & 305 & 0.461 (0.432--0.491) & 0.454 & 0.521 (0.493--0.548) & 0.505 & 0.059 \\
 GBoost-esm & 305 & 0.471 (0.442--0.499) & 0.463 & 0.516 (0.491--0.541) & 0.508 & 0.255 \\
 RF-esm & 305 & 0.452 (0.422--0.482) & 0.451 & 0.516 (0.490--0.543) & 0.511 & 0.372 \\
+scVIDR$^{\S}$ & 282 & 0.496 (0.462--0.530) & 0.487 & 0.514 (0.481--0.547) & 0.509 & 0.118 \\
 Ridge-esm & 305 & 0.451 (0.421--0.481) & 0.453 & 0.512 (0.487--0.538) & 0.505 & 0.353 \\
 Lasso-theta & 308 & 0.458 (0.427--0.487) & 0.449 & 0.510 (0.484--0.536) & 0.500 & 0.157 \\
 Lasso-esm+theta & 305 & 0.452 (0.421--0.482) & 0.451 & 0.506 (0.479--0.533) & 0.500 & 0.275 \\
@@ -288,16 +284,18 @@ Gene-mean & 308 & 0.447 (0.417--0.476) & 0.447 & 0.500 (0.500--0.500) & 0.500 & 
 MLP-esm+theta & 305 & 0.448 (0.417--0.478) & 0.449 & 0.499 (0.469--0.530) & 0.492 & 0.176 \\
 Lasso-esm & 305 & 0.450 (0.420--0.479) & 0.451 & 0.493 (0.463--0.524) & 0.495 & 0.804 \\
 \bottomrule
-\end{tabular}}
+\end{tabular}
+
+\smallskip
+\footnotesize $^{\S}$scVIDR is the only method in the grid that returned a non-finite prediction: its re-implementation diverged on JAK1 and produced no finite value for any of that gene's 26 held-out variants, so it is scored on the remaining 282 and its $n$ differs from the other rows. Those 26 are excluded and counted, not imputed. This scoring path is the one place where that matters mechanically: a non-finite prediction is unordered against every candidate, which leaves no tied entry to average and returns $1+0.5/(n_g-1)$, a value above the metric's range, rather than a score. Scoring the 26 that way put scVIDR at 0.540 and 0.557 on the two axes, the highest residual value in the table; refusing them puts it at chance on both. The main-text estimate in Supplementary Table~\ref{tab:models} uses a different convention, assigning the harness's chance value to an unscorable prediction, and is affected by $+0.001$; the two conventions are stated where each is used.
 \end{table}
 
 %% ===== Supplementary Table 9 (the pre-registered panel) =====
 \begin{table}[H]
 \centering
-\caption{\textbf{The frozen criterion applied to six published perturbation screens.} The criterion, its parameters, the datasets and four predictions were fixed before any dataset was measured (\texttt{docs/PREREG\_RESOLUTION\_PANEL\_v1.md}); nothing was tuned afterwards and no dataset was dropped. Three of the six took no part in developing the criterion. Not one is benchmarkable: every screen has a far lower identifiable than detectable fraction, and the two largest atlases still order graded predictors at 0.997 and 0.96 while 0.5\% and 1.4\% of their perturbations are identifiable. One of the four predictions failed: Adamson and Replogle are reversed on the detectable fraction relative to the manuscript's own pipeline, by 3.3 percentage points, so the packaged criterion and that pipeline are not interchangeable. Source: \texttt{results/canonical/resolution\_panel.csv}.}
+\caption{\textbf{The frozen criterion applied to six published perturbation screens.} The criterion, its parameters, the datasets and four predictions were fixed before any dataset was measured (\texttt{docs/PREREG\_RESOLUTION\_PANEL\_v1.md}); nothing was tuned afterwards and no dataset was dropped. Two of the six are new to this work, and a third had not been through this criterion. Not one supports identification of individual perturbations: every screen has a far lower identifiable than detectable fraction, and the two largest atlases still order graded predictors at 0.997 and 0.96 while 0.5\% and 1.4\% of their perturbations are identifiable. One of the four predictions failed: Adamson and Replogle are reversed on the detectable fraction relative to the manuscript's own pipeline, by 3.3 percentage points, so the packaged criterion and that pipeline are not interchangeable. The verdict names the first level that fails, against the frozen cutoffs of 50\% detectable, 50\% identifiable and a ceiling of 0.65 (Methods). Source: \texttt{results/canonical/resolution\_panel.csv}.}
 \label{tab:panel}
-\smallskip
-\resizebox{\textwidth}{!}{%
+\small
 \begin{tabular}{@{}l r r r r r l@{}}
 \toprule
 Dataset & $n$ & Detectable (\%) & Identifiable (\%) & Ceiling & $P$(order) & Verdict \\
@@ -309,32 +307,42 @@ Replogle 2022 & 414 & 51.2 & 1.4 & 0.865 & 0.959 & detectable \\
 Adamson 2016 & 94 & 47.9 & 3.2 & 0.851 & 0.974 & not detectable \\
 Virtual Cell Challenge & 139 & 25.9 & 4.3 & 0.806 & 0.903 & not detectable \\
 \bottomrule
-\end{tabular}}
+\end{tabular}
 \end{table}
 
 \bigskip
 
+\small
 \noindent\textbf{Supplementary Note: robustness and sensitivity controls.}
 
 \smallskip
-\noindent\textit{Statistical independence of variants.} Because some residues carry more than one substitution, the 470 variants are not fully independent. Under the random split, 47\% of held-out variants share a residue with a training variant (positional 0\%, mechanistic 10\%, low-depth 37\%, compatibility 54\%); the random split is therefore an optimistic setting, yet allele discrimination remained at chance under it and under the residue-disjoint positional split alike. Resampling residue-level clusters rather than individual variants in the bootstrap left the per-method PDS intervals essentially unchanged: all 23 non-null predictors continued to overlap the 0.50 chance level (only PerturbNet excluded it, the subspace artifact described above), and Pearson-$\delta$ remained above zero for every feature-model head. The direction-versus-ranking dissociation is therefore not an artifact of treating correlated substitutions as independent units. Source: \texttt{results/reviewer\_controls/residue\_independence\_summary.csv}.
+\noindent\textit{Statistical independence of variants.} Because some residues carry more than one substitution, the 470 variants are not fully independent. Under the random split, 47\% of held-out variants share a residue with a training variant (positional 0\%, mechanistic 10\%, low-depth 37\%, compatibility 54\%); the random split is therefore an optimistic setting, yet allele discrimination remained at chance under it and under the residue-disjoint positional split alike. Resampling residue-level clusters rather than individual variants in the bootstrap left the per-method PDS intervals essentially unchanged: 23 of the 24 predictors carrying an interval continued to overlap the 0.50 chance level, PerturbNet being the sole exception (the subspace artefact described above), and Pearson-$\delta$ remained above zero for every feature-model head. The direction-versus-ranking dissociation is therefore not an artefact of treating correlated substitutions as independent units. Source: \texttt{results/reviewer\_controls/residue\_independence\_summary.csv}.
 
 \smallskip
-\noindent\textit{Wild-type reference construction.} To test whether the detection floor reflects the variant effect or the heterogeneity of the wild-type reference, we compared, at matched depth, the variant replicate distance $D_{\mathrm{self}}$, the variant-to-wild-type distance $D_{\mathrm{null}}$ and the wild-type-to-wild-type distance $D_{\mathrm{wtwt}}$ from an independent split of the wild-type cells (energy distances, 50-component PCA space). For TP53, KRAS and GATA1 the three distances coincided ($D_{\mathrm{wtwt}}/D_{\mathrm{null}} = 0.91$--$1.09$ across 50--300 cells per half), so a variant differs from wild type no more than wild type differs from itself, and $D_{\mathrm{self}}$, which involves no wild-type cells, sits at the same level: the floor is set by the absence of variant signal relative to sampling noise, not by an inflated or heterogeneous control. JAK1 shows the contrast, with $D_{\mathrm{null}}$ eight- to thirty-fold above $D_{\mathrm{wtwt}}$ ($D_{\mathrm{wtwt}}/D_{\mathrm{null}} = 0.03$--$0.12$). The ratios are stable across wild-type sampling depth, so the floor is not a depth artifact. Source: \texttt{results/reviewer\_controls/wt\_control\_diagnostic.csv}.
+\noindent\textit{Wild-type reference construction.} To test whether the detection floor reflects the variant effect or the heterogeneity of the wild-type reference, we compared, at matched depth, the variant replicate distance $D_{\mathrm{self}}$, the variant-to-wild-type distance $D_{\mathrm{null}}$ and the wild-type-to-wild-type distance $D_{\mathrm{wtwt}}$ from an independent split of the wild-type cells (energy distances, 50-component PCA space). For TP53, KRAS and GATA1 the three distances coincided ($D_{\mathrm{wtwt}}/D_{\mathrm{null}} = 0.91$--$1.09$ across 50--300 cells per half), so a variant differs from wild type no more than wild type differs from itself, and $D_{\mathrm{self}}$, which involves no wild-type cells, sits at the same level: the floor is set by the absence of variant signal relative to sampling noise, not by an inflated or heterogeneous control. JAK1 shows the contrast, with $D_{\mathrm{null}}$ eight- to thirty-fold above $D_{\mathrm{wtwt}}$ ($D_{\mathrm{wtwt}}/D_{\mathrm{null}} = 0.03$--$0.12$). The ratios are stable across wild-type sampling depth, so the floor is not a depth artefact. Source: \texttt{results/reviewer\_controls/wt\_control\_diagnostic.csv}.
 
 \smallskip
 \noindent\textit{Metric-family invariance.} The detection floor is not specific to energy distance. The split-half window ratio $D_\mathrm{self}/D_\mathrm{null}$ (50-component PCA, 50 cells per half) stayed near one for TP53, KRAS and GATA1 and low for JAK1 under all five distance families tested (energy, RBF maximum-mean-discrepancy, sliced-Wasserstein, cosine and Euclidean): TP53 1.01--1.03, KRAS 0.95--0.99, GATA1 0.90--1.04, JAK1 0.05--0.40. Source: \texttt{results/canonical/metric\_family\_floor.csv}.
+
+\medskip
+\noindent\textit{Representation-space robustness of the detection floor.} Repeating the native-depth split-half criterion in gene space rather than the canonical 50-component PCA changed no verdict: 0\% of variants were rankable for TP53 (0 of 98) and KRAS (0 of 92), 1.2\% for GATA1 (3 of 254) against 2.4\% in PCA space, and 90\% for JAK1 (18 of 20) in both, with the same result at every fixed depth from 30 to 150 cells per half. The pathway-score space, available for GATA1 and the three gene-level atlases, was uniformly the most conservative of the three: 0.4\% for GATA1, and 19.8\% against 44.7\% in PCA for Replogle, 83.5\% against 96.6\% for Norman and 45.8\% against 85.4\% for Adamson. Source: \texttt{results/second\_probe\_rankability\_table.csv}, \texttt{space} column.
 
 \smallskip
 \noindent\textit{Gene-shared versus allele-specific decomposition.} Splitting each effect as $\delta_v = \bar{\delta}_g + r_v$ apportions the measured response between a component shared by all variants of a gene and an allele-specific residual; the shared fraction is a property of each dataset rather than of the metric, at 72\% (TP53), 59\% (KRAS), 29\% (GATA1) and 51\% (JAK1). What predictors actually recover follows instead from scoring the predictions against the residual: across all 24 predictors the residual Pearson-$\delta$ lay between $-0.08$ and $0.03$, so conventional direction recovery is carried almost entirely by the gene-shared component. An oracle scored on the allele-specific residual profiles, with the gene mean taken from training variants only, stayed at the axis's own 0.524 reference for TP53 and KRAS (0.509 and 0.518), was marginal for GATA1 (0.576) and high for JAK1 (0.839), so the allele-specific residual is reproducible only where the measurement resolves sibling variants. An earlier decomposition centred on a mean that included the variants being scored and gave 0.892 for JAK1; self-inclusion in the mean makes that figure optimistic. Source: \texttt{results/canonical/residual\_axis\_ceiling.csv}.
 
 \smallskip
-\noindent\textit{Representation robustness.} Under identical splits, regression heads and scoring (single deterministic pseudobulk draw; the multi-seed convention used in the main text gives PDS 0.49--0.52), every variant representation left allele discrimination at chance while recovering direction similarly: PDS-cosine 0.458--0.473 and Pearson-$\delta$ 0.628--0.659 for the biophysical $\theta$ vector, ESM-1v, four ESM2 constructions (global, mutant-minus-wild-type global, mutated-residue and local-window) and AlphaMissense; a featureless training-gene-mean predictor reached Pearson-$\delta$ 0.66 at PDS 0.44. The scoring procedure is identical across representations, but variant coverage is not, because each representation is defined only where its input exists: AlphaMissense scores were available for 374 of the 470 benchmark variants (84 of 98 for TP53, 78 of 92 for KRAS, 201 of 254 for GATA1 and 11 of 26 for JAK1), giving 389 scored variant-by-split instances against 518 for $\theta$, 511 for ESM-1v and 497 for the ESM2 constructions. Correlations between AlphaMissense pathogenicity and measured effect size are therefore reported per gene only (Spearman $-0.08$ for TP53, $-0.05$ for KRAS and $0.09$ for GATA1); cross-gene pooling is not interpretable here, because both the pathogenicity distribution and the scale of the measured transcriptional effect differ between genes. Sources: \texttt{results/reviewer\_controls/rep\_grid\_summary.csv}, \texttt{am\_summary.csv} and \texttt{am\_effect\_spearman.csv}.
+\noindent\textit{Representation robustness.} Under identical splits, regression heads and scoring (single deterministic pseudobulk draw; the multi-seed convention used in the main text gives PDS 0.49--0.52), every variant representation left allele discrimination at chance while recovering direction similarly: PDS-cosine 0.458--0.473 and Pearson-$\delta$ 0.628--0.659 for the biophysical $\theta$ vector, ESM-1v, four ESM2 constructions (global, mutant-minus-wild-type global, mutated-residue and local-window) and AlphaMissense; a featureless training-gene-mean predictor reached Pearson-$\delta$ 0.66 at PDS 0.44. The scoring procedure is identical across representations, but variant coverage is not, because each representation is defined only where its input exists: AlphaMissense scores were available for 374 of the 470 benchmark variants (84 of 98 for TP53, 78 of 92 for KRAS, 201 of 254 for GATA1 and 11 of 26 for JAK1), giving 389 scored variant-by-split instances against 518 for $\theta$, 511 for ESM-1v and 497 for the ESM2 constructions. Correlations between AlphaMissense pathogenicity and measured effect size are therefore reported per gene only, for all four genes: Spearman $-0.08$ for TP53, $-0.05$ for KRAS, $0.09$ for GATA1 and $0.41$ for JAK1, at $n = 84$, 78, 201 and 11, with two-sided $P = 0.50$, 0.64, 0.22 and 0.21, so none is significant. The JAK1 estimate is the largest in absolute value and rests on 11 of that gene's 26 variants, too few to separate a real association from none; it is reported rather than omitted because JAK1 is the one dataset carrying a model-limited verdict, and a control that is silent on that dataset should say so rather than be summarized over the other three. Cross-gene pooling is not interpretable here, because both the pathogenicity distribution and the scale of the measured transcriptional effect differ between genes; the pooled value over the 374 scored variants is $-0.38$ and inverts the sign of three of the four within-gene estimates, which is what that non-comparability produces rather than evidence of an association. Sources: \texttt{results/reviewer\_controls/rep\_grid\_summary.csv}, \texttt{am\_summary.csv} and \texttt{am\_effect\_spearman.csv}.
 
 \smallskip
-\noindent\textit{Oracle ceiling sensitivity.} The replicate ceiling was unchanged by depth (300-cell versus full-depth) and stayed at chance for TP53 and KRAS even for a perfect prediction scored against the benchmark's noisy pseudobulk truth (TP53 0.488, KRAS 0.490); GATA1 remained marginal (0.569) and JAK1 high. Shrinking a prediction fully to the gene mean lowered discrimination to 0.500 for every gene, so mean-shrinkage denoising does not raise the ceiling.
+\noindent\textit{Replicate ceiling sensitivity.} The replicate ceiling was unchanged by depth (300-cell versus full-depth) and stayed at chance for TP53 and KRAS even for a perfect prediction scored against the benchmark's noisy pseudobulk truth (TP53 0.488, KRAS 0.490); GATA1 remained marginal (0.569) and JAK1 high. Shrinking a prediction fully to the gene mean lowered discrimination to 0.500 for every gene, so mean-shrinkage denoising does not raise the ceiling.
+
+\smallskip
+\noindent\textit{Prediction-interface and model-class reachability (JAK1).} Because a model at chance is informative only if it could have scored above chance, three controls were run on JAK1, the one dataset carrying a model-limited verdict. First, a prediction that carries the answer scored PDS 1.000 and top-1 1.000 through the identical harness, and the split-half arm reproduced the published replicate ceiling of 0.792 to three decimals, so the scoring path rewards allele-specific structure when it is present. Second, the in-house regression grid emits combinations of the training variants' measured profiles, so the projection of each held-out variant onto the span of those profiles upper-bounds the whole family; that bound is PDS 0.690 (95\% CI 0.638--0.742), above the pre-registered bar of 0.573 and above it in each of the four splits carrying held-out JAK1 variants (0.663, 0.737, 0.742 and 0.617). Against a ceiling of 0.792 and chance 0.500 the family could therefore have reached 65\% of the headroom above chance and realised 5.8\% of it with its best member (Lasso-theta, 0.517); propagating the bound's interval places the reachable fraction between 47\% and 83\%. The span restriction was verified rather than assumed: the median fraction of a stored prediction lying outside the training span is exactly 0 for the ridge, $k$-nearest-neighbor, random-forest, gradient-boosted and gene-mean heads, 0.02--0.32 for the lasso and multilayer-perceptron heads, and 0.23--0.88 for the externally trained decoders, which are not span-restricted at all and also failed. Third, the span oracle's top-1 accuracy is 0.049 against a chance rate of 0.038, and the measurement itself reaches only 0.247, so exact identification is out of reach at this depth for models and measurement alike; every JAK1 model-side statement in this work is consequently a ranking statement rather than an identification statement. Sources: \texttt{results/reviewer\_controls/jak1\_interface/jak1\_interface\_arms.csv}, \texttt{jak1\_interface\_check.json} and \texttt{jak1\_outside\_span\_fraction.csv}; generator \texttt{results/reviewer\_controls/jak1\_interface\_check.py}.
 
 \smallskip
 \noindent\textit{Train-only preprocessing.} Refitting the per-gene standardization on training variants and wild-type cells only (excluding held-out variants) left every gene at or below chance: per-gene PDS-cosine, all-cell versus train-only, was 0.47/0.44 (TP53), 0.49/0.50 (KRAS), 0.46/0.46 (GATA1) and 0.46/0.45 (JAK1), with direction recovery essentially unchanged (mean $\Delta$PDS $=-0.01$), so the reported all-cell standardization is conservative with respect to the null. Source: \texttt{results/canonical/leakage\_control\_summary.csv}.
+
+\medskip
+\noindent\textit{Metrics defined but not plotted.} Three of the ten metrics are not shown in any figure and are reported here, aggregated over the 18 in-house feature-model heads exactly as in Fig.~2e: $\delta$-cosine was 0.600 (0.547 to 0.641), tracking the full-profile Pearson-$\delta$ of 0.609 (0.554 to 0.647); Pearson-$\delta$ (top-20) was 0.560 (0.487 to 0.607), below the full-profile value, so direction agreement is not concentrated in the 20 highest-variance genes; and mean absolute error was 0.0676 (0.0635 to 0.0720), against 0.0647 for the featureless Gene-mean predictor and 0.0845 for the WT-null reference. Source: \texttt{results/results\_v4\_exttheta.csv}, columns \texttt{delta\_cosine}, \texttt{pearson\_delta\_top20} and \texttt{MAE}.
 
 \end{document}
