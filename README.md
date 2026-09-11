@@ -31,9 +31,9 @@
 <table align="center">
   <tr>
     <td align="center" width="25%"><h3>470</h3><sub>coding-variant conditions</sub></td>
-    <td align="center" width="25%"><h3>321,043</h3><sub>cells in</sub>the allele arm</sub></td>
+    <td align="center" width="25%"><h3>321,043</h3><sub>cells in<sub>the allele arm</sub></td>
     <td align="center" width="25%"><h3>31</h3><sub>perturbation configurations</sub></td>
-    <td align="center" width="25%"><h3>14</h3><sub>public</sub>resources</sub></td>
+    <td align="center" width="25%"><h3>14</h3><sub>public<sub>resources</sub></td>
   </tr>
 </table>
 
