@@ -4,6 +4,16 @@ The scripts in this directory generate the canonical benchmark and
 measurement-resolution tables. Committed outputs live under
 `results/canonical/` and are kept separate from scratch reruns.
 
+These are paper-specific generators, not alternate defaults for the generic
+`pertresolve.resolution` API. In particular, the paper's six model heads across
+three input representations, train-only standardization, same-gene candidate
+pools and disjoint sampling protocol are preserved here. The generic API's
+alpha-like predictor family and four-group diagnostic are useful for software
+checks, but its `Δalpha`-like resolution is not the paper's observed `ΔPDS`.
+Split-half outputs are described as empirical reproducibility references; they
+are not hard ceilings or bounds and do not, by themselves, certify model-ranking
+resolution.
+
 Representative generators include:
 
 | Script | Main output or role |

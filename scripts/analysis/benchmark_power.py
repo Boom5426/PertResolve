@@ -9,7 +9,7 @@ The question is deliberately not "how many variants does a benchmark need". That
 not exist and the paper's own argument says so. It is: at a given measurement resolution and
 a given benchmark size, how large a difference between two predictors is recoverable.
 
-Two things make this different from the recovery probabilities already in Fig. 5d.
+Two things make this different from the recovery probabilities already in Fig. 6g.
 
 **The axis is the realised gap, not the interpolation weight.** The map from weight to score
 saturates hard, by a median factor of 8.3 and up to 40 across the committed ladders
@@ -17,8 +17,8 @@ saturates hard, by a median factor of 8.3 and up to 40 across the committed ladd
 quantity than it claims. Everything below is keyed on
 ``ΔPDS = mean(pv[a_hi]) - mean(pv[a_lo])`` at the full cohort.
 
-**Subsets are drawn without replacement.** Fig. 5d bootstraps the existing cohort n-of-n,
-which answers how stable that cohort's verdict is. Drawing a subset of size ``N_test``
+**Subsets are drawn without replacement.** Fig. 6g bootstraps the existing cohort n-of-n,
+which answers how stable that cohort's ordering result is. Drawing a subset of size ``N_test``
 answers what a benchmark of that size would have concluded, which is the design question.
 The comparison is paired: both predictors are scored on the same subset.
 
@@ -47,7 +47,7 @@ from pertresolve.paths import (  # noqa: E402
 )
 
 # Frozen constants. ALPHAS, DEPTHS and NSEED match controlled_predictors.py so this arm and
-# Fig. 5d score the same design-ordered family.
+# Fig. 6g score the same design-ordered family.
 NSEED = 10
 ALPHAS = (0.0, 0.2, 0.4, 0.6, 0.8, 1.0)
 DEPTHS = (25, 50, 100, 150, 250)
@@ -183,7 +183,7 @@ def main() -> None:
                 print(f"  {g} m={m}: no evaluable cohort, skipped")
                 continue
             rows += power_rows(g, m, vs, pv, rng)
-            print(f"  {g} m={m}: n={len(vs)}, ceiling {pv[1.0].mean():.3f}", flush=True)
+            print(f"  {g} m={m}: n={len(vs)}, empirical reference {pv[1.0].mean():.3f}", flush=True)
 
     df = pd.DataFrame(rows)
     check_gate(df)

@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""Top-3 #2: is the oracle a genuine ceiling or a half-splitting artifact?
+"""Top-3 #2: sensitivity analyses for the split-half reproducibility reference.
 
-Three oracle variants per gene (multi-seed), to bound how much a smarter/denoised predictor
-or deeper measurement could gain:
-  oracle_300        : symmetric split-half at the native 300-cell cap (the reported ceiling)
+Three sensitivity variants per gene (multi-seed), to show how denoising and depth change the
+empirical reference:
+  oracle_300        : symmetric split-half at the native 300-cell cap (the reported reference)
   oracle_fulldepth  : symmetric split-half using ALL cells (deepest achievable) -> does depth help?
   oracle_perfect    : query = near-true mean (all cells), truth = one 300-cell noisy pseudobulk
-                      -> the BEST a model could do (perfect prediction) against the actual noisy
-                         benchmark truth. Upper-bounds any model at the benchmark's own resolution.
+                      -> a perfect-prediction sensitivity control against the actual noisy
+                         benchmark truth; it is not promoted to a universal upper limit.
   oracle_perfect_both: query and truth are BOTH deep near-true means -> intrinsic separability
                       (if this also ~0.5, variants are unrankable even with perfect measurement).
 Also a shrinkage check: PDS as a prediction is shrunk toward the gene mean (lambda), to confirm

@@ -15,7 +15,7 @@ nothing for the second to reward.
 
 Distances here are the energy distance between two sets of cells, which uses the whole
 distribution rather than its mean. It is computed on cells, not on averaged profiles, so a
-verdict does not depend on averaging having preserved the difference.
+detection result does not depend on averaging having preserved the difference.
 """
 
 from __future__ import annotations
@@ -53,7 +53,7 @@ def energy_distance(a: np.ndarray, b: np.ndarray) -> float:
 
 @dataclass
 class WindowResult:
-    """Per-perturbation detection window and the rankable verdict it implies.
+    """Per-perturbation detection window and its detection-eligibility gate.
 
     Attributes:
         perturbations: names, in row order.
@@ -65,7 +65,8 @@ class WindowResult:
         signal: ``d_null - d_self``, the margin the effect clears its own noise by.
         width: the 95% spread of ``d_self`` across splits, the margin a perturbation would
             have to clear to be called reproducibly detectable.
-        rankable: ``signal > width``, per perturbation.
+        rankable: ``signal > width``, per perturbation. This is only the detection axis;
+            it is not an identification or model-ranking verdict.
         n_seeds: independent splits behind each median.
         depth: cells per half.
     """

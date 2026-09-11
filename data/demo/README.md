@@ -14,7 +14,11 @@ demonstration matrix, not a replacement for the paper's raw single-cell data
 and not a paper-reproduction input. The output reports detection,
 identification, an empirical split-half reproducibility reference and
 model-ranking resolution as independent axes; it does not collapse them into a
-single verdict. Run it with:
+single combined verdict.
+
+This derived demo validates the software interface only; its scores are not biological results from the TP53 benchmark.
+
+Run it with:
 
 ```bash
 python examples/run_resolution_demo.py

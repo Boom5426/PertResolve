@@ -14,8 +14,16 @@ import numpy as np
 def compute_de_genes(X, variant_mask, wt_mask, n_sub=300):
     """Run per-gene t-test between variant cells and WT cells.
 
+    ``lfc`` is the signed effect size, computed as the variant mean minus the
+    reference mean on the input scale. It is not a log-fold change unless the input
+    matrix is already on a log scale. The returned t-statistics select DE genes;
+    downstream ``DE_LFC_spearman`` ranks the predicted effects against ``lfc`` on
+    that selected set.
+
     Returns (t_stats, lfc, p_vals) arrays of shape (n_genes,).
     """
+    from scipy import stats
+
     v_idx = np.where(variant_mask)[0]
     w_idx = np.where(wt_mask)[0]
     if len(v_idx) > n_sub:
@@ -58,7 +66,12 @@ def de_lfc_spearman(
     real_t_stats: np.ndarray,
     top_k: int = 50,
 ) -> float:
-    """Spearman correlation of LFC on top-k real DEGs."""
+    """Rank agreement of signed DE effect sizes on the top-k real DEGs.
+
+    The top-k set is selected by ``abs(real_t_stats)``. ``real_lfc`` supplies the
+    signed effect-size target, so this is a rank metric and does not assess absolute
+    effect-size calibration.
+    """
     de_idx = list(np.argsort(np.abs(real_t_stats))[-top_k:])
     r_lfc = real_lfc[de_idx]
     p_lfc = pred_delta[de_idx]

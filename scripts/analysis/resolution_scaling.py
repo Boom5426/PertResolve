@@ -29,9 +29,9 @@ Corrected here, together with three additions the superseded script had no equiv
   constrains the between variance to be non-negative, reintroducing exactly the boundary
   artefact that defect 2 is about, so it cannot serve as an independent check;
 * disjoint cells for the two axes. ``floor_law_fit.py`` computed the between-variant term
-  and the oracle ceiling from the same evaluation half, so one noise realisation entered
+  and the split-half reference from the same evaluation half, so one noise realisation entered
   both axes of the intended collapse plot. Each variant's cells are split here into four
-  disjoint groups of ``m`` cells: two (Q, T) score the ceiling and two (S1, S2) estimate
+  disjoint groups of ``m`` cells: two (Q, T) score the empirical reference and two (S1, S2) estimate
   the signal. Nothing is shared, at the cost of requiring 4m rather than 2m cells per
   variant, which is reported as ``n_var`` rather than hidden.
 
@@ -123,7 +123,7 @@ def split_groups(gene: str, m: int, seed: int, variants: list[str]):
     """Q, T and the signal profiles of each variant, on mutually disjoint cells.
 
     Q and T each subtract their own wild-type half-mean, matching the convention the
-    oracle ceiling is defined with. The signal profiles all subtract one shared wild-type
+    empirical reference is defined with. The signal profiles all subtract one shared wild-type
     mean, so it cancels in both the within-variant and the between-variant terms and
     cannot bias their difference.
 
@@ -145,7 +145,7 @@ def split_groups(gene: str, m: int, seed: int, variants: list[str]):
     wt = np.where(np.isin(lab, WT_TAGS))[0]
     if len(wt) >= 2:
         rng.shuffle(wt)
-        # Q and T need disjoint references to match the oracle-ceiling convention; the
+        # Q and T need disjoint references to match the split-half-reference convention; the
         # signal groups share one, so it cancels out of both terms of delta2.
         per_ref = min(m, len(wt) // 2)
         wm_q = X[wt[:per_ref]].mean(0)
@@ -171,7 +171,7 @@ def split_groups(gene: str, m: int, seed: int, variants: list[str]):
 
 
 def run(gene: str, m: int, variants: list[str], cohort: str) -> dict | None:
-    """One (gene, depth, cohort) row: signal, noise, their ratio, and the ceiling."""
+    """One (gene, depth, cohort) row: signal, noise, their ratio, and the reference."""
     n = len(variants)
     if n < MIN_VAR:
         return None

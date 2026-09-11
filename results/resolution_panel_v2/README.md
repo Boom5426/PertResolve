@@ -1,5 +1,13 @@
 # Resolution panel v2
 
+The committed panel artifacts below are frozen historical outputs. Their
+`detectable`, `identifiable`, `ceiling` and `verdict` columns are legacy display
+fields, not the current public API. Read `ceiling` as the empirical split-half
+reproducibility reference, independently of detection and identification; it
+is not a hard ceiling or bound, and it does not alone certify model-ranking
+resolution. New aggregation uses the independent axis names documented in
+[`results/canonical/README.md`](../canonical/README.md).
+
 Frozen protocol: `docs/PREREG_RESOLUTION_PANEL_v2.md`. Read it before reading any number
 here. Runner: `scripts/analysis/resolution_panel_v2.py`. Compute is remote; these files are
 the synced outputs.
@@ -13,7 +21,7 @@ and their conjunction, which is what makes the jointly evaluable fraction deriva
 Section 8b requires the new loader to reproduce the v1 panel before anything else runs. It
 reproduces it **exactly**, not to within tolerance, on every scalar of both datasets:
 
-| dataset | n | detectable | identifiable | ceiling | rho2 | rho2_nn_median | p_correct_order |
+| dataset | n | detectable | identifiable | split-half reference | rho2 | rho2_nn_median | p_correct_order |
 |---|---|---|---|---|---|---|---|
 | norman2019 | 195 | 0.6871794871794872 | 0.005128205128205128 | 0.8975713719270421 | 5.947260807581858 | 0.7108467641514068 | 0.997 |
 | adamson2016 | 94 | 0.4787234042553192 | 0.031914893617021274 | 0.8509637382749943 | 4.657357310246475 | 0.5481471366042009 | 0.974 |
@@ -32,7 +40,7 @@ the detection and identification axes remain independent elsewhere in the panel.
 
 The first version of the runner filtered out the cells of sub-threshold perturbations before
 reducing dimension. That fitted the reduction on 106,022 of Norman's 111,445 cells instead of
-all of them, and emptied the `excluded` provenance. It moved the ceiling by 5.6e-5 and
+all of them, and emptied the `excluded` provenance. It moved the empirical reference by 5.6e-5 and
 `rho2_nn_median` by 1.6e-3 while leaving both discrete fractions bit-exact, so it would have
 been easy to wave through as numerical noise. With no cap active the runner now hands the
 criterion every cell, exactly as `pertresolve.resolution.cli` does, and lets

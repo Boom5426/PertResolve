@@ -13,7 +13,7 @@ import json
 import sys
 from pathlib import Path
 
-from .profiles import profiles_from_anndata  # noqa: F401  (imported for the error message)
+from .profiles import preprocess_anndata
 from .report import resolution_report
 from ..paths import reject_repo_results
 
@@ -21,7 +21,7 @@ __all__ = ["main"]
 
 
 def _load(path: Path, perturbation_key: str, layer, use_rep, n_components, seed):
-    """Read an ``.h5ad`` and return the matrix and the labels, reducing dimension if asked."""
+    """Read an ``.h5ad`` under the public preprocessing contract."""
     try:
         import anndata as ad
     except ImportError as exc:                                   # pragma: no cover
@@ -30,30 +30,21 @@ def _load(path: Path, perturbation_key: str, layer, use_rep, n_components, seed)
             "Install it, or call pertresolve.resolution.resolution_report directly with "
             "a matrix and a list of labels."
         ) from exc
-    import numpy as np
-
     adata = ad.read_h5ad(path)
     if perturbation_key not in adata.obs:
         raise SystemExit(
             f"{perturbation_key!r} is not a column of obs. Available columns: "
             + ", ".join(map(str, list(adata.obs.columns)[:30])))
     labels = adata.obs[perturbation_key].astype(str).to_numpy()
-
-    if use_rep is not None:
-        return np.asarray(adata.obsm[use_rep]), labels
-    raw = adata.layers[layer] if layer else adata.X
-    X = np.asarray(raw.todense()) if hasattr(raw, "todense") else np.asarray(raw)
-    if n_components and n_components < X.shape[1]:
-        try:
-            from sklearn.decomposition import PCA
-        except ImportError as exc:                               # pragma: no cover
-            raise SystemExit(
-                "reducing dimension needs scikit-learn. Install it, pass "
-                "--n-components 0 to keep the full space, or supply --use-rep."
-            ) from exc
-        X = PCA(n_components=n_components, random_state=seed).fit_transform(
-            X.astype("float32"))
-    return X, labels
+    try:
+        X, preprocessing = preprocess_anndata(
+            adata, layer=layer, use_rep=use_rep,
+            n_components=(None if n_components == 0 else n_components), seed=seed)
+    except (ImportError, ValueError) as exc:
+        raise SystemExit(str(exc)) from None
+    preprocessing["perturbation_key"] = perturbation_key
+    preprocessing["requested_n_components_cli"] = int(n_components)
+    return X, labels, preprocessing
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -88,6 +79,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--no-window", action="store_true",
                     help="skip the per-perturbation detection window, the slowest part; "
                          "the detection fraction is then unavailable rather than guessed")
+    ap.add_argument("--no-cross-seed", action="store_true",
+                    help="skip the optional cross-seed nearest-competitor reference; the "
+                         "primary report axes are unchanged")
     ap.add_argument("--out", type=Path, default=None,
                     help="directory receiving resolution_report.json and, when the window "
                          "is computed, resolution_window.csv")
@@ -96,8 +90,9 @@ def main(argv: list[str] | None = None) -> int:
     if not args.h5ad.exists():
         raise SystemExit(f"no such file: {args.h5ad}")
 
-    X, labels = _load(args.h5ad, args.perturbation_key, args.layer, args.use_rep,
-                      args.n_components or None, args.seed)
+    X, labels, preprocessing = _load(
+        args.h5ad, args.perturbation_key, args.layer, args.use_rep,
+        args.n_components, args.seed)
 
     import numpy as np
     if args.control not in set(map(str, labels)):
@@ -115,7 +110,8 @@ def main(argv: list[str] | None = None) -> int:
     try:
         report = resolution_report(X, labels, control=args.control, depth=args.depth,
                                    n_seeds=args.n_seeds, seed=args.seed, n_boot=args.n_boot,
-                                   with_window=not args.no_window)
+                                   with_window=not args.no_window,
+                                   cross_seed=not args.no_cross_seed)
     except ValueError as exc:
         # These are the caller's problem to fix, not a crash to debug, so they are reported
         # as a message rather than as a traceback through the library.
@@ -129,6 +125,18 @@ def main(argv: list[str] | None = None) -> int:
         payload["dataset"] = str(args.h5ad)
         payload["perturbation_key"] = args.perturbation_key
         payload["control"] = args.control
+        payload["preprocessing"] = preprocessing
+        payload["sampling"] = {
+            "depth": args.depth,
+            "n_groups": 4,
+            "n_seeds": args.n_seeds,
+            "seed": args.seed,
+            "n_boot": args.n_boot,
+            "with_window": not args.no_window,
+            "cross_seed_requested": not args.no_cross_seed,
+            "cross_seed_computed": bool(
+                not args.no_cross_seed and args.n_seeds >= 4),
+        }
         (args.out / "resolution_report.json").write_text(json.dumps(payload, indent=2,
                                                                    default=float))
         if report.window is not None:

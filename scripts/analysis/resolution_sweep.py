@@ -3,7 +3,7 @@
 
 Methods asserts that discrimination depends on the data only through the dimensionless
 group ``rho`` and the competitor count. That assertion is false: at ``rho2`` held within
-1% of 0.59, the attainable ceiling ranges from 0.999 to 0.632 across configurations that
+1% of 0.59, the attainable split-half reference ranges from 0.999 to 0.632 across configurations that
 differ only in the rank of their separation directions and the spread of their amplitudes
 (``docs/RESULT_COLLAPSE_REFUTED_2026-08-04.md``).
 
@@ -11,7 +11,7 @@ The reason is that ``rho2`` is a mean over all pairs while a discrimination scor
 ranking statistic: a perturbation is identified when its own measurement is nearer than
 every competitor, which only its **closest** competitor can spoil. Far-apart pairs inflate
 the mean without ever being asked to be resolved. This script traces both quantities
-against the ceiling so the substitution can be checked rather than asserted.
+against the empirical split-half reference so the substitution can be checked rather than asserted.
 
 Points come from two sources and are labelled as such.
 
@@ -30,10 +30,10 @@ later added to would produce the relationship by construction rather than measur
 Every variant's cells are split into five disjoint groups of ``m`` cells:
 
     D            direction block, used only when dialling
-    Q, T         query and truth for the ceiling and for the graded predictors
+    Q, T         query and truth for the split-half reference and for the graded predictors
     S1, S2       estimate the noise, the mean separation and the nearest-competitor one
 
-The two axes of every point therefore come from different cells: the ceiling from Q and T,
+The two axes of every point therefore come from different cells: the reference from Q and T,
 the signal statistics from S1 and S2.
 
 Nearest-competitor separations are formed per split and averaged across splits, then
@@ -144,7 +144,7 @@ def split_groups(gene: str, m: int, seed: int, variants: list[str], *, reserve_d
     """Scoring groups, and the direction block when one is reserved, from one shuffle.
 
     Q and T each subtract their own wild-type half-mean, matching the convention the
-    reproducibility ceiling is defined with. The signal groups share one, so it cancels from both
+    reproducibility reference is defined with. The signal groups share one, so it cancels from both
     terms of the signal estimate and cannot bias their difference.
     """
     X, lab = GENE_CELLS[gene]
@@ -185,7 +185,7 @@ def reshape_directions(U: np.ndarray, rank, hetero: float, rng: np.random.Random
     """Impose a rank and an amplitude spread, then restore the mean pairwise separation.
 
     Renormalising the mean is what makes the comparison informative: configurations differ
-    in geometry at a fixed mean separation, so any change in the ceiling cannot be a change
+    in geometry at a fixed mean separation, so any change in the reference cannot be a change
     in the mean.
     """
     if rank is not None and rank < U.shape[0]:
@@ -212,7 +212,7 @@ def graded_scores(Q: np.ndarray, T: np.ndarray) -> np.ndarray:
 
     Predictor ``alpha`` predicts ``(1 - alpha) * panel_mean + alpha * Q_v``, so its true
     quality rises with alpha by construction. Q and T come from disjoint cells, so the best
-    predictor's ceiling is the reproducibility ceiling rather than a perfect score.
+    predictor's reference is the empirical reproducibility reference rather than a perfect score.
     """
     panel_mean = Q.mean(axis=0)
     tn = T / (np.linalg.norm(T, axis=1, keepdims=True) + 1e-12)
@@ -249,7 +249,7 @@ def recovery(per_alpha: np.ndarray, seed: int = 0) -> tuple[float, float]:
 
 def measure(gene: str, m: int, variants: list[str], label: str, *,
             dial=None, extra: dict | None = None) -> dict:
-    """One row: both signal statistics, the ceiling and the ordering-recovery rates."""
+    """One row: both signal statistics, the empirical reference and ordering recovery."""
     n = len(variants)
     ssw_acc = np.zeros(n)
     d2_acc = np.zeros((n, n))
@@ -320,7 +320,7 @@ for gene in H.GENES:
         rows.append(r)
         print(f"  {gene:6s} m={m:3d} n={r['n_var']:3d} rho2={r['rho2']:8.4f} "
               f"rho2_nn_med={r['rho2_nn_median']:9.5f} above={r['frac_above_noise']:.2f} "
-              f"ceiling={r['ceiling_pds']:.3f} P_order={r['p_correct']:.3f}")
+              f"reference={r['ceiling_pds']:.3f} P_order={r['p_correct']:.3f}")
 
 print("\n=== dialled configurations on a substrate with no signal of its own ===")
 for gene in SUBSTRATES:
@@ -353,7 +353,7 @@ for gene in SUBSTRATES:
                               f"h={hetero:.0f} t={target:<4} rho2={r['rho2']:7.4f} "
                               f"rho2_nn_med={r['rho2_nn_median']:9.5f} "
                               f"above={r['frac_above_noise']:.2f} "
-                              f"ceiling={r['ceiling_pds']:.3f} P_order={r['p_correct']:.3f}")
+                              f"reference={r['ceiling_pds']:.3f} P_order={r['p_correct']:.3f}")
 
 df = pd.DataFrame(rows)
 df.to_csv(OUT_DIR / "resolution_sweep.csv", index=False)
@@ -371,7 +371,7 @@ def spearman(x, y):
 
 
 cands = ["rho2", "rho2_nn_median", "rho2_nn_geomean", "frac_above_noise"]
-print("\nSpearman with the ceiling:")
+print("\nSpearman with the empirical reference:")
 print(f"{'subset':12s} {'n':>4s} " + "".join(f"{c:>20s}" for c in cands))
 for name, sub in (("real", df[df.source == "real"]),
                   ("dialled", df[df.source == "dialled"]),

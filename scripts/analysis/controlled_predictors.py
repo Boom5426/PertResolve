@@ -7,8 +7,9 @@ Synthetic predictors with a KNOWN true quality order, indexed by alpha in [0, 1]
 
 build_delta[v] = pseudobulk delta of v from a BUILD subsample; the evaluation truth
 eval_delta[v] is an independent DISJOINT subsample. alpha=0 is the gene-mean (no allele
-information); alpha=1 is fully allele-specific (its ceiling is the finite-sample oracle,
-not 1.0). True quality is monotone in alpha, so a valid benchmark must rank
+information); alpha=1 is fully allele-specific and supplies the within-depth
+reference for this synthetic family, not a universal hard ceiling. True quality
+is monotone in alpha, so a valid benchmark must rank
 PDS(alpha) monotone in alpha.
 
 Benchmark RESOLUTION is not whether the point-estimate PDS(alpha) is monotone (with many
@@ -17,7 +18,8 @@ uncertainty. We therefore bootstrap the held-out variant set (B resamples) and r
   P_correct_order = P(no inversions in PDS(alpha) vs alpha)      [full-order recovery]
   P_winner        = P(argmax_alpha PDS == alpha=1)              [trust the leaderboard top]
   mean_tau        = mean Kendall tau(alpha, PDS)
-against the measurement window (ceiling = PDS(alpha=1), the oracle at that depth).
+against the empirical split-half reproducibility reference (PDS(alpha=1) is the
+alpha-family's within-depth reference, not a universal bound).
 """
 import numpy as np, pandas as pd, sys
 import argparse
@@ -132,7 +134,7 @@ for g in H.GENES:
             continue
         pv = {a: np.mean(per_seed[a], axis=0) for a in ALPHAS}  # seed-averaged per variant
         n = len(vs)
-        ceiling = float(pv[1.0].mean())
+        reference_pds = float(pv[1.0].mean())
         pds_point = {a: float(pv[a].mean()) for a in ALPHAS}
         # bootstrap over variants
         rng = np.random.RandomState(0)
@@ -149,7 +151,9 @@ for g in H.GENES:
                 n_winner += 1
         rows.append(dict(
             gene=g, depth_m=m, n_var=n,
-            ceiling_pds=round(ceiling, 3),
+            # Keep the frozen column name for downstream artifact compatibility; this is
+            # the alpha=1 within-depth reference for the controlled family.
+            ceiling_pds=round(reference_pds, 3),
             pds_a0=round(pds_point[0.0], 3),
             pds_a1=round(pds_point[1.0], 3),
             P_correct_order=round(n_correct / NBOOT, 3),
@@ -162,7 +166,7 @@ df.to_csv(OUT_DIR / "controlled_recovery.csv", index=False)
 print(df.to_string(index=False))
 print(f"\nsaved -> {OUT_DIR / 'controlled_recovery.csv'}")
 
-print("\n=== resolution curve: measurement window (ceiling) vs ranking recovery ===")
+print("\n=== resolution curve: empirical reference vs ranking recovery ===")
 d2 = df.copy()
 d2['ceil_bin'] = pd.cut(d2['ceiling_pds'], [0, 0.52, 0.56, 0.65, 0.80, 1.01],
                         labels=['<=0.52', '0.52-0.56', '0.56-0.65', '0.65-0.80', '>0.80'])

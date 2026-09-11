@@ -90,8 +90,8 @@ def test_the_shifted_log_transform_cancels_depth_in_a_delta():
     assert not np.allclose(naive_small, naive_large)
 
 
-def test_the_verdict_rule_matches_the_frozen_decision_table():
-    """Section 7 of the pre-registration, transcribed as cases."""
+def test_the_legacy_replicate_reference_rule_matches_the_frozen_decision_table():
+    """Legacy replicate-reference decision cases, kept separate from resolution_report."""
     tau = 0.05
     at_chance = dict(pds_P=0.50, pds_P_lo=0.49, pds_P_hi=0.51, pds_X=0.50,
                      delta_PX_lo=-0.01, delta_PX_hi=0.01)

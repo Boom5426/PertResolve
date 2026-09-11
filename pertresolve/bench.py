@@ -62,11 +62,14 @@ class PertResolveBench:
         return cls(df, data_dir=str(bench_path.parent))
 
     def __repr__(self) -> str:
-        genes = self._df["gene"].value_counts()
-        total = len(self._df)
+        variants = self.variant_conditions
+        references = self.reference_rows
+        genes = variants["gene"].value_counts()
+        total = len(variants)
         cells = int(self._df["n_cells"].sum())
         return (
-            f"PertResolve-Bench: {total} variants, {len(genes)} genes, "
+            f"PertResolve-Bench: {total} variant conditions + {len(references)} "
+            f"reference rows, {len(genes)} genes, "
             f"{cells:,} cells\n"
             f"  Genes: {', '.join(f'{g}({n})' for g, n in genes.items())}\n"
             f"  Splits: {', '.join(_SPLIT_NAMES.values())}"
@@ -78,7 +81,28 @@ class PertResolveBench:
 
     @property
     def variants(self) -> pd.DataFrame:
+        """Return the raw 472-row table, including reference rows."""
         return self._df.copy()
+
+    @property
+    def variant_conditions(self) -> pd.DataFrame:
+        """Return the 470 protein-coding variant conditions, excluding ``WT`` rows."""
+        return self._df[self._df["variant"].astype(str).str.upper() != "WT"].copy()
+
+    @property
+    def reference_rows(self) -> pd.DataFrame:
+        """Return the reference rows, currently the two rows labelled ``WT``."""
+        return self._df[self._df["variant"].astype(str).str.upper() == "WT"].copy()
+
+    @property
+    def n_variant_conditions(self) -> int:
+        """Number of benchmark conditions that are variants rather than references."""
+        return len(self.variant_conditions)
+
+    @property
+    def n_reference_rows(self) -> int:
+        """Number of reference rows retained in the metadata table."""
+        return len(self.reference_rows)
 
     def split(self, split_name: str, gene: str = None):
         """Return (train_variants, test_variants) for a given split.
@@ -105,15 +129,21 @@ class PertResolveBench:
         test = df[df[col] == "test"]["variant"].tolist()
         return train, test
 
-    def get_theta(self, gene: str = None) -> dict:
-        """Return θ₆ feature vectors as {variant_name: np.array(6)}.
+    def get_theta(self, gene: str = None, *, include_reference: bool = False) -> dict:
+        """Return θ₆ vectors as ``{variant_name: np.array(6)}``.
         
         Parameters
         ----------
         gene : str, optional
             Filter to one gene.
+        include_reference : bool, optional
+            Include ``WT`` rows as metadata features. The default returns only the
+            protein-coding variant conditions, which avoids presenting a reference row
+            as a scored variant.
         """
         df = self._df if gene is None else self._df[self._df["gene"] == gene]
+        if not include_reference:
+            df = df[df["variant"].astype(str).str.upper() != "WT"]
         theta = {}
         for _, row in df.iterrows():
             theta[row["variant"]] = np.array([row[c] for c in _THETA_COLS])
@@ -129,7 +159,8 @@ class PertResolveBench:
             raise ValueError(f"Gene {gene} not in benchmark.")
         row = sub.iloc[0]
         return {
-            "n_variants": len(sub),
+            "n_variants": int((sub["variant"].astype(str).str.upper() != "WT").sum()),
+            "n_reference_rows": int((sub["variant"].astype(str).str.upper() == "WT").sum()),
             "n_cells": int(sub["n_cells"].sum()),
             "protein": row.get("protein", ""),
             "cell_type": row.get("cell_type", ""),

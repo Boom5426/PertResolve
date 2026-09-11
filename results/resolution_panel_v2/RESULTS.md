@@ -1,5 +1,12 @@
 # Resolution panel: results
 
+This is a frozen historical snapshot. The displayed `detectable`,
+`identifiable`, `ceiling` and `verdict` columns are retained for artifact
+compatibility; `ceiling` means the empirical split-half reproducibility
+reference, not a hard ceiling or bound, and `verdict` is not emitted by the
+current public resolution API. Use the independent-axis semantics in
+[`results/canonical/README.md`](../canonical/README.md).
+
 Protocols: `docs/PREREG_RESOLUTION_PANEL_v2.md` (frozen 2026-09-01, amendments A1 to A11) and
 `docs/PREREG_RESOLUTION_PANEL_v3.md` (frozen 2026-09-04, T1 to T6 signed 2026-09-03).
 Runner: `scripts/analysis/resolution_panel_v2.py`. Extractor:

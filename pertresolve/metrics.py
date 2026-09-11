@@ -1,4 +1,10 @@
-"""Top-level evaluation convenience function."""
+"""Top-level prediction-evaluation convenience functions.
+
+``evaluate_variant`` is the paper-facing single-query adapter. It combines the same
+held-out prediction with direction, full-pool same-gene ranking and optional
+differential-expression fidelity metrics; it does not define a new model or a new
+benchmark protocol.
+"""
 import numpy as np
 from .evaluation.pds import pds_score
 from .evaluation.direction_metrics import pearson_delta, pearson_delta_top20, delta_cosine, mae
@@ -16,7 +22,7 @@ def evaluate_variant(
     real_lfc: np.ndarray = None,
     de_top_k: int = 50,
 ) -> dict:
-    """Compute all 10 PertResolve-Eval metrics for one held-out variant.
+    """Compute the PertResolve-Eval metrics for one held-out variant.
 
     Parameters
     ----------
@@ -28,9 +34,13 @@ def evaluate_variant(
     top20_idx : array of int, optional
         Indices of top-20 highest-variance genes across training deltas.
     real_t_stats : array, optional
-        T-statistics from variant-vs-WT DE test (for DE metrics).
+        T-statistics from the variant-vs-reference DE test. Their absolute values select
+        the real top-``de_top_k`` genes; they are not themselves an effect-size target.
     real_lfc : array, optional
-        Log-fold-changes from DE test.
+        Signed DE effect sizes on the same gene scale as ``real_delta`` (typically the
+        variant-minus-reference mean difference). ``DE_LFC_spearman`` evaluates rank
+        agreement on the genes selected by ``real_t_stats``; it is not a calibration or
+        magnitude-error metric.
     de_top_k : int
         Top-k DEGs for overlap metrics.
 
@@ -39,6 +49,12 @@ def evaluate_variant(
     dict with keys: PDS_cos, PDS_L1, PDS_L2, pearson_delta,
         pearson_delta_top20, delta_cosine, DE_overlap,
         DE_LFC_spearman, direction_agreement, MAE.
+
+    Notes
+    -----
+    ``candidate_variants`` is the full same-gene candidate pool for a paper-style PDS
+    query and must include ``target_variant``. The query can be held out from model
+    fitting while its measured response is still used by the evaluator as the target.
     """
     out = {}
 

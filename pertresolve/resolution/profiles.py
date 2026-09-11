@@ -28,10 +28,18 @@ alongside the profiles.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+import warnings
 
 import numpy as np
 
-__all__ = ["GroupedProfiles", "group_profiles", "profiles_from_anndata"]
+__all__ = ["GroupedProfiles", "group_profiles", "preprocess_anndata",
+           "profiles_from_anndata"]
+
+# A dense float64 array beyond this size is easy to create accidentally from a sparse
+# AnnData matrix and can exceed the memory available on a laptop.  This is a warning, not a
+# hard limit: callers with enough memory can still opt into the operation and the output
+# records the estimate that was made.
+DENSE_WARNING_GB = 2.0
 
 
 @dataclass
@@ -48,6 +56,8 @@ class GroupedProfiles:
             ``depth`` when the control is small.
         shared_reference: whether all groups subtracted the same control mean.
         excluded: perturbation name to reason, for everything left out.
+        preprocessing: the AnnData preprocessing contract that produced the matrix, when
+            this object came from :func:`profiles_from_anndata`; ``None`` for a direct matrix.
     """
 
     profiles: np.ndarray
@@ -57,6 +67,7 @@ class GroupedProfiles:
     control_cells_per_reference: int
     shared_reference: bool
     excluded: dict[str, str] = field(default_factory=dict)
+    preprocessing: dict[str, object] | None = None
 
     def __len__(self) -> int:
         return len(self.perturbations)
@@ -157,10 +168,119 @@ def group_profiles(X: np.ndarray, labels, *, control: str | None, depth: int,
                            shared_reference=shared_reference, excluded=excluded)
 
 
+def preprocess_anndata(adata, *, layer: str | None = None, use_rep: str | None = None,
+                       seed: int = 0, n_components: int | None = 50,
+                       dense_warning_gb: float = DENSE_WARNING_GB) -> tuple[np.ndarray, dict]:
+    """Materialise the AnnData representation under an explicit preprocessing contract.
+
+    This entry point intentionally does *not* normalize counts, apply ``log1p`` or select
+    highly variable genes.  The selected ``X``/``layers[layer]``/``obsm[use_rep]`` value is
+    assumed to already be the representation the caller wants to measure.  If an expression
+    matrix is selected, it is densified and optionally reduced with PCA.  Supplying
+    ``use_rep`` bypasses PCA because the representation is already explicit.
+
+    The returned metadata is JSON-serialisable and records both requested and effective
+    choices, the input/output shapes and the dense working-set estimate.  A visible warning
+    is emitted when that estimate reaches ``dense_warning_gb``.
+
+    Args:
+        adata: an AnnData-like object with ``X``, ``layers`` and ``obsm`` attributes.
+        layer: read ``adata.layers[layer]`` instead of ``adata.X``.
+        use_rep: read ``adata.obsm[use_rep]``; mutually exclusive with ``layer``.
+        seed: PCA random state. It is recorded even when no reduction is applied.
+        n_components: PCA dimensions. ``None`` keeps all dimensions; PCA is skipped when
+            this is at least the input width.
+        dense_warning_gb: warning threshold for materialising the selected matrix.
+
+    Returns:
+        ``(X, preprocessing)`` where ``X`` is a dense NumPy matrix and ``preprocessing``
+        records the effective contract.
+
+    Raises:
+        ValueError: if ``layer`` and ``use_rep`` are both supplied, or ``n_components`` is
+            not a positive integer or ``None``.
+        KeyError: if a requested layer or representation is absent.
+    """
+    if layer is not None and use_rep is not None:
+        raise ValueError("layer and use_rep are mutually exclusive; choose one input")
+    if n_components is not None and (
+            isinstance(n_components, bool) or not isinstance(n_components, (int, np.integer))
+            or n_components < 1):
+        raise ValueError("n_components must be a positive integer or None")
+    if dense_warning_gb <= 0:
+        raise ValueError("dense_warning_gb must be positive")
+
+    if use_rep is not None:
+        source = f"obsm[{use_rep!r}]"
+        raw = adata.obsm[use_rep]
+        source_kind = "obsm"
+    elif layer is not None:
+        source = f"layers[{layer!r}]"
+        raw = adata.layers[layer]
+        source_kind = "layer"
+    else:
+        source = "X"
+        raw = adata.X
+        source_kind = "X"
+
+    input_shape = tuple(int(v) for v in raw.shape)
+    raw_dtype = np.dtype(getattr(raw, "dtype", np.float64))
+    dense_bytes = int(np.prod(input_shape, dtype=np.int64)) * raw_dtype.itemsize
+    dense_gb = dense_bytes / 1e9
+    dense_warning = None
+    if dense_gb >= dense_warning_gb:
+        dense_warning = (
+            f"{source} is about {dense_gb:.2f} GB when dense; AnnData preprocessing may "
+            "exceed available RAM. Supply a precomputed obsm representation or reduce "
+            "the input before loading if necessary.")
+        warnings.warn(dense_warning, UserWarning, stacklevel=2)
+
+    X = np.asarray(raw.todense()) if hasattr(raw, "todense") else np.asarray(raw)
+    reduction = "none"
+    n_components_applied = None
+    if use_rep is None and n_components is not None and n_components < X.shape[1]:
+        try:
+            from sklearn.decomposition import PCA
+        except ImportError as exc:                           # pragma: no cover
+            raise ImportError(
+                "reducing dimension needs scikit-learn; install it, pass "
+                "n_components=None to keep the full space, or supply use_rep"
+            ) from exc
+        X = PCA(n_components=n_components, random_state=seed).fit_transform(
+            X.astype(np.float32))
+        reduction = "pca"
+        n_components_applied = int(n_components)
+
+    preprocessing = {
+        "contract_version": 1,
+        "source": source,
+        "source_kind": source_kind,
+        "layer": layer,
+        "use_rep": use_rep,
+        "normalization": "none",
+        "log1p": False,
+        "hvg_selection": False,
+        "input_shape": list(input_shape),
+        "output_shape": [int(v) for v in X.shape],
+        "input_dtype": str(raw_dtype),
+        "output_dtype": str(X.dtype),
+        "sparse_input": bool(hasattr(raw, "todense")),
+        "dense_memory_estimate_bytes": dense_bytes,
+        "dense_memory_estimate_gb": dense_gb,
+        "dense_memory_warning": dense_warning,
+        "requested_n_components": (int(n_components) if n_components is not None else None),
+        "n_components_applied": n_components_applied,
+        "reduction": reduction,
+        "pca_random_state": int(seed) if reduction == "pca" else None,
+    }
+    return X, preprocessing
+
+
 def profiles_from_anndata(adata, *, perturbation_key: str, control: str | None,
                           depth: int, n_groups: int = 2, seed: int = 0,
                           layer: str | None = None, use_rep: str | None = None,
-                          n_components: int | None = 50) -> GroupedProfiles:
+                          n_components: int | None = 50,
+                          dense_warning_gb: float = DENSE_WARNING_GB) -> GroupedProfiles:
     """Group an AnnData's cells, optionally reducing dimension first.
 
     Args:
@@ -176,6 +296,8 @@ def profiles_from_anndata(adata, *, perturbation_key: str, control: str | None,
             in a very high-dimensional space are dominated by the many directions that carry
             no perturbation signal, so a reduction is the default rather than an option.
             Pass ``None`` to keep the full space.
+        dense_warning_gb: warn when materialising the selected AnnData input would require
+            at least this many decimal gigabytes of dense memory.
 
     Returns:
         A :class:`GroupedProfiles`.
@@ -189,21 +311,15 @@ def profiles_from_anndata(adata, *, perturbation_key: str, control: str | None,
                        f"available: {list(adata.obs.columns)[:20]}")
     labels = adata.obs[perturbation_key].astype(str).to_numpy()
 
-    if use_rep is not None:
-        X = np.asarray(adata.obsm[use_rep])
-    else:
-        raw = adata.layers[layer] if layer is not None else adata.X
-        X = np.asarray(raw.todense()) if hasattr(raw, "todense") else np.asarray(raw)
-        if n_components is not None and n_components < X.shape[1]:
-            try:
-                from sklearn.decomposition import PCA
-            except ImportError as exc:                       # pragma: no cover
-                raise ImportError(
-                    "reducing dimension needs scikit-learn; install it, pass "
-                    "n_components=None to keep the full space, or supply use_rep"
-                ) from exc
-            X = PCA(n_components=n_components, random_state=seed).fit_transform(
-                X.astype(np.float32))
-
-    return group_profiles(X, labels, control=control, depth=depth,
-                          n_groups=n_groups, seed=seed)
+    X, preprocessing = preprocess_anndata(
+        adata, layer=layer, use_rep=use_rep, seed=seed,
+        n_components=n_components, dense_warning_gb=dense_warning_gb)
+    grouped = group_profiles(X, labels, control=control, depth=depth,
+                             n_groups=n_groups, seed=seed)
+    grouped.preprocessing = preprocessing
+    grouped.preprocessing["perturbation_key"] = perturbation_key
+    grouped.preprocessing["control"] = control
+    grouped.preprocessing["depth"] = int(depth)
+    grouped.preprocessing["n_groups"] = int(n_groups)
+    grouped.preprocessing["sampling_seed"] = int(seed)
+    return grouped

@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
-"""1A: Oracle measurement ceiling PDS_oracle.
+"""1A: Split-half reproducibility reference (historical output name: PDS_oracle).
+
+The output filename and column names retain ``oracle_ceiling`` for compatibility with the
+frozen result artifacts. This is an empirical split-half reference for the measurement depth
+and candidate pool used in the run, not a hard ceiling or bound on every predictor or dataset.
 
 For each held-out variant the 'prediction' is a SECOND, DISJOINT measurement of the
 SAME variant (independent split-half pseudobulk delta, with an independent WT half).
-This upper-bounds the PDS any real model can reach at this measurement depth, because a
-real model carries model error ON TOP of this finite-sample noise.
+It puts model scores on the same measurement scale at this depth; a real model has additional
+prediction error, but this reference is not promoted to a universal bound.
 
 Mirrors score_definitive.py exactly: same GENES, SPLITS, NSUB, tie-aware mid-rank
 PDS_cos, 15-seed averaging, bootstrap CI over variants; candidate set = train+test of

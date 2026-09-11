@@ -43,7 +43,7 @@ def residual_pds_score(
     directly. It is an additional axis, not a replacement: :func:`pds_score` is unchanged.
 
     On the four datasets here the residual axis makes the models look worse rather than
-    better, which is why it cannot launder a null result. The reproducibility ceiling on residuals
+    better, which is why it cannot launder a null result. The empirical reproducibility reference on residuals
     is 0.480 and 0.478 for TP53 and KRAS, still at chance, while for JAK1 it rises from
     0.792 to 0.892, widening the gap to the best model rather than closing it.
 

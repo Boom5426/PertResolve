@@ -31,7 +31,8 @@ and it is ``rho2_nn_median`` rather than ``rho2`` that is most relevant to model
 resolution.
 """
 
-from .profiles import GroupedProfiles, group_profiles, profiles_from_anndata
+from .profiles import (GroupedProfiles, group_profiles, preprocess_anndata,
+                       profiles_from_anndata)
 from .recovery import (
     DEFAULT_WEIGHTS,
     SATURATION_TOL,
@@ -69,6 +70,7 @@ __all__ = [
     "ordering_recovery",
     "permutation_null_delta2",
     "profiles_from_anndata",
+    "preprocess_anndata",
     "resolution_report",
     "signal_noise",
     "stats_from_gram",

@@ -26,10 +26,11 @@ is what the score responds to, and it carries the same magnitude and covariance 
 right one so the weight is the only thing that changes. ``toward="panel_mean"`` reproduces
 the earlier construction for comparison.
 
-The build and evaluation profiles come from disjoint cells, so the best predictor's score is
-interpreted relative to an empirical split-half reproducibility reference rather than a
-perfect-score assumption. A predictor built from the cells it is scored against would score
-1.0 by matching its own noise and would say nothing.
+    The build and evaluation profiles come from disjoint cells, so the best predictor's score is
+    interpreted relative to an empirical split-half reproducibility reference rather than a
+    perfect-score assumption. A predictor built from the cells it is scored against would score
+    1.0 by matching its own noise and would say nothing. This controlled family is a diagnostic
+    construction; it is not the paper's six-head by three-feature-space model grid.
 
 **Ordering recovery is not monotone in benchmark quality, and that is not a defect.** At the
 floor no predictor is distinguishable from another. At high resolution the best two are both
@@ -71,7 +72,8 @@ class RecoveryResult:
         p_correct_winner: bootstrap probability that the best predictor scores highest.
         smallest_resolved_gap: smallest adjacent quality gap the benchmark orders correctly
             with probability above 0.9, or NaN if it orders none of them. This is the
-            benchmark's resolution in the units the predictors are graded in.
+            generic API's resolution in the units of the supplied synthetic weights; it is
+            a Δalpha-like construction gap, not an observed ΔPDS between paper models.
         saturated: whether every predictor scored the same, to within ``SATURATION_TOL``.
             The discrimination score is a cosine and is therefore blind to scale, so when
             perturbations are widely separated the mixed prediction stays almost collinear

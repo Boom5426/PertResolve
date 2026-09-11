@@ -3,9 +3,9 @@
 ``pertresolve/evaluation/pds.py`` had no test. Three of its properties are load-bearing
 well beyond the function itself:
 
-  * **Chance is 0.5 at every candidate-set size.** Every "at chance" verdict in the paper
+  * **Chance is 0.5 at every candidate-set size.** Every "at chance" interpretation in the paper
     compares an interval against 0.50, and the four datasets rank against pools of 26 to
-    255 competitors. If the mid-rank normalisation drifted with pool size, those verdicts
+    255 competitors. If the mid-rank normalisation drifted with pool size, those interpretations
     would not be comparable across genes.
   * **Uniform candidate subsampling does not move the expected score.** This is the
     premise separating "the pool is smaller" from "the pool is easier"; without it, no

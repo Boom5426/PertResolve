@@ -25,14 +25,14 @@ of that variant, whereas a model has never seen it. That is the same asymmetry t
 manuscript's split-half reference carries.
 
 **Selection.** A pair is called resolvable when its between-variant distance exceeds the
-mean of the two variants' own split-half distances, the criterion behind Fig. 4d. Choosing
+mean of the two variants' own split-half distances, the criterion behind Fig. 3e. Choosing
 pairs and scoring the measurement on the same cell splits inflates the measurement arm: on
 GATA1 it scores 0.99 on the pairs the criterion selects and 0.61 on the rest, so the
 criterion is partly selecting splits where the noise fell favourably. Both versions are
 therefore reported:
 
   ``resolvable``       mask and score from all seeds. Reproduces the published fractions
-                       and is the stratum comparable to Fig. 4d.
+                       and is the stratum comparable to Fig. 3e.
   ``resolvable_xfit``  mask from one block of seeds, score from a disjoint block. This is
                        the version a measurement-versus-model gap should be read from.
 

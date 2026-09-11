@@ -127,7 +127,7 @@ def resolution_report(X: np.ndarray, labels, *, control: str, depth: int = 50,
                       with_window: bool = True,
                       perturbations: list[str] | None = None,
                       candidate_mask: np.ndarray | None = None,
-                   cross_seed: bool = True) -> ResolutionReport:
+                      cross_seed: bool = True) -> ResolutionReport:
     """Measure what a dataset supports, before any model is compared on it.
 
     Args:
@@ -149,6 +149,9 @@ def resolution_report(X: np.ndarray, labels, *, control: str, depth: int = 50,
             exists so that the candidate set can be varied without varying anything else:
             ``X`` is reduced once on the full cohort and only the scoring pool changes, so a
             candidate-set effect is not confounded with a change of representation basis.
+        cross_seed: compute the optional two-fold cross-seed identification reference when
+            at least four seeds are available. It is reported alongside the primary axes and
+            does not replace them.
 
     Returns:
         A :class:`ResolutionReport`.
@@ -160,7 +163,8 @@ def resolution_report(X: np.ndarray, labels, *, control: str, depth: int = 50,
     pset = resolution_profiles(X, labels, control=control, depth=depth, n_seeds=n_seeds,
                                seed=seed, with_window=with_window,
                                perturbations=perturbations)
-    return score_profiles(pset, n_boot=n_boot, seed=seed, candidate_mask=candidate_mask)
+    return score_profiles(pset, n_boot=n_boot, seed=seed, candidate_mask=candidate_mask,
+                          cross_seed=cross_seed)
 
 
 @dataclass
@@ -351,7 +355,12 @@ def score_profiles(pset: ResolutionProfiles, *, n_boot: int = 1000,
         details=dict(delta2=stats["delta2"], pair2=stats["pair2"],
                      n_nonpositive=nn["n_nonpositive"],
                      control_cells_per_reference=pset.control_cells_per_reference,
+                     n_groups=4,
                      n_seeds=pset.n_seeds,
+                     with_window=window is not None,
+                     window_n_seeds=(window.n_seeds if window is not None else None),
+                     cross_seed_requested=bool(cross_seed),
+                     cross_seed_computed=bool(cross),
                      # Per-perturbation identification, aligned with
                      # ``grouped.perturbations``. This lets callers compare the independent
                      # detection and identification vectors without re-running.

@@ -164,8 +164,8 @@ def score_split(gene: str, split: str, predictions, *, permute_seed: int | None 
 def oracle_rows(gene: str, split: str) -> list[dict]:
     """The same two axes for a second measurement of each variant, not for a model.
 
-    This is the ceiling both axes are read against. It uses the identical candidate set and
-    the identical training-only gene mean, so the comparison between a model and the ceiling
+    This is the empirical split-half reference both axes are read against. It uses the identical candidate set and
+    the identical training-only gene mean, so the comparison between a model and the reference
     is like for like on each axis.
     """
     train, test = H.split_vars(gene, split)
@@ -222,7 +222,7 @@ def bootstrap_mean(values: np.ndarray, seed: int = 0) -> tuple[float, float, flo
     return float(values.mean()), float(lo), float(hi)
 
 
-print("=== the reproducibility ceiling on both axes ===")
+print("=== the empirical reproducibility reference on both axes ===")
 ceiling_rows = []
 for gene in H.GENES:
     per_variant = {}

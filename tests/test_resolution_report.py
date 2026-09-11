@@ -88,6 +88,32 @@ def test_detection_and_identification_are_independent_axes():
     assert "detection" in report.summary() and "identification" in report.summary()
 
 
+def test_resolution_report_forwards_cross_seed_request(monkeypatch):
+    """The CLI/API switch must control computation rather than only its label."""
+    import pertresolve.resolution.report as report_module
+
+    sentinel_profiles = object()
+    sentinel_report = object()
+    seen = {}
+
+    monkeypatch.setattr(
+        report_module, "resolution_profiles",
+        lambda *args, **kwargs: sentinel_profiles,
+    )
+
+    def fake_score_profiles(profiles, **kwargs):
+        seen.update(kwargs)
+        assert profiles is sentinel_profiles
+        return sentinel_report
+
+    monkeypatch.setattr(report_module, "score_profiles", fake_score_profiles)
+    got = report_module.resolution_report(
+        np.empty((0, 0)), [], control="ctrl", cross_seed=False,
+    )
+    assert got is sentinel_report
+    assert seen["cross_seed"] is False
+
+
 def test_the_split_half_reference_tracks_the_true_separation():
     """The empirical split-half reference remains numerically stable and interpretable."""
     references = []

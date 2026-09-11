@@ -20,7 +20,7 @@ Two sub-arms, answering different objections:
     the counts in a uniform draw are multivariate hypergeometric and are sampled directly.
 
 ``hard``
-    The ``K - 1`` competitors nearest the target, which is the geometry Fig. 5g identified
+    The ``K - 1`` competitors nearest the target, which is the geometry Fig. 6c identified
     as governing. Selection uses the prediction half and evaluation the disjoint truth
     half, so for a **model** the competitors are chosen on cells the score never sees. The
     measurement arm is not clean here, because its prediction is the half the selection

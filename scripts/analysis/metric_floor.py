@@ -7,7 +7,7 @@ canonical PCA-50 space, to show the floor is not an artifact of energy distance.
   D_null = dist(halfA, WT sample)
 Distributional metrics (energy, MMD-RBF, sliced-Wasserstein) act on the two cell SETS;
 mean metrics (cosine, L2) act on the set means. Per gene we report median(D_self)/median(D_null)
-(the manuscript convention). Energy should reproduce the canonical Fig 3b ratios as a check.
+(the manuscript convention). Energy should reproduce the canonical Fig. 4f ratios as a check.
 """
 import numpy as np, pandas as pd, sys
 from sklearn.decomposition import PCA

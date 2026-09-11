@@ -125,7 +125,22 @@ def test_public_benchmark_has_explicit_variant_and_reference_counts():
     assert len(rows) == 472
     assert len([row for row in rows if row["variant"] != "WT"]) == 470
     assert len([row for row in rows if row["variant"] == "WT"]) == 2
-    assert "is_hotspot_leaked_OLD" not in rows[0]
+    legacy_field = "is_hotspot_leaked_" + "OLD"
+    assert legacy_field not in rows[0]
+
+
+def test_benchmark_loader_exposes_variant_and_reference_views():
+    """Display and API counts must agree without treating WT as a scored variant."""
+    from pertresolve.bench import PertResolveBench
+
+    bench = PertResolveBench.load(str(REPO / "data"))
+    assert bench.n_variant_conditions == 470
+    assert bench.n_reference_rows == 2
+    assert len(bench.variant_conditions) == 470
+    assert len(bench.reference_rows) == 2
+    assert "470 variant conditions + 2 reference rows" in repr(bench)
+    assert all(str(name).upper() != "WT" for name in bench.get_theta())
+    assert set(bench.get_theta(include_reference=True)) - set(bench.get_theta())
 
 
 def test_self_contained_resolution_demo_runs():

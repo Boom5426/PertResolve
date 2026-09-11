@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Detection and local-competition measurements for the four allele genes, from one measurement.
 
-Figure 4 currently reads its detection quantity and its nearest-competitor quantity from two
+The historical Figure 4 analysis read its detection quantity and its nearest-competitor quantity from two
 different pipelines. ``results/second_probe_rankability_table.csv`` measures detection with
 an energy distance over 50 random halvings of a cell pool truncated at 300 cells per variant;
 ``results/canonical/resolution_sweep.csv`` measures nearest-competitor separation with a
@@ -298,13 +298,12 @@ for gene in GENES:
                 continue
 
             t0 = time.time()
-            # cross_seed is deliberately not passed: resolution_report declares the parameter
-            # but does not forward it to score_profiles, so naming it here would read as a
-            # control that does nothing. The cross-seed columns appear regardless.
+            # This paper-specific run requests the optional cross-seed diagnostics explicitly.
+            # They are recorded alongside, not substituted for, the primary axes.
             report = resolution_report(
                 X, labels, control=control, depth=depth,
                 n_seeds=_args.n_seeds, seed=_args.seed, n_boot=_args.n_boot,
-                with_window=True, perturbations=wanted)
+                with_window=True, perturbations=wanted, cross_seed=True)
 
             window = report.window
             if window is None:

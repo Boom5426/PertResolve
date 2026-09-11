@@ -9,8 +9,8 @@ asserts), the median and geometric mean of the nearest-competitor separation, an
 fraction of perturbations whose nearest competitor clears the noise. The one that actually
 orders the outcomes is used; the others are reported so the choice is visible.
 
-**Checks which outcomes are monotone before fitting anything to them.** The replicate
-ceiling should rise with resolution without bound. The probability of recovering the full
+**Checks which outcomes are monotone before fitting anything to them.** The split-half
+reproducibility reference should rise with resolution, while the probability of recovering the full
 ordering of graded predictors need not: at the floor no predictor is distinguishable, and
 at saturation the best two are both essentially perfect and again indistinguishable, so the
 curve can turn over. Fitting a monotone calibration to a non-monotone outcome would produce
@@ -101,7 +101,7 @@ for o in OUTCOMES:
         turn[o] = float(q.loc[peak, AXIS])
         ceil_at_peak = float(sub[np.isclose(sub[AXIS], turn[o], rtol=0.5)].ceiling_pds.median())
         print(f"                 peak near {AXIS} = {turn[o]:.4f}, "
-              f"around a ceiling of {ceil_at_peak:.3f}")
+              f"around an empirical reference of {ceil_at_peak:.3f}")
 
 TARGETS = [o for o in OUTCOMES if monotone[o]]
 if not TARGETS:

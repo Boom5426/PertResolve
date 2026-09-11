@@ -4,15 +4,13 @@
 Scope. This workbook DESCRIBES the datasets: what they are, how large they are,
 where they came from and which analysis arm each one enters. It deliberately
 carries no per-dataset results. The measured quantities live in the
-Supplementary Tables of the manuscript (Table 5 per-gene backbone and
-reproducibility ceiling, Table 6 signal and noise, Table 7 depth prescriptions,
-Table 9 the pre-registered panel), and duplicating them here would create a
+Supplementary Tables of the manuscript, and duplicating them here would create a
 second, drift-prone copy of numbers that are already typeset.
 
 Numbering. Nature Portfolio numbers Supplementary Tables and Supplementary Data
-as separate sequential series. The Supplementary Information PDF of this
-manuscript already contains Supplementary Tables 1-10, so this standalone
-workbook is Supplementary Data 1, not Supplementary Table 1.
+as separate sequential series. The final Supplementary Information PDF is the
+authority for Supplementary Table numbering; this standalone workbook is
+Supplementary Data 1, not a second copy of a Supplementary Table.
 
 Provenance. Two kinds of field, kept apart on purpose:
   * quantities measured in this study, read from the committed result files and
@@ -236,15 +234,15 @@ PANEL_KEY = {"adamson2016": "Adamson", "norman2019": "Norman", "replogle": "Repl
 # Analysis arms. Membership is asserted here and CHECKED against the result
 # files in build_roles(); a mismatch raises rather than being written out.
 ARMS = {
-    "Benchmark-ranking resolution (Fig. 5c)":
+    "Benchmark-ranking resolution arm":
         ["TP53", "KRAS", "GATA1", "JAK1", "Adamson", "Norman", "Replogle", "VCC", "sciPlex"],
-    "Rankability predictor, LODO (Fig. 6b,c)":
+    "Rankability predictor, LODO arm":
         ["TP53", "KRAS", "GATA1", "JAK1", "Adamson", "Norman", "Replogle"],
-    "Pilot-to-evaluation validation (Fig. 6d)":
+    "Pilot-to-evaluation validation arm":
         ["Adamson", "Norman", "Replogle"],
-    "Frozen packaged criterion (Fig. 6h)":
+    "Frozen packaged criterion arm":
         ["Adamson", "Norman", "Replogle", "VCC", "McFarland", "Tahoe-100M"],
-    "Native-vs-depth-matched atlas comparison (Fig. 6f)":
+    "Native-vs-depth-matched atlas comparison arm":
         ["Adamson", "Norman", "Replogle"],
 }
 
@@ -348,14 +346,14 @@ def build_datasets(src: dict) -> pd.DataFrame:
 def build_roles(src: dict) -> pd.DataFrame:
     """Membership matrix, cross-checked against the files that define each arm."""
     observed = {
-        "Benchmark-ranking resolution (Fig. 5c)":
+        "Benchmark-ranking resolution arm":
             set(src["benchres"].dataset.str.replace("allele_", "", regex=False)),
-        "Rankability predictor, LODO (Fig. 6b,c)":
+        "Rankability predictor, LODO arm":
             set(src["lodo"][src["lodo"].feature_set == "effect_size"].held_out),
-        "Pilot-to-evaluation validation (Fig. 6d)": set(src["pilot"].dataset),
-        "Frozen packaged criterion (Fig. 6h)":
+        "Pilot-to-evaluation validation arm": set(src["pilot"].dataset),
+        "Frozen packaged criterion arm":
             {PANEL_KEY[k] for k in src["panel"].dataset_name},
-        "Native-vs-depth-matched atlas comparison (Fig. 6f)": set(src["depthmatch"].dataset),
+        "Native-vs-depth-matched atlas comparison arm": set(src["depthmatch"].dataset),
     }
     for arm, declared in ARMS.items():
         if set(declared) != observed[arm]:
@@ -402,13 +400,12 @@ def build_definitions() -> pd.DataFrame:
         (UNVERIFIED, "The value was not confirmed from a source that was retrieved. It is left "
                      "blank on purpose rather than filled from a secondary summary."),
         ("Results are not in this workbook",
-         "Per-dataset measured quantities are in the manuscript Supplementary Information: "
-         "Supplementary Table 5 (per-gene backbone and reproducibility ceiling), "
-         "Supplementary Table 6 (signal and noise), Supplementary Table 7 (depth "
-         "prescriptions) and Supplementary Table 9 (the pre-registered panel)."),
+         "Per-dataset measured quantities are in the final manuscript's "
+         "Supplementary Information. See the canonical result README for the "
+         "figure/panel-to-table provenance map; this workbook remains metadata-only."),
         ("Numbering", "Nature Portfolio numbers Supplementary Tables and Supplementary Data "
-                      "as separate series. The Supplementary Information PDF holds "
-                      "Supplementary Tables 1-10; this workbook is Supplementary Data 1."),
+                      "as separate series. The final Supplementary Information PDF is the "
+                      "authority for table numbering; this workbook is Supplementary Data 1."),
     ]
     return pd.DataFrame(rows, columns=["Term", "Definition"])
 

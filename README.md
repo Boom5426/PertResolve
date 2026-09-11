@@ -28,9 +28,15 @@
 
 ## ✨ What is PertResolve?
 
-PertResolve is the software, benchmark metadata, analysis harness and final
-paper artifacts accompanying **“Measurement resolution constrains fine-grained
-perturbation prediction.”** It keeps four empirical questions separate:
+PertResolve is a measurement-resolution framework for interpreting fine-grained perturbation prediction. It separates perturbation detection, perturbation identification and response prediction, and interprets model performance against the distinctions reproducibly supported by the measurement. PertResolve-Bench combines an allele-resolved benchmark with a broader perturbation panel, while PertResolve-Eval provides prediction metrics and measurement-resolution diagnostics.
+
+The release contains the software, benchmark metadata, analysis harness and
+final paper artifacts accompanying **“Measurement resolution constrains
+fine-grained perturbation prediction.”**
+
+### What the diagnostic report returns
+
+The public resolution report keeps four empirical questions separate:
 
 | Question | Meaning |
 | --- | --- |
@@ -77,10 +83,12 @@ python examples/run_resolution_demo.py
 
 The demo prints a deterministic `ResolutionReport` with independent detection,
 identification, split-half reproducibility-reference and model-ranking-resolution
-summaries. No single scalar is promoted to a pass/fail benchmark verdict. The demo file is
+summaries. No combined benchmark verdict is returned. The demo file is
 [`data/demo/pertresolve_resolution_demo.npz`](data/demo/pertresolve_resolution_demo.npz);
 its provenance and limits are documented in
 [`data/demo/README.md`](data/demo/README.md).
+
+This derived demo validates the software interface only; its scores are not biological results from the TP53 benchmark.
 
 Typical output begins like this:
 
@@ -136,6 +144,66 @@ pertresolve-resolution path/to/data.h5ad \
 The CLI writes a JSON summary and a per-perturbation window table when the
 window calculation is enabled. Output paths are explicit so a test run cannot
 silently overwrite the committed `results/` tree.
+
+### AnnData preprocessing contract
+
+The AnnData entry point measures the representation you explicitly select. By
+default it reads `adata.X`, does not normalize, apply `log1p` or select highly
+variable genes, densifies the selected matrix, and applies PCA only when
+`--n-components` is smaller than the input width. `--layer` selects
+`adata.layers[...]`; `--use-rep` selects `adata.obsm[...]` and bypasses PCA.
+These options are mutually exclusive. Pass `--n-components 0` on the CLI (or
+`n_components=None` in Python) to keep the full selected space.
+
+When `--out` is used, `resolution_report.json` records the source, input and
+output shapes, requested and effective component counts, random state, and
+whether normalization, `log1p` or HVG selection occurred. A warning is emitted
+before a selected matrix estimated at 2 GB or more is densified; callers can
+precompute a compact `obsm` representation when memory is limited.
+
+## 🎯 Evaluate your predictions
+
+`PertResolve-Eval` exposes the paper-facing prediction metrics through
+`evaluate_variant()`. The same query can report PDS and Pearson-δ:
+
+```python
+from pertresolve.metrics import evaluate_variant
+
+result = evaluate_variant(
+    pred_delta=predicted_deltas["R175H"],
+    real_delta=real_deltas["R175H"],
+    target_variant="R175H",
+    all_real_deltas=real_deltas,
+    candidate_variants=list(real_deltas),
+)
+print(f"PDS: {result['PDS_cos']:.3f}")
+print(f"Pearson-δ: {result['pearson_delta']:.3f}")
+```
+
+Here `candidate_variants` is the full same-gene candidate pool, including the
+target. A query can be held out from model fitting while its measured response
+is used as the evaluation target. Do not replace this pool with unrelated
+cross-gene variants: that would answer a different question. The example uses
+the existing evaluator and does not introduce a model-training framework.
+
+### Generic API and paper protocol
+
+The public resolution API is a general diagnostic interface, while the paper
+uses a fixed, separately documented evaluation protocol. They share the same
+scientific framing but are not interchangeable configurations:
+
+| Aspect | Generic `resolution_report()` | Paper-specific protocol |
+| --- | --- | --- |
+| Predictor family | Built-in graded predictors used to test model-ranking resolution | Six model heads across three representations, giving the paper's 18 predictor configurations |
+| Weights | Generic alpha-like family; `smallest_resolved_gap` is reported in that family’s units | Paper predictors are scored at their observed outputs; no generic alpha ladder is substituted |
+| Score difference | Diagnostic construction varies an alpha-like predictor family | `ΔPDS` means the observed difference in PDS between two paper predictors |
+| Input representation | A fixed matrix or embedding supplied by the caller; AnnData uses the explicit preprocessing contract below | Train-only standardization and the paper's allele-response representations, with disjoint sampling specified by the paper |
+| Sampling | Four disjoint groups per perturbation in the public diagnostic, with configurable depth and seeds | Paper-specific held-out queries, same-gene candidate pools and depth/seed schedules; these values are not changed by the generic defaults |
+
+The split-half value is an empirical reproducibility reference for interpreting
+scores, not a hard ceiling or bound. A reference above 0.65 alone does not
+establish that a benchmark is benchmarkable; model-ranking resolution must be
+reported as its own empirical result.
 
 ## 🧬 Data and benchmark release
 
@@ -248,10 +316,13 @@ tables live in [`results/canonical/`](results/canonical/) and
 manuscript PDF, Supplementary Information PDF and Supplementary Data 1 workbook
 are already included under [`manuscript/`](manuscript/).
 
-The final figure-generation source bundle is intentionally withheld from this
-public staging pass while the manuscript text is being finalized. The static
-Figure 1 preview above is included for orientation; the source bundle will be
-added after the manuscript is accepted for release.
+The final static figure PDFs are maintained in the local manuscript staging
+directory, including the composite Figures 1–6 and Supplementary Figures 1–2;
+some panels also have editable exports and some are composite artwork. The
+figure-generation source bundle is intentionally withheld from this public
+staging pass while the manuscript text is being finalized. The static Figure 1
+preview above is included for orientation; final-figure sources will be added
+after the manuscript is accepted for release.
 
 Detection, identification, split-half reproducibility and model-ranking resolution
 are reported as separate axes. In particular, a split-half reference above any
