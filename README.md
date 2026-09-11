@@ -3,7 +3,7 @@
 <div align="center">
 
 <h1>PertResolve</h1>
-<h3>Measurement resolution for fine-grained perturbation prediction</h3>
+<h3>Measurement resolution for<br>fine-grained perturbation prediction</h3>
 
 <p>Separate what the measurement resolves from what the model learns.</p>
 
@@ -30,7 +30,7 @@
 
 <table align="center">
   <tr>
-    <td align="center" width="25%"><h3>470</h3><sub>coding-variant conditions</sub></td>
+    <td align="center" width="25%"><h3>470</h3><sub>coding-variant<br>conditions</sub></td>
     <td align="center" width="25%"><h3>321,043</h3><sub>cells in<br>the allele arm</sub></td>
     <td align="center" width="25%"><h3>31</h3><sub>perturbation<br>configurations</sub></td>
     <td align="center" width="25%"><h3>14</h3><sub>public<br>resources</sub></td>
@@ -43,26 +43,24 @@
   <sub>PertResolve framework overview · Figure 1 · <a href="assets/fig1.pdf">Open vector figure ↗</a></sub>
 </p>
 
-
-
-### Response similarity is not perturbation specificity
+### ✨ Why PertResolve?
 
 A predictor can recover the transcriptional programme shared by variants of a gene without identifying the correct allele. PertResolve uses split-half measurement references to distinguish **measurement-limited** comparisons from **model-limited** ones, and examines how competitor geometry, sampling depth and benchmark size affect evaluation. See the [paper](manuscript/PertResolve_manuscript.pdf) for the evaluated regimes and their scope.
 
 <table>
   <tr>
     <td valign="top" width="33%">
-      <b>Measure your dataset</b><br><br>
+      <b>🔬 Measure your dataset</b><br><br>
       Quantify detection, identification and split-half reproducibility before interpreting model scores.<br><br>
       <a href="#measure-your-dataset">Resolution diagnostics →</a>
     </td>
     <td valign="top" width="33%">
-      <b>Evaluate your predictions</b><br><br>
+      <b>🎯 Evaluate your predictions</b><br><br>
       Assess response direction and full-pool allele identification with PertResolve-Eval.<br><br>
       <a href="#evaluate-your-predictions">Prediction evaluation →</a>
     </td>
     <td valign="top" width="33%">
-      <b>Explore the benchmark</b><br><br>
+      <b>🧬 Explore the benchmark</b><br><br>
       Find variant annotations, evaluation partitions, public data and paper-level result tables.<br><br>
       <a href="#benchmark">PertResolve-Bench →</a>
     </td>
@@ -71,7 +69,7 @@ A predictor can recover the transcriptional programme shared by variants of a ge
 
 <a id="quick-start"></a>
 
-## Quick start
+## 🚀 Quick start
 
 **Python 3.10+ · NumPy and pandas for the core diagnostics.** Run the bundled demo without downloading an atlas:
 
@@ -82,7 +80,8 @@ python -m pip install -e .
 python examples/run_resolution_demo.py
 ```
 
-The demo uses **160 derived profiles with 939 features** and reports the independent measurement and model-ranking quantities. It checks the software interface; **its scores are not biological results from the TP53 benchmark**. [Demo provenance](data/demo/README.md).
+> [!NOTE]
+> The demo uses **160 derived profiles with 939 features** and reports the independent measurement and model-ranking quantities. It checks the software interface; **its scores are not biological results from the TP53 benchmark**. [Demo provenance](data/demo/README.md).
 
 <details>
 <summary><b>Environment setup and optional dependencies</b></summary>
@@ -111,11 +110,11 @@ For the ESM extra, select a PyTorch build appropriate for your hardware. Depende
 
 <a id="use-pertresolve"></a>
 
-## Use PertResolve
+## 🧭 Use PertResolve
 
 <a id="measure-your-dataset"></a>
 
-### Measure your dataset
+### 🔬 Measure your dataset
 
 Provide a cell-by-feature matrix `X`, one perturbation label per row, and the reference label:
 
@@ -132,10 +131,10 @@ The report keeps four outputs separate:
 
 | Output | Question answered |
 | :--- | :--- |
-| **Detection** | Does the perturbation separate from its reference? |
-| **Identification** | Does it separate from its nearest competitor? |
-| **Split-half reproducibility reference** | Can a disjoint measurement identify the same perturbation? |
-| **Model-ranking resolution** | How reliably does this benchmark recover the ordering of the diagnostic predictor family? |
+| **🔎 Detection** | Does the perturbation separate from its reference? |
+| **🧭 Identification** | Does it separate from its nearest competitor? |
+| **🔁 Split-half reproducibility reference** | Can a disjoint measurement identify the same perturbation? |
+| **📈 Model-ranking resolution** | How reliably does this benchmark recover the ordering of the diagnostic predictor family? |
 
 **For an AnnData file:**
 
@@ -150,7 +149,8 @@ pertresolve-resolution data.h5ad \
 
 The CLI saves `resolution_report.json` and, when detection is computed, `resolution_window.csv`. At `depth=50`, the diagnostic requires **at least 200 cells per perturbation** to form four disjoint groups.
 
-**Input representation matters.** The CLI does not automatically normalize counts, log-transform expression or select highly variable genes. It evaluates the matrix or embedding you supply.
+> [!TIP]
+> **Input representation matters.** The CLI does not automatically normalize counts, log-transform expression or select highly variable genes. It evaluates the matrix or embedding you supply.
 
 <details>
 <summary><b>Run the Python example on the bundled demo</b></summary>
@@ -196,7 +196,7 @@ The saved JSON includes the preprocessing and sampling configuration. Keep this 
 
 <a id="evaluate-your-predictions"></a>
 
-### Evaluate your predictions
+### 🎯 Evaluate your predictions
 
 Install `python -m pip install -e ".[bench]"`. For your model's `predicted_deltas` and the measured `real_deltas`, keyed by variant within the **same gene**:
 
@@ -229,7 +229,7 @@ Likewise, the broader count-space panel and the depth-ladder analyses use differ
 
 <a id="benchmark"></a>
 
-## PertResolve-Bench
+## 🧬 PertResolve-Bench
 
 Two complementary analysis arms connect allele-level prediction to broader perturbation measurement:
 
@@ -269,7 +269,7 @@ Some paper analyses additionally require source matrices or model predictions in
 
 <a id="reproduce"></a>
 
-## Reproduce the paper
+## 🔁 Reproduce the paper
 
 Start at the level you need:
 
@@ -322,11 +322,12 @@ Write reruns to scratch locations and compare them with the committed tables. An
 
 </details>
 
-**Release scope.** The current checkout includes the manuscript, Supplementary Information and result tables. The final figure-generation source bundle is not included in this staging release; the overview above is an excerpt of the existing manuscript figure.
+> [!IMPORTANT]
+> The current checkout includes the manuscript, Supplementary Information and result tables. The final figure-generation source bundle is not included in this staging release; the overview above is an excerpt of the existing manuscript figure.
 
 <a id="citation"></a>
 
-## Citation
+## 📚 Citation
 
 This repository accompanies **[Measurement resolution constrains fine-grained perturbation prediction](manuscript/PertResolve_manuscript.pdf)**. Please cite the manuscript when using PertResolve or PertResolve-Bench; machine-readable metadata is available in [`CITATION.cff`](CITATION.cff).
 
