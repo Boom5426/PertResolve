@@ -1,0 +1,28 @@
+{
+  "scheme": "within each gene\u00d7setting, bijectively permute held-out target labels; retain full train+test candidate columns; use one mapping across 15 subsampling seeds; aggregate seed mean -> same (gene,variant) across settings -> 303-variant mean",
+  "rng": "numpy.default_rng(0)",
+  "n_permutations": 1000000,
+  "observed_fresh": 0.5301427097885197,
+  "committed_observed": 0.5301,
+  "observed_minus_committed": 4.2709788519723624e-05,
+  "n_distinct_variants": 303,
+  "n_gene_settings": 16,
+  "restricted_heldout_null_exact_mean": 0.5154996979129818,
+  "restricted_heldout_null_mc_mean": 0.51550718229784,
+  "restricted_heldout_null_mc_sd": 0.009890558027490604,
+  "restricted_heldout_null_mc_mean_se": 9.890558027490605e-06,
+  "restricted_heldout_null_mc_mean_95_mc_ci": [
+    0.5154877971603191,
+    0.5155265674353608
+  ],
+  "restricted_heldout_null_distribution_central_95_interval": [
+    0.4961710401661465,
+    0.5349424696778838
+  ],
+  "one_sided_exceedances": 69767,
+  "one_sided_monte_carlo_p_plus1": 0.06976793023206977,
+  "one_sided_monte_carlo_p_se": 0.00025475537529736557,
+  "full_pool_uniform_expected_pds": 0.5,
+  "restricted_minus_full_pool_expectation": 0.01549969791298178,
+  "seconds": 138.18808794021606
+}

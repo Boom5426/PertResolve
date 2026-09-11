@@ -1,0 +1,50 @@
+{
+  "name": "perturbmulti_protein",
+  "prereg": "docs/PREREG_RESOLUTION_PANEL_v2.md",
+  "h5ad": "<external-data-root>/VCData/PerturbMulti/PerturbMulti/protein_intensities_crispr_screen_20240615.h5ad",
+  "perturbation_key": [
+    "perturbation"
+  ],
+  "unit_separator": null,
+  "collapse": "guide_suffix",
+  "control": [
+    "control"
+  ],
+  "stratum_key": null,
+  "stratum": null,
+  "n_cells_file": 99294,
+  "n_cells_scored": 97928,
+  "n_cells_unassigned_dropped": 1366,
+  "verdict": "not detectable",
+  "reason": "only 18% of perturbations differ from the control by more than their own split-half noise, so most cannot be scored at all",
+  "n_perturbations": 132,
+  "detectable_fraction": 0.18181818181818182,
+  "identifiable_fraction": 0.015151515151515152,
+  "jointly_evaluable_fraction": 0.007575757575757576,
+  "replicate_ceiling": 0.7399447721489707,
+  "rho2": 0.8129983265511086,
+  "rho2_nn_median": 0.35989449970368503,
+  "eta2": 0.002417543941974904,
+  "p_correct_order": 1.0,
+  "n_excluded": 70,
+  "depth": 50,
+  "n_seeds": 8,
+  "n_boot": 1000,
+  "seed": 0,
+  "n_components": 50,
+  "reduce_path": "none",
+  "dense_working_set_gb": 0.01,
+  "selection": {
+    "n_units_total": 202,
+    "n_units_eligible": 132,
+    "n_units_scored": 132,
+    "n_units_cell_capped": 0,
+    "cell_cap": null,
+    "n_control_cells": 5137
+  },
+  "seconds": {
+    "load": 1.2,
+    "reduce": 0.4,
+    "score": 1.5
+  }
+}

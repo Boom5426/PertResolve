@@ -1,0 +1,55 @@
+{
+  "name": "gse306429_A375_capped",
+  "prereg": "docs/PREREG_RESOLUTION_PANEL_v2.md",
+  "h5ad": "<external-data-root>/VCData/GSE306429/GSE306429_combined_demuxed.h5ad",
+  "perturbation_key": [
+    "compound_name",
+    "dose_uM"
+  ],
+  "unit_separator": "ASCII 0x1f",
+  "collapse": null,
+  "control": [
+    "DMSO"
+  ],
+  "stratum_key": [
+    "cell_id"
+  ],
+  "stratum": [
+    "A375"
+  ],
+  "n_cells_file": 1257778,
+  "n_cells_scored": 168001,
+  "n_cells_unassigned_dropped": 0,
+  "verdict": "detectable",
+  "reason": "perturbations differ from the control but only 13% are separable from their closest competitor, so a discrimination score has nothing to reward; more cells would help: the separation is positive, only under the noise",
+  "n_perturbations": 95,
+  "detectable_fraction": 0.7894736842105263,
+  "identifiable_fraction": 0.12631578947368421,
+  "jointly_evaluable_fraction": 0.12631578947368421,
+  "replicate_ceiling": 0.9776455767077268,
+  "rho2": 14.51427288799693,
+  "rho2_nn_median": 0.6942115771067454,
+  "eta2": 57.48012220462086,
+  "p_correct_order": 0.528,
+  "n_excluded": 0,
+  "depth": 50,
+  "n_seeds": 8,
+  "n_boot": 1000,
+  "seed": 0,
+  "n_components": 50,
+  "reduce_path": "pca",
+  "dense_working_set_gb": 17.86,
+  "selection": {
+    "n_units_total": 96,
+    "n_units_eligible": 95,
+    "n_units_scored": 95,
+    "n_units_cell_capped": 37,
+    "cell_cap": 2000,
+    "n_control_cells": 21347
+  },
+  "seconds": {
+    "load": 248.8,
+    "reduce": 323.3,
+    "score": 2.3
+  }
+}

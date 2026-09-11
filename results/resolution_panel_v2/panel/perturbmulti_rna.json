@@ -1,0 +1,50 @@
+{
+  "name": "perturbmulti_rna",
+  "prereg": "docs/PREREG_RESOLUTION_PANEL_v2.md",
+  "h5ad": "<external-data-root>/VCData/PerturbMulti/PerturbMulti/RNA_scaled_crispr_screen_20240615.h5ad",
+  "perturbation_key": [
+    "singlet_gene"
+  ],
+  "unit_separator": null,
+  "collapse": null,
+  "control": [
+    "control"
+  ],
+  "stratum_key": null,
+  "stratum": null,
+  "n_cells_file": 2206191,
+  "n_cells_scored": 79179,
+  "n_cells_unassigned_dropped": 2127012,
+  "verdict": "not detectable",
+  "reason": "only 3% of perturbations differ from the control by more than their own split-half noise, so most cannot be scored at all",
+  "n_perturbations": 110,
+  "detectable_fraction": 0.02727272727272727,
+  "identifiable_fraction": 0.03636363636363636,
+  "jointly_evaluable_fraction": 0.02727272727272727,
+  "replicate_ceiling": 0.7135633861551293,
+  "rho2": 0.3929838689656248,
+  "rho2_nn_median": 0.13132613457491565,
+  "eta2": 0.8650820206810128,
+  "p_correct_order": 0.994,
+  "n_excluded": 92,
+  "depth": 50,
+  "n_seeds": 8,
+  "n_boot": 1000,
+  "seed": 0,
+  "n_components": 50,
+  "reduce_path": "pca",
+  "dense_working_set_gb": 0.13,
+  "selection": {
+    "n_units_total": 202,
+    "n_units_eligible": 110,
+    "n_units_scored": 110,
+    "n_units_cell_capped": 0,
+    "cell_cap": null,
+    "n_control_cells": 4161
+  },
+  "seconds": {
+    "load": 98.8,
+    "reduce": 0.6,
+    "score": 2.7
+  }
+}

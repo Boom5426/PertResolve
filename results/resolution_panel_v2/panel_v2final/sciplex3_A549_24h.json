@@ -1,0 +1,65 @@
+{
+  "name": "sciplex3_A549_24h",
+  "prereg": "docs/PREREG_RESOLUTION_PANEL_v2.md",
+  "source": "<external-data-root>/VCData/scPerturb/rna_protein/SrivatsanTrapnell2020_sciplex3.h5ad",
+  "extract_provenance": null,
+  "perturbation_key": [
+    "perturbation",
+    "dose_value"
+  ],
+  "unit_separator": "ASCII 0x1f",
+  "collapse": null,
+  "control": [
+    "control",
+    "0.0"
+  ],
+  "stratum_key": [
+    "cell_line",
+    "time"
+  ],
+  "stratum": [
+    "A549",
+    "24.0"
+  ],
+  "n_cells_file": 799317,
+  "n_cells_scored": 162171,
+  "n_cells_unassigned_dropped": 0,
+  "d7_applied": true,
+  "verdict": "not detectable",
+  "reason": "only 7% of perturbations differ from the control by more than their own split-half noise, so most cannot be scored at all",
+  "n_perturbations": 495,
+  "detectable_fraction": 0.07272727272727272,
+  "identifiable_fraction": 0.0,
+  "jointly_evaluable_fraction": 0.0,
+  "replicate_ceiling": 0.6593061178587494,
+  "rho2": 0.5807699677505851,
+  "rho2_nn_median": 0.05100443985355424,
+  "eta2": 1500.7906601982581,
+  "p_correct_order": 0.991,
+  "n_excluded": 257,
+  "depth": 50,
+  "n_seeds": 8,
+  "n_boot": 1000,
+  "seed": 0,
+  "n_components": 50,
+  "reduce_path": "rsvd",
+  "dense_working_set_gb": 143.99,
+  "selection": {
+    "n_units_total": 752,
+    "n_units_eligible": 495,
+    "n_units_scored": 495,
+    "n_units_cell_capped": 0,
+    "cell_cap": null,
+    "n_control_cells": 3773
+  },
+  "matched_arm": null,
+  "p_rho2_nn_gt1": 0.10101010101010101,
+  "cross_seed_identifiable_fraction": 0.0,
+  "cross_seed_rho2_nn_median": -0.2965338075924346,
+  "cross_seed_p_rho2_nn_gt1": 0.03232323232323232,
+  "seconds": {
+    "load": 16.3,
+    "reduce": 25.4,
+    "score": 10.7
+  }
+}

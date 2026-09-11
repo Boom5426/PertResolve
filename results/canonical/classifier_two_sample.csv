@@ -1,0 +1,5 @@
+gene,n_var,detect_med_auroc,detect_frac_gt055,ident_med_auroc,ident_frac_gt055,perm_med_auroc,n_ident_pairs
+TP53,98,0.533,0.306,0.493,0.01,0.501,100
+KRAS,92,0.498,0.0,0.498,0.03,0.501,100
+GATA1,254,0.508,0.067,0.52,0.2,0.5,100
+JAK1,26,0.965,1.0,0.873,0.96,0.503,100

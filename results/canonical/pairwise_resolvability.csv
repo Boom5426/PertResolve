@@ -1,0 +1,5 @@
+gene,n_var,frac_identifiable,frac_pairs_resolvable,median_nn_dist,median_Dself,median_nn_over_Dself
+TP53,98,0.0,0.0,0.23,0.965,0.24
+KRAS,92,0.0,0.0,0.375,0.977,0.386
+GATA1,254,0.0,0.038,0.461,0.981,0.484
+JAK1,26,0.154,0.785,0.197,0.275,0.706

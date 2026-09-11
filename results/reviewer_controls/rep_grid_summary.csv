@@ -1,0 +1,8 @@
+representation,dim,PDS_cos,pearson_delta,n_heads_scored,heads,n_pds,n_pearson,n_head_failures
+theta,6,0.473,0.632,6,GBoost;KNN;Lasso;MLP;RF;Ridge,3108,3108,0
+esm1v,1280,0.462,0.643,6,GBoost;KNN;Lasso;MLP;RF;Ridge,3066,3066,0
+esm2_global,1280,0.463,0.648,6,GBoost;KNN;Lasso;MLP;RF;Ridge,2982,2982,0
+esm2_globaldelta,1280,0.463,0.648,6,GBoost;KNN;Lasso;MLP;RF;Ridge,2982,2982,0
+esm2_sitedelta,1280,0.467,0.632,6,GBoost;KNN;Lasso;MLP;RF;Ridge,2982,2982,0
+esm2_window16,1280,0.464,0.648,6,GBoost;KNN;Lasso;MLP;RF;Ridge,2982,2982,0
+esm2_sitedelta+theta,1286,0.464,0.628,6,GBoost;KNN;Lasso;MLP;RF;Ridge,2982,2982,0

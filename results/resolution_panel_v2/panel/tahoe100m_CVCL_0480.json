@@ -1,0 +1,97 @@
+{
+  "name": "tahoe100m_CVCL_0480",
+  "prereg": "docs/PREREG_RESOLUTION_PANEL_v2.md",
+  "source": "subsets/tahoe_CVCL_0480",
+  "extract_provenance": {
+    "n_units_eligible": 1075,
+    "pool_cap": 1500,
+    "pool_seed": 0,
+    "min_cells": 200,
+    "collapse": "chem_formulation",
+    "collapse_groups": {
+      "omeprazole": [
+        "Omeprazole",
+        "Omeprazole (sodium)"
+      ],
+      "berbamine": [
+        "Berbamine",
+        "Berbamine (dihydrochloride)"
+      ],
+      "gallic acid": [
+        "Gallic acid",
+        "Gallic acid (hydrate)"
+      ],
+      "pyridoxine": [
+        "Pyridoxine",
+        "Pyridoxine (hydrochloride)"
+      ],
+      "tofacitinib": [
+        "Tofacitinib",
+        "Tofacitinib (citrate)"
+      ],
+      "cytarabine": [
+        "Cytarabine",
+        "Cytarabine (hydrochloride)"
+      ]
+    },
+    "n_collapse_groups": 6,
+    "n_units_scored": 1075,
+    "n_cells_source": 100648790,
+    "n_cells_kept": 4170504,
+    "kept_nnz": 7456688637,
+    "n_files": 14,
+    "encoding": "csr_matrix, multi-file, streamed",
+    "n_control_cells": 97098
+  },
+  "perturbation_key": [
+    "drugname_drugconc"
+  ],
+  "unit_separator": null,
+  "collapse": null,
+  "control": [
+    "dmso_tf|0.0"
+  ],
+  "stratum_key": null,
+  "stratum": null,
+  "n_cells_file": 100648790,
+  "n_cells_scored": 4170504,
+  "n_cells_unassigned_dropped": 0,
+  "d7_applied": true,
+  "verdict": "detectable",
+  "reason": "perturbations differ from the control but only 0% are separable from their closest competitor, so a discrimination score has nothing to reward; more cells would help: the separation is positive, only under the noise",
+  "n_perturbations": 1075,
+  "detectable_fraction": 0.6920930232558139,
+  "identifiable_fraction": 0.0009302325581395349,
+  "jointly_evaluable_fraction": 0.0009302325581395349,
+  "replicate_ceiling": 0.909829045948638,
+  "rho2": 7.896261212240994,
+  "rho2_nn_median": 0.6224181528699606,
+  "eta2": 762.5135277581704,
+  "p_correct_order": 0.36,
+  "n_excluded": 0,
+  "depth": 50,
+  "n_seeds": 8,
+  "n_boot": 1000,
+  "seed": 0,
+  "n_components": 50,
+  "reduce_path": "rsvd",
+  "dense_working_set_gb": 2092.26,
+  "selection": {
+    "n_units_total": 1075,
+    "n_units_eligible": 1075,
+    "n_units_scored": 1075,
+    "n_units_cell_capped": 0,
+    "cell_cap": null,
+    "n_control_cells": 97098
+  },
+  "matched_arm": null,
+  "p_rho2_nn_gt1": 0.3497674418604651,
+  "cross_seed_identifiable_fraction": 0.0009302325581395349,
+  "cross_seed_rho2_nn_median": 0.1078760281109017,
+  "cross_seed_p_rho2_nn_gt1": 0.14976744186046512,
+  "seconds": {
+    "load": 2.5,
+    "reduce": 1188.9,
+    "score": 566.5
+  }
+}

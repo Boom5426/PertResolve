@@ -1,0 +1,5 @@
+gene,n_scored,ceiling_pds,ceiling_lo,ceiling_hi,ceiling_residual_pds,ceiling_residual_lo,ceiling_residual_hi
+TP53,84,0.473,0.445,0.499,0.509,0.488,0.531
+KRAS,67,0.492,0.45,0.537,0.518,0.487,0.551
+GATA1,308,0.581,0.56,0.602,0.576,0.557,0.596
+JAK1,59,0.779,0.73,0.826,0.839,0.792,0.883

@@ -1,0 +1,165 @@
+{
+  "gene": "JAK1",
+  "nseed": 15,
+  "nboot": 2000,
+  "published_ceiling": 0.792,
+  "bar_0.25H": 0.573,
+  "C1_truth_pds": 1.0,
+  "C1_truth_top1": 1.0,
+  "C1_pass": true,
+  "C1_splithalf_pds": 0.7924,
+  "C1_splithalf_ci": [
+    0.7409,
+    0.8374
+  ],
+  "C1_splithalf_above_chance": true,
+  "C2_span_oracle_pds": 0.6899,
+  "C2_span_oracle_ci": [
+    0.6379,
+    0.7416
+  ],
+  "C2_span_oracle_above_bar": true,
+  "C2_split3_pds": 0.7416,
+  "C2_split3_above_bar": true,
+  "C3_span_oracle_top1": 0.0486,
+  "C3_top1_reachable": true,
+  "outside_span_fraction": {
+    "Biolord": {
+      "split1": 0.31154,
+      "split2": 0.72517,
+      "split3": 0.87936,
+      "split5": 0.39845
+    },
+    "CellFlow": {
+      "split1": 0.29861,
+      "split2": 0.29354,
+      "split5": 0.33486
+    },
+    "GBoost-esm+theta": {
+      "split1": 0.0,
+      "split2": 0.0,
+      "split3": 0.0,
+      "split5": 0.0
+    },
+    "GBoost-esm": {
+      "split1": 0.0,
+      "split2": 0.0,
+      "split3": 0.0,
+      "split5": 0.0
+    },
+    "GBoost-theta": {
+      "split1": 0.0,
+      "split2": 0.0,
+      "split3": 0.0,
+      "split5": 0.0
+    },
+    "Gene-mean": {
+      "split1": 0.0,
+      "split2": 0.0,
+      "split3": 0.0,
+      "split5": 0.0
+    },
+    "KNN-esm+theta": {
+      "split1": 0.0,
+      "split2": 0.0,
+      "split3": 0.0,
+      "split5": 0.0
+    },
+    "KNN-esm": {
+      "split1": 0.0,
+      "split2": 0.0,
+      "split3": 0.0,
+      "split5": 0.0
+    },
+    "KNN-theta": {
+      "split1": 0.0,
+      "split2": 0.0,
+      "split3": 0.0,
+      "split5": 0.0
+    },
+    "Lasso-esm+theta": {
+      "split1": 0.08925,
+      "split2": 0.44933,
+      "split3": 0.31357,
+      "split5": 0.14339
+    },
+    "Lasso-esm": {
+      "split1": 0.03359,
+      "split2": 0.08445,
+      "split3": 0.09108,
+      "split5": 0.02288
+    },
+    "Lasso-theta": {
+      "split1": 0.06825,
+      "split2": 0.31714,
+      "split3": 0.25429,
+      "split5": 0.13906
+    },
+    "MLP-esm+theta": {
+      "split1": 0.08684,
+      "split2": 0.18469,
+      "split3": 0.22972,
+      "split5": 0.10943
+    },
+    "MLP-esm": {
+      "split1": 0.10159,
+      "split2": 0.19707,
+      "split3": 0.15818,
+      "split5": 0.07427
+    },
+    "MLP-theta": {
+      "split1": 0.10915,
+      "split2": 0.22605,
+      "split3": 0.30631,
+      "split5": 0.11578
+    },
+    "PerturbNet": {
+      "split1": 0.50659,
+      "split2": 0.69538,
+      "split5": 0.51457
+    },
+    "RF-esm+theta": {
+      "split1": 0.0,
+      "split2": 0.0,
+      "split3": 0.0,
+      "split5": 0.0
+    },
+    "RF-esm": {
+      "split1": 0.0,
+      "split2": 0.0,
+      "split3": 0.0,
+      "split5": 0.0
+    },
+    "RF-theta": {
+      "split1": 0.0,
+      "split2": 0.0,
+      "split3": 0.0,
+      "split5": 0.0
+    },
+    "Ridge-esm+theta": {
+      "split1": 0.0,
+      "split2": 0.0,
+      "split3": 0.0,
+      "split5": 0.0
+    },
+    "Ridge-esm": {
+      "split1": 0.0,
+      "split2": 0.0,
+      "split3": 0.0,
+      "split5": 0.0
+    },
+    "Ridge-theta": {
+      "split1": 0.0,
+      "split2": 0.0,
+      "split3": 0.0,
+      "split5": 0.0
+    },
+    "scGen": {
+      "split1": 0.22959,
+      "split2": 0.34659,
+      "split3": 0.78455,
+      "split5": 0.28967
+    }
+  },
+  "verdict": "INTERFACE_OK"
+}

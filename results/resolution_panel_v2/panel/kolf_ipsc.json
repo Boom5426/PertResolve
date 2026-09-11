@@ -1,0 +1,68 @@
+{
+  "name": "kolf_ipsc",
+  "prereg": "docs/PREREG_RESOLUTION_PANEL_v2.md",
+  "source": "subsets/kolf_k1500.npz",
+  "extract_provenance": {
+    "n_units_eligible": 6822,
+    "pool_cap": 1500,
+    "pool_seed": 0,
+    "min_cells": 200,
+    "n_units_scored": 1500,
+    "n_cells_source": 2659209,
+    "n_cells_kept": 564835,
+    "n_control_cells": 146747,
+    "encoding": "csc_matrix",
+    "source_nnz": 7872183461,
+    "kept_nnz": 1677473162,
+    "source": "<external-data-root>/VCC/data/references/kolf/KOLF_Pan_Genome_QC_Filtered.h5ad",
+    "unit_key": "gene_target",
+    "control": "NTC",
+    "stratum": [],
+    "seconds": 947.4
+  },
+  "perturbation_key": [
+    "gene_target"
+  ],
+  "unit_separator": null,
+  "collapse": null,
+  "control": [
+    "NTC"
+  ],
+  "stratum_key": null,
+  "stratum": null,
+  "n_cells_file": 2659209,
+  "n_cells_scored": 564835,
+  "n_cells_unassigned_dropped": 0,
+  "verdict": "not detectable",
+  "reason": "only 31% of perturbations differ from the control by more than their own split-half noise, so most cannot be scored at all",
+  "n_perturbations": 1500,
+  "detectable_fraction": 0.312,
+  "identifiable_fraction": 0.0,
+  "jointly_evaluable_fraction": 0.0,
+  "replicate_ceiling": 0.7987065821658883,
+  "rho2": 2.0089237970969704,
+  "rho2_nn_median": -0.018970484488774027,
+  "eta2": 250.73543245686005,
+  "p_correct_order": 0.999,
+  "n_excluded": 0,
+  "depth": 50,
+  "n_seeds": 8,
+  "n_boot": 1000,
+  "seed": 0,
+  "n_components": 50,
+  "reduce_path": "rsvd",
+  "dense_working_set_gb": 169.75,
+  "selection": {
+    "n_units_total": 1500,
+    "n_units_eligible": 1500,
+    "n_units_scored": 1500,
+    "n_units_cell_capped": 0,
+    "cell_cap": null,
+    "n_control_cells": 146747
+  },
+  "seconds": {
+    "load": 5.7,
+    "reduce": 485.9,
+    "score": 89.9
+  }
+}

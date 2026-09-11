@@ -1,0 +1,72 @@
+{
+  "n_batches": 48,
+  "group_sizes": [
+    24,
+    24
+  ],
+  "n_control_cells": 4000,
+  "control_cells_per_group": [
+    2000,
+    2000
+  ],
+  "w_batch": "25",
+  "control_cells_in_w_batch": 109,
+  "cohorts": {
+    "30": {
+      "n_PX": 400,
+      "n_W": 0,
+      "n_excluded_from_PX": 0,
+      "excluded_from_PX": []
+    },
+    "50": {
+      "n_PX": 367,
+      "n_W": 0,
+      "n_excluded_from_PX": 33,
+      "excluded_from_PX": [
+        "COX5B",
+        "DDX1",
+        "DDX19A",
+        "DHX8",
+        "DPH6",
+        "ELP3",
+        "EXOC4",
+        "FNTB",
+        "GINS3",
+        "GSDMA",
+        "GSPT1",
+        "LARS",
+        "LETM1",
+        "MCM3AP",
+        "METAP1",
+        "MRPS2",
+        "MT2A",
+        "PIK3C3",
+        "POLR3B",
+        "RBBP8",
+        "RCL1",
+        "RNF123",
+        "RNMT",
+        "RPP30",
+        "RRM1",
+        "SDHC",
+        "TDGF1",
+        "TM7SF2",
+        "TOMM22",
+        "USP9X",
+        "VPS51",
+        "WDR18",
+        "ZMAT5"
+      ]
+    }
+  },
+  "dataset": "Replogle",
+  "n_cells": 77467,
+  "n_features": 50,
+  "master_seed": 20260825,
+  "n_seed": 15,
+  "depths": [
+    30,
+    50
+  ],
+  "tau": 0.05
+}

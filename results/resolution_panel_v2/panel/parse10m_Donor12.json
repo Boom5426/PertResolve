@@ -1,0 +1,79 @@
+{
+  "name": "parse10m_Donor12",
+  "prereg": "docs/PREREG_RESOLUTION_PANEL_v2.md",
+  "source": "subsets/parse_Donor12",
+  "extract_provenance": {
+    "n_units_eligible": 90,
+    "pool_cap": 1500,
+    "pool_seed": 0,
+    "min_cells": 200,
+    "n_units_scored": 90,
+    "n_cells_source": 9697974,
+    "n_cells_kept": 1054708,
+    "n_control_cells": 71179,
+    "encoding": "csr_matrix",
+    "source_nnz": 18830591942,
+    "kept_nnz": 1642484542,
+    "source": "<external-data-root>/VCData/CellFlow/Parse_10M_PBMC_cytokines.h5ad",
+    "unit_key": "cytokine",
+    "control": "PBS",
+    "stratum": [
+      [
+        "donor",
+        "Donor12"
+      ]
+    ],
+    "seconds": 1517.2
+  },
+  "perturbation_key": [
+    "cytokine"
+  ],
+  "unit_separator": null,
+  "collapse": null,
+  "control": [
+    "PBS"
+  ],
+  "stratum_key": null,
+  "stratum": null,
+  "n_cells_file": 9697974,
+  "n_cells_scored": 1054708,
+  "n_cells_unassigned_dropped": 0,
+  "d7_applied": true,
+  "verdict": "not detectable",
+  "reason": "only 41% of perturbations differ from the control by more than their own split-half noise, so most cannot be scored at all",
+  "n_perturbations": 90,
+  "detectable_fraction": 0.4111111111111111,
+  "identifiable_fraction": 0.0,
+  "jointly_evaluable_fraction": 0.0,
+  "replicate_ceiling": 0.832521847690387,
+  "rho2": 1.7150386036073604,
+  "rho2_nn_median": 0.36926974337572616,
+  "eta2": 371.5116973168681,
+  "p_correct_order": 0.944,
+  "n_excluded": 0,
+  "depth": 50,
+  "n_seeds": 8,
+  "n_boot": 1000,
+  "seed": 0,
+  "n_components": 50,
+  "reduce_path": "rsvd",
+  "dense_working_set_gb": 340.48,
+  "selection": {
+    "n_units_total": 90,
+    "n_units_eligible": 90,
+    "n_units_scored": 90,
+    "n_units_cell_capped": 0,
+    "cell_cap": null,
+    "n_control_cells": 71179
+  },
+  "matched_arm": null,
+  "p_rho2_nn_gt1": 0.16666666666666666,
+  "cross_seed_identifiable_fraction": 0.0,
+  "cross_seed_rho2_nn_median": 0.1246823550719863,
+  "cross_seed_p_rho2_nn_gt1": 0.1,
+  "seconds": {
+    "load": 0.4,
+    "reduce": 304.2,
+    "score": 5.7
+  }
+}

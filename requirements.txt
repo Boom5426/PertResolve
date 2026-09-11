@@ -1,0 +1,14 @@
+# The dependency set lives in pyproject.toml. Listing it again here would let the two
+# disagree, which they did: this file used to name scipy, scikit-learn and pyyaml as core
+# requirements while the package needs only numpy and pandas for its diagnostics.
+#
+#   pip install -e .              resolution diagnostics, numpy and pandas only
+#   pip install -e ".[io]"        adds .h5ad reading and dimension reduction
+#   pip install -e ".[bench]"     adds the benchmark loader and the analysis scripts
+#   pip install -e ".[esm]"       adds torch and fair-esm, for the ESM2 extractors
+#   pip install -e ".[dev]"       adds pytest
+#
+# `esm` is deliberately not in the line below: the right torch wheel depends on the
+# machine's CUDA driver, so it has to be installed on purpose rather than pulled in
+# by a requirements file.
+-e .[io,bench]

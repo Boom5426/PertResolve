@@ -1,0 +1,56 @@
+{
+  "complete": true,
+  "configurations_done": [
+    "TP53/pca/25",
+    "TP53/pca/50",
+    "TP53/pca/100",
+    "TP53/raw/25",
+    "TP53/raw/50",
+    "TP53/raw/100",
+    "KRAS/pca/25",
+    "KRAS/pca/50",
+    "KRAS/pca/100",
+    "KRAS/raw/25",
+    "KRAS/raw/50",
+    "KRAS/raw/100",
+    "GATA1/pca/25",
+    "GATA1/pca/50",
+    "GATA1/pca/100",
+    "GATA1/raw/25",
+    "GATA1/raw/50",
+    "GATA1/raw/100",
+    "JAK1/pca/25",
+    "JAK1/pca/50",
+    "JAK1/pca/100",
+    "JAK1/raw/25",
+    "JAK1/raw/50",
+    "JAK1/raw/100"
+  ],
+  "base": "<external-data-root>/NUS/theta_freeze/base_new",
+  "bench_md5": "0c4869f955f78e0ab0c6e71df1ad3274",
+  "genes": [
+    "TP53",
+    "KRAS",
+    "GATA1",
+    "JAK1"
+  ],
+  "depths": [
+    25,
+    50,
+    100
+  ],
+  "spaces": [
+    "pca",
+    "raw"
+  ],
+  "n_seeds": 8,
+  "seed": 0,
+  "n_boot": 1000,
+  "n_components": 50,
+  "detection_gate": "signal > width, signal = d_null - d_self, width = 95% spread of d_self across splits",
+  "competition_gate": "separation > spread, spread = 95% spread of the nearest-competitor separation across the same splits",
+  "note": "R = d_self / d_null is reported but is not a gate. replicate_ceiling, p_correct_order and p_correct_winner must not be joined to results/canonical/resolution_sweep.csv; see the module docstring.",
+  "numpy": "2.2.6",
+  "pandas": "2.3.3",
+  "seconds_total": 534.3
+}

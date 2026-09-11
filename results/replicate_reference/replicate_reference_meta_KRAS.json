@@ -1,0 +1,38 @@
+{
+  "n_batches": 20,
+  "group_sizes": [
+    10,
+    10
+  ],
+  "n_control_cells": 400,
+  "control_cells_per_group": [
+    206,
+    194
+  ],
+  "w_batch": "1",
+  "control_cells_in_w_batch": 33,
+  "cohorts": {
+    "30": {
+      "n_PX": 97,
+      "n_W": 0,
+      "n_excluded_from_PX": 0,
+      "excluded_from_PX": []
+    },
+    "50": {
+      "n_PX": 97,
+      "n_W": 0,
+      "n_excluded_from_PX": 0,
+      "excluded_from_PX": []
+    }
+  },
+  "dataset": "KRAS",
+  "n_cells": 61293,
+  "n_features": 939,
+  "master_seed": 20260825,
+  "n_seed": 15,
+  "depths": [
+    30,
+    50
+  ],
+  "tau": 0.05
+}

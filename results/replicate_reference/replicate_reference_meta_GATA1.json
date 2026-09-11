@@ -1,0 +1,57 @@
+{
+  "n_batches": 25,
+  "group_sizes": [
+    13,
+    12
+  ],
+  "n_control_cells": 4000,
+  "control_cells_per_group": [
+    2000,
+    2000
+  ],
+  "w_batch": "rep2",
+  "control_cells_in_w_batch": 227,
+  "cohorts": {
+    "30": {
+      "n_PX": 209,
+      "n_W": 2,
+      "n_excluded_from_PX": 0,
+      "excluded_from_PX": []
+    },
+    "50": {
+      "n_PX": 209,
+      "n_W": 0,
+      "n_excluded_from_PX": 0,
+      "excluded_from_PX": []
+    },
+    "100": {
+      "n_PX": 200,
+      "n_W": 0,
+      "n_excluded_from_PX": 9,
+      "excluded_from_PX": [
+        "D276G",
+        "H232R,K233E",
+        "I242T",
+        "K252G",
+        "K299R,D300G",
+        "N292G",
+        "S187P",
+        "T267A",
+        "V349A"
+      ]
+    }
+  },
+  "dataset": "GATA1",
+  "subset": null,
+  "batch_prefix": 0,
+  "n_cells": 100112,
+  "n_features": 50,
+  "master_seed": 20260825,
+  "n_seed": 15,
+  "depths": [
+    30,
+    50,
+    100
+  ],
+  "tau": 0.05
+}

@@ -1,0 +1,51 @@
+{
+  "name": "adamson2016",
+  "prereg": "docs/PREREG_RESOLUTION_PANEL_v2.md",
+  "source": "<external-data-root>/VCData/scPerturb/rna_protein/AdamsonWeissman2016_GSM2406681_10X010.h5ad",
+  "extract_provenance": null,
+  "perturbation_key": [
+    "perturbation"
+  ],
+  "unit_separator": null,
+  "collapse": null,
+  "control": [
+    "Gal4-4(mod)_pBA582"
+  ],
+  "stratum_key": null,
+  "stratum": null,
+  "n_cells_file": 65337,
+  "n_cells_scored": 62724,
+  "n_cells_unassigned_dropped": 2613,
+  "verdict": "not detectable",
+  "reason": "only 48% of perturbations differ from the control by more than their own split-half noise, so most cannot be scored at all",
+  "n_perturbations": 93,
+  "detectable_fraction": 0.4838709677419355,
+  "identifiable_fraction": 0.03225806451612903,
+  "jointly_evaluable_fraction": 0.03225806451612903,
+  "replicate_ceiling": 0.8529978962131838,
+  "rho2": 4.716125711513279,
+  "rho2_nn_median": 0.541458666032854,
+  "eta2": 3402.3135035865694,
+  "p_correct_order": 0.977,
+  "n_excluded": 20,
+  "depth": 50,
+  "n_seeds": 8,
+  "n_boot": 1000,
+  "seed": 0,
+  "n_components": 50,
+  "reduce_path": "pca",
+  "dense_working_set_gb": 16.43,
+  "selection": {
+    "n_units_total": 113,
+    "n_units_eligible": 93,
+    "n_units_scored": 93,
+    "n_units_cell_capped": 0,
+    "cell_cap": null,
+    "n_control_cells": 1283
+  },
+  "seconds": {
+    "load": 3.8,
+    "reduce": 25.7,
+    "score": 2.0
+  }
+}

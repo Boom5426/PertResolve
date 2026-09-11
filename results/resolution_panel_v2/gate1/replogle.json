@@ -1,0 +1,50 @@
+{
+  "name": "replogle",
+  "prereg": "docs/PREREG_RESOLUTION_PANEL_v2.md",
+  "h5ad": "<external-data-root>/VCData/scPerturb/rna_protein/ReplogleWeissman2022_K562_essential.h5ad",
+  "perturbation_key": [
+    "perturbation"
+  ],
+  "unit_separator": null,
+  "collapse": null,
+  "control": [
+    "control"
+  ],
+  "stratum_key": null,
+  "stratum": null,
+  "n_cells_file": 310385,
+  "n_cells_scored": 310385,
+  "n_cells_unassigned_dropped": 0,
+  "verdict": "detectable",
+  "reason": "perturbations differ from the control but only 1% are separable from their closest competitor, so a discrimination score has nothing to reward; more cells would help: the separation is positive, only under the noise",
+  "n_perturbations": 414,
+  "detectable_fraction": 0.5120772946859904,
+  "identifiable_fraction": 0.014492753623188406,
+  "jointly_evaluable_fraction": 0.014492753623188406,
+  "replicate_ceiling": 0.8648264144763775,
+  "rho2": 6.894495702910165,
+  "rho2_nn_median": 0.5256118711948438,
+  "eta2": 2359.375851033849,
+  "p_correct_order": 0.959,
+  "n_excluded": 1643,
+  "depth": 50,
+  "n_seeds": 8,
+  "n_boot": 1000,
+  "seed": 0,
+  "n_components": 50,
+  "reduce_path": "pca",
+  "dense_working_set_gb": 21.26,
+  "selection": {
+    "n_units_total": 2057,
+    "n_units_eligible": 414,
+    "n_units_scored": 414,
+    "n_units_cell_capped": 0,
+    "cell_cap": null,
+    "n_control_cells": 10691
+  },
+  "seconds": {
+    "load": 21.1,
+    "reduce": 23.9,
+    "score": 35.6
+  }
+}

@@ -1,0 +1,15 @@
+held_out,n_perturbations,rankable_rate,evaluable,auroc,auroc_lo,auroc_hi,features,feature_set
+Replogle,1832,0.4471,True,0.9702,0.9636,0.9759,log_effect,effect_size
+Norman,236,0.9661,True,0.9337,0.8399,0.9914,log_effect,effect_size
+Adamson,96,0.8542,True,0.9303,0.86,0.9847,log_effect,effect_size
+TP53,98,0.0,False,,,,log_effect,effect_size
+KRAS,92,0.0,False,,,,log_effect,effect_size
+GATA1,254,0.0236,True,0.953,0.8948,0.9912,log_effect,effect_size
+JAK1,20,0.9,True,1.0,1.0,1.0,log_effect,effect_size
+Replogle,1832,0.4471,True,0.9335,0.9227,0.9443,log_effect+log_ncells,effect_size+log_ncells
+Norman,236,0.9661,True,0.955,0.8927,0.9957,log_effect+log_ncells,effect_size+log_ncells
+Adamson,96,0.8542,True,0.9495,0.8935,0.9895,log_effect+log_ncells,effect_size+log_ncells
+TP53,98,0.0,False,,,,log_effect+log_ncells,effect_size+log_ncells
+KRAS,92,0.0,False,,,,log_effect+log_ncells,effect_size+log_ncells
+GATA1,254,0.0236,True,0.9758,0.9365,0.9992,log_effect+log_ncells,effect_size+log_ncells
+JAK1,20,0.9,True,1.0,1.0,1.0,log_effect+log_ncells,effect_size+log_ncells

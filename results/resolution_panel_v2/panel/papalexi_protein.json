@@ -1,0 +1,50 @@
+{
+  "name": "papalexi_protein",
+  "prereg": "docs/PREREG_RESOLUTION_PANEL_v2.md",
+  "h5ad": "<external-data-root>/VCData/scPerturb/rna_protein/PapalexiSatija2021_eccite_protein.h5ad",
+  "perturbation_key": [
+    "perturbation"
+  ],
+  "unit_separator": null,
+  "collapse": "guide_gN",
+  "control": [
+    "control"
+  ],
+  "stratum_key": null,
+  "stratum": null,
+  "n_cells_file": 20729,
+  "n_cells_scored": 20729,
+  "n_cells_unassigned_dropped": 0,
+  "verdict": "not detectable",
+  "reason": "only 22% of perturbations differ from the control by more than their own split-half noise, so most cannot be scored at all",
+  "n_perturbations": 23,
+  "detectable_fraction": 0.21739130434782608,
+  "identifiable_fraction": 0.0,
+  "jointly_evaluable_fraction": 0.0,
+  "replicate_ceiling": 0.716897233201581,
+  "rho2": 3.249260417736298,
+  "rho2_nn_median": 0.4868729954967107,
+  "eta2": 957.4223499999998,
+  "p_correct_order": 0.351,
+  "n_excluded": 2,
+  "depth": 50,
+  "n_seeds": 8,
+  "n_boot": 1000,
+  "seed": 0,
+  "n_components": 50,
+  "reduce_path": "none",
+  "dense_working_set_gb": 0.0,
+  "selection": {
+    "n_units_total": 25,
+    "n_units_eligible": 23,
+    "n_units_scored": 23,
+    "n_units_cell_capped": 0,
+    "cell_cap": null,
+    "n_control_cells": 2386
+  },
+  "seconds": {
+    "load": 0.3,
+    "reduce": 0.2,
+    "score": 0.1
+  }
+}

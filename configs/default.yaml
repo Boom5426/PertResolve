@@ -1,0 +1,21 @@
+# PertResolve-Eval default configuration
+evaluation:
+  n_sub: 300          # max cells subsampled per variant for pseudobulk
+  de_top_k: 50        # top-k DEGs for DE Overlap / Direction Agreement
+  random_seed: 42
+
+splits:
+  - split1   # Random
+  - split2   # OOD-Position
+  - split3   # OOD-Mechanism
+  # - split4  # Cross-Gene (structural limitation, skip by default)
+  - split5   # Low-N
+  - split6   # PerturbNet-Compat
+
+genes:
+  - TP53
+  - KRAS
+  - GATA1
+  - JAK1
+
+aggregation: mean-of-gene-means

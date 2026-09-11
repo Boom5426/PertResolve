@@ -1,0 +1,6 @@
+method,pds_query_n,pds,pds_ci_lo,pds_ci_hi,pds_refused_variants,pearson_finite_rows,pearson_distinct_variants,pearson_delta
+CellFlow,303,0.493,0.4665,0.5203,0,492,303,0.156033379736
+Biolord,308,0.4787,0.4531,0.5053,0,518,308,0.139438899789
+scGen,308,0.4739,0.4488,0.5004,0,518,308,0.201317004355
+PerturbNet,303,0.5301,0.5037,0.5547,0,492,303,0.133865181896
+scVIDR,308,0.4856,0.4605,0.5109,26,459,282,0.18284921165

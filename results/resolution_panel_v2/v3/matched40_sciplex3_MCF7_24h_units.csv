@@ -1,0 +1,736 @@
+perturbation,detectable,identifiable,jointly_evaluable,separation,spread
+"(+)-JQ1 | 10.0",False,False,False,9519.58,50123
+"(+)-JQ1 | 100.0",False,False,False,-5745.04,58769.8
+"(+)-JQ1 | 1000.0",True,False,False,-5124.31,41935.1
+"(+)-JQ1 | 10000.0",False,False,False,7119.1,99751.4
+"2-Methoxyestradiol (2-MeOE2) | 10.0",False,False,False,4865.19,47144.8
+"2-Methoxyestradiol (2-MeOE2) | 100.0",False,False,False,4637.19,72805.4
+"2-Methoxyestradiol (2-MeOE2) | 1000.0",False,False,False,5139.17,51568.4
+"2-Methoxyestradiol (2-MeOE2) | 10000.0",False,False,False,-6122.85,19622.4
+"A-366 | 10.0",False,False,False,-9837.14,19869
+"A-366 | 100.0",False,False,False,8774.24,153328
+"A-366 | 1000.0",False,False,False,112.626,54567.8
+"A-366 | 10000.0",False,False,False,-539.83,36809.4
+"ABT-737 | 10.0",False,False,False,21087.6,138514
+"ABT-737 | 100.0",False,False,False,-9221.85,42336.4
+"ABT-737 | 1000.0",False,False,False,13862.8,89295.3
+"ABT-737 | 10000.0",False,False,False,-5180.81,34846.9
+"AC480 (BMS-599626) | 10.0",False,False,False,-10236.8,23872.3
+"AC480 (BMS-599626) | 100.0",False,False,False,-2230.73,19681.5
+"AC480 (BMS-599626) | 1000.0",False,False,False,2119.64,35182.3
+"AC480 (BMS-599626) | 10000.0",False,False,False,17239.6,78231.3
+"AG-14361 | 10.0",False,False,False,-3365.75,40750.8
+"AG-14361 | 100.0",False,False,False,-1400.15,40246.6
+"AG-14361 | 1000.0",False,False,False,6234.15,68240.6
+"AG-14361 | 10000.0",False,False,False,-841.995,47362
+"AG-490 (Tyrphostin B42) | 10.0",False,False,False,-2940.17,39096.2
+"AG-490 (Tyrphostin B42) | 100.0",False,False,False,-2646.22,17455.2
+"AG-490 (Tyrphostin B42) | 1000.0",False,False,False,-12738.5,16338.1
+"AG-490 (Tyrphostin B42) | 10000.0",False,False,False,5481.72,66206.4
+"AICAR (Acadesine) | 10.0",False,False,False,25139.9,150694
+"AICAR (Acadesine) | 100.0",False,False,False,7597.61,62873.5
+"AICAR (Acadesine) | 1000.0",False,False,False,3331.14,65827.5
+"AICAR (Acadesine) | 10000.0",False,False,False,7396.32,48611.3
+"AMG-900 | 10.0",True,False,False,19525.9,76720.3
+"AMG-900 | 100.0",True,False,False,16801.2,85798
+"AMG-900 | 1000.0",False,False,False,104737,249786
+"AMG-900 | 10000.0",False,False,False,887.447,37950.6
+"AR-42 | 10.0",False,False,False,-378.356,40707.8
+"AR-42 | 100.0",False,False,False,-8119.9,27154.9
+"AR-42 | 1000.0",False,False,False,7166.93,69895.5
+"AR-42 | 10000.0",False,False,False,-6723.07,29387.6
+"AT9283 | 10.0",False,False,False,-1070.57,57492.9
+"AT9283 | 100.0",False,False,False,-7707.63,38777.5
+"AT9283 | 1000.0",False,False,False,2177.77,45241.8
+"AT9283 | 10000.0",False,False,False,10837.7,128863
+"AZ 960 | 10.0",False,False,False,13385.1,83409.5
+"AZ 960 | 100.0",False,False,False,-639.668,34524.2
+"AZ 960 | 1000.0",False,False,False,-8141.98,35277.3
+"AZ 960 | 10000.0",False,False,False,9958.29,65861.8
+"AZD1480 | 10.0",False,False,False,12514.8,62559.2
+"AZD1480 | 100.0",False,False,False,-5029.65,32620.5
+"AZD1480 | 1000.0",False,False,False,164.946,34923
+"AZD1480 | 10000.0",False,False,False,-949.036,18104.1
+"Abexinostat (PCI-24781) | 10.0",False,False,False,-9093.69,18918.8
+"Abexinostat (PCI-24781) | 100.0",True,False,False,3138.81,46350.7
+"Abexinostat (PCI-24781) | 1000.0",False,False,False,-9912.96,21110.1
+"Abexinostat (PCI-24781) | 10000.0",False,False,False,-12824.5,14795.2
+"Alendronate sodium trihydrate | 10.0",False,False,False,5990.74,66354.3
+"Alendronate sodium trihydrate | 100.0",False,False,False,6548.57,90864.7
+"Alendronate sodium trihydrate | 1000.0",False,False,False,-7147.5,30435.7
+"Alendronate sodium trihydrate | 10000.0",False,False,False,3821.4,80263.4
+"Alisertib (MLN8237) | 10.0",False,False,False,1600.88,52244.9
+"Alisertib (MLN8237) | 100.0",False,False,False,6000.64,59289.2
+"Alisertib (MLN8237) | 1000.0",True,False,False,13265.5,79470.4
+"Alisertib (MLN8237) | 10000.0",False,False,False,11799.7,78505.1
+"Altretamine | 10.0",False,False,False,-4759.9,22345.9
+"Altretamine | 100.0",False,False,False,-3186.13,46434.9
+"Altretamine | 1000.0",False,False,False,17000,135899
+"Altretamine | 10000.0",False,False,False,-9670.67,16041
+"Alvespimycin (17-DMAG) HCl | 10.0",True,False,False,-5815.16,45461.6
+"Alvespimycin (17-DMAG) HCl | 100.0",False,False,False,129603,306099
+"Alvespimycin (17-DMAG) HCl | 1000.0",False,False,False,86273.7,206747
+"Aminoglutethimide  | 10.0",False,False,False,-1723.35,49743.3
+"Aminoglutethimide  | 100.0",False,False,False,-1901.7,25950.6
+"Aminoglutethimide  | 1000.0",False,False,False,14976.7,105406
+"Aminoglutethimide  | 10000.0",False,False,False,-3397.46,29232.1
+"Amisulpride | 10.0",False,False,False,-2787.53,34766.2
+"Amisulpride | 100.0",False,False,False,-6133.02,46996.2
+"Amisulpride | 1000.0",False,False,False,-1850.97,43809.5
+"Amisulpride | 10000.0",False,False,False,4386.86,54797.6
+"Anacardic Acid | 10.0",False,False,False,13886.7,176027
+"Anacardic Acid | 100.0",False,False,False,-3705.01,29961
+"Anacardic Acid | 1000.0",False,False,False,1150.62,53601.6
+"Anacardic Acid | 10000.0",False,False,False,-7542.43,21579.5
+"Andarine | 10.0",False,False,False,1067.08,51877.7
+"Andarine | 100.0",False,False,False,15675.8,141723
+"Andarine | 1000.0",False,False,False,-2891.75,65114.5
+"Andarine | 10000.0",False,False,False,-12014.8,16430.6
+"Aurora A Inhibitor I | 10.0",False,False,False,980.541,42322.4
+"Aurora A Inhibitor I | 100.0",False,False,False,-6332.58,33515.7
+"Aurora A Inhibitor I | 1000.0",False,False,False,7860.86,86169.1
+"Aurora A Inhibitor I | 10000.0",False,False,False,3683.42,54474.1
+"Avagacestat (BMS-708163) | 10.0",False,False,False,-2169.16,29194
+"Avagacestat (BMS-708163) | 100.0",False,False,False,13890.9,54175
+"Avagacestat (BMS-708163) | 1000.0",False,False,False,4645.41,61416.7
+"Avagacestat (BMS-708163) | 10000.0",False,False,False,2941.86,62063.2
+"Azacitidine  | 10.0",False,False,False,-6612.54,25323.1
+"Azacitidine  | 100.0",False,False,False,-4503.66,24596.9
+"Azacitidine  | 1000.0",False,False,False,-13191.9,18732.2
+"Azacitidine  | 10000.0",False,False,False,-5738.62,62090.2
+"BMS-265246 | 10.0",False,False,False,13102.6,122785
+"BMS-265246 | 100.0",False,False,False,15438.9,92616.2
+"BMS-265246 | 1000.0",False,False,False,12753.9,65616.3
+"BMS-265246 | 10000.0",False,False,False,43001.1,188669
+"BMS-536924 | 10.0",False,False,False,-7157.74,28209.9
+"BMS-536924 | 100.0",False,False,False,-2515.06,30677
+"BMS-536924 | 1000.0",False,False,False,1421.7,62096.3
+"BMS-536924 | 10000.0",False,False,False,15688.6,103413
+"BMS-754807 | 10.0",False,False,False,-966.643,39805.4
+"BMS-754807 | 100.0",False,False,False,-13895.9,15112.4
+"BMS-754807 | 1000.0",False,False,False,15229.6,175040
+"BMS-911543 | 10.0",False,False,False,1535.37,79600.3
+"BMS-911543 | 100.0",False,False,False,-6191.29,39382.8
+"BMS-911543 | 1000.0",False,False,False,17946.7,143548
+"BMS-911543 | 10000.0",False,False,False,-5137.59,40941.1
+"BRD4770 | 10.0",False,False,False,7382.78,74312.8
+"BRD4770 | 100.0",False,False,False,-1135.26,56196.1
+"BRD4770 | 1000.0",False,False,False,27423,120227
+"BRD4770 | 10000.0",False,False,False,-2271.11,39421
+"Barasertib (AZD1152-HQPA) | 10.0",False,False,False,-644.263,69277
+"Barasertib (AZD1152-HQPA) | 100.0",False,False,False,21269.2,123748
+"Barasertib (AZD1152-HQPA) | 1000.0",False,False,False,17711.1,68905.4
+"Barasertib (AZD1152-HQPA) | 10000.0",False,False,False,14572,95151.2
+"Baricitinib (LY3009104, INCB028050) | 10.0",False,False,False,6085.51,81176.6
+"Baricitinib (LY3009104, INCB028050) | 100.0",False,False,False,-21.4612,60139.8
+"Baricitinib (LY3009104, INCB028050) | 1000.0",False,False,False,5087.51,64794.9
+"Baricitinib (LY3009104, INCB028050) | 10000.0",False,False,False,-6507.75,18968.8
+"Belinostat (PXD101) | 10.0",False,False,False,-8330.5,25375.9
+"Belinostat (PXD101) | 100.0",False,False,False,23755.4,191693
+"Belinostat (PXD101) | 1000.0",False,False,False,5379.07,77701.8
+"Belinostat (PXD101) | 10000.0",False,False,False,-10254.2,23995.8
+"Bisindolylmaleimide IX (Ro 31-8220 Mesylate) | 10.0",False,False,False,-23.3661,67191
+"Bisindolylmaleimide IX (Ro 31-8220 Mesylate) | 100.0",False,False,False,-7079,27350.3
+"Bisindolylmaleimide IX (Ro 31-8220 Mesylate) | 1000.0",False,False,False,-282.731,60740.6
+"Bosutinib (SKI-606) | 10.0",False,False,False,6661.67,56604.4
+"Bosutinib (SKI-606) | 100.0",False,False,False,27203.8,138812
+"Bosutinib (SKI-606) | 1000.0",False,False,False,74493.2,82911.7
+"Bosutinib (SKI-606) | 10000.0",False,False,False,3039.67,102725
+"Busulfan  | 10.0",False,False,False,-11872.2,32137
+"Busulfan  | 100.0",False,False,False,4197.98,58342.1
+"Busulfan  | 1000.0",False,False,False,-1330.09,52274.8
+"Busulfan  | 10000.0",False,False,False,-8979.82,20077.8
+"CEP-33779 | 10.0",False,False,False,-7628.28,35912.7
+"CEP-33779 | 100.0",False,False,False,-3395.74,31995.9
+"CEP-33779 | 1000.0",False,False,False,-10800.8,22962.6
+"CEP-33779 | 10000.0",False,False,False,7864.07,49744.4
+"CUDC-101 | 10.0",False,False,False,19521.9,118497
+"CUDC-101 | 100.0",False,False,False,-8605.32,29614.8
+"CUDC-101 | 1000.0",False,False,False,-5357.99,24399.7
+"CUDC-101 | 10000.0",False,False,False,11950.9,107942
+"CUDC-907 | 10.0",False,False,False,-3874.06,40266
+"CUDC-907 | 100.0",False,False,False,-3519.55,33260.1
+"CUDC-907 | 1000.0",False,False,False,-7826.52,18440.8
+"CUDC-907 | 10000.0",True,False,False,4846.39,44871.9
+"CYC116 | 10.0",False,False,False,-5832.79,36065.9
+"CYC116 | 100.0",False,False,False,18460.9,175945
+"CYC116 | 1000.0",False,False,False,-6977.34,19186.2
+"CYC116 | 10000.0",False,False,False,42996.8,119886
+"Capecitabine  | 10.0",False,False,False,-8475.54,46532.4
+"Capecitabine  | 100.0",False,False,False,-9006.81,16427
+"Capecitabine  | 1000.0",False,False,False,14779.4,133806
+"Capecitabine  | 10000.0",False,False,False,-5047.16,33693.6
+"Carmofur | 10.0",False,False,False,-391.251,37394.6
+"Carmofur | 100.0",False,False,False,3672.67,68312.4
+"Carmofur | 1000.0",False,False,False,4674.02,38803
+"Carmofur | 10000.0",True,False,False,28322.1,87317
+"Cediranib (AZD2171) | 10.0",False,False,False,5701.21,90124.8
+"Cediranib (AZD2171) | 100.0",False,False,False,-995.486,33023.3
+"Cediranib (AZD2171) | 1000.0",False,False,False,8302.67,78407.8
+"Cediranib (AZD2171) | 10000.0",False,False,False,43668.1,167267
+"Celecoxib | 10.0",False,False,False,-8683.24,28030.9
+"Celecoxib | 100.0",False,False,False,3901.03,43802.2
+"Celecoxib | 1000.0",False,False,False,-661.935,39558.4
+"Celecoxib | 10000.0",False,False,False,12604.9,97444
+"Cerdulatinib (PRT062070, PRT2070) | 10.0",False,False,False,-8688.14,36036.2
+"Cerdulatinib (PRT062070, PRT2070) | 100.0",False,False,False,-6164.77,34300.2
+"Cerdulatinib (PRT062070, PRT2070) | 1000.0",False,False,False,1416.08,59377.6
+"Cerdulatinib (PRT062070, PRT2070) | 10000.0",True,False,False,17741.1,90728.6
+"Cimetidine  | 10.0",False,False,False,25086,147654
+"Cimetidine  | 100.0",False,False,False,8638.79,82483.5
+"Cimetidine  | 1000.0",False,False,False,12892.7,96447.7
+"Cimetidine  | 10000.0",True,False,False,91199.3,348618
+"Clevudine  | 10.0",False,False,False,1467.14,54143.2
+"Clevudine  | 100.0",False,False,False,-8407.89,23177.8
+"Clevudine  | 1000.0",False,False,False,11939.2,65229
+"Clevudine  | 10000.0",False,False,False,-5580.75,23754.5
+"Costunolide | 10.0",False,False,False,-2676.03,37832.2
+"Costunolide | 100.0",False,False,False,-10031.6,23652.8
+"Costunolide | 1000.0",False,False,False,6802.79,69489.9
+"Costunolide | 10000.0",False,False,False,12649.1,75136.6
+"Crizotinib (PF-02341066) | 10.0",False,False,False,47268.9,209018
+"Crizotinib (PF-02341066) | 100.0",False,False,False,41795.4,183310
+"Crizotinib (PF-02341066) | 1000.0",False,False,False,33865.8,150888
+"Crizotinib (PF-02341066) | 10000.0",False,False,False,17337.1,84978.3
+"Curcumin | 10.0",False,False,False,30953.6,75338.2
+"Curcumin | 100.0",False,False,False,-2289.96,53634
+"Curcumin | 1000.0",False,False,False,3133.23,37139.4
+"Curcumin | 10000.0",False,False,False,4213.13,81480.3
+"Cyclocytidine HCl | 10.0",False,False,False,7733.78,33005.6
+"Cyclocytidine HCl | 100.0",False,False,False,5405.26,74728.1
+"Cyclocytidine HCl | 1000.0",False,False,False,10284,49635.6
+"Cyclocytidine HCl | 10000.0",False,False,False,709.281,33706.9
+"Dacinostat (LAQ824) | 10.0",False,False,False,-7389.75,20196.6
+"Dacinostat (LAQ824) | 100.0",False,False,False,-10661.3,21387.9
+"Dacinostat (LAQ824) | 1000.0",False,False,False,-9203.87,28860
+"Dacinostat (LAQ824) | 10000.0",False,False,False,-3463.47,72322.2
+"Danusertib (PHA-739358) | 10.0",False,False,False,9687.58,73797.2
+"Danusertib (PHA-739358) | 100.0",False,False,False,6674.44,64843.3
+"Danusertib (PHA-739358) | 1000.0",False,False,False,75317.5,264340
+"Danusertib (PHA-739358) | 10000.0",False,False,False,47976.1,218483
+"Daphnetin | 10.0",False,False,False,12897.9,103420
+"Daphnetin | 100.0",False,False,False,738.772,33612.2
+"Daphnetin | 1000.0",False,False,False,2391.97,65368.9
+"Daphnetin | 10000.0",False,False,False,14194.5,67904.7
+"Dasatinib | 10.0",False,False,False,40214.2,192127
+"Dasatinib | 100.0",True,False,False,66034.5,360786
+"Dasatinib | 1000.0",False,False,False,6360.9,91987.5
+"Dasatinib | 10000.0",False,False,False,16426.2,76211.7
+"Decitabine | 10.0",False,False,False,10659.2,123732
+"Decitabine | 100.0",False,False,False,-5171.41,32961.5
+"Decitabine | 1000.0",False,False,False,5653.13,39220.9
+"Decitabine | 10000.0",False,False,False,-7509.29,25291.6
+"Disulfiram  | 10.0",False,False,False,26637.9,85055.7
+"Disulfiram  | 100.0",False,False,False,20399,70678.6
+"Disulfiram  | 1000.0",True,False,False,-624.113,34676.2
+"Disulfiram  | 10000.0",False,False,False,-7597.71,26366.3
+"Divalproex Sodium | 10.0",True,False,False,-9543.72,38608.5
+"Divalproex Sodium | 100.0",False,False,False,-1654.58,33218.6
+"Divalproex Sodium | 1000.0",False,False,False,-2948.69,50158.9
+"Divalproex Sodium | 10000.0",False,False,False,1887.07,41377.2
+"Droxinostat | 10.0",False,False,False,-707.685,67540.5
+"Droxinostat | 100.0",False,False,False,3990.51,76214.7
+"Droxinostat | 1000.0",False,False,False,-2341.74,60021
+"Droxinostat | 10000.0",False,False,False,9939.69,60929.9
+"EED226 | 10.0",False,False,False,367.569,28813.3
+"EED226 | 100.0",False,False,False,-8875.48,18127
+"EED226 | 1000.0",False,False,False,-6849.73,34372.5
+"EED226 | 10000.0",False,False,False,4640.7,63684.5
+"ENMD-2076 | 10.0",False,False,False,2895.46,52331.3
+"ENMD-2076 | 100.0",False,False,False,-9226.63,38780.8
+"ENMD-2076 | 1000.0",False,False,False,13779.6,75443.2
+"ENMD-2076 | 10000.0",False,False,False,115886,250870
+"ENMD-2076 L-(+)-Tartaric acid  | 10.0",False,False,False,10984.1,113357
+"ENMD-2076 L-(+)-Tartaric acid  | 100.0",False,False,False,7862.18,94318
+"ENMD-2076 L-(+)-Tartaric acid  | 1000.0",False,False,False,24681,82391.5
+"ENMD-2076 L-(+)-Tartaric acid  | 10000.0",False,False,False,22738.6,107693
+"Ellagic acid | 10.0",False,False,False,-1966.91,48615
+"Ellagic acid | 100.0",False,False,False,12657.9,76136.2
+"Ellagic acid | 1000.0",False,False,False,-3363.04,45103.3
+"Ellagic acid | 10000.0",False,False,False,-3009.49,43265.6
+"Entacapone | 10.0",False,False,False,3080.45,56438.9
+"Entacapone | 100.0",False,False,False,-4442.27,54356.2
+"Entacapone | 1000.0",False,False,False,-12863.1,12843.9
+"Entacapone | 10000.0",False,False,False,-2993.03,74450.4
+"Entinostat (MS-275) | 10.0",False,False,False,-4573.37,52779.6
+"Entinostat (MS-275) | 100.0",False,False,False,4000.98,36945.6
+"Entinostat (MS-275) | 1000.0",False,False,False,9153.94,100250
+"Entinostat (MS-275) | 10000.0",False,False,False,7039.1,63710.3
+"Enzastaurin (LY317615) | 10.0",False,False,False,-7170.13,39281.4
+"Enzastaurin (LY317615) | 100.0",False,False,False,7264.8,91381.8
+"Enzastaurin (LY317615) | 1000.0",False,False,False,4969.81,95024.3
+"Enzastaurin (LY317615) | 10000.0",False,False,False,-1065.3,31777.2
+"Epothilone A | 10.0",False,False,False,131.474,30794.9
+"FLLL32 | 10.0",False,False,False,-11394.1,20673.8
+"FLLL32 | 100.0",False,False,False,-8840.3,26269.5
+"FLLL32 | 1000.0",False,False,False,6897.26,128706
+"FLLL32 | 10000.0",True,False,False,29817.3,180443
+"Fasudil (HA-1077) HCl | 10.0",False,False,False,-8118.93,38202
+"Fasudil (HA-1077) HCl | 100.0",False,False,False,-4262.98,42707.9
+"Fasudil (HA-1077) HCl | 1000.0",False,False,False,9329.34,63174.9
+"Fasudil (HA-1077) HCl | 10000.0",False,False,False,2000.92,45543.8
+"Fedratinib (SAR302503, TG101348) | 10.0",False,False,False,3366.73,34096.2
+"Fedratinib (SAR302503, TG101348) | 100.0",False,False,False,4966.01,64379.1
+"Fedratinib (SAR302503, TG101348) | 1000.0",False,False,False,-5932.4,26600.5
+"Fedratinib (SAR302503, TG101348) | 10000.0",True,False,False,-4727.59,60418.5
+"Filgotinib (GLPG0634) | 10.0",False,False,False,7479.89,81915.3
+"Filgotinib (GLPG0634) | 100.0",False,False,False,-756.459,38256.6
+"Filgotinib (GLPG0634) | 1000.0",False,False,False,5309.26,66812.3
+"Filgotinib (GLPG0634) | 10000.0",False,False,False,436.929,40011.8
+"Flavopiridol HCl | 10.0",False,False,False,29582,173162
+"Flavopiridol HCl | 100.0",False,False,False,15579.4,86573.6
+"Fluorouracil (5-Fluoracil, 5-FU) | 10.0",False,False,False,-9240.07,25175.5
+"Fluorouracil (5-Fluoracil, 5-FU) | 100.0",False,False,False,-856.221,53534
+"Fluorouracil (5-Fluoracil, 5-FU) | 1000.0",False,False,False,6244.08,72179.2
+"Fluorouracil (5-Fluoracil, 5-FU) | 10000.0",False,False,False,45311.8,186330
+"Fulvestrant | 10.0",False,False,False,3355.23,61057.6
+"Fulvestrant | 100.0",False,False,False,7658.37,95909.3
+"Fulvestrant | 1000.0",False,False,False,2102.39,29334
+"Fulvestrant | 10000.0",False,False,False,-3889.89,31593.2
+"G007-LK | 10.0",False,False,False,-1303.14,30687
+"G007-LK | 100.0",False,False,False,-10351.7,25525.8
+"G007-LK | 1000.0",False,False,False,-706.42,25247.9
+"G007-LK | 10000.0",False,False,False,-1294,43349.6
+"GSK J1 | 10.0",False,False,False,4691.68,67648.1
+"GSK J1 | 100.0",False,False,False,971.698,57856.8
+"GSK J1 | 1000.0",False,False,False,1805.77,95110.1
+"GSK J1 | 10000.0",False,False,False,-3785.72,38419.4
+"GSK-LSD1 2HCl | 10.0",False,False,False,-3658.76,20834.2
+"GSK-LSD1 2HCl | 100.0",False,False,False,-5492.21,32330.4
+"GSK-LSD1 2HCl | 1000.0",False,False,False,-831.22,48885.4
+"GSK-LSD1 2HCl | 10000.0",False,False,False,-364.765,57950.5
+"GSK1070916 | 10.0",False,False,False,21194.7,107219
+"GSK1070916 | 100.0",False,False,False,102709,307126
+"GSK1070916 | 1000.0",False,False,False,35213.6,112140
+"GSK1070916 | 10000.0",False,False,False,96301.7,141410
+"Gandotinib (LY2784544) | 10.0",False,False,False,4690.08,75164.9
+"Gandotinib (LY2784544) | 100.0",False,False,False,12825.4,86274.1
+"Gandotinib (LY2784544) | 1000.0",False,False,False,7244.57,56230.5
+"Gandotinib (LY2784544) | 10000.0",False,False,False,8196.11,43729.4
+"Givinostat (ITF2357) | 10.0",False,False,False,-4973.91,68450
+"Givinostat (ITF2357) | 100.0",False,False,False,-8911.19,18979.4
+"Givinostat (ITF2357) | 1000.0",False,False,False,-3440.71,47770.5
+"Givinostat (ITF2357) | 10000.0",True,False,False,-9317.09,32940.1
+"Glesatinib?(MGCD265) | 10.0",False,False,False,28156.1,140088
+"Glesatinib?(MGCD265) | 100.0",False,False,False,-350.692,51901.8
+"Glesatinib?(MGCD265) | 1000.0",False,False,False,-5334.86,48665.6
+"Glesatinib?(MGCD265) | 10000.0",False,False,False,46807.4,182441
+"Hesperadin | 10.0",False,False,False,11555.5,98811
+"Hesperadin | 100.0",False,False,False,1887.47,45971.8
+"Hesperadin | 1000.0",False,False,False,945.471,54036.6
+"Hesperadin | 10000.0",False,False,False,24432.9,83498
+"INO-1001 (3-Aminobenzamide) | 10.0",False,False,False,-3083.56,34599.5
+"INO-1001 (3-Aminobenzamide) | 100.0",False,False,False,-7538.06,18351.2
+"INO-1001 (3-Aminobenzamide) | 1000.0",False,False,False,3744.27,63152.3
+"INO-1001 (3-Aminobenzamide) | 10000.0",False,False,False,2888.18,113425
+"IOX2 | 10.0",False,False,False,-3043.67,35792.4
+"IOX2 | 100.0",False,False,False,-7363.8,20871.5
+"IOX2 | 1000.0",False,False,False,1795.01,50678.5
+"IOX2 | 10000.0",False,False,False,-7684.66,23718.6
+"ITSA-1 (ITSA1) | 10.0",False,False,False,1062.53,50829.1
+"ITSA-1 (ITSA1) | 100.0",False,False,False,-8217.84,27766.1
+"ITSA-1 (ITSA1) | 1000.0",False,False,False,-3196.24,44729.6
+"ITSA-1 (ITSA1) | 10000.0",False,False,False,-7883.52,36516.3
+"Iniparib (BSI-201) | 10.0",False,False,False,-5356.28,38838.4
+"Iniparib (BSI-201) | 100.0",False,False,False,-9609.41,15979.3
+"Iniparib (BSI-201) | 1000.0",False,False,False,-8538.01,30573.9
+"Iniparib (BSI-201) | 10000.0",False,False,False,3321.23,73634
+"Ivosidenib (AG-120) | 10.0",False,False,False,37860.7,138188
+"Ivosidenib (AG-120) | 100.0",False,False,False,-2866.72,59723.7
+"Ivosidenib (AG-120) | 1000.0",False,False,False,-3742.16,49054
+"Ivosidenib (AG-120) | 10000.0",False,False,False,10882.8,68922.6
+"JNJ-26854165 (Serdemetan) | 10.0",False,False,False,324.78,38288.3
+"JNJ-26854165 (Serdemetan) | 100.0",False,False,False,6985.11,59765.2
+"JNJ-26854165 (Serdemetan) | 1000.0",False,False,False,4957.45,44871.5
+"JNJ-26854165 (Serdemetan) | 10000.0",False,False,False,15948.4,105877
+"JNJ-7706621 | 10.0",False,False,False,-2303.71,39636.2
+"JNJ-7706621 | 100.0",False,False,False,-5109.62,22890.2
+"JNJ-7706621 | 1000.0",False,False,False,14839.8,81435.6
+"JNJ-7706621 | 10000.0",False,False,False,2166.76,44893
+"KW-2449 | 10.0",False,False,False,-892.28,49686
+"KW-2449 | 100.0",False,False,False,-5772.95,36822.6
+"KW-2449 | 1000.0",False,False,False,21229.5,85042.5
+"KW-2449 | 10000.0",False,False,False,27823.9,170859
+"Ki16425 | 10.0",False,False,False,10775.8,81143.3
+"Ki16425 | 100.0",False,False,False,34.7904,58670.4
+"Ki16425 | 1000.0",False,False,False,-2925.81,40393.8
+"Ki16425 | 10000.0",False,False,False,-3532.5,54729.3
+"Ki8751 | 10.0",False,False,False,2614.5,83710.2
+"Ki8751 | 100.0",False,False,False,6272.2,66334.9
+"Ki8751 | 1000.0",False,False,False,11218.2,52965
+"Ki8751 | 10000.0",False,False,False,-10563.8,21266.5
+"Lapatinib (GW-572016) Ditosylate | 10.0",False,False,False,-2317.49,49906.1
+"Lapatinib (GW-572016) Ditosylate | 100.0",False,False,False,12811.6,126150
+"Lapatinib (GW-572016) Ditosylate | 1000.0",False,False,False,2894.87,41380.7
+"Lapatinib (GW-572016) Ditosylate | 10000.0",True,False,False,-12800.2,19698.7
+"Lenalidomide (CC-5013) | 10.0",False,False,False,5544.52,47673.8
+"Lenalidomide (CC-5013) | 100.0",False,False,False,5508.42,60244.6
+"Lenalidomide (CC-5013) | 1000.0",False,False,False,10839.8,65789.4
+"Lenalidomide (CC-5013) | 10000.0",False,False,False,-9025.97,9971.86
+"Linifanib (ABT-869) | 10.0",False,False,False,-6367.22,34912.9
+"Linifanib (ABT-869) | 100.0",False,False,False,-84.5093,72081.1
+"Linifanib (ABT-869) | 1000.0",False,False,False,7134.37,57798.9
+"Linifanib (ABT-869) | 10000.0",False,False,False,222.921,66174.9
+"Lomustine  | 10.0",False,False,False,-1239.97,46293.2
+"Lomustine  | 100.0",False,False,False,9260.6,68502.7
+"Lomustine  | 1000.0",False,False,False,-3821.27,54951.8
+"Lomustine  | 10000.0",False,False,False,-6045.98,31534
+"Luminespib (AUY-922, NVP-AUY922) | 10.0",False,False,False,9411.55,58915
+"Luminespib (AUY-922, NVP-AUY922) | 100.0",False,False,False,36197.7,107632
+"Luminespib (AUY-922, NVP-AUY922) | 1000.0",True,False,False,250834,466902
+"M344 | 10.0",False,False,False,18936.8,145449
+"M344 | 100.0",True,False,False,4864.72,106714
+"M344 | 1000.0",False,False,False,961.736,36360
+"M344 | 10000.0",True,False,False,-438.513,53037.8
+"MC1568 | 10.0",False,False,False,-5181.3,30245.8
+"MC1568 | 100.0",False,False,False,-466.509,80152.5
+"MC1568 | 1000.0",False,False,False,-423.761,60786
+"MC1568 | 10000.0",False,False,False,6566.15,51381
+"MK-0752 | 10.0",False,False,False,2974.36,87362.7
+"MK-0752 | 100.0",False,False,False,-2859.59,32264.1
+"MK-0752 | 1000.0",False,False,False,16291.6,89320.7
+"MK-0752 | 10000.0",False,False,False,7234.98,68532.8
+"MK-5108 (VX-689) | 10.0",False,False,False,-7393.93,28881.5
+"MK-5108 (VX-689) | 100.0",False,False,False,-10666.2,19777.4
+"MK-5108 (VX-689) | 1000.0",True,False,False,38068.5,154745
+"MK-5108 (VX-689) | 10000.0",False,False,False,17229,102043
+"MLN8054 | 10.0",False,False,False,-12832.1,18955.8
+"MLN8054 | 100.0",False,False,False,362.33,49301.2
+"MLN8054 | 1000.0",False,False,False,-2304.64,39358.1
+"MLN8054 | 10000.0",False,False,False,15480.5,104531
+"Maraviroc | 10.0",False,False,False,35830.7,156947
+"Maraviroc | 100.0",False,False,False,-7630.04,28374.7
+"Maraviroc | 1000.0",False,False,False,7198.18,71840.4
+"Maraviroc | 10000.0",False,False,False,5416.86,74535.1
+"Meprednisone | 10.0",False,False,False,25519.4,84256.3
+"Meprednisone | 100.0",False,False,False,3224.98,58467
+"Meprednisone | 1000.0",False,False,False,-6105.01,62743.6
+"Meprednisone | 10000.0",False,False,False,11315.9,56360.5
+"Mercaptopurine (6-MP) | 10.0",False,False,False,-8021.27,19766.9
+"Mercaptopurine (6-MP) | 100.0",False,False,False,-7260.98,34439.7
+"Mercaptopurine (6-MP) | 1000.0",False,False,False,-3288.44,46476.5
+"Mesna  | 10.0",False,False,False,-9633.8,22432.8
+"Mesna  | 100.0",False,False,False,2216.15,90885.3
+"Mesna  | 1000.0",False,False,False,1360.6,40048.5
+"Mesna  | 10000.0",False,False,False,18446.4,73011
+"Mocetinostat (MGCD0103) | 10.0",False,False,False,-5054.89,27871.8
+"Mocetinostat (MGCD0103) | 100.0",False,False,False,-11995.7,20342.7
+"Mocetinostat (MGCD0103) | 1000.0",False,False,False,-11758.5,20011.8
+"Mocetinostat (MGCD0103) | 10000.0",False,False,False,12444.8,123274
+"Momelotinib (CYT387) | 10.0",False,False,False,-4764.45,25056.3
+"Momelotinib (CYT387) | 100.0",False,False,False,28453.9,161228
+"Momelotinib (CYT387) | 1000.0",False,False,False,12203.8,111443
+"Momelotinib (CYT387) | 10000.0",False,False,False,-5676.81,38485.5
+"Motesanib Diphosphate (AMG-706) | 10.0",False,False,False,1085.24,41201.9
+"Motesanib Diphosphate (AMG-706) | 100.0",False,False,False,-2590.07,43089.5
+"Motesanib Diphosphate (AMG-706) | 1000.0",False,False,False,-5790.37,23398
+"Motesanib Diphosphate (AMG-706) | 10000.0",False,False,False,12938.2,90378.8
+"NVP-BSK805 2HCl | 10.0",False,False,False,-9357.4,28757.1
+"NVP-BSK805 2HCl | 100.0",False,False,False,-4086.06,44046.7
+"NVP-BSK805 2HCl | 1000.0",False,False,False,-279.048,79238.1
+"NVP-BSK805 2HCl | 10000.0",False,False,False,25772.8,144018
+"Navitoclax (ABT-263) | 10.0",False,False,False,810.583,75487.2
+"Navitoclax (ABT-263) | 100.0",False,False,False,-2842.47,37560.4
+"Navitoclax (ABT-263) | 1000.0",False,False,False,7954.2,69658.9
+"Navitoclax (ABT-263) | 10000.0",True,False,False,7184.65,69923.4
+"Nilotinib (AMN-107) | 10.0",False,False,False,839.061,68875.7
+"Nilotinib (AMN-107) | 100.0",False,False,False,19336.6,59364.3
+"Nilotinib (AMN-107) | 1000.0",False,False,False,-8477.04,17368.8
+"Nilotinib (AMN-107) | 10000.0",False,False,False,-12108.2,22498.8
+"Nintedanib (BIBF 1120) | 10.0",False,False,False,-11239.9,17424.5
+"Nintedanib (BIBF 1120) | 100.0",False,False,False,-3725.12,43874.8
+"Nintedanib (BIBF 1120) | 1000.0",False,False,False,38298.9,177170
+"Nintedanib (BIBF 1120) | 10000.0",False,False,False,-2632.66,35523.9
+"Obatoclax Mesylate (GX15-070) | 10.0",False,False,False,10295.4,75404.1
+"Obatoclax Mesylate (GX15-070) | 100.0",False,False,False,55091.7,117674
+"Obatoclax Mesylate (GX15-070) | 1000.0",False,False,False,7859.91,50558.5
+"Obatoclax Mesylate (GX15-070) | 10000.0",True,False,False,9265.4,65878.9
+"Ofloxacin | 10.0",False,False,False,2942.25,78644.6
+"Ofloxacin | 100.0",False,False,False,18888.3,168456
+"Ofloxacin | 1000.0",False,False,False,-5410.95,16878.9
+"Ofloxacin | 10000.0",False,False,False,3700.69,76485
+"PCI-34051 | 10.0",False,False,False,10971.4,81513
+"PCI-34051 | 100.0",False,False,False,-7533.55,33131
+"PCI-34051 | 1000.0",False,False,False,-8862.45,21359.7
+"PCI-34051 | 10000.0",False,False,False,1645.82,34205.7
+"PD173074 | 10.0",False,False,False,7720.97,63194.3
+"PD173074 | 100.0",True,False,False,-3597.27,28478.4
+"PD173074 | 1000.0",True,False,False,-4629.87,46010.3
+"PD173074 | 10000.0",False,False,False,109.144,46104.2
+"PD98059 | 10.0",False,False,False,557.331,80070.8
+"PD98059 | 100.0",False,False,False,4236.76,73056.6
+"PD98059 | 1000.0",False,False,False,13763.9,72651
+"PD98059 | 10000.0",False,False,False,4455.73,91442.8
+"PF-3845 | 10.0",False,False,False,4450.38,59293.7
+"PF-3845 | 100.0",False,False,False,-11328.4,24454.4
+"PF-3845 | 1000.0",False,False,False,457.866,33526
+"PF-3845 | 10000.0",False,False,False,-1585,43548.9
+"PF-573228 | 10.0",False,False,False,1826.62,43979.2
+"PF-573228 | 100.0",False,False,False,2785.05,48286.6
+"PF-573228 | 1000.0",False,False,False,-1707.35,56995.1
+"PF-573228 | 10000.0",False,False,False,8266.12,66380.1
+"PFI-1 (PF-6405761) | 10.0",False,False,False,7266.23,62492.5
+"PFI-1 (PF-6405761) | 100.0",False,False,False,-6611.01,25508.3
+"PFI-1 (PF-6405761) | 1000.0",False,False,False,24536.3,82358
+"PFI-1 (PF-6405761) | 10000.0",False,False,False,-4801.2,42836.3
+"PHA-680632 | 10.0",False,False,False,-4555.81,43924.1
+"PHA-680632 | 100.0",False,False,False,12521,60906.6
+"PHA-680632 | 1000.0",False,False,False,-9824.29,24111.8
+"PHA-680632 | 10000.0",False,False,False,118350,265891
+"PJ34 | 10.0",False,False,False,2148.29,70309.8
+"PJ34 | 100.0",False,False,False,-3502.99,46054.1
+"PJ34 | 1000.0",False,False,False,-12711.3,14020.2
+"PJ34 | 10000.0",False,False,False,-2684.05,43234
+"Panobinostat (LBH589) | 10.0",True,False,False,-7298.32,28495.6
+"Panobinostat (LBH589) | 100.0",False,False,False,-4688.85,26545.8
+"Panobinostat (LBH589) | 1000.0",True,False,False,-4615.25,18842.2
+"Panobinostat (LBH589) | 10000.0",False,False,False,-8516.16,21876.9
+"Patupilone (EPO906, Epothilone B) | 10.0",False,False,False,10143.7,64511.5
+"Patupilone (EPO906, Epothilone B) | 100.0",False,False,False,4325.17,59948.8
+"Patupilone (EPO906, Epothilone B) | 1000.0",False,False,False,7363.76,43870.6
+"Patupilone (EPO906, Epothilone B) | 10000.0",False,False,False,72763.4,163709
+"Pelitinib (EKB-569) | 10.0",False,False,False,58036.6,206600
+"Pelitinib (EKB-569) | 100.0",False,False,False,-2560.82,33029.7
+"Pelitinib (EKB-569) | 1000.0",False,False,False,-5707.69,39293.8
+"Pelitinib (EKB-569) | 10000.0",False,False,False,-5138.05,32351.8
+"Pirarubicin | 10.0",False,False,False,2895.69,55217
+"Pirarubicin | 100.0",False,False,False,-1998.83,40146
+"Pirarubicin | 1000.0",False,False,False,-3056.31,55581.9
+"Pirarubicin | 10000.0",False,False,False,57146.1,156462
+"Pracinostat (SB939) | 10.0",False,False,False,5766.4,69858.1
+"Pracinostat (SB939) | 100.0",False,False,False,-6914.29,25993.2
+"Pracinostat (SB939) | 1000.0",False,False,False,3674.94,77855.8
+"Pracinostat (SB939) | 10000.0",False,False,False,-9364.18,22400.5
+"Prednisone  | 10.0",False,False,False,40917.7,128019
+"Prednisone  | 100.0",False,False,False,-203.714,46681.1
+"Prednisone  | 1000.0",False,False,False,6083.98,42417.7
+"Prednisone  | 10000.0",False,False,False,-8823.4,26926
+"Quercetin | 10.0",False,False,False,12656.1,128185
+"Quercetin | 100.0",False,False,False,-1155.96,37535.6
+"Quercetin | 1000.0",False,False,False,677.68,87057.7
+"Quercetin | 10000.0",False,False,False,-7013.9,38577.2
+"Quisinostat (JNJ-26481585) 2HCl | 10.0",False,False,False,14755.6,108765
+"Quisinostat (JNJ-26481585) 2HCl | 100.0",False,False,False,-380.604,43281.2
+"Quisinostat (JNJ-26481585) 2HCl | 1000.0",False,False,False,-7228.79,34200.5
+"Quisinostat (JNJ-26481585) 2HCl | 10000.0",True,False,False,-8179.21,20792.1
+"RG108 | 10.0",False,False,False,3350.74,58088.4
+"RG108 | 100.0",False,False,False,-10859.8,18334.7
+"RG108 | 1000.0",False,False,False,4989.13,58976.6
+"RG108 | 10000.0",False,False,False,-2257.31,34688.2
+"Raltitrexed | 10.0",True,False,False,106697,234254
+"Raltitrexed | 100.0",False,False,False,19604,64156.4
+"Raltitrexed | 1000.0",True,False,False,92839,323156
+"Raltitrexed | 10000.0",False,False,False,50166.3,100789
+"Ramelteon | 10.0",False,False,False,16236.4,56026.6
+"Ramelteon | 100.0",False,False,False,3054.77,65942.1
+"Ramelteon | 1000.0",False,False,False,1238.78,47404.2
+"Ramelteon | 10000.0",False,False,False,-67.0217,88785.6
+"Regorafenib (BAY 73-4506) | 10.0",False,False,False,2687.47,35712.7
+"Regorafenib (BAY 73-4506) | 100.0",False,False,False,15270.6,128080
+"Regorafenib (BAY 73-4506) | 1000.0",False,False,False,-7410.19,26289.8
+"Regorafenib (BAY 73-4506) | 10000.0",True,False,False,5526.9,53335.8
+"Resminostat | 10.0",False,False,False,3048.09,48810.2
+"Resminostat | 100.0",False,False,False,3161.17,97824.8
+"Resminostat | 1000.0",False,False,False,-2617.51,49627.7
+"Resminostat | 10000.0",False,False,False,-1321.42,70898
+"Resveratrol | 10.0",False,False,False,15485.3,83792.9
+"Resveratrol | 100.0",False,False,False,1482.07,44552.5
+"Resveratrol | 1000.0",False,False,False,-5470.31,36389.6
+"Resveratrol | 10000.0",False,False,False,-6357.47,37967.2
+"Rigosertib (ON-01910) | 10.0",False,False,False,-1506.79,41739.8
+"Rigosertib (ON-01910) | 100.0",False,False,False,4138.43,70850.7
+"Rigosertib (ON-01910) | 1000.0",False,False,False,27839.1,91138.6
+"Roscovitine (Seliciclib,CYC202) | 10.0",False,False,False,6708.47,49235.8
+"Roscovitine (Seliciclib,CYC202) | 100.0",False,False,False,-11088,25468.7
+"Roscovitine (Seliciclib,CYC202) | 1000.0",False,False,False,11646.5,57051.7
+"Roscovitine (Seliciclib,CYC202) | 10000.0",False,False,False,-6322.44,26975.3
+"Roxadustat (FG-4592) | 10.0",False,False,False,2719.71,49210.1
+"Roxadustat (FG-4592) | 100.0",False,False,False,-749.766,69315.3
+"Roxadustat (FG-4592) | 1000.0",False,False,False,-4547.17,28477.4
+"Roxadustat (FG-4592) | 10000.0",False,False,False,994.408,46207.5
+"Rucaparib (AG-014699,PF-01367338) phosphate | 10.0",False,False,False,11444.8,78564.2
+"Rucaparib (AG-014699,PF-01367338) phosphate | 100.0",False,False,False,895.066,44358.5
+"Rucaparib (AG-014699,PF-01367338) phosphate | 1000.0",False,False,False,-5017.3,44455.1
+"Rucaparib (AG-014699,PF-01367338) phosphate | 10000.0",False,False,False,-3412.66,49599.8
+"Ruxolitinib (INCB018424) | 10.0",False,False,False,16768.3,55805.7
+"Ruxolitinib (INCB018424) | 100.0",False,False,False,7707.35,25816.5
+"Ruxolitinib (INCB018424) | 1000.0",False,False,False,11868.6,82245.3
+"Ruxolitinib (INCB018424) | 10000.0",False,False,False,22442.9,149920
+"S-Ruxolitinib (INCB018424) | 10.0",False,False,False,14136.4,155782
+"S-Ruxolitinib (INCB018424) | 100.0",False,False,False,-1946.18,40667.7
+"S-Ruxolitinib (INCB018424) | 1000.0",False,False,False,-1784.43,32356.4
+"S-Ruxolitinib (INCB018424) | 10000.0",False,False,False,-8472.46,33320.7
+"S3I-201 | 10.0",False,False,False,26056.6,166324
+"S3I-201 | 100.0",False,False,False,-813.045,49152.5
+"S3I-201 | 1000.0",False,False,False,1323.72,47419
+"S3I-201 | 10000.0",False,False,False,3585.49,72654.8
+"SB431542 | 10.0",False,False,False,10085.7,45107.4
+"SB431542 | 100.0",False,False,False,-11297.7,19881
+"SB431542 | 1000.0",False,False,False,-3413.12,21669.7
+"SB431542 | 10000.0",False,False,False,-8058.08,17329.3
+"SGI-1776 free base | 10.0",True,False,False,14453.6,154912
+"SGI-1776 free base | 100.0",False,False,False,-3013,50642.5
+"SGI-1776 free base | 1000.0",False,False,False,28544.7,169545
+"SGI-1776 free base | 10000.0",False,False,False,-3222.59,39637.8
+"SL-327 | 10.0",False,False,False,-6998.19,34653.1
+"SL-327 | 100.0",False,False,False,-8855.48,33977.2
+"SL-327 | 1000.0",False,False,False,-8412.55,22343.9
+"SL-327 | 10000.0",False,False,False,14153.7,113002
+"SNS-314 | 10.0",False,False,False,35096.9,143601
+"SNS-314 | 100.0",True,False,False,51094.2,78091.7
+"SNS-314 | 1000.0",False,False,False,27508.4,94697.4
+"SNS-314 | 10000.0",False,False,False,21064.5,100014
+"SRT1720 HCl | 10.0",False,False,False,3791.83,67175.6
+"SRT1720 HCl | 100.0",False,False,False,4060.24,73870
+"SRT1720 HCl | 1000.0",False,False,False,-14130.3,17016.4
+"SRT1720 HCl | 10000.0",False,False,False,25732.2,126675
+"SRT2104 (GSK2245840) | 10.0",False,False,False,554.825,58351.1
+"SRT2104 (GSK2245840) | 100.0",False,False,False,13453.4,94875.5
+"SRT2104 (GSK2245840) | 1000.0",False,False,False,-3602.22,33042.5
+"SRT2104 (GSK2245840) | 10000.0",False,False,False,-3747.95,44596.9
+"SRT3025 HCl | 10.0",False,False,False,-159.783,38722.6
+"SRT3025 HCl | 100.0",True,False,False,-10646.2,19183.8
+"SRT3025 HCl | 1000.0",False,False,False,-5830.08,38570.1
+"SRT3025 HCl | 10000.0",False,False,False,378.148,24739.2
+"Selisistat (EX 527) | 10.0",False,False,False,21223,147357
+"Selisistat (EX 527) | 100.0",False,False,False,7075.54,52804.3
+"Selisistat (EX 527) | 1000.0",False,False,False,9273.88,71093.1
+"Selisistat (EX 527) | 10000.0",False,False,False,-609.711,60179.4
+"Sirtinol | 10.0",False,False,False,-7636.15,27141
+"Sirtinol | 100.0",False,False,False,-11345.3,20734.6
+"Sirtinol | 1000.0",False,False,False,3918.09,78212
+"Sirtinol | 10000.0",False,False,False,-5824.79,45255.1
+"Sodium Phenylbutyrate | 10.0",False,False,False,-2125.84,44663.4
+"Sodium Phenylbutyrate | 100.0",False,False,False,-1537.72,55706.8
+"Sodium Phenylbutyrate | 1000.0",False,False,False,-2654.35,25965.9
+"Sodium Phenylbutyrate | 10000.0",False,False,False,-5701.72,31174.1
+"Sorafenib Tosylate | 10.0",False,False,False,13531.4,120502
+"Sorafenib Tosylate | 100.0",False,False,False,7901.69,66184.1
+"Sorafenib Tosylate | 1000.0",False,False,False,6800.42,75978.8
+"Sorafenib Tosylate | 10000.0",True,False,False,-3438.92,35373.5
+"Streptozotocin (STZ) | 10.0",False,False,False,6436.25,49141.7
+"Streptozotocin (STZ) | 100.0",False,False,False,-5440.71,50432.8
+"Streptozotocin (STZ) | 1000.0",False,False,False,3424.18,44155.1
+"Streptozotocin (STZ) | 10000.0",False,False,False,-4383.94,29286
+"TAK-901 | 10.0",False,False,False,40187.9,152805
+"TAK-901 | 100.0",False,False,False,-5865.82,44256.1
+"TAK-901 | 1000.0",False,False,False,1278.08,48946.5
+"TG101209 | 10.0",True,False,False,6560.2,62857.8
+"TG101209 | 100.0",False,False,False,5319.87,74966.4
+"TG101209 | 1000.0",False,False,False,66318.6,193281
+"TG101209 | 10000.0",False,False,False,1897.52,77820.5
+"TGX-221 | 10.0",False,False,False,12748.1,100570
+"TGX-221 | 100.0",False,False,False,-3995.34,26180.8
+"TGX-221 | 1000.0",False,False,False,-11899.7,12087.2
+"TGX-221 | 10000.0",False,False,False,8434.32,79993.6
+"TMP195 | 10.0",False,False,False,3428.01,47062.6
+"TMP195 | 100.0",False,False,False,5171.85,89336.8
+"TMP195 | 1000.0",False,False,False,-5842.25,30290.8
+"TMP195 | 10000.0",False,False,False,12305.8,82772.6
+"Tacedinaline (CI994) | 10.0",False,False,False,1175.19,58213.9
+"Tacedinaline (CI994) | 100.0",False,False,False,10669.2,66533.2
+"Tacedinaline (CI994) | 1000.0",False,False,False,2227.3,90608.5
+"Tacedinaline (CI994) | 10000.0",False,False,False,-3870.45,53252.7
+"Tanespimycin (17-AAG) | 10.0",False,False,False,9475.46,53650.6
+"Tanespimycin (17-AAG) | 100.0",False,False,False,84317.9,233631
+"Tanespimycin (17-AAG) | 10000.0",True,False,False,74277.8,117539
+"Tazemetostat (EPZ-6438) | 10.0",False,False,False,19346.6,160285
+"Tazemetostat (EPZ-6438) | 100.0",False,False,False,-7396.27,10288.4
+"Tazemetostat (EPZ-6438) | 1000.0",False,False,False,7619.4,76128.5
+"Tazemetostat (EPZ-6438) | 10000.0",False,False,False,-672.153,35696.4
+"Temsirolimus (CCI-779, NSC 683864) | 10.0",False,False,False,20590.5,55485
+"Temsirolimus (CCI-779, NSC 683864) | 100.0",False,False,False,19018.9,195065
+"Temsirolimus (CCI-779, NSC 683864) | 1000.0",False,False,False,-7998.96,33577
+"Temsirolimus (CCI-779, NSC 683864) | 10000.0",False,False,False,-104.064,55571.4
+"Thalidomide | 10.0",False,False,False,-2831.7,30757.5
+"Thalidomide | 100.0",False,False,False,-8017.76,34356
+"Thalidomide | 1000.0",False,False,False,5037.36,70721.8
+"Thalidomide | 10000.0",False,False,False,16751.2,109360
+"Thiotepa | 10.0",False,False,False,-8731.54,32953.5
+"Thiotepa | 100.0",False,False,False,529.733,42510.7
+"Thiotepa | 1000.0",False,False,False,22928,143184
+"Thiotepa | 10000.0",False,False,False,21174.8,114774
+"Tie2 kinase inhibitor | 10.0",False,False,False,-7923.51,29647.5
+"Tie2 kinase inhibitor | 100.0",False,False,False,-3807.78,35229.9
+"Tie2 kinase inhibitor | 1000.0",False,False,False,14721.7,71713
+"Tie2 kinase inhibitor | 10000.0",False,False,False,2010.94,51980.7
+"Tofacitinib (CP-690550) Citrate | 10.0",False,False,False,-8031.03,23323.7
+"Tofacitinib (CP-690550) Citrate | 100.0",False,False,False,-655.686,53148.6
+"Tofacitinib (CP-690550) Citrate | 1000.0",False,False,False,-4426.81,45225
+"Tofacitinib (CP-690550) Citrate | 10000.0",False,False,False,-7883.19,27402.4
+"Toremifene Citrate | 10.0",False,False,False,-10289.8,16017.2
+"Toremifene Citrate | 100.0",False,False,False,4028.72,81159.7
+"Toremifene Citrate | 1000.0",False,False,False,-9397.25,22498
+"Toremifene Citrate | 10000.0",True,False,False,-6703.82,24194.9
+"Tozasertib (VX-680, MK-0457) | 10.0",False,False,False,-3784.81,39601.1
+"Tozasertib (VX-680, MK-0457) | 100.0",False,False,False,5711.62,66758
+"Tozasertib (VX-680, MK-0457) | 1000.0",False,False,False,8071.31,50368.6
+"Tozasertib (VX-680, MK-0457) | 10000.0",False,False,False,16960.5,75409.7
+"Trametinib (GSK1120212) | 10.0",False,False,False,1668.06,63375.8
+"Trametinib (GSK1120212) | 100.0",False,False,False,-12188.4,16620.6
+"Trametinib (GSK1120212) | 1000.0",False,False,False,2203.23,52962.4
+"Trametinib (GSK1120212) | 10000.0",False,False,False,17481.6,65782.4
+"Tranylcypromine (2-PCPA) HCl | 10.0",False,False,False,-6596.92,28887.2
+"Tranylcypromine (2-PCPA) HCl | 100.0",False,False,False,9090.56,119938
+"Tranylcypromine (2-PCPA) HCl | 1000.0",False,False,False,-8897.42,19877.6
+"Tranylcypromine (2-PCPA) HCl | 10000.0",False,False,False,-953.942,44836.9
+"Triamcinolone Acetonide | 10.0",False,False,False,4287.17,40300.6
+"Triamcinolone Acetonide | 100.0",False,False,False,15148.7,59246
+"Triamcinolone Acetonide | 1000.0",False,False,False,1556.91,32341.5
+"Triamcinolone Acetonide | 10000.0",False,False,False,-1833.79,44387.9
+"Trichostatin A (TSA) | 10.0",False,False,False,18562,80505.5
+"Trichostatin A (TSA) | 100.0",False,False,False,15627.6,93322.2
+"Trichostatin A (TSA) | 1000.0",False,False,False,6023.08,110472
+"Trichostatin A (TSA) | 10000.0",False,False,False,16559.2,84435
+"Tubastatin A HCl | 10.0",False,False,False,-5679,27429.2
+"Tubastatin A HCl | 100.0",False,False,False,13627,105031
+"Tubastatin A HCl | 1000.0",False,False,False,-3285.66,37877
+"Tubastatin A HCl | 10000.0",False,False,False,582.028,45814.8
+"Tucidinostat (Chidamide) | 10.0",False,False,False,-10040.8,17512.9
+"Tucidinostat (Chidamide) | 100.0",False,False,False,5604.01,46752.2
+"Tucidinostat (Chidamide) | 1000.0",False,False,False,-10201.1,21923.3
+"Tucidinostat (Chidamide) | 10000.0",False,False,False,-5452.68,32891.9
+"UNC0379 | 10.0",False,False,False,-8020.92,48746.2
+"UNC0379 | 100.0",False,False,False,11496.4,68943.4
+"UNC0379 | 1000.0",False,False,False,31877.3,212843
+"UNC0379 | 10000.0",False,False,False,11273.4,51594.3
+"UNC0631 | 10.0",False,False,False,-10498.2,30862.6
+"UNC0631 | 100.0",False,False,False,15321.1,150242
+"UNC0631 | 1000.0",False,False,False,2381.45,89151.8
+"UNC0631 | 10000.0",False,False,False,18486.3,69693.3
+"UNC1999 | 10.0",False,False,False,-5377.3,30905.1
+"UNC1999 | 100.0",False,False,False,3114,30302.1
+"UNC1999 | 1000.0",False,False,False,-3537.6,33643.8
+"UNC1999 | 10000.0",False,False,False,-8408.41,25155
+"Valproic acid sodium salt (Sodium valproate) | 10.0",False,False,False,-4816.22,33794
+"Valproic acid sodium salt (Sodium valproate) | 100.0",False,False,False,-11565.2,16630.7
+"Valproic acid sodium salt (Sodium valproate) | 1000.0",False,False,False,762.612,70520.4
+"Valproic acid sodium salt (Sodium valproate) | 10000.0",False,False,False,21437.6,66857.7
+"Vandetanib (ZD6474) | 10.0",False,False,False,6015.5,117284
+"Vandetanib (ZD6474) | 100.0",False,False,False,14472.5,71633
+"Vandetanib (ZD6474) | 1000.0",False,False,False,-8500.78,20074.5
+"Vandetanib (ZD6474) | 10000.0",True,False,False,22753.2,118246
+"Veliparib (ABT-888) | 10.0",False,False,False,-3183.75,32155.2
+"Veliparib (ABT-888) | 100.0",False,False,False,-6670.56,27331.2
+"Veliparib (ABT-888) | 1000.0",False,False,False,-1910.51,33679.7
+"Veliparib (ABT-888) | 10000.0",False,False,False,1249.46,67228
+"WHI-P154 | 10.0",False,False,False,-4443.14,36298.1
+"WHI-P154 | 100.0",False,False,False,13066.7,88527.4
+"WHI-P154 | 1000.0",False,False,False,10260.9,81615.8
+"WHI-P154 | 10000.0",False,False,False,-6161.23,23179.1
+"WP1066 | 10.0",False,False,False,821.615,47755.7
+"WP1066 | 100.0",False,False,False,-8202.62,39846.3
+"WP1066 | 1000.0",False,False,False,-6571.69,29737.4
+"WP1066 | 10000.0",False,False,False,15071.8,80096.1
+"XAV-939 | 10.0",False,False,False,7568.2,112202
+"XAV-939 | 100.0",False,False,False,17795.8,61944.8
+"XAV-939 | 1000.0",False,False,False,9939.51,98193.4
+"XAV-939 | 10000.0",False,False,False,6462.92,59475.5
+"ZM 447439 | 10.0",False,False,False,-3868.55,39377.9
+"ZM 447439 | 100.0",False,False,False,-3662.2,62452.6
+"ZM 447439 | 1000.0",False,False,False,3558.97,56789.2
+"ZM 447439 | 10000.0",False,False,False,7925.95,118947
+"Zileuton | 10.0",False,False,False,-7797.93,23311.2
+"Zileuton | 100.0",False,False,False,-9291.48,18619.5
+"Zileuton | 1000.0",False,False,False,28757.5,136315
+"Zileuton | 10000.0",False,False,False,3627.23,81293.1

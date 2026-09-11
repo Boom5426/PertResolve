@@ -1,0 +1,16 @@
+{
+  "dataset": "allele_GATA1",
+  "n_pert": 247,
+  "frac_rankable": 0.0,
+  "reliability_P_recover_order": 0.512,
+  "oracle_ceiling": 0.52,
+  "min_resolvable_gap": 0.035,
+  "gap_resolution": {
+    "0.5": 1.0,
+    "0.2": 1.0,
+    "0.15": 0.794,
+    "0.075": 0.708,
+    "0.035": 0.91,
+    "0.04": 0.608
+  }
+}

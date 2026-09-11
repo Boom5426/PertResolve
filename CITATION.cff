@@ -1,0 +1,78 @@
+cff-version: 1.2.0
+title: >-
+  PertResolve: measurement-resolution diagnostics for single-cell
+  perturbation benchmarks
+message: >-
+  If you use this software or the benchmark, please cite the article below.
+type: software
+authors:
+  - family-names: Li
+    given-names: Bo
+  - family-names: Zhang
+    given-names: Chengyang
+  - family-names: Li
+    given-names: Mengran
+  - family-names: Zhang
+    given-names: Bob
+  - family-names: Wang
+    given-names: Lin
+  - family-names: Tang
+    given-names: Zhenchao
+  - family-names: Liu
+    given-names: Jun
+  - family-names: Liu
+    given-names: Chengliang
+  - family-names: Wei
+    given-names: Chen
+  - family-names: Yi
+    given-names: Yuhao
+  - family-names: Lv
+    given-names: Jiancheng
+  - family-names: Zhang
+    given-names: Yang
+repository-code: https://github.com/Boom5426/PertResolve
+license: MIT
+keywords:
+  - single-cell
+  - perturbation prediction
+  - benchmark
+  - measurement resolution
+  - protein-coding variants
+abstract: >-
+  A benchmark whose ground truth cannot separate two perturbations cannot order
+  two models that differ in how well they separate them, so its ranking reports
+  the measurement as much as the methods. PertResolve measures that property
+  before any model is trained. PertResolve-Bench combines an allele-resolved arm
+  spanning 470 protein-coding variants and 321,043 cells with a broader panel of
+  31 configurations from 14 public perturbation resources.
+preferred-citation:
+  type: article
+  title: >-
+    Measurement resolution constrains fine-grained perturbation prediction
+  authors:
+    - family-names: Li
+      given-names: Bo
+    - family-names: Zhang
+      given-names: Chengyang
+    - family-names: Li
+      given-names: Mengran
+    - family-names: Zhang
+      given-names: Bob
+    - family-names: Wang
+      given-names: Lin
+    - family-names: Tang
+      given-names: Zhenchao
+    - family-names: Liu
+      given-names: Jun
+    - family-names: Liu
+      given-names: Chengliang
+    - family-names: Wei
+      given-names: Chen
+    - family-names: Yi
+      given-names: Yuhao
+    - family-names: Lv
+      given-names: Jiancheng
+    - family-names: Zhang
+      given-names: Yang
+  year: 2026
+  notes: Manuscript in preparation

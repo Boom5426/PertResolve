@@ -1,0 +1,79 @@
+{
+  "name": "parse10m_Donor5",
+  "prereg": "docs/PREREG_RESOLUTION_PANEL_v2.md",
+  "source": "subsets/parse_Donor5",
+  "extract_provenance": {
+    "n_units_eligible": 90,
+    "pool_cap": 1500,
+    "pool_seed": 0,
+    "min_cells": 200,
+    "n_units_scored": 90,
+    "n_cells_source": 9697974,
+    "n_cells_kept": 1066725,
+    "n_control_cells": 55293,
+    "encoding": "csr_matrix",
+    "source_nnz": 18830591942,
+    "kept_nnz": 1967345246,
+    "source": "<external-data-root>/VCData/CellFlow/Parse_10M_PBMC_cytokines.h5ad",
+    "unit_key": "cytokine",
+    "control": "PBS",
+    "stratum": [
+      [
+        "donor",
+        "Donor5"
+      ]
+    ],
+    "seconds": 1457.2
+  },
+  "perturbation_key": [
+    "cytokine"
+  ],
+  "unit_separator": null,
+  "collapse": null,
+  "control": [
+    "PBS"
+  ],
+  "stratum_key": null,
+  "stratum": null,
+  "n_cells_file": 9697974,
+  "n_cells_scored": 1066725,
+  "n_cells_unassigned_dropped": 0,
+  "d7_applied": true,
+  "verdict": "detectable",
+  "reason": "perturbations differ from the control but only 0% are separable from their closest competitor, so a discrimination score has nothing to reward; more cells would help: the separation is positive, only under the noise",
+  "n_perturbations": 90,
+  "detectable_fraction": 0.6777777777777778,
+  "identifiable_fraction": 0.0,
+  "jointly_evaluable_fraction": 0.0,
+  "replicate_ceiling": 0.876498127340824,
+  "rho2": 2.8844811100339607,
+  "rho2_nn_median": 0.5176721247184723,
+  "eta2": 402.67748462319577,
+  "p_correct_order": 1.0,
+  "n_excluded": 0,
+  "depth": 50,
+  "n_seeds": 8,
+  "n_boot": 1000,
+  "seed": 0,
+  "n_components": 50,
+  "reduce_path": "rsvd",
+  "dense_working_set_gb": 344.36,
+  "selection": {
+    "n_units_total": 90,
+    "n_units_eligible": 90,
+    "n_units_scored": 90,
+    "n_units_cell_capped": 0,
+    "cell_cap": null,
+    "n_control_cells": 55293
+  },
+  "matched_arm": null,
+  "p_rho2_nn_gt1": 0.26666666666666666,
+  "cross_seed_identifiable_fraction": 0.0,
+  "cross_seed_rho2_nn_median": 0.16647035191801668,
+  "cross_seed_p_rho2_nn_gt1": 0.17777777777777778,
+  "seconds": {
+    "load": 0.7,
+    "reduce": 483.8,
+    "score": 9.0
+  }
+}

@@ -1,0 +1,36 @@
+dataset,criterion,n_perts,unrankable_frac
+Adamson,S > W (current),96,0.146
+Adamson,D_self_hi < D_null,96,0.094
+Adamson,S > 1.5×W,96,0.229
+Adamson,S > 2×W,96,0.281
+Adamson,ratio < 0.8,96,0.104
+GATA1,S > W (current),254,0.976
+GATA1,D_self_hi < D_null,254,0.961
+GATA1,S > 1.5×W,254,0.996
+GATA1,S > 2×W,254,1.0
+GATA1,ratio < 0.8,254,0.965
+JAK1,S > W (current),20,0.1
+JAK1,D_self_hi < D_null,20,0.1
+JAK1,S > 1.5×W,20,0.15
+JAK1,S > 2×W,20,0.15
+JAK1,ratio < 0.8,20,0.1
+KRAS,S > W (current),92,1.0
+KRAS,D_self_hi < D_null,92,1.0
+KRAS,S > 1.5×W,92,1.0
+KRAS,S > 2×W,92,1.0
+KRAS,ratio < 0.8,92,1.0
+Norman,S > W (current),236,0.034
+Norman,D_self_hi < D_null,236,0.017
+Norman,S > 1.5×W,236,0.059
+Norman,S > 2×W,236,0.081
+Norman,ratio < 0.8,236,0.021
+Replogle,S > W (current),1832,0.553
+Replogle,D_self_hi < D_null,1832,0.462
+Replogle,S > 1.5×W,1832,0.635
+Replogle,S > 2×W,1832,0.691
+Replogle,ratio < 0.8,1832,0.503
+TP53,S > W (current),98,1.0
+TP53,D_self_hi < D_null,98,1.0
+TP53,S > 1.5×W,98,1.0
+TP53,S > 2×W,98,1.0
+TP53,ratio < 0.8,98,1.0

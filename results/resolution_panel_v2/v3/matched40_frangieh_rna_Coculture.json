@@ -1,0 +1,263 @@
+{
+  "name": "matched40_frangieh_rna_Coculture",
+  "prereg": "docs/PREREG_RESOLUTION_PANEL_v2.md",
+  "source": "<external-data-root>/VCData/scPerturb/rna_protein/FrangiehIzar2021_RNA.h5ad",
+  "extract_provenance": null,
+  "perturbation_key": [
+    "perturbation"
+  ],
+  "unit_separator": null,
+  "collapse": null,
+  "control": [
+    "control"
+  ],
+  "stratum_key": [
+    "perturbation_2"
+  ],
+  "stratum": [
+    "Co-culture"
+  ],
+  "n_cells_file": 218331,
+  "n_cells_scored": 73114,
+  "n_cells_unassigned_dropped": 0,
+  "d7_applied": true,
+  "verdict": "not detectable",
+  "reason": "only 9% of perturbations differ from the control by more than their own split-half noise, so most cannot be scored at all",
+  "n_perturbations": 159,
+  "detectable_fraction": 0.09433962264150944,
+  "identifiable_fraction": 0.0,
+  "jointly_evaluable_fraction": 0.0,
+  "replicate_ceiling": 0.5824974126263833,
+  "rho2": 0.27331371302151947,
+  "rho2_nn_median": 0.18928480645501364,
+  "eta2": 5212.727712460202,
+  "p_correct_order": 0.214,
+  "n_excluded": 89,
+  "depth": 50,
+  "n_seeds": 8,
+  "n_boot": 1000,
+  "seed": 0,
+  "n_components": 50,
+  "reduce_path": "pca",
+  "dense_working_set_gb": 13.87,
+  "selection": {
+    "n_units_total": 248,
+    "n_units_eligible": 159,
+    "n_units_scored": 159,
+    "n_units_cell_capped": 0,
+    "cell_cap": null,
+    "n_control_cells": 18334,
+    "matched_k": [
+      40
+    ],
+    "draws": 10,
+    "n_units_in_cohort": 159
+  },
+  "matched_arm": {
+    "per_draw": [
+      {
+        "k": 40,
+        "draw": 0,
+        "detectable_fraction": 0.09433962264150944,
+        "identifiable_fraction": 0.0,
+        "jointly_evaluable_fraction": 0.0,
+        "replicate_candidate_pool_pds": 0.5919811320754718,
+        "rho2_nn_median": 0.15427540634280104,
+        "p_rho2_nn_gt1": 0.0440251572327044,
+        "p_correct_order": 0.128,
+        "cross_seed_identifiable_fraction": 0.0,
+        "cross_seed_rho2_nn_median": -0.04388422271113786,
+        "cross_seed_p_rho2_nn_gt1": 0.006289308176100629
+      },
+      {
+        "k": 40,
+        "draw": 1,
+        "detectable_fraction": 0.09433962264150944,
+        "identifiable_fraction": 0.0,
+        "jointly_evaluable_fraction": 0.0,
+        "replicate_candidate_pool_pds": 0.5906305434607322,
+        "rho2_nn_median": 0.10209935048927808,
+        "p_rho2_nn_gt1": 0.03773584905660377,
+        "p_correct_order": 0.065,
+        "cross_seed_identifiable_fraction": 0.0,
+        "cross_seed_rho2_nn_median": -0.02020955703710348,
+        "cross_seed_p_rho2_nn_gt1": 0.025157232704402517
+      },
+      {
+        "k": 40,
+        "draw": 2,
+        "detectable_fraction": 0.09433962264150944,
+        "identifiable_fraction": 0.0,
+        "jointly_evaluable_fraction": 0.0,
+        "replicate_candidate_pool_pds": 0.5850266086115142,
+        "rho2_nn_median": 0.17800824322921052,
+        "p_rho2_nn_gt1": 0.025157232704402517,
+        "p_correct_order": 0.235,
+        "cross_seed_identifiable_fraction": 0.0,
+        "cross_seed_rho2_nn_median": -0.051842656669675725,
+        "cross_seed_p_rho2_nn_gt1": 0.0
+      },
+      {
+        "k": 40,
+        "draw": 3,
+        "detectable_fraction": 0.09433962264150944,
+        "identifiable_fraction": 0.0,
+        "jointly_evaluable_fraction": 0.0,
+        "replicate_candidate_pool_pds": 0.5886147395581358,
+        "rho2_nn_median": 0.16406809084539584,
+        "p_rho2_nn_gt1": 0.0,
+        "p_correct_order": 0.079,
+        "cross_seed_identifiable_fraction": 0.0,
+        "cross_seed_rho2_nn_median": -0.060768702233579414,
+        "cross_seed_p_rho2_nn_gt1": 0.0
+      },
+      {
+        "k": 40,
+        "draw": 4,
+        "detectable_fraction": 0.09433962264150944,
+        "identifiable_fraction": 0.0,
+        "jointly_evaluable_fraction": 0.0,
+        "replicate_candidate_pool_pds": 0.5831519109820997,
+        "rho2_nn_median": 0.1194193245983323,
+        "p_rho2_nn_gt1": 0.006289308176100629,
+        "p_correct_order": 0.055,
+        "cross_seed_identifiable_fraction": 0.0,
+        "cross_seed_rho2_nn_median": -0.03204952430303641,
+        "cross_seed_p_rho2_nn_gt1": 0.0
+      },
+      {
+        "k": 40,
+        "draw": 5,
+        "detectable_fraction": 0.09433962264150944,
+        "identifiable_fraction": 0.0,
+        "jointly_evaluable_fraction": 0.0,
+        "replicate_candidate_pool_pds": 0.565815997419771,
+        "rho2_nn_median": 0.12174367404358047,
+        "p_rho2_nn_gt1": 0.018867924528301886,
+        "p_correct_order": 0.116,
+        "cross_seed_identifiable_fraction": 0.0,
+        "cross_seed_rho2_nn_median": -0.0616265804709448,
+        "cross_seed_p_rho2_nn_gt1": 0.0
+      },
+      {
+        "k": 40,
+        "draw": 6,
+        "detectable_fraction": 0.09433962264150944,
+        "identifiable_fraction": 0.0,
+        "jointly_evaluable_fraction": 0.0,
+        "replicate_candidate_pool_pds": 0.5813780035478149,
+        "rho2_nn_median": 0.1058116217988908,
+        "p_rho2_nn_gt1": 0.006289308176100629,
+        "p_correct_order": 0.215,
+        "cross_seed_identifiable_fraction": 0.0,
+        "cross_seed_rho2_nn_median": -0.11840817740507105,
+        "cross_seed_p_rho2_nn_gt1": 0.0
+      },
+      {
+        "k": 40,
+        "draw": 7,
+        "detectable_fraction": 0.09433962264150944,
+        "identifiable_fraction": 0.0,
+        "jointly_evaluable_fraction": 0.0,
+        "replicate_candidate_pool_pds": 0.5670254797613288,
+        "rho2_nn_median": 0.2594331496951485,
+        "p_rho2_nn_gt1": 0.025157232704402517,
+        "p_correct_order": 0.342,
+        "cross_seed_identifiable_fraction": 0.0,
+        "cross_seed_rho2_nn_median": -0.006468686711550864,
+        "cross_seed_p_rho2_nn_gt1": 0.018867924528301886
+      },
+      {
+        "k": 40,
+        "draw": 8,
+        "detectable_fraction": 0.09433962264150944,
+        "identifiable_fraction": 0.0,
+        "jointly_evaluable_fraction": 0.0,
+        "replicate_candidate_pool_pds": 0.5890783744557329,
+        "rho2_nn_median": 0.15810089884790807,
+        "p_rho2_nn_gt1": 0.025157232704402517,
+        "p_correct_order": 0.154,
+        "cross_seed_identifiable_fraction": 0.0,
+        "cross_seed_rho2_nn_median": -0.13008995290744657,
+        "cross_seed_p_rho2_nn_gt1": 0.0
+      },
+      {
+        "k": 40,
+        "draw": 9,
+        "detectable_fraction": 0.09433962264150944,
+        "identifiable_fraction": 0.0,
+        "jointly_evaluable_fraction": 0.0,
+        "replicate_candidate_pool_pds": 0.5718230930495081,
+        "rho2_nn_median": 0.0754297960971701,
+        "p_rho2_nn_gt1": 0.018867924528301886,
+        "p_correct_order": 0.157,
+        "cross_seed_identifiable_fraction": 0.0,
+        "cross_seed_rho2_nn_median": -0.13488055930495024,
+        "cross_seed_p_rho2_nn_gt1": 0.0
+      }
+    ],
+    "summary": {
+      "40": {
+        "detectable_fraction": {
+          "mean": 0.09433962264150944,
+          "p10": 0.09433962264150944,
+          "p90": 0.09433962264150944
+        },
+        "identifiable_fraction": {
+          "mean": 0.0,
+          "p10": 0.0,
+          "p90": 0.0
+        },
+        "jointly_evaluable_fraction": {
+          "mean": 0.0,
+          "p10": 0.0,
+          "p90": 0.0
+        },
+        "replicate_candidate_pool_pds": {
+          "mean": 0.5814525882922108,
+          "p10": 0.566904531527173,
+          "p90": 0.5907656023222061
+        },
+        "rho2_nn_median": {
+          "mean": 0.14383895559877155,
+          "p10": 0.09943239505006729,
+          "p90": 0.1861507338758043
+        },
+        "p_rho2_nn_gt1": {
+          "mean": 0.020754716981132078,
+          "p10": 0.0056603773584905665,
+          "p90": 0.038364779874213835
+        },
+        "p_correct_order": {
+          "mean": 0.15460000000000002,
+          "p10": 0.064,
+          "p90": 0.24569999999999995
+        },
+        "cross_seed_identifiable_fraction": {
+          "mean": 0.0,
+          "p10": 0.0,
+          "p90": 0.0
+        },
+        "cross_seed_rho2_nn_median": {
+          "mean": -0.06602286197544964,
+          "p10": -0.13056901354719694,
+          "p90": -0.018835470004548223
+        },
+        "cross_seed_p_rho2_nn_gt1": {
+          "mean": 0.005031446540880504,
+          "p10": 0.0,
+          "p90": 0.019496855345911945
+        }
+      }
+    }
+  },
+  "p_rho2_nn_gt1": 0.012578616352201259,
+  "cross_seed_identifiable_fraction": 0.0,
+  "cross_seed_rho2_nn_median": -0.11083452636498223,
+  "cross_seed_p_rho2_nn_gt1": 0.0,
+  "seconds": {
+    "load": 9.6,
+    "reduce": 24.1,
+    "score": 4.5
+  }
+}

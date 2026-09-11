@@ -1,0 +1,6 @@
+# External-only is_hotspot definition (Round 3 de-leak)
+# TP53 COSMIC/IARC hotspot codons: 175,176,179,220,238,245,248,249,273,282,285
+# KRAS activating codons: 12,13,59,61,117,146
+# GATA1 ZF zinc-coordinating cysteines: 204,207,225,228,258,261,279,282 + ClinVar pathogenic
+# JAK1 functional modules: JH2 pseudokinase (583-855) + JH1 kinase (875-1153)
+# NO single-cell outcome/severity used.

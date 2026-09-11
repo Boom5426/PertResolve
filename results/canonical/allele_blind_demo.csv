@@ -1,0 +1,5 @@
+gene,n_variants,gene_keyed_representations,collapse_ratio,coverage
+TP53,98,1,0.0102,470->4
+KRAS,92,1,0.0109,470->4
+GATA1,254,1,0.0039,470->4
+JAK1,26,1,0.0385,470->4

@@ -1,0 +1,50 @@
+{
+  "name": "norman2019_rsvd",
+  "prereg": "docs/PREREG_RESOLUTION_PANEL_v2.md",
+  "h5ad": "<external-data-root>/VCData/scPerturb/rna_protein/NormanWeissman2019_filtered.h5ad",
+  "perturbation_key": [
+    "perturbation"
+  ],
+  "unit_separator": null,
+  "collapse": null,
+  "control": [
+    "control"
+  ],
+  "stratum_key": null,
+  "stratum": null,
+  "n_cells_file": 111445,
+  "n_cells_scored": 111445,
+  "n_cells_unassigned_dropped": 0,
+  "verdict": "detectable",
+  "reason": "perturbations differ from the control but only 1% are separable from their closest competitor, so a discrimination score has nothing to reward; more cells would help: the separation is positive, only under the noise",
+  "n_perturbations": 195,
+  "detectable_fraction": 0.6871794871794872,
+  "identifiable_fraction": 0.005128205128205128,
+  "jointly_evaluable_fraction": 0.005128205128205128,
+  "replicate_ceiling": 0.8975713719270421,
+  "rho2": 5.947260777555796,
+  "rho2_nn_median": 0.7108464285556305,
+  "eta2": 3668.9165681220948,
+  "p_correct_order": 0.997,
+  "n_excluded": 41,
+  "depth": 50,
+  "n_seeds": 8,
+  "n_boot": 1000,
+  "seed": 0,
+  "n_components": 50,
+  "reduce_path": "rsvd",
+  "dense_working_set_gb": 30.04,
+  "selection": {
+    "n_units_total": 236,
+    "n_units_eligible": 195,
+    "n_units_scored": 195,
+    "n_units_cell_capped": 0,
+    "cell_cap": null,
+    "n_control_cells": 11855
+  },
+  "seconds": {
+    "load": 5.3,
+    "reduce": 263.9,
+    "score": 5.5
+  }
+}

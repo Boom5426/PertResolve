@@ -1,0 +1,55 @@
+{
+  "n_batches": 3,
+  "group_sizes": [
+    2,
+    1
+  ],
+  "n_control_cells": 4000,
+  "control_cells_per_group": [
+    2000,
+    2000
+  ],
+  "w_batch": "Flex_2",
+  "control_cells_in_w_batch": 2000,
+  "cohorts": {
+    "30": {
+      "n_PX": 139,
+      "n_W": 139,
+      "n_excluded_from_PX": 0,
+      "excluded_from_PX": []
+    },
+    "50": {
+      "n_PX": 139,
+      "n_W": 132,
+      "n_excluded_from_PX": 0,
+      "excluded_from_PX": []
+    },
+    "100": {
+      "n_PX": 132,
+      "n_W": 108,
+      "n_excluded_from_PX": 7,
+      "excluded_from_PX": [
+        "ATP6V0B",
+        "EPB41L2",
+        "EPHB4",
+        "ETV4",
+        "SDC1",
+        "SEC62",
+        "SHPRH"
+      ]
+    }
+  },
+  "dataset": "VCC",
+  "subset": null,
+  "batch_prefix": 6,
+  "n_cells": 99274,
+  "n_features": 50,
+  "master_seed": 20260825,
+  "n_seed": 15,
+  "depths": [
+    30,
+    50,
+    100
+  ],
+  "tau": 0.05
+}

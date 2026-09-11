@@ -1,0 +1,54 @@
+{
+  "name": "frangieh_protein_Control",
+  "prereg": "docs/PREREG_RESOLUTION_PANEL_v2.md",
+  "h5ad": "<external-data-root>/VCData/scPerturb/rna_protein/FrangiehIzar2021_protein.h5ad",
+  "perturbation_key": [
+    "perturbation"
+  ],
+  "unit_separator": null,
+  "collapse": null,
+  "control": [
+    "control"
+  ],
+  "stratum_key": [
+    "perturbation_2"
+  ],
+  "stratum": [
+    "Control"
+  ],
+  "n_cells_file": 218331,
+  "n_cells_scored": 57627,
+  "n_cells_unassigned_dropped": 0,
+  "verdict": "not detectable",
+  "reason": "only 1% of perturbations differ from the control by more than their own split-half noise, so most cannot be scored at all",
+  "n_perturbations": 87,
+  "detectable_fraction": 0.011494252873563218,
+  "identifiable_fraction": 0.0,
+  "jointly_evaluable_fraction": 0.0,
+  "replicate_ceiling": 0.5381582464581662,
+  "rho2": 0.15010250777258644,
+  "rho2_nn_median": -0.2060729428729251,
+  "eta2": 19230.578080747127,
+  "p_correct_order": 0.001,
+  "n_excluded": 161,
+  "depth": 50,
+  "n_seeds": 8,
+  "n_boot": 1000,
+  "seed": 0,
+  "n_components": 50,
+  "reduce_path": "none",
+  "dense_working_set_gb": 0.01,
+  "selection": {
+    "n_units_total": 248,
+    "n_units_eligible": 87,
+    "n_units_scored": 87,
+    "n_units_cell_capped": 0,
+    "cell_cap": null,
+    "n_control_cells": 15361
+  },
+  "seconds": {
+    "load": 0.7,
+    "reduce": 0.3,
+    "score": 1.6
+  }
+}

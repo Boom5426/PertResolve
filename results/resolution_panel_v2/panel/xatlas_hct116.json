@@ -1,0 +1,68 @@
+{
+  "name": "xatlas_hct116",
+  "prereg": "docs/PREREG_RESOLUTION_PANEL_v2.md",
+  "source": "subsets/xatlas_hct116_k1500.npz",
+  "extract_provenance": {
+    "n_units_eligible": 6328,
+    "pool_cap": 1500,
+    "pool_seed": 0,
+    "min_cells": 200,
+    "n_units_scored": 1500,
+    "n_cells_source": 3409169,
+    "n_shards": 109,
+    "n_cells_kept": 634070,
+    "kept_nnz": 3231866624,
+    "n_control_cells": 165777,
+    "encoding": "parquet_ragged",
+    "source": "<external-data-root>/VCData/X-Atlas-Orion/data/HCT116*.parquet",
+    "unit_key": "gene_target",
+    "control": "Non-Targeting",
+    "stratum": [],
+    "seconds": 1050.2
+  },
+  "perturbation_key": [
+    "gene_target"
+  ],
+  "unit_separator": null,
+  "collapse": null,
+  "control": [
+    "Non-Targeting"
+  ],
+  "stratum_key": null,
+  "stratum": null,
+  "n_cells_file": 3409169,
+  "n_cells_scored": 634070,
+  "n_cells_unassigned_dropped": 0,
+  "verdict": "not detectable",
+  "reason": "only 1% of perturbations differ from the control by more than their own split-half noise, so most cannot be scored at all",
+  "n_perturbations": 1500,
+  "detectable_fraction": 0.008,
+  "identifiable_fraction": 0.0,
+  "jointly_evaluable_fraction": 0.0,
+  "replicate_ceiling": 0.543985212363798,
+  "rho2": 0.12957266383606367,
+  "rho2_nn_median": 0.042821540340991025,
+  "eta2": 3467.4562833418404,
+  "p_correct_order": 0.931,
+  "n_excluded": 0,
+  "depth": 50,
+  "n_seeds": 8,
+  "n_boot": 1000,
+  "seed": 0,
+  "n_components": 50,
+  "reduce_path": "rsvd",
+  "dense_working_set_gb": 195.83,
+  "selection": {
+    "n_units_total": 1500,
+    "n_units_eligible": 1500,
+    "n_units_scored": 1500,
+    "n_units_cell_capped": 0,
+    "cell_cap": null,
+    "n_control_cells": 165777
+  },
+  "seconds": {
+    "load": 17.6,
+    "reduce": 2021.4,
+    "score": 69.2
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "n_batches": 2,
+  "group_sizes": [
+    1,
+    1
+  ],
+  "n_control_cells": 4000,
+  "control_cells_per_group": [
+    2000,
+    2000
+  ],
+  "w_batch": "rep1",
+  "control_cells_in_w_batch": 2000,
+  "cohorts": {
+    "30": {
+      "n_PX": 188,
+      "n_W": 188,
+      "n_excluded_from_PX": 0,
+      "excluded_from_PX": []
+    },
+    "50": {
+      "n_PX": 188,
+      "n_W": 188,
+      "n_excluded_from_PX": 0,
+      "excluded_from_PX": []
+    },
+    "100": {
+      "n_PX": 188,
+      "n_W": 188,
+      "n_excluded_from_PX": 0,
+      "excluded_from_PX": []
+    }
+  },
+  "dataset": "sciPlex",
+  "n_cells": 154400,
+  "n_features": 50,
+  "master_seed": 20260825,
+  "n_seed": 15,
+  "depths": [
+    30,
+    50,
+    100
+  ],
+  "tau": 0.05
+}

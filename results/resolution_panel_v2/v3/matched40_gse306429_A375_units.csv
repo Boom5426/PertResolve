@@ -1,0 +1,96 @@
+perturbation,detectable,identifiable,jointly_evaluable,separation,spread
+"AT9283 | 0.03",True,False,False,55.0179,244.066
+"AZ-23 | 0.3",True,False,False,165.381,397.206
+"AZD-3514 | 1.0",True,False,False,215.342,370.017
+"Apicidin | 0.03",False,False,False,44.6708,132.691
+"Apilimod | 1.0",True,True,True,183.234,180.133
+"BI 2536 | 0.001",False,False,False,-2.4384,94.7485
+"BMS-536924 | 1.0",True,True,True,155.563,142.227
+"BRD-K76674262 | 0.01",True,False,False,76.8962,206.489
+"Bardoxolone | 0.3",True,True,True,208.73,158.445
+"Bisindolylmaleimide II | 0.1",False,False,False,66.9748,162.522
+"Bortezomib | 0.003",True,False,False,48.5008,318.466
+"Brefeldin A | 0.01",False,False,False,92.7782,244.282
+"CGP-60474 | 0.01",False,False,False,108.731,268.495
+"CLT-MCD-037 | 10.0",True,False,False,24.5144,174.77
+"CLT-MCD-046 | 0.5",True,False,False,92.6022,267.853
+"CPI-203 | 1.0",True,True,True,1478.75,837.118
+"Calcitriol | 10.0",True,False,False,236.342,243.658
+"Chaetocin | 0.003",False,False,False,116.173,405.163
+"Crizotinib | 0.3",True,False,False,53.3436,239.448
+"Dabrafenib | 0.1",True,True,True,179.297,101.138
+"Decitabine | 1.0",False,True,False,54.4076,51.7719
+"Dexamethasone | 10.0",False,False,False,98.2824,226.754
+"Dorsomorphin | 1.0",False,False,False,68.6219,224.581
+"Doxorubicin | 0.01",True,False,False,196.257,423.477
+"Doxorubicin | 0.1",True,True,True,813.951,426.41
+"ERK5-IN-1 | 1.0",True,True,True,392.325,374.8
+"EX-527 | 3.0",True,False,False,8.8894,140.951
+"Etomoxir | 1.0",True,False,False,43.6891,198.035
+"Forskolin | 0.1",False,False,False,39.94,236.282
+"GW-843682X | 0.01",False,False,False,37.4593,219.765
+"Geldanamycin | 0.01",True,False,False,81.2827,170.365
+"I-BET 762 | 0.1",True,False,False,-6.69978,88.2608
+"I-BET 762 | 0.3",True,False,False,83.6003,252.008
+"I-BET 762 | 1.0",True,False,False,106.847,292.908
+"I-BET151 | 0.1",True,False,False,-6.69978,88.2608
+"I-BET151 | 0.3",True,False,False,37.0474,184.692
+"I-BET151 | 1.0",True,False,False,26.8275,107.402
+"JNK-9L (JNK Inhibitor) | 0.03",True,False,False,90.7105,243.508
+"KI-8751 | 1.0",True,False,False,75.8898,312.175
+"LY-294002 | 0.1",True,False,False,3.5713,129.452
+"LY-294002 | 1.0",True,False,False,3.5713,129.452
+"LY2090314 | 0.1",True,False,False,-31.2536,96.0183
+"LY2090314 | 1.0",True,False,False,-31.2536,96.0183
+"MK-2461 | 1.0",True,False,False,308.649,330.392
+"NFkB Activation Inhibitor II | 1.0",False,False,False,71.0256,171.946
+"NVP-AUY922 | 0.003",True,False,False,29.0189,148.144
+"Neratinib | 0.1",True,False,False,361.607,726.375
+"Niclosamide | 0.3",True,False,False,809.815,1113.52
+"PF-3758309 | 0.01",True,False,False,268.778,558.912
+"PHA-793887 | 0.1",True,False,False,136.637,262.874
+"Penfluridol | 1.0",True,False,False,221.742,643.995
+"Pevonedistat | 0.01",True,False,False,173.206,367.524
+"Pevonedistat | 0.03",True,False,False,116.657,332.307
+"Pevonedistat | 0.1",True,True,True,1208.46,1180.76
+"Phorbol-12-myristate-13-acetate | 0.0001",True,False,False,21.717,110.832
+"Phorbol-12-myristate-13-acetate | 0.001",True,False,False,109.774,187.065
+"Pifithrin-mu | 1.0",True,False,False,105.525,159.089
+"Pomalidomide | 10.0",False,False,False,91.5322,247.185
+"Pomalidomide | 3.0",True,False,False,7.05987,102.008
+"Purmorphamine | 1.0",True,False,False,114.266,318.963
+"QS-11 | 10.0",True,False,False,129.249,191.709
+"RGFP966 | 1.0",True,False,False,90.8153,291.986
+"Rapamycin | 10.0",True,False,False,185.871,281.158
+"Resveratrol | 3.0",True,False,False,41.3797,170.729
+"Rucaparib | 1.0",False,False,False,119.635,463.162
+"SC26196 | 1.0",True,False,False,52.3231,328.175
+"SSR 69071 | 1.0",True,False,False,449.064,462.942
+"Sapanisertib | 10.0",True,True,True,1482.68,1032.23
+"Selumetinib | 0.1",True,True,True,179.297,101.138
+"Serdemetan | 3.0",True,False,False,90.7695,170.155
+"Sildenafil | 3.0",True,False,False,9.27665,160.765
+"Sorafenib | 1.0",False,False,False,351.938,793.298
+"Spebrutinib | 1.0",True,False,False,64.4708,151.053
+"Sunitinib | 1.0",True,False,False,186.344,439.792
+"Sunitinib Malate | 1.0",True,False,False,168.497,226.086
+"T3364366 | 3.0",False,False,False,29.2682,111.449
+"TG-101348 | 0.3",False,False,False,73.4832,354.005
+"TWS-119 | 1.0",False,False,False,77.5738,214.471
+"Temsirolimus | 10.0",True,True,True,364.58,218.201
+"Tozasertib | 0.03",True,False,False,100.119,238.005
+"UNC-0638 | 1.0",True,False,False,41.2348,361.199
+"VX-11e | 0.3",True,True,True,824.444,474.063
+"Veliparib | 10.0",True,False,False,61.4941,158.736
+"Withaferin A | 0.1",False,False,False,61.7315,257.333
+"Wortmannin | 1.0",True,False,False,55.9431,110.524
+"XMD8-92 | 1.0",True,False,False,163.226,184.269
+"YM-155 | 0.01",True,False,False,174.526,299.212
+"angiogenesis-inhibitor | 1.0",True,False,False,128.875,257.431
+"belinostat | 0.1",True,False,False,109.63,184.926
+"camptothecin | 0.01",True,True,True,688.465,334.004
+"digoxin | 0.01",False,False,False,18.8611,155.81
+"ibudilast | 3.0",True,False,False,99.9988,289.119
+"navitoclax | 1.0",True,False,False,719.511,874.292
+"panobinostat | 0.01",True,False,False,241.612,303.442
+"ruxolitinib | 10.0",True,False,False,60.1007,176.809

@@ -1,0 +1,55 @@
+{
+  "name": "gse306429_CD34",
+  "prereg": "docs/PREREG_RESOLUTION_PANEL_v2.md",
+  "h5ad": "<external-data-root>/VCData/GSE306429/GSE306429_combined_demuxed.h5ad",
+  "perturbation_key": [
+    "compound_name",
+    "dose_uM"
+  ],
+  "unit_separator": "ASCII 0x1f",
+  "collapse": null,
+  "control": [
+    "DMSO"
+  ],
+  "stratum_key": [
+    "cell_id"
+  ],
+  "stratum": [
+    "CD34+"
+  ],
+  "n_cells_file": 1257778,
+  "n_cells_scored": 173548,
+  "n_cells_unassigned_dropped": 0,
+  "verdict": "not detectable",
+  "reason": "only 42% of perturbations differ from the control by more than their own split-half noise, so most cannot be scored at all",
+  "n_perturbations": 102,
+  "detectable_fraction": 0.4215686274509804,
+  "identifiable_fraction": 0.049019607843137254,
+  "jointly_evaluable_fraction": 0.049019607843137254,
+  "replicate_ceiling": 0.8911740438749758,
+  "rho2": 6.128896842905892,
+  "rho2_nn_median": 0.4366247023602884,
+  "eta2": 85.574422994593,
+  "p_correct_order": 0.397,
+  "n_excluded": 1,
+  "depth": 50,
+  "n_seeds": 8,
+  "n_boot": 1000,
+  "seed": 0,
+  "n_components": 50,
+  "reduce_path": "pca",
+  "dense_working_set_gb": 18.45,
+  "selection": {
+    "n_units_total": 103,
+    "n_units_eligible": 102,
+    "n_units_scored": 102,
+    "n_units_cell_capped": 0,
+    "cell_cap": null,
+    "n_control_cells": 18354
+  },
+  "seconds": {
+    "load": 450.0,
+    "reduce": 280.1,
+    "score": 3.2
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "name": "frangieh_rna_Coculture",
+  "prereg": "docs/PREREG_RESOLUTION_PANEL_v2.md",
+  "h5ad": "<external-data-root>/VCData/scPerturb/rna_protein/FrangiehIzar2021_RNA.h5ad",
+  "perturbation_key": [
+    "perturbation"
+  ],
+  "unit_separator": null,
+  "collapse": null,
+  "control": [
+    "control"
+  ],
+  "stratum_key": [
+    "perturbation_2"
+  ],
+  "stratum": [
+    "Co-culture"
+  ],
+  "n_cells_file": 218331,
+  "n_cells_scored": 73114,
+  "n_cells_unassigned_dropped": 0,
+  "verdict": "not detectable",
+  "reason": "only 9% of perturbations differ from the control by more than their own split-half noise, so most cannot be scored at all",
+  "n_perturbations": 159,
+  "detectable_fraction": 0.09433962264150944,
+  "identifiable_fraction": 0.0,
+  "jointly_evaluable_fraction": 0.0,
+  "replicate_ceiling": 0.5824974126263833,
+  "rho2": 0.27331371302151947,
+  "rho2_nn_median": 0.18928480645501364,
+  "eta2": 5212.727712460202,
+  "p_correct_order": 0.214,
+  "n_excluded": 89,
+  "depth": 50,
+  "n_seeds": 8,
+  "n_boot": 1000,
+  "seed": 0,
+  "n_components": 50,
+  "reduce_path": "pca",
+  "dense_working_set_gb": 13.87,
+  "selection": {
+    "n_units_total": 248,
+    "n_units_eligible": 159,
+    "n_units_scored": 159,
+    "n_units_cell_capped": 0,
+    "cell_cap": null,
+    "n_control_cells": 18334
+  },
+  "seconds": {
+    "load": 9.8,
+    "reduce": 27.8,
+    "score": 3.7
+  }
+}

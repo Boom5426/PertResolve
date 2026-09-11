@@ -1,0 +1,151 @@
+# Annotation spec for the six-dimensional biophysical variant vector (theta).
+#
+# This file is the single source of truth for the position-dependent components of
+# theta. It exists because the committed feature table had no generator: no script
+# in this repository or on the compute server produces
+# `data/pertresolve_bench.csv`, which is how two defects survived in it unnoticed
+# (a measured-response readout in `is_hotspot`, and TP53/KRAS physicochemical terms
+# that do not reproduce the amino-acid tables in `pertresolve/features.py`).
+#
+# Consumed by `scripts/build_bench_features.py`. Every range is inclusive and
+# 1-based, matching the residue numbering used in variant names.
+#
+# Provenance of each entry is recorded next to it. Entries marked PENDING are not
+# settled by any committed artifact and are deliberately left empty rather than
+# guessed; see the note at the bottom.
+
+version: 1
+
+# Ordered f_v tiers. The first tier whose range set contains a mutated position
+# wins, so more specific tiers must come first. Declaring a tier here is what makes
+# it legal for `fold_core` to take that value; the builder rejects any other value.
+fold_core_tiers:
+  - name: structural_core
+    value: 1.0
+  - name: interaction_region
+    value: 0.5
+
+genes:
+
+  TP53:
+    # Supplementary Table 1, "Structural core (f_v=1)": DNA-binding domain 94-293.
+    structural_core:
+      - [94, 293]
+    # PENDING. Methods states f_v = 0.5 for "annotated interaction regions" but no
+    # committed artifact enumerates them, and no code path in the repository ever
+    # assigns 0.5. Left empty: f_v is binary for this gene until the regions are
+    # supplied.
+    interaction_regions: []
+    # Supplementary Table 1, "Functional switch (s_v=1)": none listed for TP53.
+    functional_switch_residues: []
+    # Supplementary Table 1, "Hotspot / pathogenic annotation (h_v=1)":
+    # COSMIC/IARC missense hotspot codons.
+    hotspot_codons: [175, 176, 179, 220, 238, 245, 248, 249, 273, 282, 285]
+    hotspot_regions: []
+    hotspot_variants: []
+
+  KRAS:
+    # Supplementary Table 1: G-domain 1-169.
+    structural_core:
+      - [1, 169]
+    interaction_regions: []          # PENDING, as for TP53
+    # Supplementary Table 1: G12, G13 and Q61.
+    functional_switch_residues: [12, 13, 61]
+    # Supplementary Table 1: COSMIC/IARC missense hotspot codons.
+    hotspot_codons: [12, 13, 59, 61, 117, 146]
+    hotspot_regions: []
+    hotspot_variants: []
+
+  GATA1:
+    # Supplementary Table 1: zinc fingers ZF1 (204-228) and ZF2 (258-282).
+    structural_core:
+      - [204, 228]
+      - [258, 282]
+    interaction_regions: []          # PENDING, as for TP53
+    # Supplementary Table 1: zinc-coordinating cysteines.
+    functional_switch_residues: [204, 207, 225, 228, 258, 261, 279, 282]
+    # Supplementary Table 1: zinc-coordinating cysteines, plus ClinVar pathogenic
+    # or likely-pathogenic annotations. The ClinVar set is per variant rather than
+    # per position and is transcribed from the `clinvar_pathogenic` column of
+    # `results/_remote/workspace/gata1_theta.csv` (4 positives).
+    hotspot_codons: [204, 207, 225, 228, 258, 261, 279, 282]
+    hotspot_regions: []
+    hotspot_variants: ["M1T", "E39G", "Y62C", "Y62C,Y63C"]
+
+  JAK1:
+    # Supplementary Table 1: kinase domain 866-1154.
+    structural_core:
+      - [866, 1154]
+    interaction_regions: []          # PENDING, as for TP53
+    # PENDING. Supplementary Table 1 lists no functional switch residue for JAK1,
+    # but the committed table marks "G590E,G590R" with cat_switch = 1.0. Left empty
+    # so the builder reproduces the documented table; the divergence is reported.
+    functional_switch_residues: []
+    # Supplementary Table 1: JH2 pseudokinase (583-855) and JH1 kinase (875-1153)
+    # functional modules. Range-based rather than codon-based for this gene.
+    hotspot_codons: []
+    hotspot_regions:
+      - [583, 855]
+      - [875, 1153]
+    hotspot_variants: []
+
+# Standardization is deliberately NOT performed here.
+#
+# The builder emits the physicochemical terms in their physical units: Kyte-Doolittle
+# for d_hydro, cubic angstroms for d_vol, charge at pH 7 for d_charge. Methods states
+# these were "standardized across the variant feature table before model fitting", so
+# standardization belongs to the fitting step, not to the released table.
+#
+# This matters beyond tidiness. The standardizer baked into the committed table was
+# fitted on all 444 non-JAK1 non-wild-type rows at once, 76 of which are test variants
+# under split1, so test variants influenced the normalization of the training features.
+# Refitting it inside the training loop, on training variants only, removes that.
+# Consumers reading this table must therefore standardize on training variants
+# themselves; `harness.theta_map` currently does not standardize at all.
+
+# Handling of conditions that are not single amino-acid substitutions.
+#
+# The benchmark admits missense, splice-site, stop-gained and synonymous conditions.
+# For the last three the physicochemical difference terms are undefined, because
+# there is no mutant residue to difference against. JAK1 contributes eight such
+# conditions (`Q387*`, `Q437*`, `Q499*`, `Q545*`, `Q572*`, `splice_64850911`,
+# `syn_L158`, `syn_N357`) and each gene contributes a wild-type row.
+#
+# `physicochemical`: `zero` writes 0 for the three difference terms. The committed
+#   table instead writes one constant triple shared by all eight JAK1 conditions,
+#   which is a placeholder, not a computed value.
+# `annotations`: `by_position` applies the same rules as for missense whenever the
+#   name carries a residue position, and 0 otherwise. The committed table instead
+#   assigns fold_core = 1.0 to every nonsense and splice condition even though
+#   their positions (387 to 572) lie outside the documented kinase domain
+#   866-1154. That rule is documented nowhere and is PENDING; `by_position`
+#   reproduces Supplementary Table 1 rather than the committed table.
+non_missense:
+  physicochemical: zero
+  annotations: by_position
+  wildtype_labels: ["WT", "wt", "WT_control"]
+
+# Leakage gate. No component of theta may carry information about the measured
+# per-variant response. `leak_column` names the measured effect size in the row
+# source; the builder fails if any feature column exceeds `max_abs_spearman`
+# against it. This is the check that would have caught the `is_hotspot` defect:
+# in `data/pertresolve_bench.csv` the GATA1 column reaches +0.74.
+leakage_gate:
+  leak_column: r
+  max_abs_spearman: 0.20
+  min_variants: 20
+
+# Open decisions, deliberately not encoded above:
+#
+#   1. interaction_regions (all four genes). Methods documents an f_v = 0.5 tier;
+#      nothing enumerates it. 54 GATA1 rows and 6 JAK1 rows carry 0.5 in the
+#      committed table, and 3 JAK1 rows carry an undocumented 0.3.
+#   2. JAK1 functional_switch_residues. See the note under JAK1.
+#   3. The f_v rule for nonsense and splice conditions. See `non_missense`.
+#   4. Whether the physicochemical terms for nonsense, splice and synonymous
+#      conditions should be zero or a declared placeholder.
+#
+# Until these are settled the builder produces a binary f_v, an empty JAK1 switch,
+# position-derived annotations for non-missense conditions and zeroed
+# physicochemical terms, and reports every row that consequently differs from the
+# committed table.

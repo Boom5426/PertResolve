@@ -1,0 +1,16 @@
+subset,scope,n_conditions,n_distinct_theta,n_in_tied_group,largest_tied_group,n_missense,n_synonymous,n_nonsense,n_splice,n_multi
+all_conditions,GATA1,254,70,221,31,201,0,0,0,53
+all_conditions,JAK1,26,17,12,8,11,2,5,1,7
+all_conditions,KRAS,92,67,40,12,78,14,0,0,0
+all_conditions,TP53,98,61,57,8,84,14,0,0,0
+all_conditions,ALL,470,215,330,31,374,30,5,1,60
+heldout_all,GATA1,172,61,140,17,133,0,0,0,39
+heldout_all,JAK1,26,17,12,8,11,2,5,1,7
+heldout_all,KRAS,51,41,15,7,42,9,0,0,0
+heldout_all,TP53,59,47,21,4,54,5,0,0,0
+heldout_all,ALL,308,166,188,17,240,16,5,1,46
+heldout_missense,GATA1,133,36,123,16,133,0,0,0,0
+heldout_missense,JAK1,11,10,2,2,11,0,0,0,0
+heldout_missense,KRAS,42,39,6,2,42,0,0,0,0
+heldout_missense,TP53,54,45,17,3,54,0,0,0,0
+heldout_missense,ALL,240,130,148,16,240,0,0,0,0
