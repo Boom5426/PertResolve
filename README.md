@@ -3,7 +3,7 @@
 <div align="center">
 
 <h1>PertResolve</h1>
-<h3>Measurement resolution for<br>fine-grained perturbation prediction</h3>
+<h3>Measurement resolution for fine-grained perturbation prediction</h3>
 
 <p>Separate what the measurement resolves from what the model learns.</p>
 
