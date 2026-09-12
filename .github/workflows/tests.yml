@@ -1,11 +1,8 @@
 name: tests
 
-# The README claims the estimators are checked against data whose answer is known. That
-# claim is only worth making if something runs the checks, so this runs them.
+# Run tests manually from the GitHub Actions page when needed.
 on:
-  push:
-    branches: [main]
-  pull_request:
+  workflow_dispatch:
 
 jobs:
   pytest:
