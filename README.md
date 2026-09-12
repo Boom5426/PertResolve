@@ -8,7 +8,6 @@
 <p>Separate what the measurement resolves from what the model learns.</p>
 
 <p>
-  <a href="https://github.com/Boom5426/PertResolve/actions/workflows/tests.yml"><img src="https://img.shields.io/github/actions/workflow/status/Boom5426/PertResolve/tests.yml?branch=main&style=flat-square&label=tests" alt="Tests"></a>
   <a href="pyproject.toml"><img src="https://img.shields.io/badge/python-3.10%2B-3776AB?style=flat-square" alt="Python 3.10 or newer"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-178A83?style=flat-square" alt="MIT license"></a>
   <a href="https://huggingface.co/datasets/Boom5426/PertResolve_Bench"><img src="https://img.shields.io/badge/data-Hugging%20Face-637B93?style=flat-square" alt="Dataset on Hugging Face"></a>
