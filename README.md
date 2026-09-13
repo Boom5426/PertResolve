@@ -5,23 +5,23 @@
 <h1>PertResolve</h1>
 <h3>Measurement resolution for fine-grained perturbation prediction</h3>
 
-<p>Separate what the measurement resolves from what the model learns.</p>
-
 <p>
-  <a href="pyproject.toml"><img src="https://img.shields.io/badge/python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python 3.10 or newer"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-178A83?style=flat-square" alt="MIT license"></a>
-  <a href="manuscript/PertResolve_manuscript.pdf"><img src="https://img.shields.io/badge/manuscript-PDF-B31B1B?style=flat-square&logo=adobeacrobatreader&logoColor=white" alt="Manuscript PDF"></a>
-  <a href="https://huggingface.co/datasets/Boom5426/PertResolve_Bench"><img src="https://img.shields.io/badge/data-Hugging%20Face-FFD21E?style=flat-square&logo=huggingface&logoColor=black" alt="Dataset on Hugging Face"></a>
+  <img alt="Single-cell" src="https://img.shields.io/badge/scope-single--cell-7B61FF?logo=cell&logoColor=white">
+  <img alt="Perturbation prediction" src="https://img.shields.io/badge/task-perturbation%20prediction-0F9D8A?logo=target&logoColor=white">
+  <a href="pyproject.toml"><img alt="Python 3.10+" src="https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white"></a>
+  <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-2ea44f"></a>
+  <a href="manuscript/PertResolve_manuscript.pdf"><img alt="Manuscript PDF" src="https://img.shields.io/badge/manuscript-PDF-B31B1B?logo=adobeacrobatreader&logoColor=white"></a>
+  <a href="https://huggingface.co/datasets/Boom5426/PertResolve_Bench"><img alt="Hugging Face dataset" src="https://img.shields.io/badge/data-Hugging%20Face-FFD21E?logo=huggingface&logoColor=black"></a>
 </p>
 
+<p><strong>Separate what the measurement resolves from what the model learns.</strong></p>
+
 <p>
-  <a href="manuscript/PertResolve_manuscript.pdf"><b>Paper</b></a> &nbsp;·&nbsp;
-  <a href="manuscript/PertResolve_SI.pdf"><b>Supplement</b></a> &nbsp;·&nbsp;
-  <a href="#quick-start"><b>Quick start</b></a> &nbsp;·&nbsp;
-  <a href="#use-pertresolve"><b>Usage</b></a> &nbsp;·&nbsp;
-  <a href="#benchmark"><b>Benchmark</b></a> &nbsp;·&nbsp;
-  <a href="#reproduce"><b>Reproduce</b></a> &nbsp;·&nbsp;
-  <a href="#citation"><b>Cite</b></a>
+  <a href="#quick-start">🚀 Quick start</a> ·
+  <a href="https://huggingface.co/datasets/Boom5426/PertResolve_Bench">🤗 Data</a> ·
+  <a href="#reproduce">🧪 Reproduce</a> ·
+  <a href="manuscript/PertResolve_manuscript.pdf">📄 Paper</a> ·
+  <a href="CITATION.cff">📚 Cite</a>
 </p>
 
 </div>
