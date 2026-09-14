@@ -3,197 +3,223 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="PertResolve measures whether single-cell perturbation measurements can resolve the distinctions needed to compare predictive models.">
-  <meta name="theme-color" content="#102e42">
+  <meta name="description" content="PertResolve is a measurement-resolution framework for interpreting fine-grained perturbation prediction.">
+  <meta name="theme-color" content="#1e1e1e">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="PertResolve — Measure first. Compare second.">
-  <meta property="og:description" content="Measurement-resolution diagnostics for fine-grained perturbation prediction.">
+  <meta property="og:title" content="PertResolve — Measurement resolution constrains fine-grained perturbation prediction">
+  <meta property="og:description" content="Measure what a perturbation benchmark can reproducibly resolve before interpreting model differences.">
   <meta property="og:image" content="https://boom5426.github.io/PertResolve/assets/fig1_overview.png">
-  <meta property="og:image:alt" content="PertResolve overview of measurement resolution for perturbation prediction.">
+  <meta property="og:image:alt" content="PertResolve framework overview">
   <title>PertResolve — Measurement resolution for perturbation prediction</title>
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="site.css">
-  <script src="site.js" defer></script>
+  <link rel="icon" href="assets/site/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/site/site.css">
+  <script src="assets/site/site.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
+
   <header class="site-header">
-    <div class="nav-wrap">
-      <a class="brand" href="#top" aria-label="PertResolve home"><span class="brand-mark" aria-hidden="true">P</span><span>Pert<span>Resolve</span></span></a>
-      <button class="menu-toggle" aria-controls="site-nav" aria-expanded="false">Menu <span aria-hidden="true">☰</span></button>
+    <div class="wrap nav-wrap">
+      <a class="brand" href="#top" aria-label="PertResolve home">
+        <span class="brand-mark">P</span>
+        <span class="brand-name">PertResolve</span>
+        <span class="brand-note">measurement resolution</span>
+      </a>
+      <button class="menu-toggle" aria-controls="site-nav" aria-expanded="false">Menu</button>
       <nav id="site-nav" aria-label="Main navigation">
-        <a href="#approach">Approach</a>
+        <a href="#framework">Framework</a>
+        <a href="#evidence">Interpretation</a>
         <a href="#benchmark">Benchmark</a>
         <a href="#software">Software</a>
         <a href="#paper">Paper</a>
-        <a class="github-link" href="https://github.com/Boom5426/PertResolve" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+        <a class="github-link" href="https://github.com/Boom5426/PertResolve" target="_blank" rel="noopener noreferrer">GitHub</a>
       </nav>
     </div>
   </header>
 
   <main id="main">
-    <section class="hero section-wrap" id="top">
-      <div class="hero-copy">
-        <p class="eyebrow"><i></i> Single-cell perturbations · measurement resolution</p>
-        <h1>Measure first.<br>Compare <em>second.</em></h1>
-        <p class="hero-lead">A benchmark cannot rank models on a biological distinction its own measurement cannot reproduce.</p>
-        <p class="hero-description">PertResolve makes that limitation measurable before it becomes a model-comparison conclusion.</p>
+    <section class="wrap hero" id="top">
+      <div>
+        <p class="kicker">PertResolve / measurement-resolution framework</p>
+        <h1>Measurement resolution constrains fine-grained perturbation prediction.</h1>
+        <p class="hero-lead">A benchmark cannot support biological distinctions that its own measurements do not reproducibly resolve.</p>
+        <p class="hero-description">PertResolve separates measurement questions from model questions so that perturbation-prediction performance is interpreted at the resolution supported by the experiment.</p>
         <div class="hero-actions">
-          <a class="button primary" href="manuscript/PertResolve_manuscript.pdf" target="_blank" rel="noopener">Read the manuscript <span aria-hidden="true">↗</span></a>
-          <a class="text-link" href="#approach">Explore the framework <span aria-hidden="true">↓</span></a>
+          <a class="button primary" href="manuscript/PertResolve_manuscript.pdf" target="_blank" rel="noopener">Read the manuscript <span>↗</span></a>
+          <a class="button secondary" href="#framework">Explore the framework <span>↓</span></a>
         </div>
-        <p class="hero-note">A measurement-resolution framework and public toolkit for fine-grained perturbation prediction.</p>
+        <div class="hero-meta">
+          <span><strong>470</strong> coding-variant conditions</span>
+          <span><strong>321,043</strong> cells in the allele arm</span>
+          <span><strong>31</strong> perturbation configurations</span>
+          <span><strong>14</strong> public resources</span>
+        </div>
       </div>
-      <div class="hero-visual">
-        <div class="figure-card">
-          <div class="figure-card-head"><span>PERTRESOLVE / OVERVIEW</span><span>Figure 1</span></div>
-          <img src="assets/fig1_overview.png" alt="Overview of PertResolve measurement questions, benchmark scope and evaluation protocol">
-          <p>What a measurement can resolve is distinct from what a model predicts.</p>
-        </div>
-        <span class="visual-caption">Resolution is evidence about the measurement, not a score assigned to a model.</span>
+      <figure class="figure-shell">
+        <div class="figure-head"><span>Framework overview</span><span>Figure 1</span></div>
+        <a href="assets/fig1.pdf" target="_blank" rel="noopener"><img src="assets/fig1_overview.png" alt="PertResolve framework separating measurement resolution from model prediction"></a>
+        <figcaption>Detection and identification are measurement questions; prediction is a model question. PertResolve evaluates them separately before interpreting benchmark scores.</figcaption>
+      </figure>
+    </section>
+
+    <section class="principle">
+      <div class="wrap principle-inner">
+        <span class="principle-label">Core principle</span>
+        <p>Measure the distinction first. Interpret the prediction second.</p>
       </div>
     </section>
 
-    <section class="question-band">
-      <div class="section-wrap question-inner">
-        <span class="overline">The central question</span>
-        <p>Before comparing predictors, <strong>can the measurement reliably distinguish the response differences they are asked to predict?</strong></p>
-      </div>
-    </section>
-
-    <section class="section-wrap content-section" id="approach">
-      <div class="section-heading">
+    <section class="wrap section" id="framework">
+      <div class="section-head">
         <div>
-          <span class="section-number">01 / The approach</span>
-          <h2>Separate the measurement<br>from the <em>model.</em></h2>
+          <span class="section-kicker">01 / Framework</span>
+          <h2>Four questions that should not be collapsed into one score.</h2>
         </div>
-        <p>PertResolve reports four empirical questions separately. Together, they show which biological distinctions are supported by the data and which model comparisons remain underdetermined.</p>
+        <p class="section-intro">PertResolve decomposes benchmark interpretation into independent empirical questions. The goal is not to impose a single pass/fail gate, but to expose what the measurement supports and where model comparisons become underdetermined.</p>
       </div>
-      <div class="diagnostic-layout">
-        <div class="diagnostic-list">
-          <article class="diagnostic active" data-panel="detection">
-            <span>01</span><div><h3>Detection</h3><p>Can a perturbation be distinguished from the reference population?</p></div><b aria-hidden="true">↗</b>
-          </article>
-          <article class="diagnostic" data-panel="identification">
-            <span>02</span><div><h3>Identification</h3><p>Can its response be distinguished from its nearest competitor?</p></div><b aria-hidden="true">↗</b>
-          </article>
-          <article class="diagnostic" data-panel="reproducibility">
-            <span>03</span><div><h3>Split-half reference</h3><p>How similar are disjoint measurements of the same perturbation?</p></div><b aria-hidden="true">↗</b>
-          </article>
-          <article class="diagnostic" data-panel="ranking">
-            <span>04</span><div><h3>Model-ranking resolution</h3><p>Which known differences between predictors can this measurement order?</p></div><b aria-hidden="true">↗</b>
-          </article>
+
+      <div class="diagnostics">
+        <div class="diagnostic-list" role="tablist" aria-label="PertResolve diagnostics">
+          <button class="diagnostic active" data-panel="detection" role="tab" aria-selected="true">
+            <span class="num">01</span><span><h3>Detection</h3><p>Perturbation versus reference.</p></span><span class="arrow">→</span>
+          </button>
+          <button class="diagnostic" data-panel="identification" role="tab" aria-selected="false">
+            <span class="num">02</span><span><h3>Identification</h3><p>Perturbation versus relevant competitors.</p></span><span class="arrow">→</span>
+          </button>
+          <button class="diagnostic" data-panel="reproducibility" role="tab" aria-selected="false">
+            <span class="num">03</span><span><h3>Split-half reference</h3><p>Disjoint measurements of the same perturbation.</p></span><span class="arrow">→</span>
+          </button>
+          <button class="diagnostic" data-panel="ranking" role="tab" aria-selected="false">
+            <span class="num">04</span><span><h3>Model-ranking resolution</h3><p>Which predictor gaps can the data order?</p></span><span class="arrow">→</span>
+          </button>
         </div>
-        <div class="resolution-card" aria-live="polite">
-          <p class="card-overline" id="panel-number">01 / detection</p>
-          <h3 id="panel-title">Is there a detectable response?</h3>
-          <p id="panel-copy">PertResolve compares each perturbation with a reference population while accounting for split-half sampling noise.</p>
-          <div class="signal-plot" id="signal-plot" aria-hidden="true">
-            <span class="axis y">response separation</span><span class="axis x">measurement noise →</span>
-            <i class="gate vertical"></i><i class="gate horizontal"></i>
-            <b class="point p1"></b><b class="point p2"></b><b class="point p3"></b><b class="point p4"></b><b class="point p5"></b><b class="point p6"></b>
+        <div class="diagnostic-panel" role="tabpanel" aria-live="polite">
+          <p class="eyebrow" id="panel-number">01 / Detection</p>
+          <h3 id="panel-title">Can the perturbation be distinguished from reference?</h3>
+          <p id="panel-copy">PertResolve measures whether a perturbation response separates reproducibly from the reference population under disjoint cell sampling.</p>
+          <div class="evidence-graphic" aria-hidden="true">
+            <span class="axis-y">response separation</span>
+            <span class="axis-x">measurement variability →</span>
           </div>
-          <p class="card-note" id="panel-note">A detectable signal alone does not establish that nearby perturbations, or competing models, can be distinguished.</p>
+          <p class="panel-note" id="panel-note">Detection answers whether there is a measurable response. It does not imply that nearby perturbations can be identified.</p>
         </div>
       </div>
     </section>
 
-    <section class="evidence-section" id="benchmark">
-      <div class="section-wrap content-section">
-        <div class="section-heading">
+    <section class="evidence-section" id="evidence">
+      <div class="wrap section">
+        <div class="section-head">
           <div>
-            <span class="section-number">02 / PertResolve-Bench</span>
-            <h2>Fine-grained biology<br>needs <em>fine-grained evidence.</em></h2>
+            <span class="section-kicker">02 / Interpretation</span>
+            <h2>Resolution depends on the measurement regime, not only signal strength.</h2>
           </div>
-          <p>The benchmark pairs an allele-resolved arm with a broader panel of public perturbation resources, making measurement resolution comparable across designs and readouts.</p>
+          <p class="section-intro">Fine-grained prediction becomes interpretable only relative to the experimental distinctions, competitor geometry and sampling regime that define the benchmark.</p>
         </div>
-        <div class="stat-row" aria-label="Benchmark at a glance">
-          <article><strong>470</strong><span>protein-coding variant conditions</span></article>
-          <article><strong>321k</strong><span>cells in the allele-resolved arm</span></article>
-          <article><strong>31</strong><span>perturbation configurations</span></article>
-          <article><strong>14</strong><span>public data resources</span></article>
+        <div class="evidence-grid">
+          <article><span class="n">I</span><h3>Signal versus noise</h3><p>Detection depends on whether perturbation-induced structure rises above within-condition measurement variation.</p></article>
+          <article><span class="n">II</span><h3>Competitor geometry</h3><p>Identification becomes harder when biologically relevant candidates occupy nearby response regions, even when each candidate is individually detectable.</p></article>
+          <article><span class="n">III</span><h3>Sampling and benchmark size</h3><p>Cell depth and the number of evaluated conditions determine which model-score differences can be reproducibly ordered.</p></article>
         </div>
-        <div class="benchmark-grid">
-          <article class="allele-card">
-            <p class="card-overline">Allele-resolved arm</p>
-            <h3>Variants within the same gene are the hard case.</h3>
-            <p>TP53, KRAS, GATA1 and JAK1 make the relevant candidate pool explicit: nearby alleles, not unrelated perturbations elsewhere in the atlas.</p>
-            <div class="gene-strip" aria-label="Genes represented in the allele-resolved arm"><span>TP53</span><span>KRAS</span><span>GATA1</span><span>JAK1</span></div>
-          </article>
-          <article class="panel-card">
-            <p class="card-overline">Broader measurement panel</p>
-            <h3>One question, many measurement settings.</h3>
-            <p>Across perturbation types, readouts and experimental designs, resolution is reported as an evidence profile rather than collapsed into a single benchmark verdict.</p>
-            <div class="mini-bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-          </article>
+      </div>
+    </section>
+
+    <section class="wrap section" id="benchmark">
+      <div class="section-head">
+        <div>
+          <span class="section-kicker">03 / PertResolve-Bench</span>
+          <h2>Allele-resolved prediction meets a broader perturbation panel.</h2>
+        </div>
+        <p class="section-intro">The benchmark combines a focused coding-variant arm with a broader collection of public perturbation resources to test how measurement resolution changes across biological and technical regimes.</p>
+      </div>
+
+      <div class="stats" aria-label="PertResolve benchmark summary">
+        <div class="stat"><strong>470</strong><span>coding-variant conditions</span></div>
+        <div class="stat"><strong>321k</strong><span>cells in the allele-resolved arm</span></div>
+        <div class="stat"><strong>31</strong><span>perturbation configurations</span></div>
+        <div class="stat"><strong>14</strong><span>public data resources</span></div>
+      </div>
+
+      <div class="benchmark-layout">
+        <table class="dataset-table">
+          <thead><tr><th>Dataset</th><th>Variants</th><th>Context</th><th>Assay</th></tr></thead>
+          <tbody>
+            <tr><td>TP53</td><td>98</td><td>A549</td><td>Perturb-seq</td></tr>
+            <tr><td>KRAS</td><td>92</td><td>A549</td><td>Perturb-seq</td></tr>
+            <tr><td>GATA1</td><td>254</td><td>Human HSPCs</td><td>Base editing</td></tr>
+            <tr><td>JAK1</td><td>26</td><td>HT-29</td><td>scSNV-seq</td></tr>
+          </tbody>
+        </table>
+        <div class="benchmark-note">
+          <h3>The relevant hard case is often within-gene, not across the atlas.</h3>
+          <p>Alleles can share a strong gene-level transcriptional programme while remaining difficult to distinguish from one another. PertResolve therefore makes the biologically relevant candidate pool explicit.</p>
+          <div class="gene-strip"><span>TP53</span><span>KRAS</span><span>GATA1</span><span>JAK1</span></div>
+          <div class="resource-links">
+            <a class="button secondary" href="https://huggingface.co/datasets/Boom5426/PertResolve_Bench" target="_blank" rel="noopener noreferrer">Benchmark data ↗</a>
+          </div>
         </div>
       </div>
     </section>
 
     <section class="software-section" id="software">
-      <div class="section-wrap content-section">
-        <div class="section-heading">
+      <div class="wrap section">
+        <div class="section-head">
           <div>
-            <span class="section-number">03 / Use PertResolve</span>
-            <h2>Your representation.<br>The same <em>questions.</em></h2>
+            <span class="section-kicker">04 / Software</span>
+            <h2>Apply the same diagnostic questions to your own representation.</h2>
           </div>
-          <p>The public NumPy-first API measures a supplied expression matrix, embedding or other fixed representation using disjoint cell splits.</p>
+          <p class="section-intro">The NumPy-first API accepts a cell-by-feature matrix or fixed representation and reports the measurement quantities separately rather than manufacturing a composite verdict.</p>
         </div>
         <div class="software-grid">
           <div class="software-copy">
-            <h3>Turn a matrix and perturbation labels into a resolution report.</h3>
-            <p>The report keeps detection, identification, split-half reproducibility and model-ranking resolution distinct. It does not manufacture a combined verdict.</p>
+            <h3>From expression matrix to resolution report.</h3>
+            <p>Use the bundled demo for a deterministic interface check, or provide your own perturbation labels and reference condition.</p>
             <div class="software-links">
-              <a href="https://github.com/Boom5426/PertResolve#-quick-start" target="_blank" rel="noopener noreferrer">Quick start <span aria-hidden="true">↗</span></a>
-              <a href="https://github.com/Boom5426/PertResolve#-use-the-resolution-api" target="_blank" rel="noopener noreferrer">Resolution API <span aria-hidden="true">↗</span></a>
-              <a href="https://huggingface.co/datasets/Boom5426/PertResolve_Bench" target="_blank" rel="noopener noreferrer">Benchmark data <span aria-hidden="true">↗</span></a>
+              <a href="https://github.com/Boom5426/PertResolve#quick-start" target="_blank" rel="noopener noreferrer"><span>Quick start</span><span>↗</span></a>
+              <a href="https://github.com/Boom5426/PertResolve#measure-your-dataset" target="_blank" rel="noopener noreferrer"><span>Resolution diagnostics</span><span>↗</span></a>
+              <a href="https://github.com/Boom5426/PertResolve#evaluate-your-predictions" target="_blank" rel="noopener noreferrer"><span>Prediction evaluation</span><span>↗</span></a>
+              <a href="https://huggingface.co/datasets/Boom5426/PertResolve_Bench" target="_blank" rel="noopener noreferrer"><span>Benchmark data</span><span>↗</span></a>
             </div>
-            <p class="package-meta">Python ≥ 3.10 <i>·</i> MIT License <i>·</i> Dataset-adaptable</p>
           </div>
           <div class="code-card">
             <div class="code-toolbar"><span>resolution_report.py</span><button class="copy-button" data-copy-target="api-code">Copy</button></div>
-            <pre id="api-code"><code>import numpy as np
-from pertresolve.resolution import resolution_report
-
-with np.load("data/demo/pertresolve_resolution_demo.npz") as demo:
-    X = demo["X"]
-    labels = demo["labels"].astype(str)
+            <pre id="api-code"><code>from pertresolve.resolution import resolution_report
 
 report = resolution_report(
-    X, labels,
-    control="control",
-    depth=8,
-    n_seeds=4,
-    seed=7,
+    X,
+    labels,
+    control="non-targeting",
+    depth=50,
 )
+
 print(report.summary())</code></pre>
-            <p>Run <code>python examples/run_resolution_demo.py</code> after installation for the bundled, deterministic demo.</p>
+            <p>Python ≥ 3.10 · NumPy / pandas core · MIT License</p>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section-wrap paper-section content-section" id="paper">
-      <div class="paper-mark" aria-hidden="true"><span>P</span><i></i></div>
-      <div class="paper-copy">
-        <span class="section-number">The paper &amp; resources</span>
-        <h2>Measurement resolution constrains fine-grained perturbation prediction</h2>
-        <p class="authors">Bo Li, Chengyang Zhang, Mengran Li, Bob Zhang, Lin Wang, Zhenchao Tang, Jun Liu, Chengliang Liu, Chen Wei, Yuhao Yi, Jiancheng Lv, and Yang Zhang</p>
-        <div class="resource-links">
-          <a class="button primary" href="manuscript/PertResolve_manuscript.pdf" target="_blank" rel="noopener">Manuscript <span aria-hidden="true">↗</span></a>
-          <a class="button secondary" href="manuscript/PertResolve_SI.pdf" target="_blank" rel="noopener">Supplementary information <span aria-hidden="true">↗</span></a>
-          <a class="text-link" href="https://github.com/Boom5426/PertResolve" target="_blank" rel="noopener noreferrer">Source code ↗</a>
+    <section class="wrap section" id="paper">
+      <div class="paper-layout">
+        <div class="paper-mark"><span>P</span><small>PertResolve<br>2026</small></div>
+        <div class="paper-copy">
+          <span class="section-kicker">Paper & resources</span>
+          <h2>Measurement resolution constrains fine-grained perturbation prediction</h2>
+          <p class="authors">Bo Li, Chengyang Zhang, Mengran Li, Bob Zhang, Lin Wang, Zhenchao Tang, Jun Liu, Chengliang Liu, Chen Wei, Yuhao Yi, Jiancheng Lv, and Yang Zhang</p>
+          <div class="resource-links">
+            <a class="button primary" href="manuscript/PertResolve_manuscript.pdf" target="_blank" rel="noopener">Manuscript ↗</a>
+            <a class="button secondary" href="manuscript/PertResolve_SI.pdf" target="_blank" rel="noopener">Supplementary information ↗</a>
+            <a class="button secondary" href="https://github.com/Boom5426/PertResolve" target="_blank" rel="noopener noreferrer">Source code ↗</a>
+          </div>
+          <p class="resource-note">This project page accompanies the PertResolve software, benchmark metadata, analysis harness and manuscript resources.</p>
         </div>
-        <p class="resource-note">The manuscript is in preparation. The repository contains the software, benchmark metadata, analysis harness and public release artifacts.</p>
       </div>
     </section>
   </main>
 
   <footer>
-    <div class="section-wrap footer-inner">
-      <a class="brand" href="#top"><span class="brand-mark" aria-hidden="true">P</span><span>Pert<span>Resolve</span></span></a>
-      <p>Measurement resolution for fine-grained perturbation prediction.</p>
-      <div><a href="https://github.com/Boom5426/PertResolve" target="_blank" rel="noopener noreferrer">GitHub ↗</a><a href="#top">Back to top ↑</a></div>
+    <div class="wrap footer-inner">
+      <p><strong>PertResolve</strong> — measure the distinction, interpret the prediction.</p>
+      <div class="footer-links"><a href="https://github.com/Boom5426/PertResolve">GitHub ↗</a><a href="#top">Back to top ↑</a></div>
     </div>
   </footer>
 </body>
