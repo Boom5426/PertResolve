@@ -13,6 +13,7 @@
   <title>PertResolve — Measurement resolution for perturbation prediction</title>
   <link rel="icon" href="assets/site/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/site/site.css">
+  <link rel="stylesheet" href="assets/site/resolution.css">
   <script src="assets/site/site.js" defer></script>
 </head>
 <body>
@@ -28,6 +29,7 @@
       <button class="menu-toggle" aria-controls="site-nav" aria-expanded="false">Menu</button>
       <nav id="site-nav" aria-label="Main navigation">
         <a href="#framework">Framework</a>
+        <a href="#landscape">Resolution</a>
         <a href="#evidence">Interpretation</a>
         <a href="#benchmark">Benchmark</a>
         <a href="#software">Software</a>
@@ -106,11 +108,172 @@
       </div>
     </section>
 
+    <section class="resolution-section" id="landscape">
+      <div class="wrap section">
+        <div class="section-head">
+          <div>
+            <span class="section-kicker">02 / Resolution landscape</span>
+            <h2>Perturbation datasets do not share a common measurement resolution.</h2>
+          </div>
+          <p class="section-intro">Across the broader perturbation panel, the fraction of perturbations with reproducibly detectable responses spans almost the full 0–1 range. Resolution can also shift within the same resource across cell types, donors and measurement modalities.</p>
+        </div>
+
+        <div class="resolution-layout">
+          <div class="resolution-chart" role="img" aria-label="Detection-side measurement resolution across fourteen public perturbation resources. The horizontal axis is the fraction of perturbations meeting the detection criterion, from zero to one.">
+            <div class="resolution-scale-head"><span>lower detection resolution</span><span>higher detection resolution</span></div>
+            <div class="resolution-legend" aria-hidden="true">
+              <span><i class="legend-dot"></i>RNA</span>
+              <span><i class="legend-square"></i>protein</span>
+              <span><i class="legend-demo"></i>demonstration subsample</span>
+            </div>
+
+            <div class="resolution-rows">
+              <div class="resolution-row">
+                <span class="resolution-name">McFarland</span>
+                <div class="resolution-track">
+                  <span class="resolution-point demo" style="--x:90%" title="McFarland demonstration subsample: 0.900"></span>
+                </div>
+              </div>
+
+              <div class="resolution-row">
+                <span class="resolution-name">GSE306429</span>
+                <div class="resolution-track">
+                  <span class="resolution-range" style="--from:42.2%;--to:100%"></span>
+                  <span class="resolution-point rna" style="--x:42.2%" title="CD34+: 0.422"><span class="point-label">CD34+</span></span>
+                  <span class="resolution-point rna" style="--x:78.9%" title="A375: 0.789"><span class="point-label">A375</span></span>
+                  <span class="resolution-point rna label-left" style="--x:100%" title="A549: 1.000"><span class="point-label">A549</span></span>
+                </div>
+              </div>
+
+              <div class="resolution-row">
+                <span class="resolution-name">Tahoe-100M</span>
+                <div class="resolution-track">
+                  <span class="resolution-range" style="--from:69.2%;--to:87.3%"></span>
+                  <span class="resolution-point rna" style="--x:69.2%" title="Tahoe-100M cell context: 0.692"></span>
+                  <span class="resolution-point demo" style="--x:71.4%" title="Tahoe-100M demonstration subsample: 0.714"></span>
+                  <span class="resolution-point rna" style="--x:76.8%" title="Tahoe-100M cell context: 0.768"></span>
+                  <span class="resolution-point rna" style="--x:87.3%" title="Tahoe-100M cell context: 0.873"></span>
+                </div>
+              </div>
+
+              <div class="resolution-row">
+                <span class="resolution-name">Norman</span>
+                <div class="resolution-track"><span class="resolution-point rna" style="--x:68.7%" title="Norman 2019: 0.687"></span></div>
+              </div>
+
+              <div class="resolution-row">
+                <span class="resolution-name">Replogle</span>
+                <div class="resolution-track"><span class="resolution-point rna" style="--x:51.2%" title="Replogle 2022: 0.512"></span></div>
+              </div>
+
+              <div class="resolution-row">
+                <span class="resolution-name">Adamson</span>
+                <div class="resolution-track"><span class="resolution-point rna" style="--x:48.4%" title="Adamson 2016: 0.484"></span></div>
+              </div>
+
+              <div class="resolution-row">
+                <span class="resolution-name">Parse 10M</span>
+                <div class="resolution-track">
+                  <span class="resolution-range" style="--from:25.6%;--to:67.8%"></span>
+                  <span class="resolution-point rna" style="--x:25.6%" title="donor 1: 0.256"><span class="point-label">donor 1</span></span>
+                  <span class="resolution-point rna" style="--x:41.1%" title="donor 12: 0.411"><span class="point-label">donor 12</span></span>
+                  <span class="resolution-point rna" style="--x:67.8%" title="donor 5: 0.678"><span class="point-label">donor 5</span></span>
+                </div>
+              </div>
+
+              <div class="resolution-row">
+                <span class="resolution-name">KOLF2.1J</span>
+                <div class="resolution-track"><span class="resolution-point rna" style="--x:31.2%" title="KOLF2.1J iPSC atlas: 0.312"></span></div>
+              </div>
+
+              <div class="resolution-row">
+                <span class="resolution-name">VCC</span>
+                <div class="resolution-track"><span class="resolution-point rna" style="--x:25.9%" title="Virtual Cell Challenge training set: 0.259"></span></div>
+              </div>
+
+              <div class="resolution-row">
+                <span class="resolution-name">Papalexi</span>
+                <div class="resolution-track">
+                  <span class="resolution-range" style="--from:8.7%;--to:21.7%"></span>
+                  <span class="resolution-point rna" style="--x:8.7%" title="Papalexi RNA: 0.087"></span>
+                  <span class="resolution-point protein" style="--x:21.7%" title="Papalexi protein: 0.217"></span>
+                </div>
+              </div>
+
+              <div class="resolution-row">
+                <span class="resolution-name">PerturbMulti</span>
+                <div class="resolution-track">
+                  <span class="resolution-range" style="--from:2.7%;--to:18.2%"></span>
+                  <span class="resolution-point rna" style="--x:2.7%" title="PerturbMulti RNA: 0.027"></span>
+                  <span class="resolution-point protein" style="--x:18.2%" title="PerturbMulti protein: 0.182"></span>
+                </div>
+              </div>
+
+              <div class="resolution-row">
+                <span class="resolution-name">sci-Plex 3</span>
+                <div class="resolution-track">
+                  <span class="resolution-range" style="--from:5.3%;--to:7.3%"></span>
+                  <span class="resolution-point rna" style="--x:5.3%" title="K562 / 24 h: 0.053"></span>
+                  <span class="resolution-point rna" style="--x:5.4%" title="MCF7 / 24 h: 0.053"></span>
+                  <span class="resolution-point rna" style="--x:7.3%" title="A549 / 24 h: 0.073"></span>
+                </div>
+              </div>
+
+              <div class="resolution-row">
+                <span class="resolution-name">Frangieh</span>
+                <div class="resolution-track">
+                  <span class="resolution-range" style="--from:0%;--to:9.4%"></span>
+                  <span class="resolution-point protein" style="--x:0%" title="IFNγ / protein: 0.000"></span>
+                  <span class="resolution-point protein" style="--x:1.1%" title="Control / protein: 0.011"></span>
+                  <span class="resolution-point rna" style="--x:2.3%" title="Control / RNA: 0.023"></span>
+                  <span class="resolution-point rna" style="--x:3.4%" title="IFNγ / RNA: 0.034"></span>
+                  <span class="resolution-point protein" style="--x:6.9%" title="Co-culture / protein: 0.069"></span>
+                  <span class="resolution-point rna" style="--x:9.4%" title="Co-culture / RNA: 0.094"></span>
+                </div>
+              </div>
+
+              <div class="resolution-row">
+                <span class="resolution-name">X-Atlas</span>
+                <div class="resolution-track">
+                  <span class="resolution-range" style="--from:.8%;--to:1.4%"></span>
+                  <span class="resolution-point rna" style="--x:.8%" title="HCT116: 0.008"></span>
+                  <span class="resolution-point rna" style="--x:1.4%" title="HEK293T: 0.014"></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="resolution-axis" aria-hidden="true">
+              <span>0</span><span>0.25</span><span>0.50</span><span>0.75</span><span>1.00</span>
+            </div>
+            <p class="resolution-axis-title">Fraction of perturbations meeting the detection criterion</p>
+          </div>
+
+          <aside class="resolution-summary">
+            <span class="resolution-summary-kicker">What the landscape shows</span>
+            <div class="resolution-summary-item">
+              <strong>≈0–1</strong>
+              <p>Detection-side resolution spans almost the full possible range across public perturbation configurations.</p>
+            </div>
+            <div class="resolution-summary-item">
+              <strong>Context matters</strong>
+              <p>Within GSE306429, the detectable fraction ranges from 0.42 in CD34+ to 1.00 in A549. Parse 10M varies from 0.26 to 0.68 across donors.</p>
+            </div>
+            <div class="resolution-summary-item">
+              <strong>Modality matters</strong>
+              <p>Paired RNA and protein readouts can support different detectable fractions in the same experimental resource.</p>
+            </div>
+            <p class="resolution-caveat"><strong>Detection is one measurement axis, not a global pass/fail verdict.</strong> Identification separately asks whether a perturbation can be distinguished from biologically relevant competitors.</p>
+            <a class="resolution-data-link" href="https://github.com/Boom5426/PertResolve/blob/main/results/canonical/resolution_panel_v2_table.csv" target="_blank" rel="noopener noreferrer">Canonical resolution table <span>↗</span></a>
+          </aside>
+        </div>
+      </div>
+    </section>
+
     <section class="evidence-section" id="evidence">
       <div class="wrap section">
         <div class="section-head">
           <div>
-            <span class="section-kicker">02 / Interpretation</span>
+            <span class="section-kicker">03 / Interpretation</span>
             <h2>Resolution depends on the measurement regime, not only signal strength.</h2>
           </div>
           <p class="section-intro">Fine-grained prediction becomes interpretable only relative to the experimental distinctions, competitor geometry and sampling regime that define the benchmark.</p>
@@ -126,7 +289,7 @@
     <section class="wrap section" id="benchmark">
       <div class="section-head">
         <div>
-          <span class="section-kicker">03 / PertResolve-Bench</span>
+          <span class="section-kicker">04 / PertResolve-Bench</span>
           <h2>Allele-resolved prediction meets a broader perturbation panel.</h2>
         </div>
         <p class="section-intro">The benchmark combines a focused coding-variant arm with a broader collection of public perturbation resources to test how measurement resolution changes across biological and technical regimes.</p>
@@ -164,7 +327,7 @@
       <div class="wrap section">
         <div class="section-head">
           <div>
-            <span class="section-kicker">04 / Software</span>
+            <span class="section-kicker">05 / Software</span>
             <h2>Apply the same diagnostic questions to your own representation.</h2>
           </div>
           <p class="section-intro">The NumPy-first API accepts a cell-by-feature matrix or fixed representation and reports the measurement quantities separately rather than manufacturing a composite verdict.</p>
