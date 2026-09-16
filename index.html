@@ -29,9 +29,9 @@
       <button class="menu-toggle" aria-controls="site-nav" aria-expanded="false">Menu</button>
       <nav id="site-nav" aria-label="Main navigation">
         <a href="#framework">Framework</a>
+        <a href="#benchmark">Benchmark</a>
         <a href="#landscape">Resolution</a>
         <a href="#evidence">Interpretation</a>
-        <a href="#benchmark">Benchmark</a>
         <a href="#software">Software</a>
         <a href="#paper">Paper</a>
         <a class="github-link" href="https://github.com/Boom5426/PertResolve" target="_blank" rel="noopener noreferrer">GitHub</a>
@@ -108,14 +108,51 @@
       </div>
     </section>
 
+    <section class="wrap section" id="benchmark">
+      <div class="section-head">
+        <div>
+          <span class="section-kicker">02 / PertResolve-Bench</span>
+          <h2>A focused allele arm and a broader perturbation panel answer complementary questions.</h2>
+        </div>
+        <p class="section-intro">The allele-resolved arm tests fine biological distinctions within genes. The broader panel asks whether the same measurement constraints recur across perturbation classes, cellular contexts, donors and readout modalities.</p>
+      </div>
+
+      <div class="stats" aria-label="PertResolve benchmark summary">
+        <div class="stat"><strong>470</strong><span>coding-variant conditions</span></div>
+        <div class="stat"><strong>321k</strong><span>cells in the allele-resolved arm</span></div>
+        <div class="stat"><strong>31</strong><span>perturbation configurations</span></div>
+        <div class="stat"><strong>14</strong><span>public data resources</span></div>
+      </div>
+
+      <div class="benchmark-layout">
+        <table class="dataset-table">
+          <thead><tr><th>Dataset</th><th>Variants</th><th>Context</th><th>Assay</th></tr></thead>
+          <tbody>
+            <tr><td>TP53</td><td>98</td><td>A549</td><td>Perturb-seq</td></tr>
+            <tr><td>KRAS</td><td>92</td><td>A549</td><td>Perturb-seq</td></tr>
+            <tr><td>GATA1</td><td>254</td><td>Human HSPCs</td><td>Base editing</td></tr>
+            <tr><td>JAK1</td><td>26</td><td>HT-29</td><td>scSNV-seq</td></tr>
+          </tbody>
+        </table>
+        <div class="benchmark-note">
+          <h3>Fine-grained prediction is a measurement problem before it is a model problem.</h3>
+          <p>Alleles can share a strong gene-level transcriptional programme while remaining difficult to distinguish from one another. The broader panel then tests how widely this measurement-resolution issue extends beyond the allele setting.</p>
+          <div class="gene-strip"><span>TP53</span><span>KRAS</span><span>GATA1</span><span>JAK1</span></div>
+          <div class="resource-links">
+            <a class="button secondary" href="https://huggingface.co/datasets/Boom5426/PertResolve_Bench" target="_blank" rel="noopener noreferrer">Benchmark data ↗</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="resolution-section" id="landscape">
       <div class="wrap section">
         <div class="section-head">
           <div>
-            <span class="section-kicker">02 / Resolution landscape</span>
-            <h2>Perturbation datasets do not share a common measurement resolution.</h2>
+            <span class="section-kicker">03 / Empirical resolution landscape</span>
+            <h2>What the experiment can detect varies sharply across datasets — and within them.</h2>
           </div>
-          <p class="section-intro">Across the broader perturbation panel, the fraction of perturbations with reproducibly detectable responses spans almost the full 0–1 range. Resolution can also shift within the same resource across cell types, donors and measurement modalities.</p>
+          <p class="section-intro">Across the broader panel, detection-side resolution spans almost the full 0–1 range. The same resource can move substantially across cell types or donors, paired modalities can disagree, and sampling depth alone does not explain the ordering.</p>
         </div>
 
         <div class="resolution-layout">
@@ -249,20 +286,20 @@
           </div>
 
           <aside class="resolution-summary">
-            <span class="resolution-summary-kicker">What the landscape shows</span>
+            <span class="resolution-summary-kicker">What this panel establishes</span>
             <div class="resolution-summary-item">
-              <strong>≈0–1</strong>
-              <p>Detection-side resolution spans almost the full possible range across public perturbation configurations.</p>
+              <strong>Near 0 → 1</strong>
+              <p>The fraction of perturbations with reproducibly detectable responses spans almost the full possible range across public configurations.</p>
             </div>
             <div class="resolution-summary-item">
-              <strong>Context matters</strong>
-              <p>Within GSE306429, the detectable fraction ranges from 0.42 in CD34+ to 1.00 in A549. Parse 10M varies from 0.26 to 0.68 across donors.</p>
+              <strong>Resolution is contextual</strong>
+              <p>GSE306429 ranges from 0.42 in CD34+ to 1.00 in A549, while Parse 10M ranges from 0.26 to 0.68 across donors. Paired RNA and protein readouts can also differ.</p>
             </div>
             <div class="resolution-summary-item">
-              <strong>Modality matters</strong>
-              <p>Paired RNA and protein readouts can support different detectable fractions in the same experimental resource.</p>
+              <strong>Depth is not resolution</strong>
+              <p>More cells improve estimation, but cross-dataset cell depth alone does not account for this ordering: deeply sampled configurations are not necessarily the most detectable.</p>
             </div>
-            <p class="resolution-caveat"><strong>Detection is one measurement axis, not a global pass/fail verdict.</strong> Identification separately asks whether a perturbation can be distinguished from biologically relevant competitors.</p>
+            <p class="resolution-caveat"><strong>Detection is only the first measurement question.</strong> A perturbation may be distinguishable from control yet still be indistinguishable from a biologically relevant competitor. Identification is evaluated separately.</p>
             <a class="resolution-data-link" href="https://github.com/Boom5426/PertResolve/blob/main/results/canonical/resolution_panel_v2_table.csv" target="_blank" rel="noopener noreferrer">Canonical resolution table <span>↗</span></a>
           </aside>
         </div>
@@ -273,52 +310,15 @@
       <div class="wrap section">
         <div class="section-head">
           <div>
-            <span class="section-kicker">03 / Interpretation</span>
-            <h2>Resolution depends on the measurement regime, not only signal strength.</h2>
+            <span class="section-kicker">04 / What this changes</span>
+            <h2>Prediction scores should be interpreted at the distinctions the measurement can support.</h2>
           </div>
-          <p class="section-intro">Fine-grained prediction becomes interpretable only relative to the experimental distinctions, competitor geometry and sampling regime that define the benchmark.</p>
+          <p class="section-intro">The empirical resolution landscape is not a dataset leaderboard. Its role is to determine what kind of biological claim a prediction score can support, and where apparent model differences remain measurement-limited.</p>
         </div>
         <div class="evidence-grid">
-          <article><span class="n">I</span><h3>Signal versus noise</h3><p>Detection depends on whether perturbation-induced structure rises above within-condition measurement variation.</p></article>
-          <article><span class="n">II</span><h3>Competitor geometry</h3><p>Identification becomes harder when biologically relevant candidates occupy nearby response regions, even when each candidate is individually detectable.</p></article>
-          <article><span class="n">III</span><h3>Sampling and benchmark size</h3><p>Cell depth and the number of evaluated conditions determine which model-score differences can be reproducibly ordered.</p></article>
-        </div>
-      </div>
-    </section>
-
-    <section class="wrap section" id="benchmark">
-      <div class="section-head">
-        <div>
-          <span class="section-kicker">04 / PertResolve-Bench</span>
-          <h2>Allele-resolved prediction meets a broader perturbation panel.</h2>
-        </div>
-        <p class="section-intro">The benchmark combines a focused coding-variant arm with a broader collection of public perturbation resources to test how measurement resolution changes across biological and technical regimes.</p>
-      </div>
-
-      <div class="stats" aria-label="PertResolve benchmark summary">
-        <div class="stat"><strong>470</strong><span>coding-variant conditions</span></div>
-        <div class="stat"><strong>321k</strong><span>cells in the allele-resolved arm</span></div>
-        <div class="stat"><strong>31</strong><span>perturbation configurations</span></div>
-        <div class="stat"><strong>14</strong><span>public data resources</span></div>
-      </div>
-
-      <div class="benchmark-layout">
-        <table class="dataset-table">
-          <thead><tr><th>Dataset</th><th>Variants</th><th>Context</th><th>Assay</th></tr></thead>
-          <tbody>
-            <tr><td>TP53</td><td>98</td><td>A549</td><td>Perturb-seq</td></tr>
-            <tr><td>KRAS</td><td>92</td><td>A549</td><td>Perturb-seq</td></tr>
-            <tr><td>GATA1</td><td>254</td><td>Human HSPCs</td><td>Base editing</td></tr>
-            <tr><td>JAK1</td><td>26</td><td>HT-29</td><td>scSNV-seq</td></tr>
-          </tbody>
-        </table>
-        <div class="benchmark-note">
-          <h3>The relevant hard case is often within-gene, not across the atlas.</h3>
-          <p>Alleles can share a strong gene-level transcriptional programme while remaining difficult to distinguish from one another. PertResolve therefore makes the biologically relevant candidate pool explicit.</p>
-          <div class="gene-strip"><span>TP53</span><span>KRAS</span><span>GATA1</span><span>JAK1</span></div>
-          <div class="resource-links">
-            <a class="button secondary" href="https://huggingface.co/datasets/Boom5426/PertResolve_Bench" target="_blank" rel="noopener noreferrer">Benchmark data ↗</a>
-          </div>
+          <article><span class="n">I</span><h3>Detectable is not identifiable</h3><p>A response can separate clearly from reference while remaining too close to sibling perturbations for fine-grained identification. Detection and identification therefore answer different measurement questions.</p></article>
+          <article><span class="n">II</span><h3>Measurement-limited is not model-limited</h3><p>When disjoint measurements cannot reproducibly recover a distinction, a model miss cannot be uniquely attributed to model capacity. Once the measurement resolves that distinction, model comparisons become more interpretable.</p></article>
+          <article><span class="n">III</span><h3>Benchmarks have ranking resolution</h3><p>Small score gaps between predictors may not be reproducibly orderable by the benchmark itself. PertResolve therefore keeps model-ranking resolution separate from response-prediction performance.</p></article>
         </div>
       </div>
     </section>
