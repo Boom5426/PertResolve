@@ -14,6 +14,7 @@
   <link rel="icon" href="assets/site/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/site/site.css">
   <link rel="stylesheet" href="assets/site/resolution.css">
+  <link rel="stylesheet" href="assets/site/science.css">
   <script src="assets/site/site.js" defer></script>
 </head>
 <body>
@@ -29,9 +30,9 @@
       <button class="menu-toggle" aria-controls="site-nav" aria-expanded="false">Menu</button>
       <nav id="site-nav" aria-label="Main navigation">
         <a href="#framework">Framework</a>
-        <a href="#benchmark">Benchmark</a>
-        <a href="#landscape">Resolution</a>
-        <a href="#evidence">Interpretation</a>
+        <a href="#allele-results">Evidence</a>
+        <a href="#landscape">Landscape</a>
+        <a href="#drivers">Design</a>
         <a href="#software">Software</a>
         <a href="#paper">Paper</a>
         <a class="github-link" href="https://github.com/Boom5426/PertResolve" target="_blank" rel="noopener noreferrer">GitHub</a>
@@ -45,10 +46,10 @@
         <p class="kicker">PertResolve / measurement-resolution framework</p>
         <h1>Measurement resolution constrains fine-grained perturbation prediction.</h1>
         <p class="hero-lead">A benchmark cannot support biological distinctions that its own measurements do not reproducibly resolve.</p>
-        <p class="hero-description">PertResolve separates measurement questions from model questions so that perturbation-prediction performance is interpreted at the resolution supported by the experiment.</p>
+        <p class="hero-description">PertResolve separates measurement questions from model questions, quantifies which perturbation distinctions reproduce in the experiment, and interprets prediction performance only at that supported resolution.</p>
         <div class="hero-actions">
           <a class="button primary" href="manuscript/PertResolve_manuscript.pdf" target="_blank" rel="noopener">Read the manuscript <span>↗</span></a>
-          <a class="button secondary" href="#framework">Explore the framework <span>↓</span></a>
+          <a class="button secondary" href="#allele-results">See the evidence <span>↓</span></a>
         </div>
         <div class="hero-meta">
           <span><strong>470</strong> coding-variant conditions</span>
@@ -75,9 +76,9 @@
       <div class="section-head">
         <div>
           <span class="section-kicker">01 / Framework</span>
-          <h2>Four questions that should not be collapsed into one score.</h2>
+          <h2>Four empirical questions should not be collapsed into one score.</h2>
         </div>
-        <p class="section-intro">PertResolve decomposes benchmark interpretation into independent empirical questions. The goal is not to impose a single pass/fail gate, but to expose what the measurement supports and where model comparisons become underdetermined.</p>
+        <p class="section-intro">PertResolve keeps measurement support and model performance separate. Detection asks whether a perturbation differs from reference; identification asks whether it differs from relevant competitors; split-half reproducibility asks whether the experiment recovers the same structure twice; model-ranking resolution asks which predictor gaps the benchmark can reliably order.</p>
       </div>
 
       <div class="diagnostics">
@@ -111,10 +112,10 @@
     <section class="wrap section" id="benchmark">
       <div class="section-head">
         <div>
-          <span class="section-kicker">02 / PertResolve-Bench</span>
-          <h2>A focused allele arm and a broader perturbation panel answer complementary questions.</h2>
+          <span class="section-kicker">02 / Study design</span>
+          <h2>A fine-grained allele case and a broader perturbation panel answer complementary questions.</h2>
         </div>
-        <p class="section-intro">The allele-resolved arm tests fine biological distinctions within genes. The broader panel asks whether the same measurement constraints recur across perturbation classes, cellular contexts, donors and readout modalities.</p>
+        <p class="section-intro">The allele-resolved arm tests whether experiments and models can distinguish variants of the same gene. The broader panel asks whether measurement-resolution constraints recur across genetic, chemical and cytokine perturbations, cellular contexts, donors and readout modalities.</p>
       </div>
 
       <div class="stats" aria-label="PertResolve benchmark summary">
@@ -126,7 +127,7 @@
 
       <div class="benchmark-layout">
         <table class="dataset-table">
-          <thead><tr><th>Dataset</th><th>Variants</th><th>Context</th><th>Assay</th></tr></thead>
+          <thead><tr><th>Allele dataset</th><th>Variants</th><th>Context</th><th>Assay</th></tr></thead>
           <tbody>
             <tr><td>TP53</td><td>98</td><td>A549</td><td>Perturb-seq</td></tr>
             <tr><td>KRAS</td><td>92</td><td>A549</td><td>Perturb-seq</td></tr>
@@ -135,8 +136,8 @@
           </tbody>
         </table>
         <div class="benchmark-note">
-          <h3>Fine-grained prediction is a measurement problem before it is a model problem.</h3>
-          <p>Alleles can share a strong gene-level transcriptional programme while remaining difficult to distinguish from one another. The broader panel then tests how widely this measurement-resolution issue extends beyond the allele setting.</p>
+          <h3>The scientifically relevant competitor is often a sibling perturbation, not an unrelated condition.</h3>
+          <p>A model may recover a strong gene-level programme while failing to identify the correct allele. PertResolve therefore evaluates within-gene discrimination explicitly and then tests the same measurement logic across a broader perturbation landscape.</p>
           <div class="gene-strip"><span>TP53</span><span>KRAS</span><span>GATA1</span><span>JAK1</span></div>
           <div class="resource-links">
             <a class="button secondary" href="https://huggingface.co/datasets/Boom5426/PertResolve_Bench" target="_blank" rel="noopener noreferrer">Benchmark data ↗</a>
@@ -145,18 +146,90 @@
       </div>
     </section>
 
+    <section class="allele-section" id="allele-results">
+      <div class="wrap section">
+        <div class="section-head">
+          <div>
+            <span class="section-kicker">03 / Fine-grained evidence</span>
+            <h2>The experiment itself can fail to resolve the allele distinction being scored.</h2>
+          </div>
+          <p class="section-intro">A disjoint split-half measurement provides an empirical reference for within-gene discrimination. TP53 and KRAS remain near chance, GATA1 shows partial structure, whereas JAK1 supports substantially stronger allele-level recovery. The four genes therefore expose different measurement regimes before any model is compared.</p>
+        </div>
+
+        <div class="result-strip" aria-label="Split-half allele discrimination by gene">
+          <article class="result-card">
+            <div class="result-gene"><h3>TP53</h3><span>98 variants</span></div>
+            <div class="result-pds"><strong>0.472</strong><small>split-half PDS · 95% CI 0.441–0.505</small></div>
+            <div class="pds-track" aria-hidden="true"><span class="pds-fill" style="--pds:47.2%"></span><span class="pds-chance"></span></div>
+            <dl><dt>Pairwise-resolvable pairs</dt><dd>0.0%</dd><dt>Native unrankable</dt><dd>100%</dd><dt>Top-1 split-half recovery</dt><dd>0.45%</dd></dl>
+          </article>
+          <article class="result-card">
+            <div class="result-gene"><h3>KRAS</h3><span>92 variants</span></div>
+            <div class="result-pds"><strong>0.481</strong><small>split-half PDS · 95% CI 0.431–0.533</small></div>
+            <div class="pds-track" aria-hidden="true"><span class="pds-fill" style="--pds:48.1%"></span><span class="pds-chance"></span></div>
+            <dl><dt>Pairwise-resolvable pairs</dt><dd>0.0%</dd><dt>Native unrankable</dt><dd>100%</dd><dt>Top-1 split-half recovery</dt><dd>1.05%</dd></dl>
+          </article>
+          <article class="result-card">
+            <div class="result-gene"><h3>GATA1</h3><span>254 variants</span></div>
+            <div class="result-pds"><strong>0.578</strong><small>split-half PDS · 95% CI 0.552–0.604</small></div>
+            <div class="pds-track" aria-hidden="true"><span class="pds-fill" style="--pds:57.8%"></span><span class="pds-chance"></span></div>
+            <dl><dt>Pairwise-resolvable pairs</dt><dd>3.8%</dd><dt>Native unrankable</dt><dd>97.6%</dd><dt>Top-1 split-half recovery</dt><dd>0.81%</dd></dl>
+          </article>
+          <article class="result-card jak1">
+            <div class="result-gene"><h3>JAK1</h3><span>26 variants</span></div>
+            <div class="result-pds"><strong>0.807</strong><small>split-half PDS · 95% CI 0.729–0.880</small></div>
+            <div class="pds-track" aria-hidden="true"><span class="pds-fill" style="--pds:80.7%"></span><span class="pds-chance"></span></div>
+            <dl><dt>Pairwise-resolvable pairs</dt><dd>78.5%</dd><dt>Native unrankable</dt><dd>10.0%</dd><dt>Top-1 split-half recovery</dt><dd>32.6%</dd></dl>
+          </article>
+        </div>
+
+        <div class="result-note">
+          <article>
+            <span class="eyebrow">Measurement-limited comparison</span>
+            <h3>Near-chance split-half recovery changes what a model score can mean.</h3>
+            <p>For TP53 and KRAS, two disjoint measurements of the same allele do not reliably recover within-gene identity. A near-chance model score in this regime cannot be interpreted simply as evidence that the model failed to learn a distinction that the experiment itself supports.</p>
+          </article>
+          <article>
+            <span class="eyebrow">Model-limited comparison</span>
+            <h3>JAK1 separates measurement support from model capability.</h3>
+            <p>The JAK1 split-half reference reaches <strong>0.807</strong>, while the canonical gene-wise best-model summary is <strong>0.448</strong>. Here the experimental response contains reproducible allele structure, so the remaining prediction gap is no longer explained by the same measurement limitation.</p>
+          </article>
+          <article>
+            <span class="eyebrow">Candidate geometry</span>
+            <h3>Detecting an effect is easier than identifying the right sibling perturbation.</h3>
+            <p>Pairwise resolvability ranges from <strong>0%</strong> for TP53 and KRAS to <strong>78.5%</strong> for JAK1. Fine-grained interpretation therefore depends on local competitor geometry rather than perturbation-versus-control separation alone.</p>
+          </article>
+        </div>
+
+        <div class="compatibility-callout">
+          <div class="compatibility-number">470 → 4<small>variant conditions → gene-level representations</small></div>
+          <div class="compatibility-copy">
+            <h3>Representation resolution must match evaluation resolution.</h3>
+            <p>Gene-keyed perturbation interfaces evaluated in the manuscript comparison can accept all 470 conditions but collapse variants of the same gene onto the same perturbation representation. A gene-constant reference gives PDS 0.478 (95% CI 0.450–0.504), illustrating why allele-level scoring is a category mismatch when the model input cannot express allele identity.</p>
+          </div>
+        </div>
+
+        <div class="source-row">
+          <a href="https://github.com/Boom5426/PertResolve/blob/main/results/canonical/oracle_ceiling.csv" target="_blank" rel="noopener noreferrer">Split-half PDS table ↗</a>
+          <a href="https://github.com/Boom5426/PertResolve/blob/main/results/canonical/pairwise_resolvability.csv" target="_blank" rel="noopener noreferrer">Pairwise resolvability ↗</a>
+          <a href="https://github.com/Boom5426/PertResolve/blob/main/results/canonical/split_half_topk.csv" target="_blank" rel="noopener noreferrer">Split-half top-k ↗</a>
+          <a href="https://github.com/Boom5426/PertResolve/blob/main/results/canonical/allele_blind_demo.json" target="_blank" rel="noopener noreferrer">Representation audit ↗</a>
+        </div>
+      </div>
+    </section>
+
     <section class="resolution-section" id="landscape">
       <div class="wrap section">
         <div class="section-head">
           <div>
-            <span class="section-kicker">03 / Empirical resolution landscape</span>
-            <h2>What the experiment can detect varies sharply across datasets — and within them.</h2>
+            <span class="section-kicker">04 / Across-dataset generalization</span>
+            <h2>Measurement resolution varies sharply across public perturbation resources — and within the same resource.</h2>
           </div>
-          <p class="section-intro">Across the broader panel, detection-side resolution spans almost the full 0–1 range. The same resource can move substantially across cell types or donors, paired modalities can disagree, and sampling depth alone does not explain the ordering.</p>
+          <p class="section-intro">The broader panel asks whether perturbation responses are reproducibly detectable across biological and technical regimes. Detection-side resolution spans almost the full 0–1 range, shifts across cell contexts and donors, and can differ between RNA and protein readouts.</p>
         </div>
 
         <div class="resolution-layout">
-          <div class="resolution-chart" role="img" aria-label="Detection-side measurement resolution across fourteen public perturbation resources. The horizontal axis is the fraction of perturbations meeting the detection criterion, from zero to one.">
+          <div class="resolution-chart" role="img" aria-label="Detection-side measurement resolution across public perturbation resources. The horizontal axis is the fraction of perturbations meeting the detection criterion, from zero to one.">
             <div class="resolution-scale-head"><span>lower detection resolution</span><span>higher detection resolution</span></div>
             <div class="resolution-legend" aria-hidden="true">
               <span><i class="legend-dot"></i>RNA</span>
@@ -165,143 +238,88 @@
             </div>
 
             <div class="resolution-rows">
-              <div class="resolution-row">
-                <span class="resolution-name">McFarland</span>
-                <div class="resolution-track">
-                  <span class="resolution-point demo" style="--x:90%" title="McFarland demonstration subsample: 0.900"></span>
-                </div>
-              </div>
-
-              <div class="resolution-row">
-                <span class="resolution-name">GSE306429</span>
-                <div class="resolution-track">
-                  <span class="resolution-range" style="--from:42.2%;--to:100%"></span>
-                  <span class="resolution-point rna" style="--x:42.2%" title="CD34+: 0.422"><span class="point-label">CD34+</span></span>
-                  <span class="resolution-point rna" style="--x:78.9%" title="A375: 0.789"><span class="point-label">A375</span></span>
-                  <span class="resolution-point rna label-left" style="--x:100%" title="A549: 1.000"><span class="point-label">A549</span></span>
-                </div>
-              </div>
-
-              <div class="resolution-row">
-                <span class="resolution-name">Tahoe-100M</span>
-                <div class="resolution-track">
-                  <span class="resolution-range" style="--from:69.2%;--to:87.3%"></span>
-                  <span class="resolution-point rna" style="--x:69.2%" title="Tahoe-100M cell context: 0.692"></span>
-                  <span class="resolution-point demo" style="--x:71.4%" title="Tahoe-100M demonstration subsample: 0.714"></span>
-                  <span class="resolution-point rna" style="--x:76.8%" title="Tahoe-100M cell context: 0.768"></span>
-                  <span class="resolution-point rna" style="--x:87.3%" title="Tahoe-100M cell context: 0.873"></span>
-                </div>
-              </div>
-
-              <div class="resolution-row">
-                <span class="resolution-name">Norman</span>
-                <div class="resolution-track"><span class="resolution-point rna" style="--x:68.7%" title="Norman 2019: 0.687"></span></div>
-              </div>
-
-              <div class="resolution-row">
-                <span class="resolution-name">Replogle</span>
-                <div class="resolution-track"><span class="resolution-point rna" style="--x:51.2%" title="Replogle 2022: 0.512"></span></div>
-              </div>
-
-              <div class="resolution-row">
-                <span class="resolution-name">Adamson</span>
-                <div class="resolution-track"><span class="resolution-point rna" style="--x:48.4%" title="Adamson 2016: 0.484"></span></div>
-              </div>
-
-              <div class="resolution-row">
-                <span class="resolution-name">Parse 10M</span>
-                <div class="resolution-track">
-                  <span class="resolution-range" style="--from:25.6%;--to:67.8%"></span>
-                  <span class="resolution-point rna" style="--x:25.6%" title="donor 1: 0.256"><span class="point-label">donor 1</span></span>
-                  <span class="resolution-point rna" style="--x:41.1%" title="donor 12: 0.411"><span class="point-label">donor 12</span></span>
-                  <span class="resolution-point rna" style="--x:67.8%" title="donor 5: 0.678"><span class="point-label">donor 5</span></span>
-                </div>
-              </div>
-
-              <div class="resolution-row">
-                <span class="resolution-name">KOLF2.1J</span>
-                <div class="resolution-track"><span class="resolution-point rna" style="--x:31.2%" title="KOLF2.1J iPSC atlas: 0.312"></span></div>
-              </div>
-
-              <div class="resolution-row">
-                <span class="resolution-name">VCC</span>
-                <div class="resolution-track"><span class="resolution-point rna" style="--x:25.9%" title="Virtual Cell Challenge training set: 0.259"></span></div>
-              </div>
-
-              <div class="resolution-row">
-                <span class="resolution-name">Papalexi</span>
-                <div class="resolution-track">
-                  <span class="resolution-range" style="--from:8.7%;--to:21.7%"></span>
-                  <span class="resolution-point rna" style="--x:8.7%" title="Papalexi RNA: 0.087"></span>
-                  <span class="resolution-point protein" style="--x:21.7%" title="Papalexi protein: 0.217"></span>
-                </div>
-              </div>
-
-              <div class="resolution-row">
-                <span class="resolution-name">PerturbMulti</span>
-                <div class="resolution-track">
-                  <span class="resolution-range" style="--from:2.7%;--to:18.2%"></span>
-                  <span class="resolution-point rna" style="--x:2.7%" title="PerturbMulti RNA: 0.027"></span>
-                  <span class="resolution-point protein" style="--x:18.2%" title="PerturbMulti protein: 0.182"></span>
-                </div>
-              </div>
-
-              <div class="resolution-row">
-                <span class="resolution-name">sci-Plex 3</span>
-                <div class="resolution-track">
-                  <span class="resolution-range" style="--from:5.3%;--to:7.3%"></span>
-                  <span class="resolution-point rna" style="--x:5.3%" title="K562 / 24 h: 0.053"></span>
-                  <span class="resolution-point rna" style="--x:5.4%" title="MCF7 / 24 h: 0.053"></span>
-                  <span class="resolution-point rna" style="--x:7.3%" title="A549 / 24 h: 0.073"></span>
-                </div>
-              </div>
-
-              <div class="resolution-row">
-                <span class="resolution-name">Frangieh</span>
-                <div class="resolution-track">
-                  <span class="resolution-range" style="--from:0%;--to:9.4%"></span>
-                  <span class="resolution-point protein" style="--x:0%" title="IFNγ / protein: 0.000"></span>
-                  <span class="resolution-point protein" style="--x:1.1%" title="Control / protein: 0.011"></span>
-                  <span class="resolution-point rna" style="--x:2.3%" title="Control / RNA: 0.023"></span>
-                  <span class="resolution-point rna" style="--x:3.4%" title="IFNγ / RNA: 0.034"></span>
-                  <span class="resolution-point protein" style="--x:6.9%" title="Co-culture / protein: 0.069"></span>
-                  <span class="resolution-point rna" style="--x:9.4%" title="Co-culture / RNA: 0.094"></span>
-                </div>
-              </div>
-
-              <div class="resolution-row">
-                <span class="resolution-name">X-Atlas</span>
-                <div class="resolution-track">
-                  <span class="resolution-range" style="--from:.8%;--to:1.4%"></span>
-                  <span class="resolution-point rna" style="--x:.8%" title="HCT116: 0.008"></span>
-                  <span class="resolution-point rna" style="--x:1.4%" title="HEK293T: 0.014"></span>
-                </div>
-              </div>
+              <div class="resolution-row"><span class="resolution-name">McFarland</span><div class="resolution-track"><span class="resolution-point demo" style="--x:90%" title="McFarland demonstration subsample: 0.900"></span></div></div>
+              <div class="resolution-row"><span class="resolution-name">GSE306429</span><div class="resolution-track"><span class="resolution-range" style="--from:42.2%;--to:100%"></span><span class="resolution-point rna" style="--x:42.2%" title="CD34+: 0.422"><span class="point-label">CD34+</span></span><span class="resolution-point rna" style="--x:78.9%" title="A375: 0.789"><span class="point-label">A375</span></span><span class="resolution-point rna label-left" style="--x:100%" title="A549: 1.000"><span class="point-label">A549</span></span></div></div>
+              <div class="resolution-row"><span class="resolution-name">Tahoe-100M</span><div class="resolution-track"><span class="resolution-range" style="--from:69.2%;--to:87.3%"></span><span class="resolution-point rna" style="--x:69.2%" title="cell context: 0.692"></span><span class="resolution-point demo" style="--x:71.4%" title="demonstration subsample: 0.714"></span><span class="resolution-point rna" style="--x:76.8%" title="cell context: 0.768"></span><span class="resolution-point rna" style="--x:87.3%" title="cell context: 0.873"></span></div></div>
+              <div class="resolution-row"><span class="resolution-name">Norman</span><div class="resolution-track"><span class="resolution-point rna" style="--x:68.7%" title="Norman 2019: 0.687"></span></div></div>
+              <div class="resolution-row"><span class="resolution-name">Replogle</span><div class="resolution-track"><span class="resolution-point rna" style="--x:51.2%" title="Replogle 2022: 0.512"></span></div></div>
+              <div class="resolution-row"><span class="resolution-name">Adamson</span><div class="resolution-track"><span class="resolution-point rna" style="--x:48.4%" title="Adamson 2016: 0.484"></span></div></div>
+              <div class="resolution-row"><span class="resolution-name">Parse 10M</span><div class="resolution-track"><span class="resolution-range" style="--from:25.6%;--to:67.8%"></span><span class="resolution-point rna" style="--x:25.6%" title="donor 1: 0.256"><span class="point-label">donor 1</span></span><span class="resolution-point rna" style="--x:41.1%" title="donor 12: 0.411"><span class="point-label">donor 12</span></span><span class="resolution-point rna" style="--x:67.8%" title="donor 5: 0.678"><span class="point-label">donor 5</span></span></div></div>
+              <div class="resolution-row"><span class="resolution-name">KOLF2.1J</span><div class="resolution-track"><span class="resolution-point rna" style="--x:31.2%" title="KOLF2.1J: 0.312"></span></div></div>
+              <div class="resolution-row"><span class="resolution-name">VCC</span><div class="resolution-track"><span class="resolution-point rna" style="--x:25.9%" title="Virtual Cell Challenge: 0.259"></span></div></div>
+              <div class="resolution-row"><span class="resolution-name">Papalexi</span><div class="resolution-track"><span class="resolution-range" style="--from:8.7%;--to:21.7%"></span><span class="resolution-point rna" style="--x:8.7%" title="RNA: 0.087"></span><span class="resolution-point protein" style="--x:21.7%" title="protein: 0.217"></span></div></div>
+              <div class="resolution-row"><span class="resolution-name">PerturbMulti</span><div class="resolution-track"><span class="resolution-range" style="--from:2.7%;--to:18.2%"></span><span class="resolution-point rna" style="--x:2.7%" title="RNA: 0.027"></span><span class="resolution-point protein" style="--x:18.2%" title="protein: 0.182"></span></div></div>
+              <div class="resolution-row"><span class="resolution-name">sci-Plex 3</span><div class="resolution-track"><span class="resolution-range" style="--from:5.3%;--to:7.3%"></span><span class="resolution-point rna" style="--x:5.3%" title="K562 / 24 h: 0.053"></span><span class="resolution-point rna" style="--x:5.4%" title="MCF7 / 24 h: 0.053"></span><span class="resolution-point rna" style="--x:7.3%" title="A549 / 24 h: 0.073"></span></div></div>
+              <div class="resolution-row"><span class="resolution-name">Frangieh</span><div class="resolution-track"><span class="resolution-range" style="--from:0%;--to:9.4%"></span><span class="resolution-point protein" style="--x:0%" title="IFNγ / protein: 0.000"></span><span class="resolution-point protein" style="--x:1.1%" title="Control / protein: 0.011"></span><span class="resolution-point rna" style="--x:2.3%" title="Control / RNA: 0.023"></span><span class="resolution-point rna" style="--x:3.4%" title="IFNγ / RNA: 0.034"></span><span class="resolution-point protein" style="--x:6.9%" title="Co-culture / protein: 0.069"></span><span class="resolution-point rna" style="--x:9.4%" title="Co-culture / RNA: 0.094"></span></div></div>
+              <div class="resolution-row"><span class="resolution-name">X-Atlas</span><div class="resolution-track"><span class="resolution-range" style="--from:.8%;--to:1.4%"></span><span class="resolution-point rna" style="--x:.8%" title="HCT116: 0.008"></span><span class="resolution-point rna" style="--x:1.4%" title="HEK293T: 0.014"></span></div></div>
             </div>
 
-            <div class="resolution-axis" aria-hidden="true">
-              <span>0</span><span>0.25</span><span>0.50</span><span>0.75</span><span>1.00</span>
-            </div>
+            <div class="resolution-axis" aria-hidden="true"><span>0</span><span>0.25</span><span>0.50</span><span>0.75</span><span>1.00</span></div>
             <p class="resolution-axis-title">Fraction of perturbations meeting the detection criterion</p>
           </div>
 
           <aside class="resolution-summary">
-            <span class="resolution-summary-kicker">What this panel establishes</span>
-            <div class="resolution-summary-item">
-              <strong>Near 0 → 1</strong>
-              <p>The fraction of perturbations with reproducibly detectable responses spans almost the full possible range across public configurations.</p>
-            </div>
-            <div class="resolution-summary-item">
-              <strong>Resolution is contextual</strong>
-              <p>GSE306429 ranges from 0.42 in CD34+ to 1.00 in A549, while Parse 10M ranges from 0.26 to 0.68 across donors. Paired RNA and protein readouts can also differ.</p>
-            </div>
-            <div class="resolution-summary-item">
-              <strong>Depth is not resolution</strong>
-              <p>More cells improve estimation, but cross-dataset cell depth alone does not account for this ordering: deeply sampled configurations are not necessarily the most detectable.</p>
-            </div>
-            <p class="resolution-caveat"><strong>Detection is only the first measurement question.</strong> A perturbation may be distinguishable from control yet still be indistinguishable from a biologically relevant competitor. Identification is evaluated separately.</p>
-            <a class="resolution-data-link" href="https://github.com/Boom5426/PertResolve/blob/main/results/canonical/resolution_panel_v2_table.csv" target="_blank" rel="noopener noreferrer">Canonical resolution table <span>↗</span></a>
+            <span class="resolution-summary-kicker">What the broader panel shows</span>
+            <div class="resolution-summary-item"><strong>21 / 31</strong><p>Configurations have detection fractions below 0.50 at the frozen analysis settings.</p></div>
+            <div class="resolution-summary-item"><strong>17 / 31</strong><p>Configurations have exactly zero identification fraction; none exceeds 0.50 at depth 50.</p></div>
+            <div class="resolution-summary-item"><strong>Context matters</strong><p>GSE306429 ranges from 0.42 in CD34+ to 1.00 in A549; Parse 10M ranges from 0.26 to 0.68 across donors.</p></div>
+            <p class="resolution-caveat"><strong>This is not a dataset-quality leaderboard.</strong> Detection is one measurement axis. Identification, split-half reproducibility and model-ranking resolution answer different questions and are reported separately.</p>
+            <a class="resolution-data-link" href="https://github.com/Boom5426/PertResolve/blob/main/results/canonical/resolution_panel_v2_table.csv" target="_blank" rel="noopener noreferrer">Canonical broader-panel table <span>↗</span></a>
           </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="driver-section" id="drivers">
+      <div class="wrap section">
+        <div class="section-head">
+          <div>
+            <span class="section-kicker">05 / What shapes resolution</span>
+            <h2>More cells help estimation, but they do not by themselves create biological separation.</h2>
+          </div>
+          <p class="section-intro">Cross-dataset depth is an incomplete proxy for resolution. Controlled analyses instead point to the local separation between a perturbation and its closest competitors, together with sampling depth and benchmark size, as the quantities that determine what can be reproducibly distinguished and ranked.</p>
+        </div>
+
+        <div class="driver-grid">
+          <article class="driver-card">
+            <span class="driver-value">ρ = 0.961</span><span class="driver-label">nearest-competitor signal vs split-half PDS</span>
+            <h3>Local competitor geometry is highly informative.</h3>
+            <p>In the controlled resolution sweep, the median nearest-neighbour signal tracks the split-half discrimination reference more closely than the global signal summary. Fine-grained resolution is therefore governed by the closest confusable alternatives, not by average separation alone.</p>
+          </article>
+          <article class="driver-card">
+            <span class="driver-value">depth ≠ resolution</span><span class="driver-label">cross-dataset comparison</span>
+            <h3>The deepest experiment is not necessarily the most resolvable.</h3>
+            <p>Parse 10M is the deepest point in the cell-depth comparison, yet donor 1 reaches only 0.256 detection fraction. GSE306429 A549 reaches 1.00 with far fewer cells per perturbation. Depth reduces sampling uncertainty but cannot manufacture an absent or weak response distinction.</p>
+          </article>
+          <article class="driver-card">
+            <span class="driver-value">no single gate</span><span class="driver-label">independent measurement and ranking axes</span>
+            <h3>Resolution is not one scalar pass/fail property.</h3>
+            <p>The controlled sweep shows monotonic improvement of the split-half discrimination reference with local signal, but model-order recovery is not itself monotonic. Whether a benchmark can rank predictors also depends on the score gap and number of evaluated conditions.</p>
+          </article>
+        </div>
+
+        <div class="pilot-block">
+          <div class="pilot-copy">
+            <span class="section-kicker">Prospective experiment design</span>
+            <h3>A small disjoint pilot can flag which perturbations are likely to become rankable.</h3>
+            <p>Using only 25 pilot cells per perturbation, pilot effect size predicts the predefined depth-100 rankability label in three genetic screens with high AUROC. A training-free signal-to-noise score retains substantial discrimination without fitting the learned pilot model.</p>
+            <p class="pilot-rule">Pilot cells and evaluation cells are disjoint; rankability is defined from split-half signal exceeding the uncertainty width in the held-out depth-100 evaluation slice.</p>
+          </div>
+          <div>
+            <table class="pilot-table">
+              <thead><tr><th>Dataset</th><th>25-cell learned effect AUROC</th><th>25-cell training-free SNR AUROC</th></tr></thead>
+              <tbody>
+                <tr><td>Replogle</td><td><span class="pilot-bar" aria-hidden="true"><i style="--auc:96.0%"></i></span>0.960</td><td>0.934</td></tr>
+                <tr><td>Norman</td><td><span class="pilot-bar" aria-hidden="true"><i style="--auc:91.6%"></i></span>0.916</td><td>0.851</td></tr>
+                <tr><td>Adamson</td><td><span class="pilot-bar" aria-hidden="true"><i style="--auc:89.4%"></i></span>0.894</td><td>0.856</td></tr>
+              </tbody>
+            </table>
+            <div class="source-row">
+              <a href="https://github.com/Boom5426/PertResolve/blob/main/results/canonical/resolution_law.json" target="_blank" rel="noopener noreferrer">Controlled resolution law ↗</a>
+              <a href="https://github.com/Boom5426/PertResolve/blob/main/results/fig6_derived/prospective_auc.csv" target="_blank" rel="noopener noreferrer">Prospective pilot AUROC ↗</a>
+              <a href="https://github.com/Boom5426/PertResolve/blob/main/results/pilot_validation/pilot_features.py" target="_blank" rel="noopener noreferrer">Disjoint pilot protocol ↗</a>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -310,15 +328,15 @@
       <div class="wrap section">
         <div class="section-head">
           <div>
-            <span class="section-kicker">04 / What this changes</span>
-            <h2>Prediction scores should be interpreted at the distinctions the measurement can support.</h2>
+            <span class="section-kicker">06 / Interpretation</span>
+            <h2>The same prediction score has different meaning in different measurement regimes.</h2>
           </div>
-          <p class="section-intro">The empirical resolution landscape is not a dataset leaderboard. Its role is to determine what kind of biological claim a prediction score can support, and where apparent model differences remain measurement-limited.</p>
+          <p class="section-intro">PertResolve does not replace prediction metrics with a composite resolution score. It supplies the measurement context needed to interpret them: whether the target distinction is experimentally supported, whether the model representation can express it, and whether the benchmark has enough resolution to order competing predictors.</p>
         </div>
         <div class="evidence-grid">
-          <article><span class="n">I</span><h3>Detectable is not identifiable</h3><p>A response can separate clearly from reference while remaining too close to sibling perturbations for fine-grained identification. Detection and identification therefore answer different measurement questions.</p></article>
-          <article><span class="n">II</span><h3>Measurement-limited is not model-limited</h3><p>When disjoint measurements cannot reproducibly recover a distinction, a model miss cannot be uniquely attributed to model capacity. Once the measurement resolves that distinction, model comparisons become more interpretable.</p></article>
-          <article><span class="n">III</span><h3>Benchmarks have ranking resolution</h3><p>Small score gaps between predictors may not be reproducibly orderable by the benchmark itself. PertResolve therefore keeps model-ranking resolution separate from response-prediction performance.</p></article>
+          <article><span class="n">I</span><h3>Detectable is not identifiable.</h3><p>A perturbation can differ clearly from control yet remain indistinguishable from its nearest biological competitors. Detection and identification therefore answer different measurement questions.</p></article>
+          <article><span class="n">II</span><h3>Measurement-limited is not model-limited.</h3><p>TP53 and KRAS illustrate weak within-gene measurement recovery; JAK1 provides a contrasting regime where the experiment supports allele discrimination but current predictors still leave a large gap.</p></article>
+          <article><span class="n">III</span><h3>Benchmark ranking is its own problem.</h3><p>Even when perturbation responses are measurable, a finite benchmark may not reliably order small model-score differences. Model-ranking resolution must therefore be assessed separately from perturbation detection or identification.</p></article>
         </div>
       </div>
     </section>
@@ -327,7 +345,7 @@
       <div class="wrap section">
         <div class="section-head">
           <div>
-            <span class="section-kicker">05 / Software</span>
+            <span class="section-kicker">07 / Software</span>
             <h2>Apply the same diagnostic questions to your own representation.</h2>
           </div>
           <p class="section-intro">The NumPy-first API accepts a cell-by-feature matrix or fixed representation and reports the measurement quantities separately rather than manufacturing a composite verdict.</p>
@@ -373,7 +391,7 @@ print(report.summary())</code></pre>
             <a class="button secondary" href="manuscript/PertResolve_SI.pdf" target="_blank" rel="noopener">Supplementary information ↗</a>
             <a class="button secondary" href="https://github.com/Boom5426/PertResolve" target="_blank" rel="noopener noreferrer">Source code ↗</a>
           </div>
-          <p class="resource-note">This project page accompanies the PertResolve software, benchmark metadata, analysis harness and manuscript resources.</p>
+          <p class="resource-note">The public repository includes the software, benchmark metadata, canonical result tables, analysis entry points and manuscript resources used by this project page.</p>
         </div>
       </div>
     </section>
