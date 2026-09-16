@@ -159,29 +159,30 @@
         <div class="result-strip" aria-label="Split-half allele discrimination by gene">
           <article class="result-card">
             <div class="result-gene"><h3>TP53</h3><span>98 variants</span></div>
-            <div class="result-pds"><strong>0.472</strong><small>split-half PDS · 95% CI 0.441–0.505</small></div>
+            <div class="result-pds"><strong>0.472</strong><small>split-half PDS · n=59 scored · 95% CI 0.441–0.505</small></div>
             <div class="pds-track" aria-hidden="true"><span class="pds-fill" style="--pds:47.2%"></span><span class="pds-chance"></span></div>
-            <dl><dt>Pairwise-resolvable pairs</dt><dd>0.0%</dd><dt>Native unrankable</dt><dd>100%</dd><dt>Top-1 split-half recovery</dt><dd>0.45%</dd></dl>
+            <dl><dt>Pairwise-resolvable pairs</dt><dd>0.0%</dd><dt>Native-depth unrankable*</dt><dd>100%</dd><dt>Top-1 split-half recovery</dt><dd>0.45%</dd></dl>
           </article>
           <article class="result-card">
             <div class="result-gene"><h3>KRAS</h3><span>92 variants</span></div>
-            <div class="result-pds"><strong>0.481</strong><small>split-half PDS · 95% CI 0.431–0.533</small></div>
+            <div class="result-pds"><strong>0.481</strong><small>split-half PDS · n=51 scored · 95% CI 0.431–0.533</small></div>
             <div class="pds-track" aria-hidden="true"><span class="pds-fill" style="--pds:48.1%"></span><span class="pds-chance"></span></div>
-            <dl><dt>Pairwise-resolvable pairs</dt><dd>0.0%</dd><dt>Native unrankable</dt><dd>100%</dd><dt>Top-1 split-half recovery</dt><dd>1.05%</dd></dl>
+            <dl><dt>Pairwise-resolvable pairs</dt><dd>0.0%</dd><dt>Native-depth unrankable*</dt><dd>100%</dd><dt>Top-1 split-half recovery</dt><dd>1.05%</dd></dl>
           </article>
           <article class="result-card">
             <div class="result-gene"><h3>GATA1</h3><span>254 variants</span></div>
-            <div class="result-pds"><strong>0.578</strong><small>split-half PDS · 95% CI 0.552–0.604</small></div>
+            <div class="result-pds"><strong>0.578</strong><small>split-half PDS · n=172 scored · 95% CI 0.552–0.604</small></div>
             <div class="pds-track" aria-hidden="true"><span class="pds-fill" style="--pds:57.8%"></span><span class="pds-chance"></span></div>
-            <dl><dt>Pairwise-resolvable pairs</dt><dd>3.8%</dd><dt>Native unrankable</dt><dd>97.6%</dd><dt>Top-1 split-half recovery</dt><dd>0.81%</dd></dl>
+            <dl><dt>Pairwise-resolvable pairs</dt><dd>3.8%</dd><dt>Native-depth unrankable*</dt><dd>97.6%</dd><dt>Top-1 split-half recovery</dt><dd>0.81%</dd></dl>
           </article>
           <article class="result-card jak1">
             <div class="result-gene"><h3>JAK1</h3><span>26 variants</span></div>
-            <div class="result-pds"><strong>0.807</strong><small>split-half PDS · 95% CI 0.729–0.880</small></div>
+            <div class="result-pds"><strong>0.807</strong><small>split-half PDS · n=26 scored · 95% CI 0.729–0.880</small></div>
             <div class="pds-track" aria-hidden="true"><span class="pds-fill" style="--pds:80.7%"></span><span class="pds-chance"></span></div>
-            <dl><dt>Pairwise-resolvable pairs</dt><dd>78.5%</dd><dt>Native unrankable</dt><dd>10.0%</dd><dt>Top-1 split-half recovery</dt><dd>32.6%</dd></dl>
+            <dl><dt>Pairwise-resolvable pairs</dt><dd>78.5%</dd><dt>Native-depth unrankable*</dt><dd>10.0%</dd><dt>Top-1 split-half recovery</dt><dd>32.6%</dd></dl>
           </article>
         </div>
+        <p class="result-footnote">* Native-depth eligibility differs from the full variant count. The unrankable estimates use n=98 TP53, 92 KRAS, 254 GATA1 and 20 JAK1; the split-half PDS uses the scored counts printed above.</p>
 
         <div class="result-note">
           <article>
@@ -192,13 +193,35 @@
           <article>
             <span class="eyebrow">Model-limited comparison</span>
             <h3>JAK1 separates measurement support from model capability.</h3>
-            <p>The JAK1 split-half reference reaches <strong>0.807</strong>, while the canonical gene-wise best-model summary is <strong>0.448</strong>. Here the experimental response contains reproducible allele structure, so the remaining prediction gap is no longer explained by the same measurement limitation.</p>
+            <p>The JAK1 split-half reference reaches <strong>0.807</strong>, while the canonical gene-wise evaluated-predictor summary reports <strong>0.448</strong> for its highest PDS entry. Here the experimental response contains reproducible allele structure, so the remaining prediction gap is not explained by the same measurement limitation.</p>
           </article>
           <article>
             <span class="eyebrow">Candidate geometry</span>
             <h3>Detecting an effect is easier than identifying the right sibling perturbation.</h3>
             <p>Pairwise resolvability ranges from <strong>0%</strong> for TP53 and KRAS to <strong>78.5%</strong> for JAK1. Fine-grained interpretation therefore depends on local competitor geometry rather than perturbation-versus-control separation alone.</p>
           </article>
+        </div>
+
+        <div class="model-block">
+          <div class="model-copy">
+            <span class="section-kicker">Prediction metrics</span>
+            <h3>Model ordering changes with the question being scored.</h3>
+            <p>Across five released perturbation-prediction models, the conventional response-correlation summary and the fine-grained perturbation-discrimination score do not induce the same ordering.</p>
+            <p class="model-callout"><strong>scGen</strong> has the largest Pearson-Δ among these five models (0.201) but PDS 0.474, whereas <strong>PerturbNet</strong> has the largest PDS (0.530) but Pearson-Δ 0.134. This is why PertResolve reports response prediction and perturbation identification as different questions rather than treating one metric as a substitute for the other.</p>
+          </div>
+          <div>
+            <table class="model-table" aria-label="Released model prediction metrics">
+              <thead><tr><th>Released model</th><th>PDS</th><th>PDS 95% CI</th><th>Pearson-Δ</th></tr></thead>
+              <tbody>
+                <tr><td>CellFlow</td><td>0.493</td><td>0.467–0.520</td><td>0.156</td></tr>
+                <tr><td>Biolord</td><td>0.479</td><td>0.453–0.505</td><td>0.139</td></tr>
+                <tr class="highlight"><td>scGen</td><td>0.474</td><td>0.449–0.500</td><td>0.201<small>largest Pearson-Δ in this table</small></td></tr>
+                <tr class="highlight"><td>PerturbNet</td><td>0.530</td><td>0.504–0.555</td><td>0.134<small>largest PDS in this table</small></td></tr>
+                <tr><td>scVIDR</td><td>0.486</td><td>0.461–0.511</td><td>0.183</td></tr>
+              </tbody>
+            </table>
+            <div class="source-row"><a href="https://github.com/Boom5426/PertResolve/blob/main/results/canonical/released_model_table3_summary.csv" target="_blank" rel="noopener noreferrer">Released-model summary ↗</a></div>
+          </div>
         </div>
 
         <div class="compatibility-callout">
@@ -213,6 +236,7 @@
           <a href="https://github.com/Boom5426/PertResolve/blob/main/results/canonical/oracle_ceiling.csv" target="_blank" rel="noopener noreferrer">Split-half PDS table ↗</a>
           <a href="https://github.com/Boom5426/PertResolve/blob/main/results/canonical/pairwise_resolvability.csv" target="_blank" rel="noopener noreferrer">Pairwise resolvability ↗</a>
           <a href="https://github.com/Boom5426/PertResolve/blob/main/results/canonical/split_half_topk.csv" target="_blank" rel="noopener noreferrer">Split-half top-k ↗</a>
+          <a href="https://github.com/Boom5426/PertResolve/blob/main/results/canonical/best_model_pds.csv" target="_blank" rel="noopener noreferrer">Gene-wise evaluated-predictor summary ↗</a>
           <a href="https://github.com/Boom5426/PertResolve/blob/main/results/canonical/allele_blind_demo.json" target="_blank" rel="noopener noreferrer">Representation audit ↗</a>
         </div>
       </div>
@@ -302,12 +326,12 @@
           <div class="pilot-copy">
             <span class="section-kicker">Prospective experiment design</span>
             <h3>A small disjoint pilot can flag which perturbations are likely to become rankable.</h3>
-            <p>Using only 25 pilot cells per perturbation, pilot effect size predicts the predefined depth-100 rankability label in three genetic screens with high AUROC. A training-free signal-to-noise score retains substantial discrimination without fitting the learned pilot model.</p>
+            <p>Using only 25 pilot cells per perturbation, the learned pilot score predicts the predefined depth-100 rankability label in three genetic screens with high AUROC. A training-free signal-to-noise score retains substantial discrimination without fitting the learned pilot model.</p>
             <p class="pilot-rule">Pilot cells and evaluation cells are disjoint; rankability is defined from split-half signal exceeding the uncertainty width in the held-out depth-100 evaluation slice.</p>
           </div>
           <div>
             <table class="pilot-table">
-              <thead><tr><th>Dataset</th><th>25-cell learned effect AUROC</th><th>25-cell training-free SNR AUROC</th></tr></thead>
+              <thead><tr><th>Dataset</th><th>25-cell learned-effect AUROC</th><th>25-cell training-free SNR AUROC</th></tr></thead>
               <tbody>
                 <tr><td>Replogle</td><td><span class="pilot-bar" aria-hidden="true"><i style="--auc:96.0%"></i></span>0.960</td><td>0.934</td></tr>
                 <tr><td>Norman</td><td><span class="pilot-bar" aria-hidden="true"><i style="--auc:91.6%"></i></span>0.916</td><td>0.851</td></tr>
@@ -335,7 +359,7 @@
         </div>
         <div class="evidence-grid">
           <article><span class="n">I</span><h3>Detectable is not identifiable.</h3><p>A perturbation can differ clearly from control yet remain indistinguishable from its nearest biological competitors. Detection and identification therefore answer different measurement questions.</p></article>
-          <article><span class="n">II</span><h3>Measurement-limited is not model-limited.</h3><p>TP53 and KRAS illustrate weak within-gene measurement recovery; JAK1 provides a contrasting regime where the experiment supports allele discrimination but current predictors still leave a large gap.</p></article>
+          <article><span class="n">II</span><h3>Measurement-limited is not model-limited.</h3><p>TP53 and KRAS illustrate weak within-gene measurement recovery; JAK1 provides a contrasting regime where the experiment supports allele discrimination but current evaluated predictors still leave a large gap.</p></article>
           <article><span class="n">III</span><h3>Benchmark ranking is its own problem.</h3><p>Even when perturbation responses are measurable, a finite benchmark may not reliably order small model-score differences. Model-ranking resolution must therefore be assessed separately from perturbation detection or identification.</p></article>
         </div>
       </div>
