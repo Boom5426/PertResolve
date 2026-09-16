@@ -19,9 +19,7 @@
 .resolution-point.demo{width:10px;height:10px;background:#fff;border-width:1.5px}
 .point-label{position:absolute;left:12px;top:-7px;color:#6d747b;font-size:9px;font-weight:400;white-space:nowrap;pointer-events:none}
 .resolution-point.label-left .point-label{left:auto;right:12px}
-.resolution-axis{display:grid;grid-template-columns:repeat(5,1fr);margin-left:132px;padding-top:7px;color:var(--muted);font-size:9px}
-.resolution-axis span{text-align:center;transform:translateX(-50%)}
-.resolution-axis span:last-child{transform:translateX(50%)}
+.resolution-axis{display:flex;justify-content:space-between;margin-left:132px;padding-top:7px;color:var(--muted);font-size:9px}
 .resolution-axis-title{margin:4px 0 0 132px;text-align:center;font-size:10px;color:var(--ink)}
 .resolution-summary{border-top:4px solid var(--accent);padding-top:14px}
 .resolution-summary-kicker{display:block;margin-bottom:18px;color:var(--accent);font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.16em}
