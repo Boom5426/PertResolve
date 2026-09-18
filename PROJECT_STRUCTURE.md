@@ -73,15 +73,16 @@ pip install -e ".[dev,bench]"
 pytest
 ```
 
-The public `manuscript/` directory intentionally contains only the final
-manuscript PDF, Supplementary Information PDF and Supplementary Data 1
-workbook. Figure-generation sources and LaTeX sources are kept in the local
-staging backup, not in the public checkout.
+The public `manuscript/` directory contains the manuscript PDF,
+Supplementary Information PDF and Supplementary Data 1 workbook. Reproducibility
+is organized around the analysis generators and canonical derived tables in this
+repository. Final journal figure-layout and LaTeX source files are not required
+to rerun those analyses and are not part of the public software release.
 
-The release does not include the final figure-generation scripts. The
-figure/panel provenance status, including panels whose source is still pending,
-is maintained in [`results/canonical/README.md`](results/canonical/README.md);
-panel mappings are not inferred from filenames.
+Figure/panel provenance is maintained in
+[`results/canonical/README.md`](results/canonical/README.md), which distinguishes
+numerical analysis generators from final visualization/layout sources rather
+than inferring mappings from filenames.
 
 Expression matrices, large atlas files and protein-language-model embeddings
 are not redistributed. Scripts that need them require an explicit `--base` or

@@ -5,6 +5,8 @@ title: >-
 message: >-
   If you use this software or the benchmark, please cite the article below.
 type: software
+version: 0.2.0
+date-released: 2026-09-18
 authors:
   - family-names: Li
     given-names: Bo
@@ -75,4 +77,3 @@ preferred-citation:
     - family-names: Zhang
       given-names: Yang
   year: 2026
-  notes: Manuscript in preparation

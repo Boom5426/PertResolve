@@ -324,7 +324,7 @@ Write reruns to scratch locations and compare them with the committed tables. An
 </details>
 
 > [!IMPORTANT]
-> The current checkout includes the manuscript, Supplementary Information and result tables. The final figure-generation source bundle is not included in this staging release; the overview above is an excerpt of the existing manuscript figure.
+> The repository provides the analysis code and canonical derived tables underlying the reported quantitative results, together with the manuscript and Supplementary Information. Final journal figure-layout and LaTeX source files are not part of the public software release; the overview above is a static excerpt from the manuscript figure.
 
 <a id="citation"></a>
 
