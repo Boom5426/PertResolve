@@ -3,7 +3,7 @@
 <div align="center">
 
 <h1>PertResolve</h1>
-<h3>Measurement resolution for fine-grained perturbation prediction</h3>
+<h3>Measurement resolution for fine-grained perturbation prediction</h3>\n\n<p>\n  <strong>English</strong> · <a href="README_CN.md">简体中文</a>\n</p>
 
 <p>
   <img alt="Single-cell" src="https://img.shields.io/badge/scope-single--cell-7B61FF?logo=cell&logoColor=white">
