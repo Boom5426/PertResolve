@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="PertResolve is a measurement-resolution framework for interpreting fine-grained perturbation prediction.">
+  <meta name="description" content="PertResolve is a diagnostic framework that distinguishes measurement limitations from model limitations in perturbation prediction.">
   <meta name="theme-color" content="#1e1e1e">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="PertResolve — Distinguishing measurement and model limitations in perturbation prediction">
-  <meta property="og:description" content="Measure what a perturbation benchmark can reproducibly resolve before interpreting model differences.">
+  <meta property="og:title" content="PertResolve: Distinguishing measurement and model limitations in perturbation prediction">
+  <meta property="og:description" content="Find out whether a perturbation prediction task needs better measurements or better models.">
   <meta property="og:image" content="https://boom5426.github.io/PertResolve/assets/fig1_overview.png">
   <meta property="og:image:alt" content="PertResolve framework overview">
-  <title>PertResolve — Measurement resolution for perturbation prediction</title>
+  <title>PertResolve: Distinguishing measurement and model limitations in perturbation prediction</title>
   <link rel="icon" href="assets/site/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/site/site.css">
   <link rel="stylesheet" href="assets/site/resolution.css">
@@ -43,10 +43,10 @@
   <main id="main">
     <section class="wrap hero" id="top">
       <div>
-        <p class="kicker">PertResolve / measurement-resolution framework</p>
+        <p class="kicker">PertResolve / diagnostic framework</p>
         <h1>Distinguishing measurement and model limitations in perturbation prediction.</h1>
         <p class="hero-lead">A benchmark cannot support biological distinctions that its own measurements do not reproducibly resolve.</p>
-        <p class="hero-description">PertResolve separates measurement questions from model questions, quantifies which perturbation distinctions reproduce in the experiment, and interprets prediction performance only at that supported resolution.</p>
+        <p class="hero-description">PertResolve separates measurement questions from model questions, quantifies which perturbation distinctions reproduce in the experiment, and interprets prediction performance only at that supported resolution. It shows whether a prediction task needs better measurements or better models.</p>
         <div class="hero-actions">
           <a class="button primary" href="manuscript/PertResolve_manuscript.pdf" target="_blank" rel="noopener">Read the manuscript <span>↗</span></a>
           <a class="button secondary" href="#allele-results">See the evidence <span>↓</span></a>
@@ -76,7 +76,7 @@
       <div class="section-head">
         <div>
           <span class="section-kicker">01 / Framework</span>
-          <h2>Four empirical questions should not be collapsed into one score.</h2>
+          <h2>Measurement support and model performance should not be collapsed into one score.</h2>
         </div>
         <p class="section-intro">PertResolve keeps measurement support and model performance separate. Detection asks whether a perturbation differs from reference; identification asks whether it differs from relevant competitors; split-half reproducibility asks whether the experiment recovers the same structure twice; model-ranking resolution asks which predictor gaps the benchmark can reliably order.</p>
       </div>
@@ -161,28 +161,28 @@
             <div class="result-gene"><h3>TP53</h3><span>98 variants</span></div>
             <div class="result-pds"><strong>0.472</strong><small>split-half PDS · n=59 scored · 95% CI 0.441–0.505</small></div>
             <div class="pds-track" aria-hidden="true"><span class="pds-fill" style="--pds:47.2%"></span><span class="pds-chance"></span></div>
-            <dl><dt>Pairwise-resolvable pairs</dt><dd>0.0%</dd><dt>Native-depth unrankable*</dt><dd>100%</dd><dt>Top-1 split-half recovery</dt><dd>0.45%</dd></dl>
+            <dl><dt>Pairwise-resolvable pairs</dt><dd>0.0%</dd><dt>Native-depth detection-eligible*</dt><dd>0%</dd><dt>Top-10 split-half recovery</dt><dd>7.7% <small>(chance 10.2%)</small></dd></dl>
           </article>
           <article class="result-card">
             <div class="result-gene"><h3>KRAS</h3><span>92 variants</span></div>
             <div class="result-pds"><strong>0.481</strong><small>split-half PDS · n=51 scored · 95% CI 0.431–0.533</small></div>
             <div class="pds-track" aria-hidden="true"><span class="pds-fill" style="--pds:48.1%"></span><span class="pds-chance"></span></div>
-            <dl><dt>Pairwise-resolvable pairs</dt><dd>0.0%</dd><dt>Native-depth unrankable*</dt><dd>100%</dd><dt>Top-1 split-half recovery</dt><dd>1.05%</dd></dl>
+            <dl><dt>Pairwise-resolvable pairs</dt><dd>0.0%</dd><dt>Native-depth detection-eligible*</dt><dd>0%</dd><dt>Top-10 split-half recovery</dt><dd>8.9% <small>(chance 10.9%)</small></dd></dl>
           </article>
           <article class="result-card">
             <div class="result-gene"><h3>GATA1</h3><span>254 variants</span></div>
             <div class="result-pds"><strong>0.578</strong><small>split-half PDS · n=172 scored · 95% CI 0.552–0.604</small></div>
             <div class="pds-track" aria-hidden="true"><span class="pds-fill" style="--pds:57.8%"></span><span class="pds-chance"></span></div>
-            <dl><dt>Pairwise-resolvable pairs</dt><dd>3.8%</dd><dt>Native-depth unrankable*</dt><dd>97.6%</dd><dt>Top-1 split-half recovery</dt><dd>0.81%</dd></dl>
+            <dl><dt>Pairwise-resolvable pairs</dt><dd>3.8%</dd><dt>Native-depth detection-eligible*</dt><dd>2.4%</dd><dt>Top-10 split-half recovery</dt><dd>8.0% <small>(chance 3.9%)</small></dd></dl>
           </article>
           <article class="result-card jak1">
             <div class="result-gene"><h3>JAK1</h3><span>26 variants</span></div>
             <div class="result-pds"><strong>0.807</strong><small>split-half PDS · n=26 scored · 95% CI 0.729–0.880</small></div>
             <div class="pds-track" aria-hidden="true"><span class="pds-fill" style="--pds:80.7%"></span><span class="pds-chance"></span></div>
-            <dl><dt>Pairwise-resolvable pairs</dt><dd>78.5%</dd><dt>Native-depth unrankable*</dt><dd>10.0%</dd><dt>Top-1 split-half recovery</dt><dd>32.6%</dd></dl>
+            <dl><dt>Pairwise-resolvable pairs</dt><dd>78.5%</dd><dt>Native-depth detection-eligible*</dt><dd>90%</dd><dt>Top-10 split-half recovery</dt><dd>83.3% <small>(chance 38.5%)</small></dd></dl>
           </article>
         </div>
-        <p class="result-footnote">* Native-depth eligibility differs from the full variant count. The unrankable estimates use n=98 TP53, 92 KRAS, 254 GATA1 and 20 JAK1; the split-half PDS uses the scored counts printed above.</p>
+        <p class="result-footnote">* Native-depth eligibility differs from the full variant count. The detection-eligible fractions use n=98 TP53, 92 KRAS, 254 GATA1 and 20 JAK1 variants evaluable at native depth; the split-half PDS and top-10 recovery use the scored counts printed above.</p>
 
         <div class="result-note">
           <article>
@@ -193,7 +193,7 @@
           <article>
             <span class="eyebrow">Model-limited comparison</span>
             <h3>JAK1 separates measurement support from model capability.</h3>
-            <p>The JAK1 split-half reference reaches <strong>0.807</strong>, while the canonical gene-wise evaluated-predictor summary reports <strong>0.448</strong> for its highest PDS entry. Here the experimental response contains reproducible allele structure, so the remaining prediction gap is not explained by the same measurement limitation.</p>
+            <p>The JAK1 split-half reference reaches <strong>0.807</strong>, while the best feature-based predictor reaches <strong>0.448</strong>, a gap of 0.36 in PDS. Here the experimental response contains reproducible allele structure, so the remaining prediction gap is not explained by the same measurement limitation.</p>
           </article>
           <article>
             <span class="eyebrow">Candidate geometry</span>
@@ -204,10 +204,10 @@
 
         <div class="model-block">
           <div class="model-copy">
-            <span class="section-kicker">Prediction metrics</span>
-            <h3>Model ordering changes with the question being scored.</h3>
-            <p>Across five released perturbation-prediction models, the conventional response-correlation summary and the fine-grained perturbation-discrimination score do not induce the same ordering.</p>
-            <p class="model-callout"><strong>scGen</strong> has the largest Pearson-Δ among these five models (0.201) but PDS 0.474, whereas <strong>PerturbNet</strong> has the largest PDS (0.530) but Pearson-Δ 0.134. This is why PertResolve reports response prediction and perturbation identification as different questions rather than treating one metric as a substitute for the other.</p>
+            <span class="section-kicker">Released frameworks</span>
+            <h3>Released perturbation models show the same limit.</h3>
+            <p>Released perturbation-prediction frameworks, evaluated on the same held-out variants with the same allele-level scoring, did not reliably identify alleles. Biolord, CellFlow and the allele-conditioned adaptation of scGen gave PDS values of 0.47–0.49 with confidence intervals overlapping 0.50.</p>
+            <p class="model-callout"><strong>PerturbNet</strong> reached PDS 0.530, above the uniform-matching expectation of 0.50 but not above its task-matched permutation null (null mean 0.515). <strong>scVIDR</strong> uses the held-out variant's measured response in its GATA1 scaling and is shown as a response-informed control.</p>
           </div>
           <div>
             <table class="model-table" aria-label="Released model prediction metrics">
@@ -215,9 +215,9 @@
               <tbody>
                 <tr><td>CellFlow</td><td>0.493</td><td>0.467–0.520</td><td>0.156</td></tr>
                 <tr><td>Biolord</td><td>0.479</td><td>0.453–0.505</td><td>0.139</td></tr>
-                <tr class="highlight"><td>scGen</td><td>0.474</td><td>0.449–0.500</td><td>0.201<small>largest Pearson-Δ in this table</small></td></tr>
-                <tr class="highlight"><td>PerturbNet</td><td>0.530</td><td>0.504–0.555</td><td>0.134<small>largest PDS in this table</small></td></tr>
-                <tr><td>scVIDR</td><td>0.486</td><td>0.461–0.511</td><td>0.183</td></tr>
+                <tr><td>scGen<small>allele-conditioned adaptation</small></td><td>0.474</td><td>0.449–0.500</td><td>0.201</td></tr>
+                <tr class="highlight"><td>PerturbNet<small>task-matched null 0.515</small></td><td>0.530</td><td>0.504–0.555</td><td>0.134</td></tr>
+                <tr><td>scVIDR<small>response-informed control</small></td><td>0.486</td><td>0.461–0.511</td><td>0.183</td></tr>
               </tbody>
             </table>
             <div class="source-row"><a href="https://github.com/Boom5426/PertResolve/blob/main/results/canonical/released_model_table3_summary.csv" target="_blank" rel="noopener noreferrer">Released-model summary ↗</a></div>
@@ -228,7 +228,7 @@
           <div class="compatibility-number">470 → 4<small>variant conditions → gene-level representations</small></div>
           <div class="compatibility-copy">
             <h3>Representation resolution must match evaluation resolution.</h3>
-            <p>Gene-keyed perturbation interfaces evaluated in the manuscript comparison can accept all 470 conditions but collapse variants of the same gene onto the same perturbation representation. A gene-constant reference gives PDS 0.478 (95% CI 0.450–0.504), illustrating why allele-level scoring is a category mismatch when the model input cannot express allele identity.</p>
+            <p>Gene-keyed interfaces such as scGPT, GEARS and STATE condition on perturbed-gene identity, so the 470 variant conditions collapse onto four conditioning keys and sibling alleles receive the same prediction. The Gene-mean reference, which predicts the mean response of a gene's training variants, gives PDS 0.478 (95% CI 0.450–0.504), indistinguishable from chance.</p>
           </div>
         </div>
 
@@ -236,8 +236,8 @@
           <a href="https://github.com/Boom5426/PertResolve/blob/main/results/canonical/oracle_ceiling.csv" target="_blank" rel="noopener noreferrer">Split-half PDS table ↗</a>
           <a href="https://github.com/Boom5426/PertResolve/blob/main/results/canonical/pairwise_resolvability.csv" target="_blank" rel="noopener noreferrer">Pairwise resolvability ↗</a>
           <a href="https://github.com/Boom5426/PertResolve/blob/main/results/canonical/split_half_topk.csv" target="_blank" rel="noopener noreferrer">Split-half top-k ↗</a>
-          <a href="https://github.com/Boom5426/PertResolve/blob/main/results/canonical/best_model_pds.csv" target="_blank" rel="noopener noreferrer">Gene-wise evaluated-predictor summary ↗</a>
-          <a href="https://github.com/Boom5426/PertResolve/blob/main/results/canonical/allele_blind_demo.json" target="_blank" rel="noopener noreferrer">Representation audit ↗</a>
+          <a href="https://github.com/Boom5426/PertResolve/blob/main/results/canonical/best_model_pds.csv" target="_blank" rel="noopener noreferrer">Best feature-based predictor by gene ↗</a>
+          <a href="https://github.com/Boom5426/PertResolve/blob/main/results/canonical/definitive_summary.csv" target="_blank" rel="noopener noreferrer">Predictor and Gene-mean PDS ↗</a>
         </div>
       </div>
     </section>
@@ -247,9 +247,9 @@
         <div class="section-head">
           <div>
             <span class="section-kicker">04 / Across-dataset generalization</span>
-            <h2>Measurement resolution varies sharply across public perturbation resources — and within the same resource.</h2>
+            <h2>Measurement resolution varies sharply across public perturbation resources and within the same resource.</h2>
           </div>
-          <p class="section-intro">The broader panel asks whether perturbation responses are reproducibly detectable across biological and technical regimes. Detection-side resolution spans almost the full 0–1 range, shifts across cell contexts and donors, and can differ between RNA and protein readouts.</p>
+          <p class="section-intro">The broader panel asks whether perturbation responses are reproducibly detectable across biological and technical regimes. Detection-side resolution spans the full 0–1 range, shifts across cell contexts and donors, and can differ between RNA and protein readouts.</p>
         </div>
 
         <div class="resolution-layout">
@@ -285,7 +285,7 @@
           <aside class="resolution-summary">
             <span class="resolution-summary-kicker">What the broader panel shows</span>
             <div class="resolution-summary-item"><strong>21 / 31</strong><p>Configurations have detection fractions below 0.50 at the frozen analysis settings.</p></div>
-            <div class="resolution-summary-item"><strong>17 / 31</strong><p>Configurations have exactly zero identification fraction; none exceeds 0.50 at depth 50.</p></div>
+            <div class="resolution-summary-item"><strong>0 / 6</strong><p>Prespecified screens identify more than half of their perturbations against the nearest competitor at 50 cells per group.</p></div>
             <div class="resolution-summary-item"><strong>Context matters</strong><p>GSE306429 ranges from 0.42 in CD34+ to 1.00 in A549; Parse 10M ranges from 0.26 to 0.68 across donors.</p></div>
             <p class="resolution-caveat"><strong>This is not a dataset-quality leaderboard.</strong> Detection is one measurement axis. Identification, split-half reproducibility and model-ranking resolution answer different questions and are reported separately.</p>
             <a class="resolution-data-link" href="https://github.com/Boom5426/PertResolve/blob/main/results/canonical/resolution_panel_v2_table.csv" target="_blank" rel="noopener noreferrer">Canonical broader-panel table <span>↗</span></a>
@@ -324,14 +324,14 @@
 
         <div class="pilot-block">
           <div class="pilot-copy">
-            <span class="section-kicker">Prospective experiment design</span>
-            <h3>A small disjoint pilot can flag which perturbations are likely to become rankable.</h3>
-            <p>Using only 25 pilot cells per perturbation, the learned pilot score predicts the predefined depth-100 rankability label in three genetic screens with high AUROC. A training-free signal-to-noise score retains substantial discrimination without fitting the learned pilot model.</p>
-            <p class="pilot-rule">Pilot cells and evaluation cells are disjoint; rankability is defined from split-half signal exceeding the uncertainty width in the held-out depth-100 evaluation slice.</p>
+            <span class="section-kicker">Pilot-based design</span>
+            <h3>Averaged pilot scores rank perturbations by likely detectability.</h3>
+            <p>In Replogle, Norman and Adamson, pilot scores from 25 cells per perturbation, averaged over ten pilot draws, ranked detectable above undetectable perturbations. A learned effect-size score and a training-free signal-to-variation rule both reach high AUROC. Identification among close competitors still requires assessing competitor geometry.</p>
+            <p class="pilot-rule">Pilot and evaluation cells are disjoint within each of ten draws. The detection label requires the median perturbation-to-reference distance, minus the median split-half distance, to exceed the 95% range of split-half distances at 100 cells per half.</p>
           </div>
           <div>
             <table class="pilot-table">
-              <thead><tr><th>Dataset</th><th>25-cell learned-effect AUROC</th><th>25-cell training-free SNR AUROC</th></tr></thead>
+              <thead><tr><th>Dataset</th><th>Learned effect-size AUROC (25 cells)</th><th>Training-free signal-to-variation AUROC (25 cells)</th></tr></thead>
               <tbody>
                 <tr><td>Replogle</td><td><span class="pilot-bar" aria-hidden="true"><i style="--auc:96.0%"></i></span>0.960</td><td>0.934</td></tr>
                 <tr><td>Norman</td><td><span class="pilot-bar" aria-hidden="true"><i style="--auc:91.6%"></i></span>0.916</td><td>0.851</td></tr>
@@ -340,8 +340,8 @@
             </table>
             <div class="source-row">
               <a href="https://github.com/Boom5426/PertResolve/blob/main/results/canonical/resolution_law.json" target="_blank" rel="noopener noreferrer">Controlled resolution law ↗</a>
-              <a href="https://github.com/Boom5426/PertResolve/blob/main/results/fig6_derived/prospective_auc.csv" target="_blank" rel="noopener noreferrer">Prospective pilot AUROC ↗</a>
-              <a href="https://github.com/Boom5426/PertResolve/blob/main/results/pilot_validation/pilot_features.py" target="_blank" rel="noopener noreferrer">Disjoint pilot protocol ↗</a>
+              <a href="https://github.com/Boom5426/PertResolve/blob/main/results/fig6_derived/prospective_auc.csv" target="_blank" rel="noopener noreferrer">Pilot AUROC table ↗</a>
+              <a href="https://github.com/Boom5426/PertResolve/blob/main/results/pilot_validation/pilot_features.py" target="_blank" rel="noopener noreferrer">Pilot protocol ↗</a>
             </div>
           </div>
         </div>

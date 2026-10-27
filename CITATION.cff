@@ -41,12 +41,23 @@ keywords:
   - measurement resolution
   - protein-coding variants
 abstract: >-
-  A benchmark whose ground truth cannot separate two perturbations cannot order
-  two models that differ in how well they separate them, so its ranking reports
-  the measurement as much as the methods. PertResolve measures that property
-  before any model is trained. PertResolve-Bench combines an allele-resolved arm
-  spanning 470 protein-coding variants and 321,043 cells with a broader panel of
-  31 configurations from 14 public perturbation resources.
+  Virtual-cell models are increasingly evaluated at finer biological resolution,
+  yet benchmarks rarely test whether measurements reproducibly resolve the scored
+  distinctions. We introduce PertResolve, a diagnostic framework that separates
+  perturbation detection, identification and response prediction, and compares
+  model performance with a matched split-half reproducibility reference. Across
+  470 coding-variant conditions of TP53, KRAS, GATA1 and JAK1 (321,043 cells),
+  feature-based predictors recovered transcriptional direction, as did a
+  gene-mean baseline without allele information, but neither they nor released
+  perturbation models reliably identified alleles. Split-half references revealed
+  distinct limitations behind similar model scores: TP53 and KRAS were
+  measurement-limited, whereas JAK1 was model-limited, its reference exceeding
+  the best feature-based predictor by 0.36 in perturbation discrimination score.
+  Across 31 configurations from 14 public resources, detection depended on
+  perturbation signal relative to within-condition variation, whereas
+  identification depended on separation from nearby competitors. PertResolve
+  indicates whether a prediction task needs better measurements or better
+  models, and guides benchmark design.
 preferred-citation:
   type: article
   title: >-

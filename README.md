@@ -3,22 +3,17 @@
 <div align="center">
 
 <h1>PertResolve</h1>
-<h3>Measurement resolution for fine-grained perturbation prediction</h3>
+<h3>Distinguishing measurement and model limitations in perturbation prediction</h3>
 
 <p>
-  <strong>English</strong> · <a href="README_CN.md">简体中文</a>
-</p>
-
-<p>
-  <img alt="Single-cell" src="https://img.shields.io/badge/scope-single--cell-7B61FF?logo=cell&logoColor=white">
-  <img alt="Perturbation prediction" src="https://img.shields.io/badge/task-perturbation%20prediction-0F9D8A?logo=target&logoColor=white">
+  <a href="README.md"><img alt="English" src="https://img.shields.io/badge/lang-English-0969DA"></a>
+  <a href="README_CN.md"><img alt="简体中文" src="https://img.shields.io/badge/lang-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-0969DA"></a>
+  <img alt="Single-cell" src="https://img.shields.io/badge/scope-single--cell-7B61FF">
+  <img alt="Perturbation prediction" src="https://img.shields.io/badge/scope-perturbation%20prediction-7B61FF">
+  <img alt="Virtual cell" src="https://img.shields.io/badge/scope-virtual%20cell-7B61FF">
   <a href="pyproject.toml"><img alt="Python 3.10+" src="https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white"></a>
   <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-2ea44f"></a>
-  <a href="manuscript/PertResolve_manuscript.pdf"><img alt="Manuscript PDF" src="https://img.shields.io/badge/manuscript-PDF-B31B1B?logo=adobeacrobatreader&logoColor=white"></a>
-  <a href="https://huggingface.co/datasets/Boom5426/PertResolve_Bench"><img alt="Hugging Face dataset" src="https://img.shields.io/badge/data-Hugging%20Face-FFD21E?logo=huggingface&logoColor=black"></a>
 </p>
-
-<p><strong>Separate what the measurement resolves from what the model learns.</strong></p>
 
 <p>
   <a href="https://boom5426.github.io/PertResolve/">🌐 Project website</a> ·
@@ -31,7 +26,7 @@
 
 </div>
 
-**PertResolve** is a measurement-resolution framework for interpreting fine-grained perturbation prediction. It separates **perturbation detection**, **perturbation identification** and **response prediction**, and interprets model performance against the distinctions reproducibly supported by the measurement.
+**PertResolve** is a diagnostic framework for perturbation prediction. It separates **perturbation detection**, **perturbation identification** and **response prediction**, and compares model performance with a matched split-half reproducibility reference from the same measurement. It shows whether a prediction task is limited by the measurement or by the model, and therefore whether further progress requires better experimental measurements or better predictive models.
 
 <table align="center">
   <tr>
@@ -132,13 +127,14 @@ report = resolution_report(
 print(report.summary())
 ```
 
-The report keeps four outputs separate:
+The report keeps five outputs separate:
 
 | Output | Question answered |
 | :--- | :--- |
 | **🔎 Detection** | Does the perturbation separate from its reference? |
 | **🧭 Identification** | Does it separate from its nearest competitor? |
 | **🔁 Split-half reproducibility reference** | Can a disjoint measurement identify the same perturbation? |
+| **📐 Local response geometry** | How far is each perturbation from its nearest competitor, relative to the sampling-noise scale? |
 | **📈 Model-ranking resolution** | How reliably does this benchmark recover the ordering of the diagnostic predictor family? |
 
 **For an AnnData file:**

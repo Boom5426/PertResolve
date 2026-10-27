@@ -3,22 +3,17 @@
 <div align="center">
 
 <h1>PertResolve</h1>
-<h3>面向细粒度扰动预测的测量分辨率框架</h3>
+<h3>区分扰动预测中的测量局限与模型局限</h3>
 
 <p>
-  <a href="README.md">English</a> · <strong>简体中文</strong>
-</p>
-
-<p>
-  <img alt="Single-cell" src="https://img.shields.io/badge/scope-single--cell-7B61FF?logo=cell&logoColor=white">
-  <img alt="Perturbation prediction" src="https://img.shields.io/badge/task-perturbation%20prediction-0F9D8A?logo=target&logoColor=white">
+  <a href="README.md"><img alt="English" src="https://img.shields.io/badge/lang-English-0969DA"></a>
+  <a href="README_CN.md"><img alt="简体中文" src="https://img.shields.io/badge/lang-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-0969DA"></a>
+  <img alt="Single-cell" src="https://img.shields.io/badge/scope-single--cell-7B61FF">
+  <img alt="Perturbation prediction" src="https://img.shields.io/badge/scope-perturbation%20prediction-7B61FF">
+  <img alt="Virtual cell" src="https://img.shields.io/badge/scope-virtual%20cell-7B61FF">
   <a href="pyproject.toml"><img alt="Python 3.10+" src="https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white"></a>
   <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-2ea44f"></a>
-  <a href="manuscript/PertResolve_manuscript.pdf"><img alt="Manuscript PDF" src="https://img.shields.io/badge/manuscript-PDF-B31B1B?logo=adobeacrobatreader&logoColor=white"></a>
-  <a href="https://huggingface.co/datasets/Boom5426/PertResolve_Bench"><img alt="Hugging Face dataset" src="https://img.shields.io/badge/data-Hugging%20Face-FFD21E?logo=huggingface&logoColor=black"></a>
 </p>
-
-<p><strong>先明确测量能够分辨什么，再解释模型学到了什么。</strong></p>
 
 <p>
   <a href="https://boom5426.github.io/PertResolve/">🌐 项目主页</a> ·
@@ -31,7 +26,7 @@
 
 </div>
 
-**PertResolve** 是一个用于解释细粒度扰动预测的测量分辨率框架。它将 **扰动检测（perturbation detection）**、**扰动鉴别（perturbation identification）** 与 **响应预测（response prediction）** 分开，并根据实验测量能够稳定、可重复支持的生物学区分来解释模型性能。
+**PertResolve** 是一个面向扰动预测的诊断框架。它将 **扰动检测（perturbation detection）**、**扰动鉴别（perturbation identification）** 与 **响应预测（response prediction）** 分开，并将模型性能与来自同一测量、条件匹配的 split-half 可重复性参照进行比较。它指出一个预测任务受限于测量还是受限于模型，从而判断进一步的进展需要更好的实验测量，还是更好的预测模型。
 
 <table align="center">
   <tr>
@@ -132,13 +127,14 @@ report = resolution_report(
 print(report.summary())
 ```
 
-报告将四类输出明确分开：
+报告将五类输出明确分开：
 
 | 输出 | 回答的问题 |
 | :--- | :--- |
 | **🔎 Detection** | 该扰动能否与 reference 区分？ |
 | **🧭 Identification** | 该扰动能否与其最近的竞争者区分？ |
 | **🔁 Split-half reproducibility reference** | 一个不重叠的独立测量能否识别出同一扰动？ |
+| **📐 Local response geometry** | 相对于抽样噪声尺度，每个扰动与其最近竞争者相距多远？ |
 | **📈 Model-ranking resolution** | 该 benchmark 能以多高可靠性恢复诊断性预测器家族之间的排序？ |
 
 **对于 AnnData 文件：**

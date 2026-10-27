@@ -97,7 +97,7 @@ const panels={
   identification:{
     number:'02 / Identification',
     title:'Can the response be distinguished from its relevant competitors?',
-    copy:'Identification evaluates local separation from the nearest biologically relevant competitor, such as another allele of the same gene, using disjoint cells from those used for detection.',
+    copy:'Identification evaluates local separation from the nearest biologically relevant competitor, such as another allele of the same gene.',
     note:'A benchmark can support broad perturbation detection while remaining unresolved for fine-grained allele identification.',
     visual:visuals.identification
   },
