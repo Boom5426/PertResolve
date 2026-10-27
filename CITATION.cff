@@ -50,7 +50,7 @@ abstract: >-
 preferred-citation:
   type: article
   title: >-
-    Measurement resolution constrains fine-grained perturbation prediction
+    Distinguishing measurement and model limitations in perturbation prediction
   authors:
     - family-names: Li
       given-names: Bo

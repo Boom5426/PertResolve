@@ -334,14 +334,14 @@ python scripts/make_dataset_table.py \
 
 ## 📚 引用
 
-本仓库对应论文 **[Measurement resolution constrains fine-grained perturbation prediction](manuscript/PertResolve_manuscript.pdf)**。如使用 PertResolve 或 PertResolve-Bench，请引用该论文；机器可读的引用信息见 [`CITATION.cff`](CITATION.cff)。
+本仓库对应论文 **[Distinguishing measurement and model limitations in perturbation prediction](manuscript/PertResolve_manuscript.pdf)**。如使用 PertResolve 或 PertResolve-Bench，请引用该论文；机器可读的引用信息见 [`CITATION.cff`](CITATION.cff)。
 
 <details>
 <summary><b>BibTeX</b></summary>
 
 ```bibtex
 @article{Li2026PertResolve,
-  title  = {Measurement resolution constrains fine-grained perturbation prediction},
+  title  = {Distinguishing measurement and model limitations in perturbation prediction},
   author = {Li, Bo and Zhang, Chengyang and Li, Mengran and Zhang, Bob and
             Wang, Lin and Tang, Zhenchao and Liu, Jun and Liu, Chengliang and
             Wei, Chen and Yi, Yuhao and Lv, Jiancheng and Zhang, Yang},

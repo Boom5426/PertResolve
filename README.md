@@ -334,14 +334,14 @@ Write reruns to scratch locations and compare them with the committed tables. An
 
 ## 📚 Citation
 
-This repository accompanies **[Measurement resolution constrains fine-grained perturbation prediction](manuscript/PertResolve_manuscript.pdf)**. Please cite the manuscript when using PertResolve or PertResolve-Bench; machine-readable metadata is available in [`CITATION.cff`](CITATION.cff).
+This repository accompanies **[Distinguishing measurement and model limitations in perturbation prediction](manuscript/PertResolve_manuscript.pdf)**. Please cite the manuscript when using PertResolve or PertResolve-Bench; machine-readable metadata is available in [`CITATION.cff`](CITATION.cff).
 
 <details>
 <summary><b>BibTeX</b></summary>
 
 ```bibtex
 @article{Li2026PertResolve,
-  title  = {Measurement resolution constrains fine-grained perturbation prediction},
+  title  = {Distinguishing measurement and model limitations in perturbation prediction},
   author = {Li, Bo and Zhang, Chengyang and Li, Mengran and Zhang, Bob and
             Wang, Lin and Tang, Zhenchao and Liu, Jun and Liu, Chengliang and
             Wei, Chen and Yi, Yuhao and Lv, Jiancheng and Zhang, Yang},

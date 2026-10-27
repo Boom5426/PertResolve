@@ -2,7 +2,7 @@
 
 PertResolve has two public layers: an installable measurement-resolution
 tool and the benchmark/reproducibility materials for the paper
-“Measurement resolution constrains fine-grained perturbation prediction”.
+“Distinguishing measurement and model limitations in perturbation prediction”.
 PertResolve is a measurement-resolution framework for interpreting fine-grained
 perturbation prediction. It separates perturbation detection, perturbation
 identification and response prediction, while PertResolve-Bench and
